@@ -603,11 +603,25 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .tec-op.atual { border-color: var(--nevoeiro); background: color-mix(in srgb, var(--nevoeiro) 12%, var(--ceu-2)); }
 .tec-op em { position: absolute; top: 10px; right: 12px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--nevoeiro); font-weight: 600; }
 .passos-noite { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #c97a7c; }
-.ceu-inicio { display: block; width: 100%; padding: 0; border: 1px solid var(--ceu-3); border-radius: 22px; overflow: hidden; background: #0b0c18; text-align: left; }
-.ceu-inicio canvas { display: block; width: 100%; height: auto; }
-.ceu-inicio-pe { display: flex; flex-direction: column; gap: 6px; padding: 12px 16px 14px; background: linear-gradient(180deg, rgba(11,12,24,0), #0b0c18 40%); margin-top: -28px; position: relative; }
-.ceu-inicio .nums { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--areia-2); }
-.ceu-inicio .nums b { font-family: var(--display); font-weight: 400; font-size: 20px; color: var(--areia); margin-right: 4px; }
+.ceu-inicio { display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 14px 12px 16px; border: 1px solid var(--ceu-3); border-radius: 22px; background: radial-gradient(120% 90% at 50% 0%, #1d2148, #0b0c18 75%); text-align: left; }
+.ceu-inicio-cab { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; }
+.grafico-noites { display: block; width: 100%; height: auto; overflow: visible; }
+.grafico-noites .guia { stroke: rgba(238,229,212,.07); stroke-width: 1; stroke-dasharray: 2 5; }
+.grafico-noites .horizonte { stroke: rgba(238,229,212,.18); stroke-width: 1; }
+.grafico-noites .constelacao { fill: none; stroke: color-mix(in srgb, var(--nevoeiro) 70%, transparent); stroke-width: 1.2; stroke-linejoin: round; }
+.grafico-noites .eixo { font-size: 9px; fill: var(--areia-2); font-family: var(--corpo); }
+.grafico-noites .eixo.fim { text-anchor: end; }
+.ic-ponto { fill: none; stroke: url(#ouro-i); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.ic-ponto .f { fill: url(#ouro-i); stroke: none; }
+.ic-ponto .fino { stroke-width: 1.8; }
+.ic-ponto .dim { opacity: .35; }
+.ic-ponto .esc { fill: #0b0c18; }
+.ic-ponto.n0 { opacity: .55; }
+.ic-ponto.n3, .ic-ponto.n4 { filter: drop-shadow(0 0 4px rgba(245,199,91,.8)); }
+.legenda-olhos { display: flex; justify-content: space-between; gap: 4px; padding: 0 2px; }
+.legenda-olhos > span { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: var(--areia-2); }
+.ic-noite.mini { width: 24px; height: 24px; }
+.ceu-frase { font-family: var(--display); font-size: 16px; line-height: 1.4; color: var(--areia); padding: 2px 4px 0; }
 .frase-ato { margin: 0; display: flex; flex-direction: column; gap: 4px; font-family: var(--display); font-size: 21px; line-height: 1.3; color: var(--areia); }
 .frase-ato .rotulo { font-family: var(--corpo); }
 .dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
@@ -905,12 +919,29 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return n;
   }
 
-  // A primeira coisa da tela inicial: o céu das noites da pessoa (a constelação dela), que leva ao Duat.
+  // A primeira coisa da tela inicial: as noites da pessoa em ordem, com os olhinhos.
+  // Da esquerda (mais antigas) para a direita (ontem); quanto mais alto, mais desperta. A linha é a constelação dela.
   function ceuDoInicio() {
-    const todas = noitesExemplo().concat(est.diario.map(d => d.tipo)), cont = [0, 0, 0, 0, 0]; todas.forEach(t => cont[t]++);
-    return `<button class="ceu-inicio" data-aba="ceu" aria-label="Ver o céu das suas noites"><canvas id="ceu" width="720" height="420"></canvas>
-      <span class="ceu-inicio-pe"><span class="rotulo">O céu das suas noites</span>
-        <span class="nums"><span><b>${todas.length}</b> noites</span><span><b>${cont[2]}</b> com lucidez</span><span><b>${cont[3] + cont[4]}</b> lúcidos e viagens</span></span></span></button>`;
+    const N = 14, porDia = {};
+    todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
+    const dias = Array.from({ length: N }, (_, k) => isoMais(hojeIso, k - N + 1));
+    const W = 340, H = 196, x0 = 22, x1 = 326, Y = [172, 136, 100, 64, 28];
+    const pts = dias.map((iso, k) => porDia[iso] === undefined ? null : { x: x0 + (x1 - x0) * k / (N - 1), y: Y[porDia[iso]], t: porDia[iso] });
+    const linha = pts.filter(Boolean).map((p, k) => `${k ? "L" : "M"}${p.x.toFixed(1)} ${p.y}`).join("");
+    const olhos = pts.map(p => p ? `<svg class="ic-ponto n${p.t}" x="${(p.x - 12).toFixed(1)}" y="${p.y - 12}" width="24" height="24" viewBox="0 0 48 48">${ICONES_NOITE[p.t]}</svg>` : "").join("");
+    const guias = Y.map((y, k) => `<path d="M8 ${y}H${W - 8}" class="${k ? "guia" : "horizonte"}"/>`).join("");
+    const lucidas = (a, b) => dias.slice(a, b).filter(iso => (porDia[iso] ?? -1) >= 2).length;
+    const agora = lucidas(7, 14), antes = lucidas(0, 7), anotadas = pts.filter(Boolean).length;
+    const frase = !anotadas ? "A primeira estrela aparece na sua primeira noite anotada."
+      : agora > antes ? `${agora} ${agora === 1 ? "noite" : "noites"} com lucidez nesta semana. A sua constelação está subindo.`
+      : agora ? `${agora} ${agora === 1 ? "noite" : "noites"} com lucidez nesta semana. Continue: a lucidez vem com a constância.`
+      : `${anotadas} ${anotadas === 1 ? "noite anotada" : "noites anotadas"}. Lembrar é o primeiro degrau.`;
+    return `<button class="ceu-inicio" data-aba="ceu" aria-label="Ver o céu das suas noites">
+      <span class="ceu-inicio-cab"><span class="rotulo">O céu das suas noites</span><span class="hora">últimos 14 dias</span></span>
+      <svg class="grafico-noites" viewBox="0 0 ${W} ${H}" aria-hidden="true">${guias}<path d="${linha}" class="constelacao"/>${olhos}
+        <text x="${x0}" y="${H - 4}" class="eixo">há 2 semanas</text><text x="${x1}" y="${H - 4}" class="eixo fim">hoje</text></svg>
+      <span class="legenda-olhos">${["Noite negra", "Sonhos", "Lampejo", "Lúcido", "Viagem"].map((n, k) => `<span>${iconeNoite(k, "mini")}${n}</span>`).join("")}</span>
+      <span class="ceu-frase">${esc(frase)}</span></button>`;
   }
   function telaCeu() {
     const ex = noitesExemplo();
