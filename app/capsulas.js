@@ -1,20 +1,20 @@
-// Cápsulas diárias do Arhat: uma por dia, em cartas curtas e interativas.
-// Temas: "livro" (do Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda), "mantras" (mantras e práticas do sono da Índia e do Tibete).
+// Cápsulas diárias do Osirion: uma por dia, em cartas curtas e interativas.
+// Temas: "livro" (do Osirion), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda), "mantras" (mantras e práticas do sono da Índia e do Tibete).
 // Cartas: abre · fala · revela · quiz · faca · leva · alvo
 window.CAPSULAS = [
-  { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O que é um Arhat", minutos: 2, cartas: [
-    { t: "abre", titulo: "O que é um Arhat", sub: "O começo da jornada" },
-    { t: "fala", texto: "“Arhat”, em sânscrito, refere-se a alguém que alcançou o estado de iluminação ou despertar espiritual." },
-    { t: "fala", texto: "Aquele que transcende todos os planos, que pisou em todos os mundos, pois passou por todas as iniciações. É senhor de Si e caminhante do tempo." },
-    { t: "fala", texto: "O livro tem cinco atos. Você pode atravessá-los em sequência ou ficar alguns dias em cada um. A transformação da consciência demanda tempo: quanto mais tempo fizer o Arhat, mais viverá seus resultados." },
-    { t: "revela", pergunta: "O que o livro recomenda para o corpo durante a jornada?", resposta: "Uma alimentação leve e saudável, evitando carnes e bebidas alcoólicas." },
+  { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O caminho do despertar", minutos: 2, cartas: [
+    { t: "abre", titulo: "O caminho do despertar", sub: "O começo da jornada" },
+    { t: "fala", texto: "Este é um caminho de despertar: aprender a manter a consciência acesa enquanto o corpo dorme." },
+    { t: "fala", texto: "Quem completa o caminho transcende todos os planos e pisa em todos os mundos, pois passou por todas as iniciações. É senhor de Si e caminhante do tempo." },
+    { t: "fala", texto: "O Osirion tem cinco atos. Você pode atravessá-los em sequência ou ficar alguns dias em cada um. A transformação da consciência demanda tempo: quanto mais tempo praticar, mais viverá seus resultados." },
+    { t: "revela", pergunta: "O que o Osirion recomenda para o corpo durante a jornada?", resposta: "Uma alimentação leve e saudável, evitando carnes e bebidas alcoólicas." },
     { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!" }
   ] },
   { dia: 2, ilus: "lua", tema: "livro", titulo: "Por que a noite", minutos: 2, cartas: [
     { t: "abre", titulo: "Por que a noite", sub: "A real morada da consciência" },
     { t: "quiz", pergunta: "Quanto da vida passamos dormindo?", opcoes: ["Um décimo", "Um quarto", "Um terço"], certa: 2, explica: "Cerca de um terço. Numa vida de 75 anos, são uns 25 anos de noites." },
     { t: "fala", texto: "O ponto onde nossa consciência mais se aproxima da sua real morada é durante o sono!" },
-    { t: "fala", texto: "O Arhat nunca dorme, mas atua conscientemente em ambas as realidades: o dia, que é matéria, e a noite, que é espírito. Apenas atravessa de um limiar a outro." },
+    { t: "fala", texto: "Quem desperta nunca dorme de verdade: atua conscientemente em ambas as realidades: o dia, que é matéria, e a noite, que é espírito. Apenas atravessa de um limiar a outro." },
     { t: "faca", titulo: "Hoje à noite", texto: "Tente perceber o exato momento em que você adormece. Não precisa conseguir. Só a intenção já começa a acordar algo." },
     { t: "leva", texto: "Nós não somos daqui, viemos das estrelas, mas em alguma parte do caminho nos esquecemos." }
   ] },
@@ -23,7 +23,7 @@ window.CAPSULAS = [
     { t: "fala", texto: "Ninguém dorme de um jeito só. A noite é feita de ciclos de mais ou menos 90 minutos: sono leve, sono profundo e sono REM. Em uma noite, você passa por quatro a seis ciclos." },
     { t: "revela", pergunta: "O que acontece no sono REM?", resposta: "Os olhos se movem rápido sob as pálpebras, o cérebro fica quase tão ativo quanto acordado e o corpo fica paralisado, para você não encenar o sonho. É no REM que acontecem os sonhos mais vívidos." },
     { t: "quiz", pergunta: "Em que parte da noite os períodos de REM são mais longos?", opcoes: ["Logo depois de deitar", "No meio da noite", "Na madrugada, perto de acordar"], certa: 2, explica: "A cada ciclo o REM cresce. Os últimos, de madrugada, são os mais longos e cheios de sonhos." },
-    { t: "fala", texto: "É por isso que o Arhat te desperta às 4 da manhã: você volta a dormir bem na janela dos sonhos mais longos, com a mente um pouco mais acordada." },
+    { t: "fala", texto: "É por isso que o Osirion te desperta às 4 da manhã: você volta a dormir bem na janela dos sonhos mais longos, com a mente um pouco mais acordada." },
     { t: "leva", texto: "A madrugada é a hora do sonho." }
   ] },
   { dia: 4, ilus: "estrela-lilas", tema: "livro", titulo: "Lembrar é um treino", minutos: 2, cartas: [
@@ -41,7 +41,7 @@ window.CAPSULAS = [
     { t: "fala", texto: "No Egito, havia livros de sonhos há mais de 3.200 anos, como o papiro Chester Beatty III. Em Saqqara, as pessoas dormiam junto aos santuários pedindo orientação e cura." },
     { t: "fala", texto: "No Japão de mil anos atrás, peregrinos passavam a noite em templos de Kannon, como Hasedera, esperando um sonho que respondesse à sua pergunta." },
     { t: "faca", titulo: "Hoje", texto: "Prepare o seu quarto como um templo: arrume, limpe, desligue as telas antes de deitar. Imagine a chuva caindo e limpando o ambiente." },
-    { t: "leva", texto: "O Arhat devolve esse templo para dentro do seu quarto." }
+    { t: "leva", texto: "O Osirion devolve esse templo para dentro do seu quarto." }
   ] },
   { dia: 6, ilus: "fitas", tema: "livro", titulo: "As raízes de cura", minutos: 2, cartas: [
     { t: "abre", titulo: "As raízes de cura", sub: "O corpo invisível" },
@@ -86,7 +86,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "Fora do corpo", sub: "O que a ciência observa" },
     { t: "fala", texto: "Pesquisas em vários países estimam que perto de uma em cada dez pessoas já teve ao menos uma experiência de se ver fora do próprio corpo." },
     { t: "revela", pergunta: "O que os neurologistas descobriram em 2002?", resposta: "Na Suíça, ao estimular uma pequena região do cérebro chamada junção temporoparietal, médicos provocaram numa paciente a sensação de flutuar e se ver de cima." },
-    { t: "fala", texto: "Para a ciência, isso mostra onde o cérebro constrói a sensação de estar dentro do corpo. Para as tradições, mostra onde fica a porta. O Arhat convida você a experimentar e tirar as suas conclusões." },
+    { t: "fala", texto: "Para a ciência, isso mostra onde o cérebro constrói a sensação de estar dentro do corpo. Para as tradições, mostra onde fica a porta. O Osirion convida você a experimentar e tirar as suas conclusões." },
     { t: "fala", texto: "Vislumbramos as cores vivas do astral, atravessamos barreiras físicas e viajamos à velocidade do pensamento." },
     { t: "leva", texto: "O medo da morte se dissipa quando vivenciamos, na prática, a multiplicidade de nossos corpos." }
   ] },
@@ -157,15 +157,15 @@ window.CAPSULAS = [
   { dia: 21, ilus: "figura-estrela", tema: "livro", titulo: "Abrir os olhos", minutos: 2, cartas: [
     { t: "abre", titulo: "Abrir os olhos", sub: "O fechamento" },
     { t: "fala", texto: "Quem olha para a Magia da Vida resgata um conhecimento que preenche uma lacuna mantida por eras, que revela do que somos feitos e o caminho para casa!" },
-    { t: "revela", pergunta: "O que significa Arhat?", resposta: "Arhat significa abrir os olhos." },
+    { t: "revela", pergunta: "O que significa despertar?", resposta: "Despertar é abrir os olhos." },
     { t: "faca", titulo: "Hoje", texto: "Abra o céu das suas noites e olhe a constelação que você formou. Cada ponto foi uma noite em que você se lembrou." },
     { t: "leva", texto: "Só aquele que decidiu abrir os olhos enxerga as portas da Verdade." }
   ] },
   { dia: 22, ilus: "figura-fio", tema: "viajantes", titulo: "Robert Monroe e as vibrações", minutos: 3, cartas: [
     { t: "abre", titulo: "Robert Monroe e as vibrações", sub: "O homem que mapeou a saída do corpo" },
     { t: "fala", texto: "Robert Monroe era um empresário de rádio nos Estados Unidos quando, nos anos 1950, começou a sair do corpo sem querer. Ele registrou tudo e publicou Viagens Fora do Corpo, em 1971." },
-    { t: "revela", pergunta: "O que acontecia antes de cada saída?", resposta: "Uma onda de vibrações tomava o corpo, às vezes com zumbido e sensação de choque. Com o tempo ele entendeu que era a porta, e não um perigo. O Arhat chama isso de estado vibracional." },
-    { t: "fala", texto: "Monroe chamou de Foco 10 o estado de mente desperta e corpo dormindo. É o mesmo corpo relaxado, mente desperta do Arhat." },
+    { t: "revela", pergunta: "O que acontecia antes de cada saída?", resposta: "Uma onda de vibrações tomava o corpo, às vezes com zumbido e sensação de choque. Com o tempo ele entendeu que era a porta, e não um perigo. O Osirion chama isso de estado vibracional." },
+    { t: "fala", texto: "Monroe chamou de Foco 10 o estado de mente desperta e corpo dormindo. É o mesmo corpo relaxado, mente desperta do Osirion." },
     { t: "faca", titulo: "Hoje à noite", texto: "Se vierem as vibrações, não se assuste e não se mexa. Respire e deixe que elas cresçam e se espalhem pelo corpo inteiro." },
     { t: "leva", texto: "A vibração é a porta, não o perigo." }
   ] },
@@ -188,21 +188,21 @@ window.CAPSULAS = [
     { t: "abre", titulo: "O alvo de William Buhlman", sub: "Escolher para onde ir" },
     { t: "fala", texto: "William Buhlman pesquisa a experiência fora do corpo há décadas e escreveu Aventuras Além do Corpo. Ele ensina que a intenção clara é o que mais leva alguém para fora." },
     { t: "revela", pergunta: "O que é a técnica do alvo?", resposta: "Escolha um lugar real que você conhece bem, como outro cômodo da casa, e três objetos dele. Durante o dia, observe esses objetos com atenção. À noite, ao deitar, sinta-se lá, tocando cada um." },
-    { t: "fala", texto: "Repare: é o mesmo exercício do Segundo Ato do Arhat, caminhar em outro cômodo com o corpo sutil. Tradições diferentes chegando ao mesmo caminho." },
+    { t: "fala", texto: "Repare: é o mesmo exercício do Segundo Ato do Osirion, caminhar em outro cômodo com o corpo sutil. Tradições diferentes chegando ao mesmo caminho." },
     { t: "faca", titulo: "Hoje", texto: "Escolha um cômodo e três objetos. Olhe para eles hoje como se fosse a primeira vez." },
     { t: "leva", texto: "Para onde vai a atenção, vai o corpo sutil." }
   ] },
   { dia: 26, ilus: "estrela-terra", tema: "viajantes", titulo: "Comandos em voz firme", minutos: 2, cartas: [
-    { t: "abre", titulo: "Comandos em voz firme", sub: "Buhlman e o Arhat" },
+    { t: "abre", titulo: "Comandos em voz firme", sub: "Buhlman e o Osirion" },
     { t: "fala", texto: "Buhlman recomenda frases curtas, ditas com firmeza, ao adormecer e dentro da experiência. Elas acordam a atenção." },
-    { t: "quiz", pergunta: "Qual comando o Arhat ensina quando o sonho fica instável?", opcoes: ["“Quero acordar”", "“Clareza, agora!”", "“Não estou aqui”"], certa: 1, explica: "Buhlman ensina o mesmo pedido: clareza e consciência, agora. Dito com convicção, o ambiente se firma." },
+    { t: "quiz", pergunta: "Qual comando o Osirion ensina quando o sonho fica instável?", opcoes: ["“Quero acordar”", "“Clareza, agora!”", "“Não estou aqui”"], certa: 1, explica: "Buhlman ensina o mesmo pedido: clareza e consciência, agora. Dito com convicção, o ambiente se firma." },
     { t: "fala", texto: "Ao adormecer, repita em silêncio: “Agora estou fora do corpo.” Dentro da experiência: “Clareza, agora!” ou “Consciência, agora!”." },
     { t: "leva", texto: "Clareza, agora!" }
   ] },
   { dia: 27, ilus: "figura-fio", tema: "viajantes", titulo: "O som que solta o corpo", minutos: 2, cartas: [
     { t: "abre", titulo: "O som que solta o corpo", sub: "Monroe, o Om e as cigarras" },
     { t: "fala", texto: "Monroe usava um exercício de ressonância: cantar um som grave e longo, sentindo a vibração no peito e na cabeça, antes de praticar." },
-    { t: "fala", texto: "O Arhat faz o mesmo com o Om no Quinto Ato, e conta que os Maias usavam o canto das cigarras para atravessar." },
+    { t: "fala", texto: "O Osirion faz o mesmo com o Om no Quinto Ato, e conta que os Maias usavam o canto das cigarras para atravessar." },
     { t: "faca", titulo: "Agora", texto: "Inspire fundo e solte o ar num “ommm” grave, longo. Faça três vezes e repare onde o corpo vibra.", segundos: 45 },
     { t: "leva", texto: "Entre na vibração do som até ouvir o zumbido do outro lado." }
   ] },
@@ -210,14 +210,14 @@ window.CAPSULAS = [
     { t: "abre", titulo: "Lembrar de lembrar", sub: "A técnica de Stephen LaBerge" },
     { t: "fala", texto: "Stephen LaBerge, o pesquisador de Stanford que provou o sonho lúcido com o movimento dos olhos, criou uma técnica chamada MILD: indução do sonho lúcido pela memória." },
     { t: "revela", pergunta: "Como fazer?", resposta: "Ao acordar de um sonho, de madrugada, relembre-o. Depois, voltando a dormir, repita: “Da próxima vez que eu sonhar, vou lembrar que estou sonhando.” E imagine-se de volta naquele sonho, percebendo que é sonho." },
-    { t: "fala", texto: "Ela funciona ainda melhor somada ao despertar de madrugada do Arhat." },
+    { t: "fala", texto: "Ela funciona ainda melhor somada ao despertar de madrugada do Osirion." },
     { t: "faca", titulo: "Nesta madrugada", texto: "Quando o Osirion te despertar, relembre o último sonho e repita a frase até adormecer." },
     { t: "leva", texto: "Da próxima vez que eu sonhar, vou lembrar que estou sonhando." }
   ] },
   { dia: 29, ilus: "estrela-cadente", tema: "viajantes", titulo: "O que todos os viajantes dizem", minutos: 2, cartas: [
-    { t: "abre", titulo: "O que todos os viajantes dizem", sub: "Monroe, Buhlman, Castaneda, LaBerge e o Arhat" },
+    { t: "abre", titulo: "O que todos os viajantes dizem", sub: "Monroe, Buhlman, Castaneda, LaBerge e o Osirion" },
     { t: "fala", texto: "Caminhos diferentes, as mesmas chaves: relaxar o corpo sem apagar a mente, ter uma intenção clara, não ter medo das vibrações e lembrar de perguntar se está sonhando." },
-    { t: "revela", pergunta: "E a chave mais esquecida?", resposta: "A constância. Quase todos contam que a primeira experiência veio depois de semanas de prática. Quanto mais tempo fizer o Arhat, mais viverá seus resultados." },
+    { t: "revela", pergunta: "E a chave mais esquecida?", resposta: "A constância. Quase todos contam que a primeira experiência veio depois de semanas de prática. Quanto mais tempo praticar, mais viverá seus resultados." },
     { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!" }
   ] },
   { dia: 30, ilus: "maos-chama", tema: "viajantes", titulo: "Dom Juan e as mãos", minutos: 3, cartas: [
@@ -233,7 +233,7 @@ window.CAPSULAS = [
     { t: "fala", texto: "Em A Arte de Sonhar, Dom Juan descreve o sonhar como uma travessia por portões. Cada portão é um obstáculo de energia que a atenção precisa vencer." },
     { t: "revela", pergunta: "Qual é o primeiro portão?", resposta: "Perceber que você está adormecendo, ou ter um sonho tão vivo que você percebe que está dentro dele. Para Dom Juan, é ali que nasce a “atenção do sonhar”." },
     { t: "revela", pergunta: "E o segundo?", resposta: "Acordar de um sonho para dentro de outro sonho, ou trocar de sonho de propósito, sem voltar ao corpo." },
-    { t: "revela", pergunta: "E o terceiro?", resposta: "Ver o próprio corpo dormindo. É a mesma cena que o Arhat descreve na saída do corpo." },
+    { t: "revela", pergunta: "E o terceiro?", resposta: "Ver o próprio corpo dormindo. É a mesma cena que o Osirion descreve na saída do corpo." },
     { t: "quiz", pergunta: "Em qual portão está quem se levanta no sonho e vê o próprio corpo na cama?", opcoes: ["No primeiro", "No segundo", "No terceiro"], certa: 2, explica: "Ver o próprio corpo dormindo é o terceiro portão de Dom Juan." },
     { t: "leva", texto: "Um portão de cada vez. A atenção cresce como um músculo." }
   ] },
@@ -242,7 +242,7 @@ window.CAPSULAS = [
     { t: "fala", texto: "Dom Juan dizia que, para sonhar com lucidez, é preciso energia. E que a nossa energia fica presa em lembranças, mágoas e conversas que ainda giram na cabeça." },
     { t: "fala", texto: "A prática para soltar essa energia se chama recapitulação: lembrar, uma a uma, as pessoas e as cenas da vida, com a respiração." },
     { t: "faca", titulo: "Recapitulação", texto: "Lembre uma cena que ainda pesa. Inspire girando a cabeça devagar de um ombro ao outro, como se puxasse de volta a energia que deixou lá. Expire girando para o outro lado, soltando o que não é seu. Repita até a cena ficar leve." },
-    { t: "revela", pergunta: "O que é o “intento”?", resposta: "Para Dom Juan, é a intenção firme, sem dúvida, que move a atenção. É o mesmo que o Arhat pede com o comando antes de dormir: dizer com convicção, como se já fosse verdade." },
+    { t: "revela", pergunta: "O que é o “intento”?", resposta: "Para Dom Juan, é a intenção firme, sem dúvida, que move a atenção. É o mesmo que o Osirion pede com o comando antes de dormir: dizer com convicção, como se já fosse verdade." },
     { t: "leva", texto: "Quem recolhe a própria energia tem com o que sonhar." }
   ] },
   { dia: 33, ilus: "olho", tema: "viajantes", titulo: "Ver, não só olhar", minutos: 3, cartas: [
@@ -302,7 +302,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "O way dos maias", sub: "O companheiro que viaja à noite" },
     { t: "fala", texto: "Para os maias, cada pessoa tinha um way: um espírito companheiro, muitas vezes um animal, como a onça, que sai e viaja enquanto o corpo dorme." },
     { t: "revela", pergunta: "Como os maias escreviam a palavra way?", resposta: "Com um rosto humano coberto pela metade por pele de onça. Meio gente, meio jaguar: o eu do dia e o eu da noite no mesmo rosto." },
-    { t: "fala", texto: "Os maias também usavam sons e vibrações para alcançar estados de consciência expandida, como conta o Arhat sobre o canto das cigarras." },
+    { t: "fala", texto: "Os maias também usavam sons e vibrações para alcançar estados de consciência expandida, como conta o Osirion sobre o canto das cigarras." },
     { t: "faca", titulo: "Esta noite", texto: "Antes de dormir, pergunte: “Quem viaja comigo esta noite?” Não escolha a resposta. Anote de manhã o que aparecer." },
     { t: "leva", texto: "Meio dia, meio noite: os dois são você." }
   ] },

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Osirion</title>
-<meta name="description" content="Osirion: sonho lúcido e viagem astral, com o método Arhat, de Vivian Pupin.">
+<meta name="description" content="Osirion: sonho lúcido e viagem astral, de Vivian Pupin.">
 <meta name="theme-color" content="#121427">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1203,7 +1203,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       </button>`;
     }).join("");
     return `<div class="tela">${topo()}${seg || ""}
-      <div><span class="rotulo">O método Arhat</span><h1>Cinco atos para abrir os olhos</h1></div>
+      <div><span class="rotulo">O caminho</span><h1>Cinco atos para abrir os olhos</h1></div>
       <p class="suave">O Osirion é um caminho de autoaprimoramento das faculdades do sonhar. Siga em sequência ou fique alguns dias em cada ato: quanto mais tempo no caminho, mais você vive os resultados.</p>
       ${lista}
       ${est.pago ? "" : `<div class="oferta"><span class="rotulo" style="color:var(--cristal)">Jornada completa</span>
@@ -1411,7 +1411,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     // Na primeira vez, depois do olho acender, aparece a frase do Osirion e a pessoa começa a travessia.
     const frase = () => {
       const f = document.createElement("div"); f.className = "ab-frase";
-      f.innerHTML = `<p>Osirion é o nome de um templo egípcio dedicado a Osíris, o deus que atravessa o mundo da noite e renasce.</p>
+      f.innerHTML = `<p>Osirion é o nome de um templo egípcio dedicado a Osíris, o deus que atravessa o mundo da noite para renascer.</p>
         <p>Toda noite, durante o sono, fazemos essa travessia, mas sem consciência.</p>
         <p>O Osirion ensina a fazê-la acordado: descer abaixo da superfície, e voltar trazendo o que viu do outro lado.</p>
         <button class="btn-trav" type="button">Começar a travessia</button>`;
@@ -1436,7 +1436,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "texto", cor: "#12142c", ilus: "estrela-cadente", rotulo: "A intenção", titulo: "Uma técnica por semana", texto: "Antes de dormir, você vai praticar técnicas dos pesquisadores do sono, dos grandes viajantes e das tradições antigas. O ideal é ficar uma semana com cada uma: é o tempo para a mente aprender e os resultados começarem a aparecer.", nota: "Você escolhe com qual começar. A sugestão para a primeira semana é uma frase simples para dizer ao deitar.", botao: "Seguir" },
     { tipo: "texto", cor: "#11132a", ilus: "maos-chama", rotulo: "Portal do silêncio e da fumaça", titulo: "Silenciar e perfumar o caminho", texto: "Depois da água vinham o silêncio e a fumaça. Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção.", nota: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio.", botao: "Atravessar" },
     { tipo: "respirar", vezes: 3, cor: "#10122a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
-    { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O livro Arhat chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
+    { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O Osirion chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0d0f22", ilus: "maos-chama", rotulo: "Os portões do sonhar", titulo: "Procure as suas mãos", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo. E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho.", nota: "Por isso o Osirion vai te pedir, várias vezes ao dia, para olhar as suas mãos.", botao: "Descer mais" },
     { tipo: "lembrete", cor: "#0c0d1f", ilus: "estrela-lilas", peq: true, rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
     { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
@@ -1467,7 +1467,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           <li><b>Amanhã cedo</b><span>Os primeiros cinco minutos e a pergunta: qual a cor do seu nevoeiro?</span></li>
           <li><b>Primeira semana</b><span>O Primeiro Ato: as raízes, a Respiração Dourada e os testes de realidade.</span></li>
           <li><b>Em duas a três semanas</b><span>Os primeiros graus de lucidez e o despertar das ${desp}.</span></li>
-          <li><b>Depois</b><span>Os cinco atos do método Arhat, a viagem astral e os seus alvos.</span></li></ol>`;
+          <li><b>Depois</b><span>Os cinco atos do caminho, a viagem astral e os seus alvos.</span></li></ol>`;
       }
       const titulo = t.tipo === "caminho" && pf.nome ? `${esc(pf.nome)}, este é o seu caminho` : t.titulo;
       d.innerHTML = `<div class="tela">
@@ -1766,7 +1766,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { nome: "Sonhador", xp: 120, ilus: "figura-descendo", frase: "Eu sou consciência além deste corpo.", texto: "Os sonhos começaram a voltar com você pela manhã." },
     { nome: "Desperto", xp: 350, ilus: "olho", frase: "Ao cair no sono estou consciente.", texto: "Ao longo do dia você pergunta se está sonhando. Uma noite o sonho vai responder." },
     { nome: "Viajante", xp: 800, ilus: "voo-figura", frase: "Sou um ser multidimensional.", texto: "Você já atravessa o limiar e visita lugares do outro lado." },
-    { nome: "Arhat", xp: 1600, ilus: "figura-dourada", frase: "Agora eu me separo facilmente do meu corpo e estou consciente.", texto: "Aquele que despertou. A consciência segue acesa mesmo com o corpo dormindo." }
+    { nome: "Renascido", xp: 1600, ilus: "figura-dourada", frase: "Agora eu me separo facilmente do meu corpo e estou consciente.", texto: "Aquele que atravessou a noite e renasceu. A consciência segue acesa mesmo com o corpo dormindo." }
   ];
   // A luz (os pontos): testes, práticas, cápsulas, noites anotadas (mais para as lúcidas) e selos.
   function luz() {
@@ -1881,7 +1881,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <span class="rotulo">Iniciação · nível ${i + 1} de ${NIVEIS.length}</span>
       <img class="cer-ilus" src="${ILUS(n.ilus)}" alt="">
       <span class="suave">Você agora é</span><h1>${esc(n.nome)}</h1>
-      <blockquote class="cita">“${esc(n.frase)}”<cite>Arhat</cite></blockquote>
+      <blockquote class="cita">“${esc(n.frase)}”</blockquote>
       <p class="suave">${esc(n.texto)}</p>
       <button class="btn largo" data-fechar>Seguir a jornada</button></div></div>`, d => ceuFundo(d.querySelector(".ceu-fundo"), d.querySelector(".cerimonia")));
   }
