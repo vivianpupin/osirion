@@ -9,4 +9,5 @@ Este repositório é o projeto inteiro do Osirion. A Netlify publica a pasta `ap
 - `app/`: o aplicativo (abre no celular e pode ser instalado na tela inicial).
 - `netlify.toml`: só publica quando o commit tiver `[publicar]`.
 - Endereço: https://ooosirion.netlify.app
+- Publicado em 19/10/2026: desenhos do livro, cápsulas ilustradas e o ícone do olho.
 - O que a pessoa anota ainda fica só no aparelho. A próxima etapa é a conta na nuvem.
