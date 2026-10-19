@@ -51,12 +51,15 @@ body {
   display: flex; flex-direction: column;
 }
 html, body { margin: 0; }
-:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 /* No celular, o app ocupa a tela inteira, sem a moldura. */
 @media (max-width: 460px) {
   body { padding: 0; gap: 0; }
   .aviso-prot { display: none; }
-  .celular { height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); min-height: 0; max-width: none; border-radius: 0; border: 0; box-shadow: none; }
+  /* A tela inteira, até atrás da barra de status e da barra de baixo, sem faixas de outra cor. */
+  html, body { background: var(--ceu); }
+  .celular { height: 100dvh; min-height: 0; max-width: none; border-radius: 0; border: 0; box-shadow: none;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .sobre, .caverna, .abertura-app { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 }
 .nevoa {
   position: absolute; inset: 0; pointer-events: none; z-index: 0;
@@ -147,7 +150,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 /* A travessia: entrar na caverna */
 .caverna { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; overflow-y: auto; transition: background 1.2s; }
 .caverna .tela { flex: 1; justify-content: space-between; text-align: center; align-items: center; }
-.caverna .passo-c { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; max-width: 34ch; }
+.caverna .passo-c { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; max-width: 34ch; padding-top: clamp(28px, 11vh, 110px); }
 .caverna h1 { font-size: 30px; }
 .caverna p { font-size: 17px; line-height: 1.6; color: var(--areia); }
 .caverna .nota-c { font-size: 13px; color: var(--areia-2); }
@@ -1261,19 +1264,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Inspirada nas telas de boas-vindas dos apps de sonho e nos templos antigos:
   // ninguém entrava direto, passava por pátios e portais antes da câmara onde se dormia.
   const TRAVESSIA = [
-    { tipo: "nome", cor: "#262a52", rotulo: "Portal do nome", titulo: "Como você quer ser chamado na travessia?", texto: "É assim que o Osirion vai falar com você.", botao: "Seguir" },
-    { tipo: "escolha", campo: "lembra", cor: "#22264b", rotulo: "Portal da memória", titulo: "Você costuma lembrar dos seus sonhos?", opcoes: ["Quase nunca", "Às vezes, em pedaços", "Quase todas as manhãs"], ensina: "Todos sonham, todas as noites. Lembrar é um treino, e começa nos primeiros cinco minutos depois de acordar." },
-    { tipo: "escolha", campo: "experiencia", cor: "#1f2245", rotulo: "Portal da experiência", titulo: "Você já despertou dentro de um sonho?", opcoes: ["Nunca", "Aconteceu por acaso algumas vezes", "Estou tentando, com técnicas", "Às vezes consigo provocar", "Com frequência"], ensina: "Despertar no sonho é perceber, ali dentro, que aquilo é um sonho. Daí em diante você pode agir com a mesma consciência de agora." },
-    { tipo: "escolha", campo: "pesadelos", cor: "#1c1f40", rotulo: "Portal do medo", titulo: "Com que frequência você tem pesadelos ou paralisia do sono?", opcoes: ["Nunca", "Raramente", "Às vezes", "Com frequência"], ensina: "No Arhat, o pesadelo é uma porta: quem está atento percebe o absurdo e desperta dentro dele. E a paralisia do sono, que assusta, é passageira e inofensiva." },
-    { tipo: "multi", campo: "tecnicas", cor: "#191c3a", rotulo: "Portal do caminho já trilhado", titulo: "O que você já experimentou?", sub: "Pode marcar várias.", opcoes: ["Testes de realidade", "Acordar de madrugada e voltar a dormir", "Diário de sonhos", "Meditação antes de dormir", "Projeção astral", "Nada ainda"], botao: "Seguir" },
-    { tipo: "multi", campo: "desejos", cor: "#161935", rotulo: "Portal do desejo", titulo: "O que você quer viver do outro lado?", sub: "Pode marcar várias. São os seus alvos de viagem.", opcoes: ["Voar", "Reencontrar alguém que partiu", "Falar com meus guias", "Curar algo em mim", "Conhecer o Egito antigo", "Perder o medo da morte", "Explorar mundos impossíveis", "Ir às estrelas"], botao: "Seguir" },
-    { tipo: "sono", cor: "#13152f", rotulo: "Portal do tempo", titulo: "Qual é o seu horário de sono?", texto: "O momento dos sonhos está ligado ao seu ciclo de sono. Com ele, o Osirion calcula a hora do seu despertar de madrugada.", botao: "Seguir" },
+    { tipo: "nome", cor: "#262a52", ilus: "olho", peq: true, rotulo: "Portal do nome", titulo: "Como você quer ser chamado na travessia?", texto: "É assim que o Osirion vai falar com você.", botao: "Seguir" },
+    { tipo: "escolha", campo: "lembra", cor: "#22264b", ilus: "lua", peq: true, rotulo: "Portal da memória", titulo: "Você costuma lembrar dos seus sonhos?", opcoes: ["Quase nunca", "Às vezes, em pedaços", "Quase todas as manhãs"], ensina: "Todos sonham, todas as noites. Lembrar é um treino, e começa nos primeiros cinco minutos depois de acordar." },
+    { tipo: "escolha", campo: "experiencia", cor: "#1f2245", ilus: "estrela-dourada", peq: true, rotulo: "Portal da experiência", titulo: "Você já despertou dentro de um sonho?", opcoes: ["Nunca", "Aconteceu por acaso algumas vezes", "Estou tentando, com técnicas", "Às vezes consigo provocar", "Com frequência"], ensina: "Despertar no sonho é perceber, ali dentro, que aquilo é um sonho. Daí em diante você pode agir com a mesma consciência de agora." },
+    { tipo: "escolha", campo: "pesadelos", cor: "#1c1f40", ilus: "figura-cruz", peq: true, rotulo: "Portal do medo", titulo: "Com que frequência você tem pesadelos ou paralisia do sono?", opcoes: ["Nunca", "Raramente", "Às vezes", "Com frequência"], ensina: "No Arhat, o pesadelo é uma porta: quem está atento percebe o absurdo e desperta dentro dele. E a paralisia do sono, que assusta, é passageira e inofensiva." },
+    { tipo: "multi", campo: "tecnicas", cor: "#191c3a", ilus: "fita-estrela-2", peq: true, rotulo: "Portal do caminho já trilhado", titulo: "O que você já experimentou?", sub: "Pode marcar várias.", opcoes: ["Testes de realidade", "Acordar de madrugada e voltar a dormir", "Diário de sonhos", "Meditação antes de dormir", "Projeção astral", "Nada ainda"], botao: "Seguir" },
+    { tipo: "multi", campo: "desejos", cor: "#161935", ilus: "voo-figura", peq: true, rotulo: "Portal do desejo", titulo: "O que você quer viver do outro lado?", sub: "Pode marcar várias. São os seus alvos de viagem.", opcoes: ["Voar", "Reencontrar alguém que partiu", "Falar com meus guias", "Curar algo em mim", "Conhecer o Egito antigo", "Perder o medo da morte", "Explorar mundos impossíveis", "Ir às estrelas"], botao: "Seguir" },
+    { tipo: "sono", cor: "#13152f", ilus: "figura-deitada", peq: true, rotulo: "Portal do tempo", titulo: "Qual é o seu horário de sono?", texto: "O momento dos sonhos está ligado ao seu ciclo de sono. Com ele, o Osirion calcula a hora do seu despertar de madrugada.", botao: "Seguir" },
     { tipo: "texto", cor: "#12142c", ilus: "rio", rotulo: "Portal da água", titulo: "Lavar o que ficou do dia", texto: "Antes de entrar no santuário, lavavam-se as mãos, o rosto e os pés. A água levava a poeira da estrada e marcava a passagem de um mundo para o outro.", nota: "Hoje à noite, antes de deitar, lave as mãos e o rosto devagar, com essa intenção: deixar o dia ir com a água.", botao: "Atravessar" },
     { tipo: "texto", cor: "#11132a", ilus: "maos-chama", rotulo: "Portal do silêncio e da fumaça", titulo: "Silenciar e perfumar o caminho", texto: "Depois da água vinham o silêncio e a fumaça. Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção.", nota: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio.", botao: "Atravessar" },
     { tipo: "respirar", vezes: 3, cor: "#10122a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
     { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O livro Arhat chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0d0f22", ilus: "maos-chama", rotulo: "Os portões do sonhar", titulo: "Procure as suas mãos", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo. E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho.", nota: "Por isso o Osirion vai te pedir, várias vezes ao dia, para olhar as suas mãos.", botao: "Descer mais" },
-    { tipo: "lembrete", cor: "#0c0d1f", rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
+    { tipo: "lembrete", cor: "#0c0d1f", ilus: "estrela-lilas", peq: true, rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
     { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Entrar no santuário" },
     { tipo: "caminho", cor: "#0a0b19", rotulo: "O santuário", titulo: "Seu caminho para a lucidez", botao: "Começar a jornada" }
@@ -1308,7 +1311,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       d.innerHTML = `<div class="tela">
         <div class="profundidade" aria-hidden="true">${TRAVESSIA.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("")}</div>
         <div class="passo-c">
-          ${t.ilus ? `<img class="ilus" src="${ILUS(t.ilus)}" alt="">` : ""}
+          ${t.ilus ? `<img class="ilus ${t.peq ? "pequena" : ""}" src="${ILUS(t.ilus)}" alt="">` : ""}
           ${t.luz ? '<div class="luz" aria-hidden="true"></div>' : ""}
           <span class="rotulo">${t.rotulo}</span>
           <h1>${titulo}</h1>
