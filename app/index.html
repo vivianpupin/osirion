@@ -618,8 +618,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .passos-noite { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #c97a7c; }
 .cal-inicio { display: flex; flex-direction: column; gap: 10px; padding: 14px 12px 16px; border: 1px solid var(--ceu-3); border-radius: 22px; background: radial-gradient(120% 90% at 50% 0%, #1d2148, #0b0c18 75%); }
 /* O olho é o que importa: grande no centro; o número do dia fica pequeno e apagado no canto. */
-.grade-olhos { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px 4px; padding: 4px 2px; }
-.grade-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0 4px; padding: 0 2px 12px; margin-top: -6px; }
+.grade-olhos { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px 4px; padding: 0 2px 8px; }
+.grade-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0 4px; padding: 2px 2px 0; }
 .grade-dias span { text-align: center; font-size: 9px; letter-spacing: .08em; color: var(--areia-2); opacity: .45; }
 .ver-cal { display: block; margin: 12px auto 0; background: none; border: 0; padding: 4px 8px; font: inherit; font-size: 12px; letter-spacing: .06em; color: var(--nevoeiro); opacity: .85; cursor: pointer; }
 .grade-olhos .cel { aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
@@ -961,18 +961,18 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   // A primeira coisa da tela inicial: o andamento da pessoa, só com os olhinhos (sem mês, sem datas).
-  // Em cima, os últimos 7 dias (o de hoje à direita); embaixo, o placar da semana. O calendário todo fica no Diário.
+  // Em cima, os últimos 14 dias em duas linhas (hoje embaixo, à direita); embaixo, o placar desses dias. O calendário todo fica no Diário.
   function ceuDoInicio() {
     const porDia = {};
     todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
-    const N = 7, dias = Array.from({ length: N }, (_, k) => isoMais(hojeIso, k - N + 1));
+    const N = 14, dias = Array.from({ length: N }, (_, k) => isoMais(hojeIso, k - N + 1));
     const cont = [0, 0, 0, 0, 0];
     const celulas = dias.map(iso => { const t = porDia[iso]; if (t !== undefined) cont[t]++;
       return `<button class="cel ${iso === hojeIso ? "hoje" : ""}" data-ver-dia="${iso}" aria-label="${esc(deIso(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "long" }))}">${t !== undefined ? iconeNoite(t, "cel") : ""}</button>`; }).join("");
-    const letras = dias.map(iso => `<span>${"DSTQQSS"[deIso(iso).getDay()]}</span>`).join("");
+    const letras = dias.slice(-7).map(iso => `<span>${"DSTQQSS"[deIso(iso).getDay()]}</span>`).join("");
     return `<section class="cal-inicio">
-      <div class="grade-olhos">${celulas}</div>
       <div class="grade-dias">${letras}</div>
+      <div class="grade-olhos">${celulas}</div>
       <div class="placar">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>
       <button class="ver-cal" data-ver-dia="${hojeIso}">Ver o calendário todo</button></section>`;
   }
