@@ -998,7 +998,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${modoAnota === "gravar" ? `<button class="gravar" id="gravar" data-acao="gravar">Gravar sonho</button>
       <p class="suave" id="gravar-tx" style="text-align:center">Toque e fale de olhos fechados. A sua voz vira texto aqui embaixo.</p>` : ""}
       <p class="dica-pessoa">Conte em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga, a luz é laranja…”. Até lembranças pequenas contam.</p>
-      <label for="sonho" class="rotulo">O que veio</label>
+      <label for="sonho" class="rotulo">Diário</label>
       <textarea id="sonho" placeholder="Estou numa casa antiga, a luz é laranja…"></textarea>
       <span class="rotulo">Como foi a noite</span>
       <div class="tipos">${TIPOS.map(t => `<button class="tipo" data-tipo="${t.k}" aria-pressed="${t.k === tipoEscolhido}">${iconeNoite(t.k)}${t.nome}</button>`).join("")}</div>
