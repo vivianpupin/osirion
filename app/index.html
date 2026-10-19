@@ -451,36 +451,43 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .trilho-m i { display: block; height: 100%; background: var(--cristal); }
 .mapa { background: #0b0c18; padding: 14px 10px; }
 .mapa .momento-cab, .mapa > p { padding: 0 6px; }
-.carta { border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
-.carta svg { display: block; width: 100%; height: auto; fill: none; stroke: #c9a35f; stroke-width: .7; stroke-linecap: round; stroke-linejoin: round; }
+.carta { border-radius: 10px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,.6), 0 0 0 1px rgba(201,163,95,.25); }
+.carta svg { display: block; width: 100%; height: auto; fill: none; stroke: url(#ouro); stroke-width: .65; stroke-linecap: round; stroke-linejoin: round; }
+.carta .fino { stroke-width: .35; }
 .carta .est-f { fill: #eee5d4; stroke: none; }
 .carta .est-g { fill: #fff2d6; stroke: none; }
-.carta .braco { stroke: #b9b2ff; stroke-width: 16; opacity: .09; filter: blur(5px); }
-.carta .faixa-c { stroke-width: .5; opacity: .5; }
-.carta .faixa path { opacity: .7; }
-.carta .esfera { stroke-dasharray: 1.5 3; opacity: .55; }
-.carta .esfera.feita { stroke-dasharray: none; stroke: #f5c75b; opacity: .7; }
-.carta .cheio { fill: #c9a35f; }
-.carta .terra-c { fill: #1f2c5c; stroke-width: 1; }
-.carta .rota { stroke: #eee5d4; stroke-width: 1.1; stroke-dasharray: 2 4; opacity: .55; }
-.carta .rota.feita { stroke: #f5c75b; stroke-width: 2; stroke-dasharray: none; opacity: 1; filter: drop-shadow(0 0 3px rgba(245,199,91,.8)); }
-.carta .medalha-m { fill: #121427; stroke-width: 1; }
-.carta .num-m { font-family: var(--display); font-size: 9px; fill: #c9a35f; stroke: none; text-anchor: middle; }
-.carta .marco.feita .medalha-m { fill: #c9a35f; }
-.carta .marco.feita .num-m, .carta .marco.aqui .num-m { fill: #121427; }
-.carta .marco.aqui .medalha-m { fill: var(--nevoeiro); stroke: var(--nevoeiro); }
-.carta .marco.longe { opacity: .75; }
-.carta .raio-s { stroke: #f5c75b; }
-.carta .cartela { fill: #15173a; stroke-width: .9; }
-.carta .titulo-mapa { font-family: var(--display); font-size: 12px; letter-spacing: .06em; fill: #eee5d4; stroke: none; text-anchor: middle; }
-.carta .voce-m .anel { stroke: var(--nevoeiro); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; animation: anel-m 2.4s ease-out infinite; }
-.carta .voce-m .a2 { animation-delay: 1.2s; }
-@keyframes anel-m { from { transform: scale(.7); opacity: .9; } to { transform: scale(1.6); opacity: 0; } }
+.carta .braco { stroke: #b9b2ff; stroke-width: 18; opacity: .07; filter: blur(6px); }
+.carta .raios-c { stroke-width: .25; opacity: .22; }
+.carta .ouro-f { fill: url(#ouro); stroke: none; }
+.carta .disco { fill: #14163a; }
+.carta .esfera { stroke-width: .45; stroke-dasharray: 1 2.5; opacity: .6; }
+.carta .esfera.feita { stroke-dasharray: none; stroke-width: .6; opacity: .85; }
+.carta .nome-esf { text-anchor: middle; font-family: var(--corpo); font-size: 5.6px; letter-spacing: .28em; fill: #d9bc7c; stroke: none; opacity: .85; }
+.carta .terra-c { fill: #1b2552; }
+.carta .rota { stroke: #eee5d4; stroke-width: .7; stroke-dasharray: 1.5 3; opacity: .5; }
+.carta .rota.feita { stroke: url(#ouro); stroke-width: 1.3; stroke-dasharray: none; opacity: 1; }
+.carta .rota-brilho { stroke: #f5d78b; stroke-width: 4; opacity: .18; filter: blur(2px); }
+.carta .medalha-m { fill: #121427; stroke-width: .8; }
+.carta .medalha-in { stroke-width: .35; }
+.carta .num-m { font-family: var(--display); font-size: 6.5px; letter-spacing: .02em; fill: #e6c983; stroke: none; text-anchor: middle; }
+.carta .marco.feita .medalha-m { fill: url(#ouro-m); }
+.carta .marco.feita .medalha-in { stroke: #7a5a26; }
+.carta .marco.feita .num-m, .carta .marco.aqui .num-m { fill: #1a1430; }
+.carta .marco.aqui .medalha-m { fill: var(--nevoeiro); stroke: #fff; stroke-width: .6; }
+.carta .marco.aqui .medalha-in { stroke: #121427; opacity: .4; }
+.carta .marco.longe { opacity: .8; }
+.carta .raio-s { stroke-width: .6; }
+.carta .cartela { fill: #14163a; stroke-width: .7; }
+.carta .titulo-mapa { font-family: var(--display); font-size: 8.6px; letter-spacing: .14em; fill: #f1dfb0; stroke: none; text-anchor: middle; }
+.carta .rodape-mapa { font-family: var(--corpo); font-style: italic; font-size: 8px; letter-spacing: .12em; fill: #d9bc7c; stroke: none; text-anchor: middle; }
+.carta .voce-m .anel { stroke: var(--nevoeiro); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: anel-m 2.6s ease-out infinite; }
+.carta .voce-m .a2 { animation-delay: 1.3s; }
+@keyframes anel-m { from { transform: scale(.7); opacity: .9; } to { transform: scale(1.7); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .carta .voce-m .anel { animation: none; opacity: .6; } }
 .legenda-mapa { list-style: none; margin: 0; padding: 0 4px; display: flex; flex-direction: column; gap: 2px; }
-.legenda-mapa li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: center; padding: 7px 4px; border-bottom: 1px solid #1d2040; }
-.legenda-mapa .num-l { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #c9a35f; display: grid; place-items: center; font-family: var(--display); font-size: 12px; color: #c9a35f; }
-.legenda-mapa li.feita .num-l { background: #c9a35f; color: #121427; }
+.legenda-mapa li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center; padding: 7px 4px; border-bottom: 1px solid #1d2040; }
+.legenda-mapa .num-l { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #c9a35f; display: grid; place-items: center; font-family: var(--display); font-size: 10px; color: #c9a35f; }
+.legenda-mapa li.feita .num-l { background: radial-gradient(circle at 35% 30%, #fbeab8, #d4ae66 60%, #9c7535); color: #1a1430; }
 .legenda-mapa li.aqui .num-l { background: var(--nevoeiro); border-color: var(--nevoeiro); color: #121427; box-shadow: 0 0 10px var(--nevoeiro); }
 .legenda-mapa b { font-family: var(--display); font-weight: 400; font-size: 15px; }
 .legenda-mapa small { display: block; font-style: italic; font-size: 12px; color: #c9a35f; }
@@ -1687,75 +1694,100 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${s.lista.map(x => `<div class="missao ${x.ok ? "ok" : ""}"><span class="marca-m">${x.ok ? "✦" : ""}</span><span>${esc(x.m.txt)}<span class="trilho-m"><i style="width:${x.v / x.m.meta * 100}%"></i></span></span><b>${x.v}/${x.m.meta}</b></div>`).join("")}
       <p class="suave miuda">${s.completa ? "Semana cumprida. O selo da semana inteira é seu." : "Cumpra as três até domingo e ganhe o selo da semana inteira. Toda segunda chegam missões novas."}</p></section>`;
   }
-  // O mapa da jornada: uma carta celeste antiga. Do corpo, no centro, a consciência viaja para fora, esfera por esfera
-  // (como os focos de Robert Monroe), em espiral pela galáxia, até o santuário na borda do céu.
+  // O mapa da jornada: uma carta celeste antiga, como uma carta de tarô gravada em ouro. Do corpo, no centro, a consciência
+  // viaja para fora, esfera por esfera (os estados que Monroe descreveu, com os nomes do Arhat), em espiral pela galáxia, até o santuário na borda do céu.
   const ESFERAS = [
-    ["A travessia", "O véu do sono"], ["O Início", "Foco 10 · o corpo dorme, a mente desperta"], ["Primeiro Ato", "Foco 12 · a consciência se expande"],
-    ["Segundo Ato", "Foco 15 · onde o tempo para"], ["Terceiro Ato", "Foco 21 · a ponte para outros mundos"], ["Quarto Ato", "Os mundos sutis"],
-    ["Quinto Ato", "O caminho das estrelas"], ["O Santuário", "A abertura"]
+    ["A travessia", "O véu do sono", "O VÉU"], ["O Início", "O limiar · o corpo dorme, a mente desperta", "O LIMIAR"], ["Primeiro Ato", "A expansão · a consciência cresce além do corpo", "A EXPANSÃO"],
+    ["Segundo Ato", "O silêncio · onde o tempo para", "O SILÊNCIO"], ["Terceiro Ato", "A ponte · a passagem para outros mundos", "A PONTE"], ["Quarto Ato", "Os mundos sutis", "OS MUNDOS SUTIS"],
+    ["Quinto Ato", "O caminho das estrelas", "O CAMINHO DAS ESTRELAS"], ["O Santuário", "A abertura · acordado nos dois mundos", ""]
   ];
   function mapaJornada() {
-    const CX = 180, CY = 222, R = [26, 44, 62, 80, 98, 116, 134, 152], aqui = est.travessia ? est.ato + 1 : 0;
+    const LW = 360, LH = 440, CX = 180, CY = 226, R = [26, 44, 62, 80, 98, 116, 134], aqui = est.travessia ? est.ato + 1 : 0;
     let sem = 9; const rnd = () => (sem = (sem * 9301 + 49297) % 233280) / 233280;
     const gauss = () => (rnd() + rnd() + rnd() - 1.5) * 1.4;
-    const pt = (r, g) => [CX + r * Math.cos(g * Math.PI / 180), CY + r * Math.sin(g * Math.PI / 180)];
+    const pt = (r, g, cx = CX, cy = CY) => [cx + r * Math.cos(g * Math.PI / 180), cy + r * Math.sin(g * Math.PI / 180)];
     const n = v => v.toFixed(1);
-    // Estrelas soltas e os dois braços da galáxia.
+    // Arco para escrever ao longo do círculo; na metade de baixo ele vai ao contrário, para o texto ficar de pé.
+    const arco = (r, g0, g1, baixo) => { const [a, b] = pt(r, baixo ? g1 : g0), [c, d] = pt(r, baixo ? g0 : g1); return `M${n(a)} ${n(b)}A${r} ${r} 0 ${g1 - g0 > 180 ? 1 : 0} ${baixo ? 0 : 1} ${n(c)} ${n(d)}`; };
+    // Fundo: estrelas soltas, raios gravados saindo do centro e os dois braços da galáxia.
     let fundo = "";
-    for (let i = 0; i < 150; i++) fundo += `<circle cx="${n(8 + rnd() * 344)}" cy="${n(8 + rnd() * 404)}" r="${[.35, .5, .7][Math.floor(rnd() * 3)]}" opacity="${(.2 + rnd() * .6).toFixed(2)}" class="est-f"/>`;
+    for (let i = 0; i < 140; i++) fundo += `<circle cx="${n(8 + rnd() * 344)}" cy="${n(8 + rnd() * 424)}" r="${[.3, .45, .6][Math.floor(rnd() * 3)]}" opacity="${(.2 + rnd() * .5).toFixed(2)}" class="est-f"/>`;
+    let raios = "";
+    for (let g = 0; g < 360; g += 2.5) { const [a, b] = pt(16, g), [c, d] = pt(g % 10 ? 128 : 140, g); raios += `M${n(a)} ${n(b)}L${n(c)} ${n(d)}`; }
+    fundo += `<path d="${raios}" class="raios-c"/>`;
     for (const braco of [0, 180]) {
       let linha = "";
       for (let i = 0; i < 420; i++) {
         const t = i / 420, g = braco + t * 560, r = 14 + t * 136, [x, y] = pt(r + gauss() * (4 + t * 6), g + gauss() * 5);
-        fundo += `<circle cx="${n(x)}" cy="${n(y)}" r="${rnd() < .12 ? 1 : .5}" opacity="${(.4 + rnd() * .55).toFixed(2)}" class="est-g"/>`;
+        fundo += `<circle cx="${n(x)}" cy="${n(y)}" r="${rnd() < .1 ? .8 : .4}" opacity="${(.35 + rnd() * .5).toFixed(2)}" class="est-g"/>`;
         if (i % 6 === 0) { const [a, b] = pt(r, g); linha += `${linha ? "L" : "M"}${n(a)} ${n(b)}`; }
       }
       fundo = `<path d="${linha}" class="braco"/>` + fundo;
     }
-    // A faixa externa, como o zodíaco das cartas antigas: graus e doze estrelas.
-    let faixa = `<circle cx="${CX}" cy="${CY}" r="160" class="faixa-c"/><circle cx="${CX}" cy="${CY}" r="144"/><circle cx="${CX}" cy="${CY}" r="163"/>`;
-    for (let g = 0; g < 360; g += 5) { const [a, b] = pt(144, g), [c, d] = pt(g % 30 ? 148 : 152, g); faixa += `<path d="M${n(a)} ${n(b)}L${n(c)} ${n(d)}"/>`; }
-    for (let g = 15; g < 360; g += 30) { const [x, y] = pt(156, g); faixa += `<circle cx="${n(x)}" cy="${n(y)}" r="1.4" class="cheio"/>`; }
-    // As esferas.
-    const esferas = R.slice(0, 7).map((r, i) => `<circle cx="${CX}" cy="${CY}" r="${r}" class="esfera ${i < aqui ? "feita" : ""}"/>`).join("");
+    // A faixa externa, como o zodíaco das cartas antigas: graus finos e doze estrelinhas.
+    let faixa = `<circle cx="${CX}" cy="${CY}" r="144"/><circle cx="${CX}" cy="${CY}" r="146" class="fino"/><circle cx="${CX}" cy="${CY}" r="161" class="fino"/><circle cx="${CX}" cy="${CY}" r="163"/>`;
+    let marcas = "";
+    for (let g = 0; g < 360; g += 2.5) { const [a, b] = pt(146, g), [c, d] = pt(g % 30 === 0 ? 153 : g % 10 === 0 ? 150 : 148, g); marcas += `M${n(a)} ${n(b)}L${n(c)} ${n(d)}`; }
+    faixa += `<path d="${marcas}" class="fino"/>`;
+    const estrela = (x, y, s) => `<path d="M${n(x)} ${n(y - s)}L${n(x + s * .25)} ${n(y - s * .25)}L${n(x + s)} ${n(y)}L${n(x + s * .25)} ${n(y + s * .25)}L${n(x)} ${n(y + s)}L${n(x - s * .25)} ${n(y + s * .25)}L${n(x - s)} ${n(y)}L${n(x - s * .25)} ${n(y - s * .25)}z" class="ouro-f"/>`;
+    for (let g = 15; g < 360; g += 30) { const [x, y] = pt(156.5, g); faixa += estrela(x, y, 2.6); }
+    // As esferas, com o nome escrito ao longo do círculo, do lado oposto ao marco.
+    const ang = i => 90 + i * 540 / 7;
+    let esferas = "", nomes = "";
+    R.forEach((r, i) => {
+      esferas += `<circle cx="${CX}" cy="${CY}" r="${r}" class="esfera ${i < aqui ? "feita" : ""}"/>`;
+      const rotulo = ESFERAS[i][2]; if (!rotulo || r < 40) return;
+      const meio = ang(i) + 180, largura = 160, baixo = Math.sin(meio * Math.PI / 180) > 0;
+      nomes += `<path id="esf${i}" d="${arco(baixo ? r - 2.2 : r + 2.2, meio - largura / 2 - 4, meio + largura / 2 + 4, baixo)}" fill="none" stroke="none"/><text class="nome-esf"><textPath href="#esf${i}" startOffset="50%">${rotulo}</textPath></text>`;
+    });
     // A rota em espiral: do corpo até o santuário, no alto.
-    const ang = i => 90 + i * 540 / 7, pos = i => pt(i === 7 ? 152 : R[i], ang(i));
+    const pos = i => pt(i === 7 ? 154 : R[i], ang(i));
     const rota = ate => { let d = ""; const ini = [14, ang(0) - 70];
-      for (let i = 0; i <= ate; i++) { const [r0, g0] = i ? [i === 8 ? 152 : R[i - 1], ang(i - 1)] : ini, [r1, g1] = [i === 7 ? 152 : R[i], ang(i)];
-        for (let k = i ? 1 : 0; k <= 20; k++) { const t = k / 20, [x, y] = pt(r0 + (r1 - r0) * t, g0 + (g1 - g0) * t); d += `${d ? "L" : "M"}${n(x)} ${n(y)}`; } }
+      for (let i = 0; i <= ate; i++) { const [r0, g0] = i ? [R[i - 1], ang(i - 1)] : ini, [r1, g1] = [i === 7 ? 154 : R[i], ang(i)];
+        for (let k = i ? 1 : 0; k <= 24; k++) { const t = k / 24, [x, y] = pt(r0 + (r1 - r0) * t, g0 + (g1 - g0) * t); d += `${d ? "L" : "M"}${n(x)} ${n(y)}`; } }
       return d; };
     const marcos = ESFERAS.map(([nome], i) => { const [x, y] = pos(i), st = i < aqui ? "feita" : i === aqui ? "aqui" : "longe";
-      const g = i === 7 ? `<path d="M0 -13L3 -3L13 0L3 3L0 13L-3 3L-13 0L-3 -3z" class="cheio"/>${Array.from({ length: 12 }, (_, k) => { const a = k * 30 * Math.PI / 180; return `<path d="M${n(Math.cos(a) * 15)} ${n(Math.sin(a) * 15)}L${n(Math.cos(a) * 21)} ${n(Math.sin(a) * 21)}" class="raio-s"/>`; }).join("")}` : "";
-      return `<g class="marco ${st}" transform="translate(${n(x)} ${n(y)})">${g}<circle r="8" class="medalha-m"/><text y="3.2" class="num-m">${i + 1}</text></g>`; }).join("");
+      const coroa = i === 7 ? Array.from({ length: 16 }, (_, k) => { const a = k * 22.5 * Math.PI / 180, L = k % 2 ? 15 : 20; return `<path d="M${n(Math.cos(a) * 10)} ${n(Math.sin(a) * 10)}L${n(Math.cos(a) * L)} ${n(Math.sin(a) * L)}" class="raio-s"/>`; }).join("") : "";
+      return `<g class="marco ${st}" transform="translate(${n(x)} ${n(y)})">${coroa}<circle r="7.5" class="medalha-m"/><circle r="5.8" class="medalha-in"/><text y="3" class="num-m">${["I", "II", "III", "IV", "V", "VI", "VII", "VIII"][i]}</text></g>`; }).join("");
     const [vx, vy] = pos(aqui);
-    // A Terra no centro: o corpo que dorme.
-    const terra = `<g transform="translate(${CX} ${CY})"><circle r="12" class="terra-c"/><ellipse rx="5" ry="12"/><ellipse rx="10" ry="12" opacity=".6"/><path d="M-12 0h24M-10 -6h20M-10 6h20" opacity=".6"/></g>`;
-    // Os cantos: sol, lua, Saturno e cometa.
-    const cantos = `<g transform="translate(34 60)"><circle r="8" class="cheio"/>${Array.from({ length: 12 }, (_, k) => { const a = k * 30 * Math.PI / 180; return `<path d="M${n(Math.cos(a) * 10)} ${n(Math.sin(a) * 10)}L${n(Math.cos(a) * 15)} ${n(Math.sin(a) * 15)}"/>`; }).join("")}</g>
-      <g transform="translate(326 60)"><path d="M5 -11a11 11 0 1 0 0 22a8.5 8.5 0 0 1 0 -22z" class="cheio"/></g>
-      <g transform="translate(34 390)"><circle r="7" class="cheio"/><ellipse rx="15" ry="4" transform="rotate(-18)"/></g>
-      <g transform="translate(320 388) rotate(-30)"><circle r="3" class="cheio"/><path d="M3 -2l24 -4M3 0l28 0M3 2l24 4" opacity=".7"/></g>`;
-    let moldura = `<rect x="5" y="5" width="350" height="404"/><rect x="9" y="9" width="342" height="396" opacity=".5"/>`;
-    for (let i = 0; i < 342; i += 12) moldura += `<path d="M${9 + i} 5v4M${9 + i} 405v4" opacity=".6"/>`;
-    for (let i = 0; i < 396; i += 12) moldura += `<path d="M5 ${9 + i}h4M351 ${9 + i}h4" opacity=".6"/>`;
-    const svg = `<svg viewBox="0 0 360 414" role="img" aria-label="Carta dos céus interiores: você está em ${esc(ESFERAS[aqui][0])}">
-      <defs><radialGradient id="ceu-c" cx="50%" cy="54%" r="65%"><stop offset="0" stop-color="#232552"/><stop offset=".6" stop-color="#121427"/><stop offset="1" stop-color="#080914"/></radialGradient>
-        <radialGradient id="nucleo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f5c75b" stop-opacity=".35"/><stop offset="1" stop-color="#f5c75b" stop-opacity="0"/></radialGradient>
-        <filter id="papel"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .79  0 0 0 0 .64  0 0 0 0 .37  0 0 0 .06 0"/></filter></defs>
-      <rect width="360" height="414" fill="url(#ceu-c)"/>
-      <circle cx="${CX}" cy="${CY}" r="60" fill="url(#nucleo)"/>
-      <g>${fundo}</g><g class="faixa">${faixa}</g>${esferas}
-      <path d="${rota(7)}" class="rota"/>${aqui ? `<path d="${rota(aqui)}" class="rota feita"/>` : ""}
+    // A Terra no centro, gravada: o corpo que dorme.
+    const terra = `<g transform="translate(${CX} ${CY})"><circle r="11" class="terra-c"/><ellipse rx="4.5" ry="11" class="fino"/><ellipse rx="8.5" ry="11" class="fino"/><path d="M-11 0h22M-9.6 -5.5h19.2M-9.6 5.5h19.2" class="fino"/></g>`;
+    // Os cantos, a bico de pena: o sol com rosto, a lua, Saturno e o cometa.
+    const sol = (x, y) => `<g transform="translate(${x} ${y})"><circle r="8" class="disco"/>${Array.from({ length: 16 }, (_, k) => { const a = k * 22.5 * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+        return k % 2 ? `<path d="M${n(c * 10)} ${n(s * 10)}L${n(c * 17)} ${n(s * 17)}"/>` : `<path d="M${n(c * 10)} ${n(s * 10)}Q${n(c * 13 - s * 2)} ${n(s * 13 + c * 2)} ${n(c * 15)} ${n(s * 15)}T${n(c * 19)} ${n(s * 19)}"/>`; }).join("")}
+      <path d="M-4 -2q1.5 -1.5 3 0M1 -2q1.5 -1.5 3 0M-2.5 3q2.5 2 5 0" class="fino"/></g>`;
+    const lua = (x, y) => `<g transform="translate(${x} ${y})"><path d="M4 -12a12 12 0 1 0 0 24a9.5 9.5 0 0 1 0 -24z" class="disco"/><path d="M-6 -6l3 0M-8 1q2 1 4 0M-7 6l3 -1" class="fino"/><path d="M-1 -9q-6 9 0 18" class="fino"/></g>`;
+    const saturno = (x, y) => `<g transform="translate(${x} ${y})"><circle r="7" class="disco"/><path d="M-6 -3h12M-7 0h14M-6 3h12" class="fino"/><g transform="rotate(-20)"><ellipse rx="16" ry="4"/><ellipse rx="13" ry="3" class="fino"/></g></g>`;
+    const cometa = (x, y) => `<g transform="translate(${x} ${y}) rotate(-32)">${estrela(0, 0, 4)}<path d="M4 -1.5Q18 -6 32 -4M4 0Q20 0 36 1M4 1.5Q18 6 30 8" class="fino"/></g>`;
+    const cantos = sol(36, 66) + lua(324, 66) + saturno(38, 398) + cometa(312, 396);
+    // Moldura de carta: borda dupla graduada, cantos em losango, título no alto e o nome embaixo.
+    let mold = `<rect x="5" y="5" width="${LW - 10}" height="${LH - 10}" rx="3"/><rect x="10" y="10" width="${LW - 20}" height="${LH - 20}" class="fino"/>`;
+    let gr = "";
+    for (let i = 0; i <= LW - 20; i += 8) gr += `M${10 + i} 10v${i % 40 ? 2 : 4}M${10 + i} ${LH - 10}v${i % 40 ? -2 : -4}`;
+    for (let i = 0; i <= LH - 20; i += 8) gr += `M10 ${10 + i}h${i % 40 ? 2 : 4}M${LW - 10} ${10 + i}h${i % 40 ? -2 : -4}`;
+    mold += `<path d="${gr}" class="fino"/>`;
+    for (const [x, y] of [[10, 10], [LW - 10, 10], [10, LH - 10], [LW - 10, LH - 10]]) mold += `<path d="M${x} ${y - 5}L${x + 5} ${y}L${x} ${y + 5}L${x - 5} ${y}z" class="ouro-f"/>`;
+    const titulo = `<path d="M88 20h184l-9 10 9 10H88l9 -10z" class="cartela"/><path d="M97 23.5h166M97 36.5h166" class="fino"/><text x="180" y="34" class="titulo-mapa">CARTA DOS CÉUS INTERIORES</text>
+      <path d="M110 404h140l-7 9 7 9H110l7 -9z" class="cartela"/><text x="180" y="416.5" class="rodape-mapa">a viagem da consciência</text>`;
+    const svg = `<svg viewBox="0 0 ${LW} ${LH}" role="img" aria-label="Carta dos céus interiores: você está em ${esc(ESFERAS[aqui][0])}">
+      <defs><linearGradient id="ouro" x1="0" y1="0" x2="${LW}" y2="${LH}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f3dc9a"/><stop offset=".35" stop-color="#c9a35f"/><stop offset=".55" stop-color="#f7e3a8"/><stop offset=".8" stop-color="#b48a45"/><stop offset="1" stop-color="#e8cd85"/></linearGradient>
+        <radialGradient id="ouro-m" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fbeab8"/><stop offset=".6" stop-color="#d4ae66"/><stop offset="1" stop-color="#9c7535"/></radialGradient>
+        <radialGradient id="ceu-c" cx="50%" cy="52%" r="65%"><stop offset="0" stop-color="#252859"/><stop offset=".55" stop-color="#14163a"/><stop offset="1" stop-color="#090a17"/></radialGradient>
+        <radialGradient id="nucleo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f5d78b" stop-opacity=".3"/><stop offset="1" stop-color="#f5d78b" stop-opacity="0"/></radialGradient>
+        <filter id="papel"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .8  0 0 0 0 .66  0 0 0 0 .4  0 0 0 .08 0"/></filter></defs>
+      <rect width="${LW}" height="${LH}" fill="url(#ceu-c)"/>
+      <circle cx="${CX}" cy="${CY}" r="70" fill="url(#nucleo)"/>
+      <g>${fundo}</g><g class="faixa">${faixa}</g>${esferas}<g>${nomes}</g>
+      <path d="${rota(7)}" class="rota"/>${aqui ? `<path d="${rota(aqui)}" class="rota-brilho"/><path d="${rota(aqui)}" class="rota feita"/>` : ""}
       ${terra}${marcos}
-      <g transform="translate(${n(vx)} ${n(vy)})" class="voce-m"><circle r="13" class="anel"/><circle r="13" class="anel a2"/></g>
-      <g class="titulo-c"><path d="M92 18h176l-8 10 8 10H92l8 -10z" class="cartela"/><text x="180" y="32" class="titulo-mapa">Carta dos Céus Interiores</text></g>
-      ${cantos}<g class="mold">${moldura}</g>
-      <rect width="360" height="414" filter="url(#papel)" pointer-events="none"/></svg>`;
+      <g transform="translate(${n(vx)} ${n(vy)})" class="voce-m"><circle r="12" class="anel"/><circle r="12" class="anel a2"/></g>
+      ${titulo}${cantos}<g>${mold}</g>
+      <rect width="${LW}" height="${LH}" filter="url(#papel)" pointer-events="none"/></svg>`;
     const legenda = ESFERAS.map(([nome, esfera], i) => { const st = i < aqui ? "feita" : i === aqui ? "aqui" : "longe";
-      return `<li class="${st}"><span class="num-l">${i + 1}</span><span><b>${esc(nome)}</b>${i === aqui ? '<em class="voce-l">você está aqui</em>' : ""}<small>${esc(esfera)}</small></span></li>`; }).join("");
+      return `<li class="${st}"><span class="num-l">${["I", "II", "III", "IV", "V", "VI", "VII", "VIII"][i]}</span><span><b>${esc(nome)}</b>${i === aqui ? '<em class="voce-l">você está aqui</em>' : ""}<small>${esc(esfera)}</small></span></li>`; }).join("");
     return `<section class="mapa"><div class="momento-cab"><h2>Mapa da jornada</h2><span class="hora">${aqui + 1} de ${ESFERAS.length}</span></div>
       <div class="carta">${svg}</div>
-      <p class="suave miuda">No centro, o seu corpo dormindo. A cada ato, a consciência vai uma esfera mais longe, como nos estados que Robert Monroe mapeou, até o santuário na borda do céu.</p>
+      <p class="suave miuda">No centro, o seu corpo dormindo. A cada ato, a consciência vai uma esfera mais longe, até o santuário na borda do céu.</p>
       <ol class="legenda-mapa">${legenda}</ol></section>`;
   }
   // Álbum dos alvos: todos os lugares do sorteio; ganham cor quando a pessoa chega lá.
