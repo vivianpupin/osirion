@@ -11,7 +11,7 @@ window.ARHAT = (function () {
   ];
 
   const RESP_DOURADA = {
-    k: "resp", ico: "sol", nome: "Respiração Dourada", det: "7 respirações pelo terceiro olho",
+    k: "resp", ilus: "estrela-dourada", ico: "sol", nome: "Respiração Dourada", det: "7 respirações pelo terceiro olho",
     resp: { n: 7, inspire: "Inspire: um filamento dourado desce do sol central, penetra o terceiro olho, ilumina os olhos, o topo da cabeça e a nuca.", expire: "Expire: a energia faz o caminho de volta e libera as impurezas que bloqueiam os centros espirituais.", fim: "Todo o corpo se ilumina. Estimule a vibração das raízes extrafísicas: elas são a porta de entrada para algo totalmente novo." },
     texto: [
       { p: "Há dois grandes sóis centrais que sustentam a vida deste universo." },
@@ -23,15 +23,15 @@ window.ARHAT = (function () {
     ]
   };
 
-  const TESTE = { k: "teste", ico: "mao", nome: "Teste de realidade", det: "“Será que estou sonhando?” 7 a 10 vezes" };
+  const TESTE = { k: "teste", ilus: "olho", ico: "mao", nome: "Teste de realidade", det: "“Será que estou sonhando?” 7 a 10 vezes" };
 
   const ATOS = [
     {
-      id: 0, nome: "O Início", sub: "Atravessar o véu do sono", gratis: true, capa: "noite",
+      id: 0, cor: "#a9b2f0", ilus: "morro-figuras", nome: "O Início", sub: "Atravessar o véu do sono", gratis: true, capa: "noite",
       frase: "A Terra Prometida é o mundo dos sonhos.",
       momentos: [
         { quando: "Ao acordar", hora: "no dia seguinte", praticas: [
-          { k: "diario", ico: "pena", nome: "Diário dos 5 minutos", det: "Sem levantar e sem abrir os olhos", texto: [
+          { k: "diario", ilus: "lua", ico: "pena", nome: "Diário dos 5 minutos", det: "Sem levantar e sem abrir os olhos", texto: [
             { p: "Ao escrevermos nossos sonhos imediatamente após acordar, mostramos ao cérebro a importância de recordar as experiências do plano extrafísico, incentivando-o a não mais ocultar essa valiosa informação." },
             { sub: "Os primeiros 5 minutos após o despertar são cruciais!" },
             { p: "Não levante e nem abra os olhos. Mantenha o estado de “Corpo relaxado, mente desperta”." },
@@ -42,7 +42,7 @@ window.ARHAT = (function () {
             { p: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!" }
           ] } ] },
         { quando: "Dia", hora: "quando quiser", praticas: [
-          { k: "raizes", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
+          { k: "raizes", ilus: "fitas", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
             { p: "Temos raízes, linhas invisíveis, tentáculos tremeluzentes pouco opacos que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
             { p: "Esses filamentos sutis, parte importante de nosso corpo invisível, são usados por curandeiros para penetrar em outros corpos, curar e manipular energia." },
             { p: "Quando as raízes estão ativas, sente-se uma leve vibração ou sensação de amortecimento na região: é um sinal de que aquele centro de energia está em funcionamento!" },
@@ -52,7 +52,7 @@ window.ARHAT = (function () {
             { p: "Aproxime suas mãos, sinta suas raízes dançando entre si como línguas de fogo que se entrelaçam! Brinque e dance com elas, ative o seu poder sutil." }
           ] } ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
-          { k: "noite", ico: "lua", nome: "Corpo relaxado, mente desperta", det: "Encontre o seu nevoeiro", audio: true, texto: [
+          { k: "noite", ilus: "meditacao-fita", ico: "lua", nome: "Corpo relaxado, mente desperta", det: "Encontre o seu nevoeiro", audio: true, texto: [
             { p: "Ao deitar-se, inicie limpando sua mente e respire profundamente para relaxar todo o corpo. Foque sua atenção na respiração e na planta dos pés. Permita que os pensamentos fluam livremente, sem se prender a eles. Se uma ideia intrusiva surgir, simplesmente comande sua consciência:" },
             { afirm: "Vá além disso… Vá além disso…" },
             { p: "Continue com essa concentração e observe enquanto seu corpo se entrega ao sono gradualmente. Esse estado é conhecido como “Corpo relaxado, mente desperta”, no qual você atravessa o véu do sono conscientemente, mantendo sua consciência ativa e presente durante o processo de adormecimento." },
@@ -67,7 +67,7 @@ window.ARHAT = (function () {
       ]
     },
     {
-      id: 1, nome: "Primeiro Ato", sub: "Captar energia cósmica e desobstruir os centros de energia", gratis: true, capa: "noite",
+      id: 1, cor: "#9d93c9", ilus: "figura-descendo", nome: "Primeiro Ato", sub: "Captar energia cósmica e desobstruir os centros de energia", gratis: true, capa: "noite",
       frase: "Eu sou consciência além deste corpo.",
       intro: "Para sutilizar nossa vibração vamos reativar as raízes receptoras do corpo! Essa prática não apenas ativa nossa memória, mas também nos aproxima gradualmente de nossos conselheiros espirituais.",
       momentos: [
@@ -75,7 +75,7 @@ window.ARHAT = (function () {
           { k: "diario", ico: "pena", nome: "Diário dos 5 minutos", det: "Onde eu estava? O que eu sentia?", irDiario: true } ] },
         { quando: "Dia", hora: "ao amanhecer e no pôr do sol", praticas: [ RESP_DOURADA, TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
-          { k: "noite", ico: "lua", nome: "Preparando o ambiente", det: "A chuva no quarto e a afirmação", audio: true, texto: [
+          { k: "noite", ilus: "fita-estrela", ico: "lua", nome: "Preparando o ambiente", det: "A chuva no quarto e a afirmação", audio: true, texto: [
             { afirm: "Eu sou consciência além deste corpo.\nPor isso, posso perceber o que existe além do mundo dos sentidos.\nAbro-me para expandir, explorar e compreender as forças sutis que me atravessam,\ne para usá-las com sabedoria, para o meu bem e o de quem eu amo.\nChamo para perto de mim os guias e conselheiros de jornada\ncuja luz e sabedoria me conduzem com amor.\nQue nada menor do que a minha verdade me alcance nesta noite.\nEu sou consciência além deste corpo.", fonte: "Afirmação do Arhat" },
             { passos: [
               "Imagine uma chuva caindo em seu quarto, limpando toda a atmosfera ao seu redor.",
@@ -89,11 +89,11 @@ window.ARHAT = (function () {
       ]
     },
     {
-      id: 2, nome: "Segundo Ato", sub: "Cair no sono consciente", capa: "fios",
+      id: 2, cor: "#9dc1dc", ilus: "figura-cruz", nome: "Segundo Ato", sub: "Cair no sono consciente", capa: "fios",
       frase: "Ao cair no sono estou consciente.",
       momentos: [
         { quando: "04:00", hora: "despertar no meio da noite", praticas: [
-          { k: "madrugada", ico: "espiral", nome: "Nirvana Shatakam", det: "Testa no joelho e o outro cômodo", audio: true, texto: [
+          { k: "madrugada", ilus: "fita-estrela-lilas", ico: "espiral", nome: "Nirvana Shatakam", det: "Testa no joelho e o outro cômodo", audio: true, texto: [
             { p: "Sente-se na postura de lótus, com as pernas cruzadas, e curve o corpo para a frente, colocando a testa sobre o joelho esquerdo." },
             { p: "Respire profundamente e visualize a raiz do seu terceiro olho brilhando intensamente, enquanto a energia da Terra circula por todo o seu corpo, nutrindo-o e fortalecendo-o." },
             { p: "Repita algumas vezes e sente-se naturalmente." },
@@ -102,7 +102,7 @@ window.ARHAT = (function () {
         { quando: "Dia", hora: "ao longo do dia", praticas: [
           Object.assign({}, RESP_DOURADA, { det: "7 vezes" }), TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
-          { k: "noite", ico: "lua", nome: "Estou consciente", det: "Afirmação em voz alta e o nevoeiro", audio: true, texto: [
+          { k: "noite", ilus: "figura-fio", ico: "lua", nome: "Estou consciente", det: "Afirmação em voz alta e o nevoeiro", audio: true, texto: [
             { p: "Deitado, afirme em voz alta e em seguida mentalmente:" },
             { afirm: "Ao cair no sono estou consciente." },
             { p: "Encontre o nevoeiro de passagem para o outro lado e estimule para que essa visão se mantenha em sua tela mental." },
@@ -114,11 +114,11 @@ window.ARHAT = (function () {
       ]
     },
     {
-      id: 3, nome: "Terceiro Ato", sub: "A chama da vela e o Dragão", capa: "fios",
+      id: 3, cor: "#e69a84", ilus: "montanha-fita", nome: "Terceiro Ato", sub: "A chama da vela e o Dragão", capa: "fios",
       frase: "Eu tenho clareza do plano astral.",
       momentos: [
         { quando: "04:00", hora: "despertar no meio da noite", praticas: [
-          { k: "madrugada", ico: "vela", nome: "Chama da vela", det: "Estou leve e posso flutuar até o teto", audio: true, texto: [
+          { k: "madrugada", ilus: "maos-chama", ico: "vela", nome: "Chama da vela", det: "Estou leve e posso flutuar até o teto", audio: true, texto: [
             { passos: [
               "Acenda uma vela e posicione-se confortavelmente.",
               "Concentre sua atenção na chama da vela, olhando-a fixamente.",
@@ -131,7 +131,7 @@ window.ARHAT = (function () {
             { afirm: "Estou leve e posso flutuar até o teto." }
           ] } ] },
         { quando: "Dia", hora: "ao longo do dia", praticas: [
-          { k: "dragao", ico: "sol", nome: "Respiração do Dragão", det: "O Estado Vibracional",
+          { k: "dragao", ilus: "figura-espiral", ico: "sol", nome: "Respiração do Dragão", det: "O Estado Vibracional",
             resp: { n: 7, segura: true, inspire: "Inspire: a energia do centro da Terra sobe pela coluna, pelo umbigo, coração e garganta, ilumina a pineal, o terceiro olho e a coroa, e sai em direção ao Sol central.", segurar: "Não respire ainda. Sinta o esvaziamento e a liberdade.", expire: "Expire: a energia desce pelo terceiro olho, olhos, coroa e pineal, pela coluna, ativando cada centro, até voltar à Terra.", fim: "Estado vibracional: todos os centros ativos, o corpo astral mais solto." },
             texto: [
               { p: "Ao inspirar, visualize a energia do centro da Terra subindo pela sua coluna vertebral, passando pelo Chakra Umbilical, pelo Chakra Cardíaco e pelo Chakra Laríngeo, iluminando os cristais da glândula Pineal na nuca, o Terceiro Olho e a coroa da cabeça, e saindo para fora do seu corpo em direção ao Sol central." },
@@ -141,7 +141,7 @@ window.ARHAT = (function () {
             ] },
           TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
-          { k: "noite", ico: "lua", nome: "O outro cômodo", det: "Caminhar com o corpo fluídico", audio: true, texto: [
+          { k: "noite", ilus: "figura-salto", ico: "lua", nome: "O outro cômodo", det: "Caminhar com o corpo fluídico", audio: true, texto: [
             { p: "Deitado, afirme em voz alta e em seguida mentalmente:" },
             { afirm: "Eu tenho clareza do plano astral." },
             { p: "Visualize-se caminhando em outro cômodo da sua casa, manipulando objetos e interagindo com o ambiente ao seu redor." },
@@ -153,11 +153,11 @@ window.ARHAT = (function () {
       ]
     },
     {
-      id: 4, nome: "Quarto Ato", sub: "A luz azul e o banho da pineal", capa: "noite",
+      id: 4, cor: "#f3d58b", ilus: "fita-estrela-dourada", nome: "Quarto Ato", sub: "A luz azul e o banho da pineal", capa: "noite",
       frase: "Sou um ser multidimensional.",
       momentos: [
         { quando: "04:00", hora: "despertar no meio da noite", praticas: [
-          { k: "madrugada", ico: "luz", nome: "Que a paz possa inundar minha alma", det: "O círculo de luz azul", audio: true, texto: [
+          { k: "madrugada", ilus: "figura-mergulho", ico: "luz", nome: "Que a paz possa inundar minha alma", det: "O círculo de luz azul", audio: true, texto: [
             { afirm: "Que a paz possa inundar minha alma\nDe dentro, da semente, a claridade se espalhe para as periferias do meu corpo\nQue o silêncio possa acalmar a respiração e a tornar profunda\nComo um túnel a ser seguido rumo à Verdade.\nQue eu ouça meu nome de criador\nQue de uma vez por todas possa entender\nQue aquilo que se apresentar a mim é todo e parte de mim\nQue eu esteja pronto e nada me passe pelas mãos\nQue nesta jornada os dragões não possam me alcançar\nE que as prisões não possam jamais me enclausurar\nQue eu me inunde da certeza de que eu sou a resposta.\nQue eu sinta o vibrante som do éter como lembrete do caminho de volta\nE me preencha com a chave que dele ressoa em meu ser.", fonte: "Afirmação" },
             { p: "Ao voltar para a cama, deite-se em posição supina." },
             { p: "Visualize uma luz azul brilhante sobre o seu chakra coronário. Essa luz desce suavemente pela sua testa, ativando seus olhos e o terceiro olho, iluminando a glândula pineal e descendo pela garganta, coração, estômago, umbigo, órgãos sexuais e espalhando-se por suas pernas e pés." },
@@ -165,13 +165,13 @@ window.ARHAT = (function () {
             { p: "Visualize esse círculo de luz até adormecer, procurando prestar atenção ao que aparecer no nevoeiro." }
           ] } ] },
         { quando: "Dia", hora: "ao acordar e no pôr do sol", praticas: [
-          { k: "maos", ico: "sol", nome: "Mãos para o céu", det: "Captar a energia solar", texto: [
+          { k: "maos", ilus: "estrela-sol", ico: "sol", nome: "Mãos para o céu", det: "Captar a energia solar", texto: [
             { p: "Com as mãos esticadas na direção do céu, concentre-se em ativar as raízes das suas mãos e capte a energia solar com a intenção de preencher todos os seus corpos, tanto o físico quanto os extrafísicos." },
             { p: "Ao inspirar e expirar lentamente, permita-se sentir a sensação de ativação conforme a energia solar flui para dentro de você." },
             { p: "Visualize essa energia fluindo através de cada célula do seu corpo, nutrindo-o e fortalecendo-o em todos os níveis: físico, mental, emocional e espiritual. Essa prática pode trazer uma sensação de revitalização e conexão com a energia vital ao seu redor." }
           ] },
           TESTE,
-          { k: "banho", ico: "agua", nome: "Durante o banho", det: "A água entra pela nuca", texto: [
+          { k: "banho", ilus: "rio", ico: "agua", nome: "Durante o banho", det: "A água entra pela nuca", texto: [
             { passos: [
               "Posicione-se de costas para o chuveiro, permitindo que a água caia suavemente na região da nuca.",
               "Visualize que a água entra pela nuca e sai pelo seu terceiro olho.",
@@ -180,7 +180,7 @@ window.ARHAT = (function () {
             { p: "Essa prática combina a ação física do banho com a visualização e a intenção de limpeza energética, promovendo uma sensação de renovação e clareza mental." }
           ] } ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
-          { k: "noite", ico: "lua", nome: "Luz dourada", det: "Sou um ser multidimensional", audio: true, texto: [
+          { k: "noite", ilus: "figura-dourada", ico: "lua", nome: "Luz dourada", det: "Sou um ser multidimensional", audio: true, texto: [
             { p: "Deite-se na posição supina e respire lentamente, permitindo que o frescor da noite penetre suavemente seus pulmões. Conforme você inspira, visualize uma luz dourada irradiando de dentro de você, preenchendo todo o seu corpo através do ar que entra." },
             { p: "Sinta essa luz dourada nutrindo cada célula, trazendo uma sensação de calor e energia revitalizante. Deixe-se envolver por essa luz, permitindo que ela promova um estado de relaxamento profundo e renovação interior." },
             { p: "Repita mentalmente até dormir:" },
@@ -189,11 +189,11 @@ window.ARHAT = (function () {
       ]
     },
     {
-      id: 5, nome: "Quinto Ato", sub: "Sair do corpo", capa: "fios",
+      id: 5, cor: "#8cc6c7", ilus: "estrela-cadente", nome: "Quinto Ato", sub: "Sair do corpo", capa: "fios",
       frase: "Agora eu me separo facilmente do meu corpo e estou consciente.",
       momentos: [
         { quando: "04:00", hora: "despertar no meio da noite", praticas: [
-          { k: "madrugada", ico: "espiral", nome: "Hermes Trismegisto", det: "Espiral da coroa e os comandos", audio: true, texto: [
+          { k: "madrugada", ilus: "figura-voo", ico: "espiral", nome: "Hermes Trismegisto", det: "Espiral da coroa e os comandos", audio: true, texto: [
             { afirm: "Sai para fora do corpo,\nAtravessa o tempo,\nTorna-te eternidade;\nReconhece-te por imortal,\nCapaz de tudo conceber\nE tudo fazer;\nSê mais alto do que toda altura,\nMais profundo do que toda profundeza;\nSê ao mesmo tempo\nTodas as partes do mundo;\nReúne num abraço todos os ciclos,\nTodas as medidas e todas\nAs extensões e, então,\nPoderás compreender a verdadeira eternidade: Deus", fonte: "Hermes Trismegisto" },
             { p: "Sente-se em um local confortável e concentre-se no seu chakra coronário, no topo da cabeça. Enquanto expira e inspira suavemente, visualize a energia nesse chakra movimentando-se em espiral, começando a partir do topo da sua cabeça." },
             { p: "A energia da sua coroa segue essa espiral ascendente, subindo em direção ao infinito e se perdendo na vastidão do universo. Conforme você continua a respirar de forma consciente, sinta essa energia expandindo-se e conectando-se com as energias mais elevadas." },
@@ -206,14 +206,14 @@ window.ARHAT = (function () {
             { p: "Anote os resultados." }
           ] } ] },
         { quando: "Dia", hora: "ao acordar e no pôr do sol", praticas: [
-          { k: "pilar", ico: "luz", nome: "Pilar de luz", det: "Azul claro e pulsante, várias vezes ao dia", texto: [
+          { k: "pilar", ilus: "figura-estrela", ico: "luz", nome: "Pilar de luz", det: "Azul claro e pulsante, várias vezes ao dia", texto: [
             { p: "Em pé ao ar livre, visualize um pilar de luz descendo dos céus e penetrando todos os seus corpos, preenchendo-os com uma luz pulsante de cor azul clara. Sinta essa luz fluindo e expandindo-se por todo o seu ser." },
             { p: "Respire profundamente e aguarde a ativação dos seus chakras (sensações de formigamento) enquanto permanece conectado com essa luz pulsante. Permita que a energia circule livremente, ativando e equilibrando cada um dos seus centros energéticos ao longo do corpo. Essa prática pode trazer uma sensação de clareza, harmonia e vitalidade para o seu ser." },
             { p: "(Pode ser feita várias vezes ao dia.)" }
           ] },
           TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
-          { k: "noite", ico: "lua", nome: "O som do Om", det: "Até o zumbido do plano astral", audio: true, texto: [
+          { k: "noite", ilus: "figura-deitada", ico: "lua", nome: "O som do Om", det: "Até o zumbido do plano astral", audio: true, texto: [
             { passos: [
               "Deite-se com o corpo totalmente relaxado e respire profundamente.",
               "Comece a entoar mentalmente o mantra “Om” em um ritmo confortável para você.",
