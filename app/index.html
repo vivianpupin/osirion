@@ -1077,8 +1077,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
   }
 
+  // As noites de exemplo só aparecem no protótipo (arquivo local, prévia do Claude ou ?demo). No app de verdade, tudo começa vazio.
+  const DEMO = location.protocol === "file:" || /claude|usercontent/.test(location.hostname) || /[?&]demo\b/.test(location.search);
   // Noites de exemplo: 9 semanas de prática, ficando mais lúcidas com o tempo.
   function noitesExemplo() {
+    if (!DEMO) return [];
     let s = 7; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
     const n = [];
     for (let i = 0; i < 56; i++) {
@@ -1115,7 +1118,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="ceu-box"><canvas id="ceu" width="720" height="560" aria-label="Céu com ${todas.length} noites registradas"></canvas></div>
       <div class="numeros"><div><b>${todas.length}</b><span>noites</span></div><div><b>${cont[2]}</b><span>com lucidez</span></div><div><b>${cont[3] + cont[4]}</b><span>lúcidos e viagens</span></div></div>
       <div class="legenda">${TIPOS.map(t => `<div><canvas width="28" height="28" data-ponto="${t.k}"></canvas>${t.nome}</div>`).join("")}</div>
-      <p class="exemplo">As primeiras 56 noites são de exemplo. As que você salvar no Diário entram no fim do céu.</p>
+      ${DEMO ? '<p class="exemplo">As primeiras 56 noites são de exemplo. As que você salvar no Diário entram no fim do céu.</p>' : todas.length ? "" : '<p class="suave" style="text-align:center">O seu céu começa vazio. Cada noite anotada no Diário acende um ponto aqui.</p>'}
       ${livre("painel") ? painelMes() : trancado("painel")}
     </div>`;
   }
@@ -1175,7 +1178,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   });
 
   function todasEntradas() {
-    return est.diario.map(d => Object.assign({ iso: hojeIso }, d)).concat(EXEMPLOS)
+    return est.diario.map(d => Object.assign({ iso: hojeIso }, d)).concat(DEMO ? EXEMPLOS : [])
       .sort((a, b) => (a.iso < b.iso ? 1 : a.iso > b.iso ? -1 : 0));
   }
 
@@ -2204,7 +2207,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="lucidez-sem"><span class="rotulo">Lucidez por semana</span><div class="cols">${semanas.map((v, i) => `<div class="${i === semHoje ? "agora" : ""}"><i style="height:${v / maxS * 100}%"></i><b>${v}</b><span>${i + 1}ª</span></div>`).join("")}</div></div>
       <div class="tecnica"><span class="rotulo">A técnica que mais funciona para você</span>
         ${melhor ? `<b>${esc(TEC[melhor[0]])}</b><span class="suave">esteve no dia anterior de ${melhor[1]} das ${lucidas} noites com lucidez</span>` : `<span class="suave">Anote mais noites: o Osirion vai mostrar qual prática vem antes das suas noites lúcidas.</span>`}</div>
-      <p class="exemplo">O painel inclui as noites de exemplo do protótipo.</p></section>`;
+      ${DEMO ? '<p class="exemplo">O painel inclui as noites de exemplo do protótipo.</p>' : ""}</section>`;
   }
 
   // ---------- Sinais de sonho ----------
