@@ -588,6 +588,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sono-log label { min-width: 0; }
 .sono-log input { width: 100%; min-width: 0; }
 .mais .cheguei { flex-direction: column; }
+.tecnica-noite { display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px; border-radius: 18px; text-align: left; border: 1px solid color-mix(in srgb, var(--nevoeiro) 35%, var(--ceu-3)); background: linear-gradient(150deg, color-mix(in srgb, var(--nevoeiro) 14%, var(--ceu-2)), var(--ceu-2)); }
+.tecnica-noite img { width: 58px; height: 58px; object-fit: contain; flex: none; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--nevoeiro) 50%, transparent)); }
+.tecnica-noite small { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--nevoeiro); font-weight: 600; }
+.tecnica-noite b { display: block; font-family: var(--display); font-weight: 400; font-size: 19px; margin: 2px 0; }
+.tecnica-noite .suave { font-size: 13px; }
+.passos-noite { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #c97a7c; }
 .dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
 .cheguei { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); background: var(--ceu-2); }
 .cheguei b { font-family: var(--display); font-weight: 400; font-size: 19px; }
@@ -788,6 +794,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const feitoHoje = k => ((est.hist[hojeIso] || {}).tec || []).includes(k);
   const duasVezes = (m, p) => p.k !== "teste" && /pôr do sol/.test(m.hora || "");
   const vezFeita = (k, v) => !!(((est.hist[hojeIso] || {}).vezes || {})[k + ":" + v]);
+  const NOITE = window.ARHAT.NOITE || [];
+  const tecnicaDaNoite = () => NOITE[(diaDaJornada() - 1) % NOITE.length];
+  function cartaoTecnica() {
+    const t = tecnicaDaNoite(); if (!t) return "";
+    return `<button class="tecnica-noite" data-acao="tecnica"><img src="${ILUS(t.ilus)}" alt=""><span><small>A técnica desta noite</small><b>${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span></span></button>`;
+  }
+  function abrirTecnica() {
+    const t = tecnicaDaNoite();
+    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">A técnica desta noite · ${esc(t.de)}</span><h1>${esc(t.nome)}</h1>
+      <img class="ilus" src="${ILUS(t.ilus)}" alt=""><p class="grande-p" style="font-size:17px;line-height:1.6">${esc(t.texto)}</p>
+      <ol class="roteiro">${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+      <button class="btn largo" data-acao="dormir">Vou dormir</button></div>`);
+  }
   function telaHoje() {
     const a = ATOS[est.ato];
     const momentos = a.momentos.map(m => `
@@ -812,6 +831,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></button>
       ${sinalDeSonho()}
       ${momentos}
+      ${cartaoTecnica()}
       <section class="momento"><div class="momento-cab"><h3>Viagens guiadas</h3><span class="hora">para qualquer noite</span></div>
         ${!livre("viagens") ? trancado("viagens") : VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
           <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>`).join("")}</section>
@@ -1065,7 +1085,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }).join("");
     return `<div class="tela">${topo()}${seg || ""}
       <div><span class="rotulo">O método Arhat</span><h1>Cinco atos para abrir os olhos</h1></div>
-      <p class="suave">Siga em sequência ou fique alguns dias em cada ato. Quanto mais tempo no Arhat, mais você vive os resultados.</p>
+      <p class="suave">O Osirion é um caminho de autoaprimoramento das faculdades do sonhar. Siga em sequência ou fique alguns dias em cada ato: quanto mais tempo no caminho, mais você vive os resultados.</p>
       ${lista}
       ${est.pago ? "" : `<div class="oferta"><span class="rotulo" style="color:var(--cristal)">Jornada completa</span>
         <h2>Do Segundo ao Quinto Ato</h2>
@@ -1291,7 +1311,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "multi", campo: "tecnicas", cor: "#191c3a", ilus: "fita-estrela-2", peq: true, rotulo: "Portal do caminho já trilhado", titulo: "O que você já experimentou?", sub: "Pode marcar várias.", opcoes: ["Testes de realidade", "Acordar de madrugada e voltar a dormir", "Diário de sonhos", "Meditação antes de dormir", "Projeção astral", "Nada ainda"], botao: "Seguir" },
     { tipo: "multi", campo: "desejos", cor: "#161935", ilus: "voo-figura", peq: true, rotulo: "Portal do desejo", titulo: "O que você quer viver do outro lado?", sub: "Pode marcar várias. São os seus alvos de viagem.", opcoes: ["Voar", "Reencontrar alguém que partiu", "Falar com meus guias", "Curar algo em mim", "Conhecer o Egito antigo", "Perder o medo da morte", "Explorar mundos impossíveis", "Ir às estrelas"], botao: "Seguir" },
     { tipo: "sono", cor: "#13152f", ilus: "figura-deitada", peq: true, rotulo: "Portal do tempo", titulo: "Qual é o seu horário de sono?", texto: "O momento dos sonhos está ligado ao seu ciclo de sono. Com ele, o Osirion calcula a hora do seu despertar de madrugada.", botao: "Seguir" },
-    { tipo: "texto", cor: "#12142c", ilus: "estrela-cadente", rotulo: "A intenção", titulo: "A frase que abre a porta", texto: "Pesquisadores do sono, como Stephen LaBerge, mostraram que uma intenção dita antes de dormir aumenta as chances de perceber o sonho por dentro. A mente leva para a noite a última coisa em que você pensou com convicção.", nota: "Hoje, ao deitar, repita devagar: “Na próxima vez que eu estiver sonhando, vou perceber que estou sonhando.”", botao: "Seguir" },
+    { tipo: "texto", cor: "#12142c", ilus: "estrela-cadente", rotulo: "A intenção", titulo: "Cada noite, uma técnica", texto: "Antes de dormir, o Osirion vai te ensinar uma técnica diferente a cada noite: dos pesquisadores do sono, dos grandes viajantes e das tradições antigas. Elas mudam conforme você avança.", nota: "A primeira é hoje: uma frase para dizer ao deitar.", botao: "Seguir" },
     { tipo: "texto", cor: "#11132a", ilus: "maos-chama", rotulo: "Portal do silêncio e da fumaça", titulo: "Silenciar e perfumar o caminho", texto: "Depois da água vinham o silêncio e a fumaça. Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção.", nota: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio.", botao: "Atravessar" },
     { tipo: "respirar", vezes: 3, cor: "#10122a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
     { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O livro Arhat chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
@@ -1299,7 +1319,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "lembrete", cor: "#0c0d1f", ilus: "estrela-lilas", peq: true, rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
     { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Entrar no santuário" },
-    { tipo: "caminho", cor: "#0a0b19", rotulo: "O santuário", titulo: "Seu caminho para a lucidez", botao: "Começar a jornada" }
+    { tipo: "caminho", cor: "#0a0b19", rotulo: "O santuário", titulo: "Seu caminho para a lucidez", texto: "Um caminho de autoaprimoramento das faculdades do sonhar: lembrar, perceber, despertar e viajar.", botao: "Começar a jornada" }
   ];
   function abrirTravessia() {
     const d = document.createElement("div"); d.className = "caverna"; d.id = "caverna"; app.appendChild(d);
@@ -2003,6 +2023,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <div class="topo">${voltar}<span class="rotulo">Modo noite</span></div>
         <div class="relogio" id="relogio">${agoraHM()}</div>
         <p class="afirm-noite">${esc(ATOS[est.ato].frase)}</p>
+        ${tecnicaDaNoite() ? `<section><span class="rotulo">A técnica desta noite · ${esc(tecnicaDaNoite().nome)}</span><ol class="passos-noite">${tecnicaDaNoite().passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol></section>` : ""}
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
         <section><span class="rotulo">Alvo desta noite</span>${a ? `<p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p>` : livre("sorteio") ? '<button class="btn fantasma largo" data-acao="sortear">Sortear o alvo</button>' : trancado("sorteio")}</section>
         <section><span class="rotulo">Sons da noite</span>
@@ -2134,6 +2155,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "sem-nevoeiro") { est.nevoeiro = null; salvar(); fecharSobre(); aba = "hoje"; render(); }
     else if (acao === "gravar") gravarVoz(b);
     else if (acao === "dormir") abrirModoNoite();
+    else if (acao === "tecnica") abrirTecnica();
     else if (acao === "teste") abrirTeste();
     else if (acao === "dejavu") abrirDejavu();
     else if (acao === "salvar-dejavu") { const t = document.getElementById("deja-tx").value.trim(); if (t) { est.dejavus.push({ iso: hojeIso, texto: t }); salvar(); } fecharSobre(); render(); }

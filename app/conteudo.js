@@ -285,5 +285,45 @@ window.ARHAT = (function () {
     }
   ];
 
-  return { ATOS, ALVOS, VIAGENS };
+  // Uma técnica antes de dormir para cada noite, das mais simples às mais avançadas (avança com os dias da jornada). Escritas para o app, a Vivian revisa.
+  const NOITE = [
+    { nome: "A frase que abre a porta", de: "Stephen LaBerge", ilus: "estrela-cadente",
+      texto: "Pesquisadores do sono mostraram que uma intenção dita antes de dormir aumenta as chances de perceber o sonho por dentro. A mente leva para a noite a última coisa em que você pensou com convicção.",
+      passos: ["Deite e respire devagar algumas vezes.", "Lembre um sonho recente, ou imagine um, e veja a si mesmo percebendo dentro dele que é sonho.", "Repita devagar, com convicção: “Na próxima vez que eu estiver sonhando, vou perceber que estou sonhando.”", "Adormeça com essa frase, sem pensar em mais nada."] },
+    { nome: "Procure as suas mãos", de: "Dom Juan, nos livros de Castaneda", ilus: "maos-chama",
+      texto: "Dom Juan ensinava que encontrar as próprias mãos dentro do sonho acende a atenção lá dentro.",
+      passos: ["Antes de deitar, olhe as suas mãos por um minuto, com calma.", "Diga: “Hoje eu vou ver as minhas mãos no sonho.”", "Ao fechar os olhos, imagine as mãos na sua frente até adormecer."] },
+    { nome: "O sankalpa", de: "Yoga Nidra", ilus: "figura-deitada",
+      texto: "Uma intenção curta, plantada no limiar do sono, entra fundo, como uma semente.",
+      passos: ["Escolha uma frase curta, no presente. Por exemplo: “Eu desperto dentro dos meus sonhos.”", "Repita três vezes ao deitar, com convicção.", "Use sempre a mesma, noite após noite."] },
+    { nome: "Recapitular o dia", de: "Dom Juan, nos livros de Castaneda", ilus: "figura-fio",
+      texto: "Lembrar o dia de trás para frente solta a energia presa nas cenas e treina a memória para guardar os sonhos.",
+      passos: ["Deitado, volte no tempo: o que fez logo antes de deitar? E antes disso?", "Vá cena por cena até a manhã, sem julgar.", "Se uma cena pesar, respire fundo e deixe ir."] },
+    { nome: "A caixa das preocupações", de: "Robert Monroe", ilus: "figura-cruz",
+      texto: "Pensamentos do dia prendem a consciência ao corpo. Monroe ensinava a guardá-los antes de atravessar.",
+      passos: ["Imagine uma caixa ao lado da cama.", "Coloque dentro dela, uma a uma, as preocupações do dia.", "Feche a tampa. Elas estarão lá amanhã. Agora você está livre para ir."] },
+    { nome: "So Ham", de: "tradição do yoga", ilus: "espiral-figura",
+      texto: "So Ham quer dizer “eu sou Aquilo”. A própria respiração já repete esse mantra, e você só escuta.",
+      passos: ["Inspire ouvindo por dentro “So”.", "Expire ouvindo “Ham”.", "Não controle o ar. Se se perder, volte ao próximo So, até adormecer."] },
+    { nome: "O som do AUM", de: "Mandukya Upanishad", ilus: "estrela-sol",
+      texto: "O A é a vigília, o U é o sonho, o M é o sono profundo. O silêncio depois do M é a consciência que fica acordada através dos três.",
+      passos: ["Sentado ou deitado, entoe o AUM três vezes, bem devagar.", "Sinta o A no peito, o U na garganta e o M na cabeça.", "Depois fique no silêncio que vem em seguida, até o sono chegar."] },
+    { nome: "Pedir um sonho", de: "os templos de incubação", ilus: "morro-figuras",
+      texto: "Por milhares de anos, quem buscava uma resposta dormia no templo e pedia um sonho. A pergunta clara abre o caminho.",
+      passos: ["Escreva uma pergunta curta no diário.", "Leia em voz baixa antes de deitar.", "Peça: “Que a resposta venha em sonho, e que eu esteja desperto para recebê-la.”"] },
+    { nome: "A luz na garganta", de: "yoga dos sonhos tibetana", ilus: "fita-estrela-lilas",
+      texto: "Na yoga dos sonhos ensinada por Tenzin Wangyal Rinpoche, a garganta é o centro do sonho.",
+      passos: ["Leve a atenção à garganta.", "Imagine ali uma pequena luz vermelha, quente e calma.", "Não force. Deixe a luz ficar enquanto o corpo adormece."] },
+    { nome: "Contar até o sonho", de: "Stephen LaBerge", ilus: "fita-estrela",
+      texto: "Contar devagar mantém a mente acesa enquanto o corpo adormece. Em algum número, o sonho começa e você percebe.",
+      passos: ["Deitado, comece a contar em silêncio: “um, estou sonhando; dois, estou sonhando…”.", "Conte devagar, uma vez a cada respiração.", "Se perder a conta, recomece de onde lembrar, sem se cobrar.", "Quando as imagens aparecerem, pare de contar e só observe."] },
+    { nome: "Observar as imagens", de: "técnica do sonho lúcido induzido desperto", ilus: "fitas",
+      texto: "Ao adormecer surgem cores, rostos e paisagens. Quem observa sem se agarrar entra no sonho acordado.",
+      passos: ["Deite de barriga para cima e fique imóvel.", "Observe o escuro atrás dos olhos, sem esperar nada.", "Quando as imagens vierem, só olhe. Deixe que fiquem mais nítidas até virar cena."] },
+    { nome: "O alvo de três objetos", de: "William Buhlman", ilus: "fita-estrela-dourada",
+      texto: "A intenção clara é o que mais leva para fora do corpo. Um lugar conhecido, com detalhes, vira um alvo para a consciência.",
+      passos: ["Escolha um cômodo da casa e três objetos dele.", "Ao deitar, sinta-se lá, tocando cada um: a textura, a temperatura, o peso.", "Diga por dentro: “Agora eu estou lá.” e adormeça nessa cena."] }
+  ];
+
+  return { ATOS, ALVOS, VIAGENS, NOITE };
 })();
