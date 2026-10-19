@@ -356,5 +356,56 @@ window.CAPSULAS = [
     { t: "fala", texto: "Em outros cantos, quem vinha à noite era gentil: o João Pestana, ou o Homem da Areia das histórias europeias, jogava areia nos olhos das crianças, e o Ole Fecha-Olho, de Andersen, abria um guarda-chuva de sonhos sobre elas." },
     { t: "faca", titulo: "Se acontecer", texto: "Se acordar sem se mexer, não lute. Diga: “Estou protegido.” Respire devagar e use o momento: imagine que rola para fora do corpo." },
     { t: "leva", texto: "O que os antigos temiam é a porta que o viajante usa." }
+  ] },
+  // Os ensinamentos que abriam o app (a travessia antiga) viraram cápsulas: entram na programação, na ordem do Arhat.
+  { dia: 47, ilus: "maos-chama", tema: "viajantes", titulo: "Procure as suas mãos", minutos: 1, cartas: [
+    { t: "abre", titulo: "Procure as suas mãos", sub: "O primeiro portão" },
+    { t: "fala", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo." },
+    { t: "fala", texto: "E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho." },
+    { t: "leva", texto: "Por isso o Osirion vai te pedir, várias vezes ao dia, para olhar as suas mãos." }
+  ] },
+  { dia: 48, ilus: "maos-chama", tema: "livro", titulo: "Silenciar e perfumar o caminho", minutos: 1, cartas: [
+    { t: "abre", titulo: "Silenciar e perfumar o caminho", sub: "A preparação da noite" },
+    { t: "fala", texto: "Nos templos do sono, ninguém entrava direto. Depois da água vinham o silêncio e a fumaça." },
+    { t: "fala", texto: "Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção." },
+    { t: "faca", titulo: "Esta noite", texto: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio." }
+  ] },
+  { dia: 49, ilus: "meditacao-fita", tema: "livro", titulo: "Corpo relaxado, mente desperta", minutos: 1, cartas: [
+    { t: "abre", titulo: "Corpo relaxado, mente desperta", sub: "O estado que abre a porta" },
+    { t: "fala", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta." },
+    { t: "fala", texto: "O Osirion chama esse estado de corpo relaxado, mente desperta. Todas as práticas da noite levam até ele." },
+    { t: "leva", texto: "O corpo dorme. Eu continuo aqui." }
+  ] },
+  { dia: 50, ilus: "fitas", tema: "livro", titulo: "O que aparece ao adormecer", minutos: 1, cartas: [
+    { t: "abre", titulo: "O que aparece ao adormecer", sub: "As imagens na parede" },
+    { t: "fala", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas." },
+    { t: "fala", texto: "Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas." },
+    { t: "fala", texto: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto." },
+    { t: "leva", texto: "Apenas olhe. A imagem é a porta." }
+  ] },
+  { dia: 51, ilus: "estrela-lilas", tema: "livro", titulo: "No fundo, uma luz", minutos: 1, cartas: [
+    { t: "abre", titulo: "No fundo, uma luz", sub: "O nevoeiro" },
+    { t: "fala", texto: "Em algum momento, ao adormecer, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro." },
+    { t: "fala", texto: "Cada pessoa tem o seu, e cada nevoeiro tem uma cor." },
+    { t: "faca", titulo: "Ao acordar", texto: "Se você vir o seu nevoeiro, guarde a cor. O Osirion vai te perguntar." }
+  ] },
+  { dia: 52, ilus: "meditacao-figura", tema: "livro", titulo: "Deixe o dia na entrada", minutos: 1, cartas: [
+    { t: "abre", titulo: "Deixe o dia na entrada", sub: "O sopro" },
+    { t: "fala", texto: "Antes de deitar, o dia ainda está em você: as conversas, as telas, as pressas." },
+    { t: "faca", titulo: "Agora", texto: "Respire fundo três vezes. A cada expiração, solte um pedaço do dia.", segundos: 30 },
+    { t: "leva", texto: "O que é do dia fica na entrada." }
+  ] },
+  { dia: 53, ilus: "estrela-cadente", tema: "livro", titulo: "Uma técnica por semana", minutos: 1, cartas: [
+    { t: "abre", titulo: "Uma técnica por semana", sub: "Antes de dormir" },
+    { t: "fala", texto: "Antes de dormir, você vai praticar técnicas dos pesquisadores do sono, dos grandes viajantes e das tradições antigas." },
+    { t: "fala", texto: "O ideal é ficar uma semana com cada uma: é o tempo para a mente aprender e os resultados começarem a aparecer." },
+    { t: "leva", texto: "Uma técnica, sete noites." }
+  ] },
+  { dia: 54, ilus: "olho", tema: "livro", titulo: "O Osirion", minutos: 1, cartas: [
+    { t: "abre", titulo: "O Osirion", sub: "O santuário sob a terra" },
+    { t: "fala", texto: "Osirion é um santuário escondido sob a terra, no Egito, dedicado a Osíris, o deus que atravessa o mundo da noite para renascer." },
+    { t: "fala", texto: "Os egípcios viam Osíris no céu, na constelação de Órion." },
+    { t: "fala", texto: "Toda noite, ao dormir, fazemos essa mesma travessia, mas sem consciência." },
+    { t: "leva", texto: "O Osirion ensina a cruzar esse limiar desperto: descer além da superfície e voltar trazendo tudo o que foi visto do outro lado." }
   ] }
 ];

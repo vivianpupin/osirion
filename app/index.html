@@ -711,6 +711,29 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .roteiro span.ok i { background: var(--cristal); }
 .roteiro span.ok, .roteiro span.atual { opacity: 1; }
 .roteiro span.atual i { background: var(--nevoeiro); }
+.agora .rot-tipo { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--nevoeiro); margin-top: 4px; }
+.barra-cam { height: 3px; border-radius: 3px; background: var(--ceu-3); overflow: hidden; }
+.barra-cam i { display: block; height: 100%; background: linear-gradient(90deg, var(--nevoeiro), var(--cristal)); border-radius: 3px; transition: width .6s; }
+.barra-cam.grande { height: 5px; }
+.grupo { border: 1px solid var(--ceu-3); border-radius: 18px; background: var(--ceu-2); overflow: hidden; }
+.grupo-cab { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.grupo-cab > span:first-child { display: flex; flex-direction: column; gap: 2px; }
+.grupo-cab b { font-family: var(--display); font-weight: 400; font-size: 19px; }
+.grupo-cab .suave { font-size: 13px; }
+.grupo-cab .conta { flex: none; font-size: 12px; color: var(--areia-2); }
+.etapas { display: flex; flex-direction: column; padding: 0 10px 10px; }
+.etapa { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 8px; background: none; border: 0; border-top: 1px solid var(--ceu-3); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.etapa > span:last-child { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.etapa .rot { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--areia-2); }
+.etapa b { font-weight: 600; font-size: 15px; }
+.etapa .marca { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; border: 1px solid var(--ceu-3); color: var(--areia-2); }
+.etapa.ok .marca { background: color-mix(in srgb, var(--cristal) 22%, transparent); border-color: var(--cristal); color: var(--cristal); }
+.etapa.atual .marca { border-color: var(--nevoeiro); color: var(--nevoeiro); box-shadow: 0 0 0 4px color-mix(in srgb, var(--nevoeiro) 18%, transparent); animation: pulsa-etapa 2.4s ease-in-out infinite; }
+.etapa.atual b { color: var(--areia); }
+.etapa.fechada { opacity: .38; cursor: default; }
+@keyframes pulsa-etapa { 50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--nevoeiro) 6%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .etapa.atual .marca { animation: none; } }
+.abre-ato .ilus { max-height: 200px; align-self: center; }
 .ver-tudo { align-self: center; background: none; border: 0; padding: 8px 14px; font: inherit; font-size: 13px; letter-spacing: .06em; color: var(--areia-2); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
 .lista-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .lista-cab h1 { margin: 0; }
@@ -820,7 +843,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     <button data-aba="hoje"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 1 0 9 9 9 9 0 1 1-9-9z"/></svg>Hoje</button>
     <button data-aba="diario"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>Diário</button>
     <button data-aba="ceu"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/><circle cx="5" cy="18" r="1"/><circle cx="18" cy="17" r="1.4"/></svg>Duat</button>
-    <button data-aba="capsulas"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="5"/><path d="M7 12h10"/></svg>Cápsulas</button>
+    <button data-aba="capsulas"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="5"/><path d="M7 12h10"/></svg>Caminho</button>
     <button data-aba="atos"><svg viewBox="0 0 24 24"><path d="M12 2l6 8-2 10H8L6 10z"/><path d="M6 10h12M12 2v18"/></svg>Jornada</button>
   </nav>
 </div>
@@ -829,6 +852,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 <script src="firebase-config.js"></script>
 <script src="conteudo.js"></script>
 <script src="capsulas.js"></script>
+<script src="programa.js"></script>
 <script src="alvos.js"></script>
 <script>
 (function () {
@@ -903,7 +927,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // Estado guardado só neste aparelho.
   const guardado = (() => { try { return JSON.parse(localStorage.getItem("arhat") || "{}"); } catch (e) { return {}; } })();
-  const estPadrao = () => ({ entrou: null, travessia: null, nevoeiro: null, ato: 1, feitos: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0, hist: {}, selos: {}, album: {}, pessoais: [], semanas: {}, dejavus: [], nivelVisto: 0, liberados: {} });
+  const estPadrao = () => ({ entrou: null, travessia: null, nevoeiro: null, ato: 0, feitos: {}, passos: {}, desde: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0, hist: {}, selos: {}, album: {}, pessoais: [], semanas: {}, dejavus: [], nivelVisto: 0, liberados: {} });
   const est = Object.assign(estPadrao(), guardado);
   if (!est.inicio) { const d = new Date(); est.inicio = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
   // Dia da jornada: conta desde o primeiro dia no app (no protótipo dá para adiantar).
@@ -1136,63 +1160,151 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="lista-tec">${NOITE.map((t, k) => `<button class="tec-op ${k === i ? "atual" : ""}" data-tecnica="${k}"><img src="${ILUS(t.ilus)}" alt="">
         <span><b>${k + 1}. ${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span><span class="tx">${esc(t.texto)}</span></span>${k === i ? '<em>agora</em>' : ""}</button>`).join("")}</div></div>`);
   }
-  // ---------- Hoje: um só próximo passo, conforme a hora do dia e o que já foi feito ----------
-  // O roteiro do dia segue a ordem do Arhat: lembrar (anotar o sonho), entender (o ensinamento), praticar (de dia) e a noite.
-  let verTudo = false;
-  function roteiroHoje() {
-    const hr = new Date().getHours(), cap = CAPS[diaDaJornada() - 1];
-    const anotou = est.diario.some(d => isoNoite(d) === hojeIso);
-    const entendeu = !cap || !!est.vistas[cap.dia];
-    const pendente = ((ATOS[est.ato].momentos.find(m => m.quando === "Dia") || {}).praticas || []).find(p => !feitoHoje(p.k));
-    const praticou = !pendente && testesHoje() >= 3;
-    const passos = [["anotar", "Lembrar", anotou], ["entender", "Entender", entendeu], ["praticar", "Praticar", praticou], ["noite", "A noite", est.ultimaNoite === hojeIso]];
-    let agora;
-    if (!anotou && hr >= 4 && hr < 12) agora = ["anotar", "Ao acordar", "Anote o seu sonho", "Antes de levantar: onde você estava? O que sentia? Até um fragmento conta.", "Anotar", 'data-acao="anotar-agora"'];
-    else if (hr >= 19 || hr < 4) agora = ["noite", "A noite", "Vou dormir", `A afirmação desta noite, a técnica da semana e o despertar das ${despertar()}.`, "Vou dormir", 'data-acao="dormir"'];
-    else if (!entendeu) agora = ["entender", "O ensinamento de hoje", cap.titulo, `${cap.minutos} min · ${cap.cartas.length} cartas`, "Abrir", `data-capsula="${cap.dia}"`];
-    else if (pendente) agora = ["praticar", "A prática do dia", pendente.nome, pendente.det, "Fazer agora", `data-pratica="${pendente.k}"`];
-    else if (testesHoje() < 7) agora = ["praticar", "Durante o dia", "Será que estou sonhando?", `Olhe para as suas mãos e conte os dedos. Hoje: ${testesHoje()} de 7 testes.`, "Fazer o teste", 'data-acao="teste"'];
-    else agora = ["noite", "Mais tarde", "O dia está feito", "À noite, toque em “Vou dormir”.", "Vou dormir", 'data-acao="dormir"'];
-    return { passos, agora };
+  // ---------- A programação: as etapas em sequência (programa.js), na ordem do Arhat ----------
+  // Cada etapa só abre depois da anterior. O que já foi feito fica em est.passos; est.desde guarda como estavam
+  // as contas quando a etapa abriu (para "dormir" e "anotar" valerem só a partir dali).
+  const PROGRAMA = window.PROGRAMA || [];
+  const ATO_ETAPA = (() => { let a = 0; return PROGRAMA.map(p => (p.tipo === "ato" ? (a = p.ref) : a)); })();
+  const totalDe = k => Object.values(est.hist).reduce((n, h) => n + (h[k] || 0), 0);
+  const praticaDe = (p, i) => { for (const m of ATOS[ATO_ETAPA[i]].momentos) for (const x of m.praticas) if (x.k === p.ref) return x; return null; };
+  function etapaInfo(p, i) {
+    if (p.tipo === "ler") { const c = CAPS[p.ref - 1]; return { tit: c ? c.titulo : "", sub: c ? (c.cartas.find(x => x.t === "abre") || {}).sub || "" : "", rot: `Ler · ${c ? c.minutos : 1} min`, btn: "Ler" }; }
+    if (p.tipo === "ato") { const a = ATOS[p.ref]; return { tit: a.nome, sub: a.sub, rot: p.ref === 0 ? "O começo" : "Um novo ato", btn: "Abrir" }; }
+    if (p.tipo === "pratica") { const x = praticaDe(p, i); return { tit: x ? x.nome : p.ref, sub: x ? x.det : "", rot: "Praticar", btn: "Praticar" }; }
+    if (p.tipo === "tecnica") return { tit: p.titulo || "Escolher a técnica da semana", sub: "Uma técnica antes de dormir, por sete noites", rot: "Escolher", btn: "Escolher" };
+    if (p.tipo === "noite") return { tit: p.titulo || "Dormir com a prática", sub: "Ao deitar, toque em “Vou dormir”", rot: "Esta noite", btn: "Vou dormir" };
+    if (p.tipo === "anotar") return { tit: p.titulo || "Anotar o sonho", sub: "Ao acordar, antes de levantar", rot: "Ao acordar", btn: "Anotar o sonho" };
+    if (p.tipo === "teste") return { tit: p.titulo || "Teste de realidade", sub: "Será que estou sonhando?", rot: "Praticar", btn: "Fazer o teste" };
+    if (p.tipo === "oraculo") return { tit: p.titulo || "O oráculo dos alvos", sub: "O primeiro alvo das suas viagens", rot: "O oráculo", btn: "Consultar o oráculo" };
+    if (p.tipo === "viagem") { const v = VIAGENS.find(x => x.k === p.ref); return { tit: v ? v.nome : p.ref, sub: v ? v.det : "", rot: "Viagem guiada", btn: "Começar a viagem" }; }
+    return { tit: p.titulo || "", sub: "", rot: "", btn: "Abrir" };
   }
+  function etapaCumprida(p, i, desde) {
+    const d = desde || {};
+    if (p.tipo === "ler") return !!est.vistas[p.ref];
+    if (p.tipo === "pratica") return !!(est.feitos[ATOS[ATO_ETAPA[i]].id] || {})[p.ref];
+    if (p.tipo === "tecnica") return !!est.tecnicaEscolhida;
+    if (p.tipo === "noite") return totalDe("dormir") > (d.dormir ?? 1e9);
+    if (p.tipo === "anotar") return est.diario.length > (d.diario ?? 1e9);
+    if (p.tipo === "teste") return totalDe("testes") > (d.testes ?? 1e9);
+    if (p.tipo === "oraculo") return !!est.alvo && JSON.stringify(est.alvo) !== d.alvo;
+    if (p.tipo === "viagem") return Object.values(est.feitos).some(f => f && f[p.ref]);
+    return false; // "ato": só quando a pessoa entra
+  }
+  // Devolve o índice da etapa atual (ou PROGRAMA.length quando tudo foi feito).
+  function programa() {
+    est.passos = est.passos || {}; est.desde = est.desde || {};
+    let atual = PROGRAMA.length, mudou = false;
+    for (let i = 0; i < PROGRAMA.length; i++) {
+      const p = PROGRAMA[i];
+      if (est.passos[p.id]) continue;
+      if (etapaCumprida(p, i, est.desde[p.id])) { est.passos[p.id] = hojeIso; mudou = true; continue; }
+      if (!est.desde[p.id]) { est.desde[p.id] = { iso: hojeIso, dormir: totalDe("dormir"), diario: est.diario.length, testes: totalDe("testes"), alvo: JSON.stringify(est.alvo || null) }; mudou = true; }
+      atual = i; break;
+    }
+    if (mudou) salvar();
+    return atual;
+  }
+  const etapaLivre = i => { const a = ATOS[ATO_ETAPA[i]]; return a.gratis || est.pago; };
+  function abrirEtapa(i) {
+    const p = PROGRAMA[i]; if (!p) return;
+    if (i > programa() || !etapaLivre(i)) return;
+    if (p.tipo === "ler") return abrirCapsula(p.ref);
+    if (p.tipo === "ato") return abrirAto(i);
+    if (p.tipo === "pratica") return abrirPratica(p.ref, ATO_ETAPA[i]);
+    if (p.tipo === "tecnica") return abrirEscolhaTecnica();
+    if (p.tipo === "noite") return abrirModoNoite();
+    if (p.tipo === "anotar") { aba = "diario"; modoDiario = "gravar"; manha = new Date().getHours() < 12; render(); return; }
+    if (p.tipo === "teste") return abrirTeste();
+    if (p.tipo === "oraculo") return abrirSorteio();
+    if (p.tipo === "viagem") return abrirPratica(p.ref);
+  }
+  function ofertaJornada() {
+    return `<div class="oferta"><span class="rotulo" style="color:var(--cristal)">Jornada completa</span>
+        <h2>Do Segundo ao Quinto Ato</h2>
+        <ul><li>O despertar das 4 da manhã, ato por ato</li><li>As práticas da noite guiadas pela voz da Vivian</li><li>O céu das suas noites sem limite</li><li>Os alvos das viagens e o socorro dentro do sonho</li></ul>
+        <span class="preco">R$ 97</span><span class="suave">pagamento único · ou R$ 19,90 por mês</span>
+        <button class="btn largo" data-acao="comprar">Abrir a jornada</button>
+        <span class="suave" style="font-size:12px">No protótipo o botão só abre os atos, sem cobrar.</span></div>`;
+  }
+  // A abertura de um ato: o nome, a frase e a introdução do livro. Ao entrar, as práticas passam a ser as desse ato.
+  function abrirAto(i) {
+    const p = PROGRAMA[i], a = ATOS[p.ref], feito = !!est.passos[p.id];
+    abrirSobre(`<div class="tela abre-ato">${voltar}
+      <span class="rotulo" style="color:${a.cor}">${p.ref === 0 ? "O começo" : "Um novo ato"}</span>
+      ${a.ilus ? `<img class="ilus" src="${ILUS(a.ilus)}" alt="">` : ""}
+      <h1>${esc(a.nome)}</h1><p class="suave">${esc(a.sub)}</p>
+      <blockquote class="cita">“${esc(a.frase)}”</blockquote>
+      ${a.intro ? `<p>${esc(a.intro)}</p>` : ""}
+      ${a.gratis || est.pago ? `<button class="btn largo" data-acao="entrar-ato" data-i="${i}">${feito ? "Fechar" : p.ref === 0 ? "Começar o Início" : "Entrar no " + esc(a.nome)}</button>` : ofertaJornada()}
+    </div>`);
+  }
+
+  // ---------- Hoje: o próximo passo da programação e os hábitos que a pessoa já aprendeu ----------
   function cartaoAgora() {
-    const { passos, agora: [k, rot, tit, tx, btn, attr] } = roteiroHoje(), a = ATOS[est.ato];
+    const i = programa();
+    if (i >= PROGRAMA.length) return `<section class="agora"><span class="rotulo">O caminho</span><h2>Você atravessou todos os atos</h2><p class="suave">Continue com os seus hábitos e reveja qualquer etapa no Caminho.</p><button class="ver-tudo" data-aba="capsulas">Ver o caminho</button></section>`;
+    const p = PROGRAMA[i], info = etapaInfo(p, i), a = ATOS[ATO_ETAPA[i]];
     return `<section class="agora">
-      <div class="roteiro">${passos.map(([pk, nome, ok]) => `<span class="${ok ? "ok" : ""} ${pk === k ? "atual" : ""}"><i></i>${nome}</span>`).join("")}</div>
-      <span class="rotulo">${esc(a.nome)} · dia ${diaDaJornada()} · ${rot}</span>
-      <h2>${esc(tit)}</h2><p class="suave">${tx}</p>
-      <button class="btn largo" ${attr}>${btn}</button>
+      <span class="rotulo">${esc(a.nome)} · etapa ${i + 1} de ${PROGRAMA.length}</span>
+      <div class="barra-cam"><i style="width:${Math.max(2, Math.round(i / PROGRAMA.length * 100))}%"></i></div>
+      <span class="rot-tipo">${esc(info.rot)}</span>
+      <h2>${esc(info.tit)}</h2>${info.sub ? `<p class="suave">${esc(info.sub)}</p>` : ""}
+      ${etapaLivre(i) ? `<button class="btn largo" data-etapa="${i}">${esc(info.btn)}</button>` : ofertaJornada()}
+      <button class="ver-tudo" data-aba="capsulas">Ver o caminho todo</button>
     </section>`;
+  }
+  // Os hábitos: só o que a pessoa já aprendeu no caminho (as práticas do dia do ato, o teste, o diário, a noite).
+  function habitosHoje() {
+    const atual = PROGRAMA[programa()] || {}, hr = new Date().getHours(), itens = [];
+    const anotou = est.diario.some(d => isoNoite(d) === hojeIso);
+    if (est.passos.anotar1 && !anotou && hr >= 4 && hr < 12 && atual.tipo !== "anotar")
+      itens.push(`<button class="pratica" data-acao="anotar-agora"><span class="ico">${ICO.pena}</span><span><span class="nome">Anotar o sonho</span><br><span class="det">Antes de levantar</span></span><span class="feito">✓</span></button>`);
+    const m = ATOS[est.ato].momentos.find(x => x.quando === "Dia");
+    (m ? m.praticas : []).filter(p => p.k !== "teste" && PROGRAMA.some(e => e.tipo === "pratica" && e.ref === p.k && est.passos[e.id])).forEach(p => {
+      itens.push(`<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span><span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>${duasVezes(m, p) ? `<div class="vezes">${VEZES.map(([v, n]) => `<button class="vez" data-vez="${p.k}:${v}" aria-pressed="${vezFeita(p.k, v)}"><i></i>${n}</button>`).join("")}</div>` : ""}`);
+    });
+    if (est.passos.teste1) itens.push(`<button class="pratica ${testesHoje() >= 7 ? "ok" : ""}" data-acao="teste"><span class="ico">${ICO.mao}</span><span><span class="nome">Teste de realidade</span><br><span class="det">${testesHoje()} de 7 hoje · será que estou sonhando?</span></span><span class="feito">✓</span></button>`);
+    if (est.passos.noite1 && atual.tipo !== "noite")
+      itens.push(`<button class="dormir-card" data-acao="dormir"><span class="ico">${ICO.lua}</span><span><b>Vou dormir</b><span class="suave">A afirmação, a técnica da semana e o despertar</span></span></button>`);
+    return itens.length ? `<section class="momento"><div class="momento-cab"><h3>Hábitos de hoje</h3></div>${itens.join("")}</section>` : "";
+  }
+
+  // ---------- Caminho: todas as etapas, por ato. As feitas podem ser revistas; as próximas aparecem trancadas. ----------
+  let grupoAberto = null;
+  function telaCaminho() {
+    const atual = programa(), feitas = PROGRAMA.filter(p => est.passos[p.id]).length;
+    const grupos = [];
+    PROGRAMA.forEach((p, i) => { const a = ATO_ETAPA[i], g = grupos[grupos.length - 1]; if (!g || g.a !== a) grupos.push({ a, itens: [i] }); else g.itens.push(i); });
+    const aberto = grupoAberto ?? ATO_ETAPA[Math.min(atual, PROGRAMA.length - 1)];
+    const html = grupos.map(g => {
+      const a = ATOS[g.a], ok = g.itens.filter(i => est.passos[PROGRAMA[i].id]).length, abre = g.a === aberto;
+      const linhas = abre ? g.itens.map(i => {
+        const p = PROGRAMA[i], info = etapaInfo(p, i), feito = !!est.passos[p.id], cur = i === atual, tranc = !feito && !cur;
+        return `<button class="etapa ${feito ? "ok" : cur ? "atual" : "fechada"}" ${tranc ? "disabled" : `data-etapa="${i}"`}>
+          <span class="marca">${feito ? "✓" : cur ? "✦" : i + 1}</span>
+          <span><span class="rot">${esc(info.rot)}</span><b>${esc(info.tit)}</b></span></button>`;
+      }).join("") : "";
+      return `<section class="grupo ${abre ? "aberto" : ""}"><button class="grupo-cab" data-grupo="${g.a}" aria-expanded="${abre}">
+          <span><b>${esc(a.nome)}</b><span class="suave">${esc(a.sub)}</span></span><span class="conta">${ok} de ${g.itens.length}</span></button>
+        ${linhas ? `<div class="etapas">${linhas}</div>` : ""}</section>`;
+    }).join("");
+    return `<div class="tela">${topo()}
+      <div><span class="rotulo">O seu caminho</span><h1>Uma etapa de cada vez</h1></div>
+      <p class="suave">Na ordem do Arhat: primeiro entender, depois praticar. A próxima etapa abre quando você conclui a anterior.</p>
+      <div class="barra-cam grande"><i style="width:${Math.max(2, Math.round(feitas / PROGRAMA.length * 100))}%"></i></div>
+      <span class="suave" style="font-size:13px">${feitas} de ${PROGRAMA.length} etapas</span>
+      ${html}
+    </div>`;
   }
 
   function telaHoje() {
-    const a = ATOS[est.ato];
-    const momentos = a.momentos.map(m => `
-      <section class="momento">
-        <div class="momento-cab"><h3>${m.quando === "Noite" ? "A prática da noite" : m.quando === "04:00" ? despertar() : m.quando}</h3><span class="hora">${m.hora}</span></div>
-        ${m.praticas.map(p => `
-          <button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}">
-            <span class="ico">${ICO[p.ico]}</span>
-            <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span>
-            <span class="feito">✓</span>
-          </button>${duasVezes(m, p) ? `<div class="vezes">${VEZES.map(([v, n]) => `<button class="vez" data-vez="${p.k}:${v}" aria-pressed="${vezFeita(p.k, v)}"><i></i>${n}</button>`).join("")}</div>` : ""}`).join("")}
-      </section>`).join("");
-    // Em cima, o andamento e o próximo passo. O resto do dia fica guardado em "Tudo de hoje", sem amontoar a tela.
+    // O andamento, o próximo passo da programação e os hábitos já aprendidos. Nada escondido, nada solto.
     return `<div class="tela">${topo()}
       ${ceuDoInicio()}
       ${cartaoAgora()}
-      <button class="ver-tudo" data-acao="ver-tudo" aria-expanded="${verTudo}">${verTudo ? "Fechar" : "Tudo de hoje"}</button>
-      ${!verTudo ? "" : `
       ${sinalDeSonho()}
-      ${cartaoCapsula(CAPS[diaDaJornada() - 1], true)}
-      <button class="dormir-card" data-acao="dormir"><span class="ico">${ICO.lua}</span><span><b>Vou dormir</b><span class="suave">Modo noite: tela vermelha, sons, o alvo e o despertar das ${despertar()}</span></span></button>
-      ${momentos}
-      ${cartaoTecnica()}
-      <section class="momento"><div class="momento-cab"><h3>Viagens guiadas</h3><span class="hora">para qualquer noite</span></div>
-        ${!livre("viagens") ? trancado("viagens") : VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
-          <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>`).join("")}</section>
-      ${cartaoSorteio()}
-      <p class="nota-pe">Hoje: ${testesHoje()} de 7 a 10 testes de realidade</p>`}
+      ${habitosHoje()}
     </div>`;
   }
 
@@ -1445,28 +1557,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     </div>`;
   }
 
-  function telaCapsulas() {
-    const hoje = diaDaJornada();
-    const nos = CAPS.map(c => {
-      const aberta = c.dia <= hoje, vista = est.vistas[c.dia];
-      return `<button class="no t-${c.tema} ${vista ? "vista" : ""} ${c.dia === hoje ? "hoje" : ""} ${aberta ? "" : "fechada"}" data-capsula="${c.dia}" ${aberta ? "" : 'aria-disabled="true"'}>
-        <span class="ponto">${vista ? "✦" : c.dia}</span>
-        <span><span class="tema-tag">${TEMAS[c.tema]}</span><br><span class="nome">${esc(c.titulo)}</span></span>
-        <span class="cadeado">${aberta ? "" : "em " + (c.dia - hoje) + (c.dia - hoje === 1 ? " dia" : " dias")}</span></button>`;
-    }).join("");
-    return `<div class="tela">${topo()}
-      <div><span class="rotulo">Cápsulas</span><h1>Um ensinamento por dia</h1></div>
-      <p class="suave">Cada dia abre uma cápsula de dois ou três minutos: o livro, a ciência do sono, os povos que honram os sonhos e as técnicas dos grandes viajantes.</p>
-      <div class="legenda-temas"><span class="t-livro"><i></i>Ensinamentos</span><span class="t-ciencia"><i></i>Ciência do sono</span><span class="t-tradicoes"><i></i>Tradições do sonho</span><span class="t-viajantes"><i></i>Técnicas dos viajantes</span><span class="t-mantras"><i></i>Mantras do sonho</span></div>
-      <div class="trilha">${nos}</div>
-      <button class="btn fantasma largo" data-acao="adiantar">Adiantar um dia (só no protótipo)</button>
-    </div>`;
-  }
+
 
   let modoJornada = "caminho";
   function telaJornada() {
-    const seg = `<div class="seg seg3" role="group" aria-label="Jornada">${[["caminho", "Caminho"], ["conquistas", "Conquistas"], ["atos", "Atos"]].map(([k, n]) => `<button data-jornada="${k}" aria-pressed="${modoJornada === k}">${n}</button>`).join("")}</div>`;
-    if (modoJornada === "atos") return telaAtos(seg);
+    const seg = `<div class="seg" role="group" aria-label="Jornada">${[["caminho", "Mapa"], ["conquistas", "Conquistas"]].map(([k, n]) => `<button data-jornada="${k}" aria-pressed="${modoJornada === k}">${n}</button>`).join("")}</div>`;
     if (modoJornada === "conquistas") return `<div class="tela">${topo()}${seg}${livre("selos") ? livroSelos() : trancado("selos")}${livre("album") ? albumAlvos() : trancado("album")}${livre("lugares") ? seusAlvos() : trancado("lugares")}</div>`;
     return `<div class="tela">${topo()}${seg}${mapaJornada()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}${cartaoConta()}</div>`;
   }
@@ -1483,12 +1578,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div><span class="rotulo">O caminho</span><h1>Cinco atos para abrir os olhos</h1></div>
       <p class="suave">O Osirion é um caminho de autoaprimoramento das faculdades do sonhar. O objetivo é se tornar um Arhat: aquele que despertou e segue consciente enquanto o corpo dorme. Siga em sequência ou fique alguns dias em cada ato: quanto mais tempo no caminho, mais você vive os resultados.</p>
       ${lista}
-      ${est.pago ? "" : `<div class="oferta"><span class="rotulo" style="color:var(--cristal)">Jornada completa</span>
-        <h2>Do Segundo ao Quinto Ato</h2>
-        <ul><li>O despertar das 4 da manhã, ato por ato</li><li>As práticas da noite guiadas pela voz da Vivian</li><li>O céu das suas noites sem limite</li><li>Os alvos das viagens e o socorro dentro do sonho</li></ul>
-        <span class="preco">R$ 97</span><span class="suave">pagamento único · ou R$ 19,90 por mês</span>
-        <button class="btn largo" data-acao="comprar">Abrir a jornada</button>
-        <span class="suave" style="font-size:12px">No protótipo o botão só abre os atos, sem cobrar.</span></div>`}
+      ${est.pago ? "" : ofertaJornada()}
       <section class="momento"><h2>Dentro do sonho</h2>
         <div class="socorro">
           <div><b>“Clareza, agora!”</b>Quando o sonho fica instável e a lucidez escapa.</div>
@@ -1884,17 +1974,17 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // As viagens guiadas valem em qualquer ato (conteudo.js).
   const VIAGENS = window.ARHAT.VIAGENS || [];
   const ehViagem = k => VIAGENS.some(v => v.k === k);
-  function acharPratica(k) {
-    const a = ATOS[est.ato];
+  function acharPratica(k, at) {
+    const a = ATOS[at ?? est.ato];
     for (const m of a.momentos) for (const p of m.praticas) if (p.k === k) return { a, m, p };
     const v = VIAGENS.find(x => x.k === k);
     if (v) return { a: { nome: "Viagem guiada" }, m: { quando: "para qualquer noite", hora: "ao deitar" }, p: v };
     return null;
   }
 
-  function abrirPratica(k) {
+  function abrirPratica(k, at) {
     if (k === "teste") return abrirTeste();
-    const achada = acharPratica(k); if (!achada) return;
+    const achada = acharPratica(k, at); if (!achada) return;
     const { a, m, p } = achada;
     if (p.irDiario) { aba = "diario"; modoDiario = "gravar"; render(); return; }
     // Um bloco por tela; um subtítulo vai junto com o bloco seguinte.
@@ -1929,7 +2019,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       d.querySelector("#ant").onclick = () => { if (i > 0) { i--; mostra(); } };
       d.querySelector("#prox").onclick = () => {
         if (i < passos.length - 1) { i++; mostra(); return; }
-        marcar(p.k); if (duasVezes(m, p)) marcarVez(p.k, new Date().getHours() < 15 ? "manha" : "tarde");
+        marcar(p.k, a.id); if (duasVezes(m, p)) marcarVez(p.k, new Date().getHours() < 15 ? "manha" : "tarde");
         fecharSobre();
         if (k === "diario") { aba = "diario"; modoDiario = "gravar"; }
         render();
@@ -1962,7 +2052,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   function abrirCapsula(dia) {
-    const c = CAPS[dia - 1]; if (!c || dia > diaDaJornada()) return;
+    const c = CAPS[dia - 1]; if (!c) return;
     const fundo = TEXTURA[c.tema];
     abrirSobre(`<div class="story t-${c.tema}" style="position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column">
       <div class="fundo" style="background-image:url('${fundo}')"></div>
@@ -2537,13 +2627,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // ---------- Navegação ----------
   function render() {
     aplicarCor();
-    telas.innerHTML = { hoje: telaHoje, diario: telaDiario, ceu: telaCeu, capsulas: telaCapsulas, atos: telaJornada }[aba]();
+    telas.innerHTML = { hoje: telaHoje, diario: telaDiario, ceu: telaCeu, capsulas: telaCaminho, atos: telaJornada }[aba]();
     telas.scrollTop = 0;
     document.querySelectorAll("#nav button").forEach(b => b.setAttribute("aria-current", b.dataset.aba === aba ? "page" : "false"));
     pintarCeu();
     checarConquistas();
   }
-  function marcar(k) { const id = ATOS[est.ato].id; est.feitos[id] = est.feitos[id] || {}; est.feitos[id][k] = true; registrar("pratica", k); salvar(); }
+  function marcar(k, at) { const id = at ?? ATOS[est.ato].id; est.feitos[id] = est.feitos[id] || {}; est.feitos[id][k] = true; registrar("pratica", k); salvar(); }
   function marcarVez(k, v, tira) {
     const h = est.hist[hojeIso] = est.hist[hojeIso] || {}; h.vezes = h.vezes || {};
     if (tira) delete h.vezes[k + ":" + v]; else { h.vezes[k + ":" + v] = true; marcar(k); }
@@ -2568,6 +2658,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.cor) { est.nevoeiro = b.dataset.cor; aplicarCor(); document.querySelectorAll(".cor").forEach(c => c.setAttribute("aria-pressed", c === b)); const cl = document.getElementById("cor-livre"); if (cl) cl.value = b.dataset.cor; return; }
     if (b.dataset.pratica) { abrirPratica(b.dataset.pratica); return; }
     if (b.dataset.capsula) { abrirCapsula(+b.dataset.capsula); return; }
+    if (b.dataset.etapa) { abrirEtapa(+b.dataset.etapa); return; }
+    if (b.dataset.grupo) { const g = +b.dataset.grupo; grupoAberto = grupoAberto === g ? -1 : g; render(); return; }
     if (b.dataset.tipo) { tipoEscolhido = +b.dataset.tipo; document.querySelectorAll(".tipo").forEach(t => t.setAttribute("aria-pressed", t === b)); return; }
     if (b.dataset.alvo) {
       est.alvo = est.alvo === b.dataset.alvo ? null : b.dataset.alvo; salvar();
@@ -2582,7 +2674,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
     if (b.dataset.modo) { modoDiario = b.dataset.modo; render(); return; }
     if (b.dataset.anota) { if (rec) rec.stop(); const t = document.getElementById("sonho").value; modoAnota = b.dataset.anota; render(); const a = document.getElementById("sonho"); a.value = t; if (modoAnota === "escrever") a.focus(); return; }
-    if (b.dataset.tecnica) { est.tecnica = { i: +b.dataset.tecnica, desde: hojeIso }; salvar(); fecharSobre(); render(); abrirTecnica(); return; }
+    if (b.dataset.tecnica) { est.tecnica = { i: +b.dataset.tecnica, desde: hojeIso }; est.tecnicaEscolhida = true; salvar(); fecharSobre(); render(); abrirTecnica(); return; }
     if (b.dataset.jornada) { modoJornada = b.dataset.jornada; render(); return; }
     if (b.dataset.exp) { const k = b.dataset.exp; expSel.has(k) ? expSel.delete(k) : expSel.add(k); b.setAttribute("aria-pressed", expSel.has(k)); return; }
     if (b.dataset.chegou) { chegou = chegou === b.dataset.chegou ? null : b.dataset.chegou; document.querySelectorAll("[data-chegou]").forEach(x => x.setAttribute("aria-pressed", x.dataset.chegou === chegou)); return; }
@@ -2606,7 +2698,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "tecnica") abrirTecnica();
     else if (acao === "escolher-tecnica") abrirEscolhaTecnica();
     else if (acao === "teste") abrirTeste();
-    else if (acao === "ver-tudo") { verTudo = !verTudo; render(); }
+    else if (acao === "entrar-ato") { const p = PROGRAMA[+b.dataset.i]; if (!est.passos[p.id]) { est.ato = p.ref; est.passos[p.id] = hojeIso; salvar(); } fecharSobre(); render(); }
     else if (acao === "anotar-agora") { aba = "diario"; modoDiario = "gravar"; manha = true; render(); }
     else if (acao === "dejavu") abrirDejavu();
     else if (acao === "salvar-dejavu") { const t = document.getElementById("deja-tx").value.trim(); if (t) { est.dejavus.push({ iso: hojeIso, texto: t }); salvar(); } fecharSobre(); render(); }

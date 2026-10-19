@@ -2,7 +2,7 @@
 importScripts("imagens.js");
 const CACHE = "osirion-v2", FB = "osirion-firebase";
 // Na instalação já guarda o app e todas as imagens (uma por uma: se alguma falhar, as outras ficam guardadas).
-const BASE = ["./", "index.html", "conteudo.js", "capsulas.js", "alvos.js", "imagens.js", "firebase-config.js", "manifest.webmanifest", "icone-192.png"];
+const BASE = ["./", "index.html", "conteudo.js", "capsulas.js", "programa.js", "alvos.js", "imagens.js", "firebase-config.js", "manifest.webmanifest", "icone-192.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.allSettled(BASE.concat(self.IMAGENS || []).map(a => c.add(new Request(a, { cache: "reload" }))))));
   self.skipWaiting();
