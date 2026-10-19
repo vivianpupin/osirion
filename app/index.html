@@ -541,6 +541,28 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 /* ---------- Diário: manhã, alvo, sono, pontes ---------- */
 .diario.manha { background: #050509; }
 .diario.manha .perguntas, .diario.manha .suave { opacity: .8; }
+.trancado { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 18px; border: 1px dashed var(--ceu-3); background: color-mix(in srgb, var(--ceu-2) 60%, transparent); color: var(--areia-2); }
+.trancado .cad-ilus { position: relative; flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--ceu); display: grid; place-items: center; }
+.trancado .cad-ilus img { width: 38px; height: 38px; object-fit: contain; filter: grayscale(1) brightness(.55); opacity: .5; }
+.trancado .cad-ilus svg { position: absolute; right: -2px; bottom: -2px; width: 22px; height: 22px; padding: 3px; border-radius: 50%; background: var(--ceu-3); stroke: var(--cristal); fill: none; stroke-width: 2; }
+.trancado b { display: block; font-family: var(--display); font-weight: 400; font-size: 17px; color: var(--areia); opacity: .75; }
+.trancado span span { font-size: 13px; }
+.modo-noite .trancado { border-color: #3a1214; background: #160506; color: #a65558; }
+.modo-noite .trancado b { color: #e08a8b; }
+.mais { display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--ceu-3); border-radius: 16px; padding: 0 14px; background: color-mix(in srgb, var(--ceu-2) 70%, transparent); }
+.mais[open] { padding-bottom: 14px; }
+.mais > * + * { margin-top: 10px; }
+.mais summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 0; }
+.mais summary::-webkit-details-marker { display: none; }
+.mais summary::after { content: "+"; font-size: 22px; color: var(--nevoeiro); line-height: 1; }
+.mais[open] summary::after { content: "−"; }
+.mais summary b { display: block; font-weight: 600; font-size: 14px; }
+.mais summary span span { font-size: 12px; color: var(--areia-2); }
+.mais .alvos, .mais .cheguei, .mais .sono-log { display: flex; }
+.mais .sono-log { display: grid; }
+.sono-log label { min-width: 0; }
+.sono-log input { width: 100%; min-width: 0; }
+.mais .cheguei { flex-direction: column; }
 .dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
 .cheguei { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); background: var(--ceu-2); }
 .cheguei b { font-family: var(--display); font-weight: 400; font-size: 19px; }
@@ -681,7 +703,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // Estado guardado só neste aparelho.
   const guardado = (() => { try { return JSON.parse(localStorage.getItem("arhat") || "{}"); } catch (e) { return {}; } })();
-  const est = Object.assign({ entrou: null, travessia: null, nevoeiro: null, ato: 1, feitos: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0, hist: {}, selos: {}, album: {}, pessoais: [], semanas: {}, dejavus: [], nivelVisto: 0 }, guardado);
+  const est = Object.assign({ entrou: null, travessia: null, nevoeiro: null, ato: 1, feitos: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0, hist: {}, selos: {}, album: {}, pessoais: [], semanas: {}, dejavus: [], nivelVisto: 0, liberados: {} }, guardado);
   if (!est.inicio) { const d = new Date(); est.inicio = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
   // Dia da jornada: conta desde o primeiro dia no app (no protótipo dá para adiantar).
   function diaDaJornada() {
@@ -755,7 +777,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${sinalDeSonho()}
       ${momentos}
       <section class="momento"><div class="momento-cab"><h3>Viagens guiadas</h3><span class="hora">para qualquer noite</span></div>
-        ${VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
+        ${!livre("viagens") ? trancado("viagens") : VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
           <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>`).join("")}</section>
       ${cartaoSorteio()}
       <p class="nota-pe">Hoje: ${testesHoje()} de 7 a 10 testes de realidade</p>
@@ -801,7 +823,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="numeros"><div><b>${todas.length}</b><span>noites</span></div><div><b>${cont[2]}</b><span>com lucidez</span></div><div><b>${cont[3]}</b><span>estrelas</span></div></div>
       <div class="legenda">${TIPOS.map(t => `<div><canvas width="28" height="28" data-ponto="${t.k}"></canvas>${t.nome}</div>`).join("")}</div>
       <p class="exemplo">As primeiras 56 noites são de exemplo. As que você salvar no Diário entram no fim do céu.</p>
-      ${painelMes()}
+      ${livre("painel") ? painelMes() : trancado("painel")}
     </div>`;
   }
 
@@ -959,12 +981,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <textarea id="sonho" placeholder="Estou numa casa antiga, a luz é laranja…"></textarea>
       <span class="rotulo">Como foi a noite</span>
       <div class="tipos">${TIPOS.map(t => `<button class="tipo" data-tipo="${t.k}" aria-pressed="${t.k === tipoEscolhido}"><canvas width="28" height="28" data-ponto="${t.k}"></canvas>${t.nome}</button>`).join("")}</div>
+      <details class="mais"><summary><span><b>Mais detalhes</b><span>o que aconteceu, o alvo, o sono</span></span></summary>
       <span class="rotulo">O que aconteceu</span>
       <div class="alvos">${EXPS.map(([k, n]) => `<button class="alvo" data-exp="${k}" aria-pressed="${expSel.has(k)}">${n}</button>`).join("")}</div>
       ${a ? `<div class="cheguei"><span class="rotulo">O alvo desta noite</span><b>${esc(a.nome)}</b><span class="suave">Você chegou lá?</span>
         <div class="seg seg3">${[["sim", "Cheguei"], ["quase", "Quase"], ["nao", "Não"]].map(([k, n]) => `<button data-chegou="${k}" aria-pressed="${chegou === k}">${n}</button>`).join("")}</div></div>` : ""}
       <span class="rotulo">O sono</span>
       <div class="sono-log"><label>Dormi às<input type="time" id="dormi" value="${esc(est.dormiuAs || (est.perfil || {}).dorme || "23:00")}"></label><label>Acordei às<input type="time" id="acordei" value="${hora}"></label></div>
+      </details>
       <button class="btn largo" data-acao="salvar-sonho">Guardar a noite</button>
     </div>`;
   }
@@ -991,8 +1015,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function telaJornada() {
     const seg = `<div class="seg seg3" role="group" aria-label="Jornada">${[["caminho", "Caminho"], ["conquistas", "Conquistas"], ["atos", "Atos"]].map(([k, n]) => `<button data-jornada="${k}" aria-pressed="${modoJornada === k}">${n}</button>`).join("")}</div>`;
     if (modoJornada === "atos") return telaAtos(seg);
-    if (modoJornada === "conquistas") return `<div class="tela">${topo()}${seg}${livroSelos()}${albumAlvos()}${seusAlvos()}</div>`;
-    return `<div class="tela">${topo()}${seg}${cartaoNivel()}${cartaoChama()}${cartaoMissoes()}${mapaJornada()}</div>`;
+    if (modoJornada === "conquistas") return `<div class="tela">${topo()}${seg}${livre("selos") ? livroSelos() : trancado("selos")}${livre("album") ? albumAlvos() : trancado("album")}${livre("lugares") ? seusAlvos() : trancado("lugares")}</div>`;
+    return `<div class="tela">${topo()}${seg}${mapaJornada()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}</div>`;
   }
   function telaAtos(seg) {
     const lista = ATOS.map(a => {
@@ -1067,6 +1091,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   const posRoda = (graus, r) => { const a = (graus - 90) * Math.PI / 180; return { x: 50 + r * Math.cos(a), y: 50 + r * Math.sin(a) }; };
   function cartaoSorteio() {
+    if (!livre("sorteio")) return trancado("sorteio");
     const a = alvoDe(est.alvo);
     const mini = REINOS.map((x, k) => { const p = posRoda(k * 40, 40); return `<img src="${ILUS(x.ilus)}" alt="" style="left:${p.x}%;top:${p.y}%">`; }).join("");
     return `<button class="sorteio-card" data-acao="sortear"><span class="roda-mini" aria-hidden="true">${mini}<img class="centro" src="${IMG.marca}" alt="" style="left:50%;top:50%"></span>
@@ -1636,22 +1661,48 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return { chave: ini, lista, completa: lista.every(x => x.ok), restam: 7 - isos.indexOf(hojeIso) };
   }
 
+  // ---------- O que se abre aos poucos ----------
+  // Como num mapa de videogame: tudo aparece desde o começo, mas fechado, com o aviso de quando abre.
+  const noitesAnotadas = () => est.diario.length;
+  const LIBERA = {
+    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Abre depois da sua primeira noite anotada no diário.", ok: () => noitesAnotadas() >= 1 },
+    selos: { nome: "O livro de selos", ilus: "estrela-dourada", quando: "Abre depois da sua primeira noite anotada no diário.", ok: () => noitesAnotadas() >= 1 },
+    missoes: { nome: "As missões da semana", ilus: "fita-estrela-2", quando: "Abre quando você tiver 3 noites anotadas.", ok: () => noitesAnotadas() >= 3 },
+    album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
+    lugares: { nome: "Os seus lugares", ilus: "olho", quando: "Abre quando você chegar ao nível Sonhador.", ok: () => nivel().i >= 1 },
+    painel: { nome: "O painel do mês", ilus: "estrela-lilas", quando: "Abre quando você tiver 7 noites anotadas.", ok: () => noitesAnotadas() >= 7 },
+    viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: "Abrem no Segundo Ato.", ok: () => est.ato >= 2 },
+    despertar: { nome: "O despertar de madrugada", ilus: "lua", quando: "Abre no Segundo Ato, quando começam as práticas das 4 da manhã.", ok: () => est.ato >= 2 }
+  };
+  const livre = k => LIBERA[k].ok();
+  const CADEADO = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  function trancado(k) {
+    const L = LIBERA[k];
+    return `<div class="trancado"><span class="cad-ilus"><img src="${ILUS(L.ilus)}" alt="">${CADEADO}</span><span><b>${esc(L.nome)}</b><span>${esc(L.quando)}</span></span></div>`;
+  }
+
   // ---------- Conquistas: selos novos e cerimônia de nível ----------
   function checarConquistas() {
     if (!est.entrou || !est.travessia || document.getElementById("sobre") || document.getElementById("entrada")) return;
     const sem = semanaAtual();
     if (sem.completa && !est.semanas[sem.chave]) est.semanas[sem.chave] = hojeIso;
+    const abertos = Object.keys(LIBERA).filter(k => !est.liberados[k] && livre(k));
+    abertos.forEach(k => { est.liberados[k] = hojeIso; });
     const novos = SELOS.filter(s => !est.selos[s.id] && s.ok());
     novos.forEach(s => { est.selos[s.id] = hojeIso; });
     const nv = nivel();
     if (nv.i > est.nivelVisto) { est.nivelVisto = nv.i; salvar(); abrirCerimonia(nv.i); }
     else if (novos.length) sino();
     if (novos.length) { salvar(); avisoSelo(novos); }
+    if (abertos.length) {
+      salvar(); const lib = () => { sino(); avisoSelo(abertos.map(k => ({ nome: LIBERA[k].nome, ilus: LIBERA[k].ilus })), "Liberado"); };
+      if (novos.length) setTimeout(lib, 4700); else lib();
+    }
     marcaIcone();
   }
-  function avisoSelo(novos) {
+  function avisoSelo(novos, titulo) {
     const s = novos[0], t = document.createElement("div"); t.className = "toast-selo"; t.setAttribute("role", "status");
-    t.innerHTML = `<img src="${ILUS(s.ilus)}" alt=""><span><small>Novo selo${novos.length > 1 ? ` · e mais ${novos.length - 1}` : ""}</small><b>${esc(s.nome)}</b></span>`;
+    t.innerHTML = `<img src="${ILUS(s.ilus)}" alt=""><span><small>${titulo || "Novo selo"}${novos.length > 1 ? ` · e mais ${novos.length - 1}` : ""}</small><b>${esc(s.nome)}</b></span>`;
     app.appendChild(t); setTimeout(() => t.remove(), 4500);
   }
   function abrirCerimonia(i) {
@@ -1925,14 +1976,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <div class="relogio" id="relogio">${agoraHM()}</div>
         <p class="afirm-noite">${esc(ATOS[est.ato].frase)}</p>
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
-        <section><span class="rotulo">Alvo desta noite</span>${a ? `<p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p>` : '<button class="btn fantasma largo" data-acao="sortear">Sortear o alvo</button>'}</section>
+        <section><span class="rotulo">Alvo desta noite</span>${a ? `<p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p>` : livre("sorteio") ? '<button class="btn fantasma largo" data-acao="sortear">Sortear o alvo</button>' : trancado("sorteio")}</section>
         <section><span class="rotulo">Sons da noite</span>
           <div class="sons">${SONS.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>
           <div class="sons tempo">${[15, 30, 60].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
-        <section><span class="rotulo">Viagem guiada</span><div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div></section>
-        <section><span class="rotulo">Despertar de madrugada</span>
+        <section><span class="rotulo">Viagem guiada</span>${livre("viagens") ? `<div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div>` : trancado("viagens")}</section>
+        <section><span class="rotulo">Despertar de madrugada</span>${!livre("despertar") ? trancado("despertar") : `
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>
-          <p class="suave miuda">Funciona com o Osirion aberto nesta tela, o celular carregando e o som ligado. A tela fica escura, mas acordada. <button class="link" id="ouvir-sino">Ouvir o sino</button></p></section>
+          <p class="suave miuda">Funciona com o Osirion aberto nesta tela, o celular carregando e o som ligado. A tela fica escura, mas acordada. <button class="link" id="ouvir-sino">Ouvir o sino</button></p>`}</section>
         <button class="btn largo apagar" id="apagar">Apagar a luz</button>
       </div>
       <div class="breu" id="breu" hidden><div class="relogio" id="relogio2"></div><span id="breu-desp"></span><span class="miuda">toque para acender</span></div>
