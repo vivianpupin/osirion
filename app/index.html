@@ -384,7 +384,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .story { background: var(--ceu); }
 .story .fundo { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: .18; pointer-events: none; }
 .story .fundo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--ceu) 0%, transparent 30%, transparent 60%, var(--ceu) 100%); }
-.story .tela { position: relative; min-height: 100%; }
+.story .tela { position: relative; min-height: 100%; padding-top: max(18px, calc(env(safe-area-inset-top, 0px) + 10px)); padding-bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 10px)); }
+.story .carta { padding: 8px 6px; }
 .barras { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
 .barras i { height: 3px; border-radius: 3px; background: var(--ceu-3); }
 .barras i.on { background: var(--tema); }
@@ -525,39 +526,39 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .trilho-m i { display: block; height: 100%; background: var(--cristal); }
 .mapa { background: #0b0c18; padding: 14px 10px; }
 .mapa .momento-cab, .mapa > p { padding: 0 6px; }
-.carta { border-radius: 10px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,.6), 0 0 0 1px rgba(201,163,95,.25); }
-.carta svg { display: block; width: 100%; height: auto; fill: none; stroke: url(#ouro); stroke-width: .65; stroke-linecap: round; stroke-linejoin: round; }
-.carta .fino { stroke-width: .35; }
-.carta .est-f { fill: #eee5d4; stroke: none; }
-.carta .est-g { fill: #fff2d6; stroke: none; }
-.carta .braco { stroke: #b9b2ff; stroke-width: 18; opacity: .07; filter: blur(6px); }
-.carta .raios-c { stroke-width: .25; opacity: .22; }
-.carta .ouro-f { fill: url(#ouro); stroke: none; }
-.carta .disco { fill: #14163a; }
-.carta .esfera { stroke-width: .45; stroke-dasharray: 1 2.5; opacity: .6; }
-.carta .esfera.feita { stroke-dasharray: none; stroke-width: .6; opacity: .85; }
-.carta .nome-esf { text-anchor: middle; font-family: var(--corpo); font-size: 5.6px; letter-spacing: .28em; fill: #d9bc7c; stroke: none; opacity: .85; }
-.carta .terra-c { fill: #1b2552; }
-.carta .rota { stroke: #eee5d4; stroke-width: .7; stroke-dasharray: 1.5 3; opacity: .5; }
-.carta .rota.feita { stroke: url(#ouro); stroke-width: 1.3; stroke-dasharray: none; opacity: 1; }
-.carta .rota-brilho { stroke: #f5d78b; stroke-width: 4; opacity: .18; filter: blur(2px); }
-.carta .medalha-m { fill: #121427; stroke-width: .8; }
-.carta .medalha-in { stroke-width: .35; }
-.carta .num-m { font-family: var(--display); font-size: 6.5px; letter-spacing: .02em; fill: #e6c983; stroke: none; text-anchor: middle; }
-.carta .marco.feita .medalha-m { fill: url(#ouro-m); }
-.carta .marco.feita .medalha-in { stroke: #7a5a26; }
-.carta .marco.feita .num-m, .carta .marco.aqui .num-m { fill: #1a1430; }
-.carta .marco.aqui .medalha-m { fill: var(--nevoeiro); stroke: #fff; stroke-width: .6; }
-.carta .marco.aqui .medalha-in { stroke: #121427; opacity: .4; }
-.carta .marco.longe { opacity: .8; }
-.carta .raio-s { stroke-width: .6; }
-.carta .cartela { fill: #14163a; stroke-width: .7; }
-.carta .titulo-mapa { font-family: var(--display); font-size: 8.6px; letter-spacing: .14em; fill: #f1dfb0; stroke: none; text-anchor: middle; }
-.carta .rodape-mapa { font-family: var(--corpo); font-style: italic; font-size: 8px; letter-spacing: .12em; fill: #d9bc7c; stroke: none; text-anchor: middle; }
-.carta .voce-m .anel { stroke: var(--nevoeiro); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: anel-m 2.6s ease-out infinite; }
-.carta .voce-m .a2 { animation-delay: 1.3s; }
+.carta-ceu { border-radius: 10px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,.6), 0 0 0 1px rgba(201,163,95,.25); }
+.carta-ceu svg { display: block; width: 100%; height: auto; fill: none; stroke: url(#ouro); stroke-width: .65; stroke-linecap: round; stroke-linejoin: round; }
+.carta-ceu .fino { stroke-width: .35; }
+.carta-ceu .est-f { fill: #eee5d4; stroke: none; }
+.carta-ceu .est-g { fill: #fff2d6; stroke: none; }
+.carta-ceu .braco { stroke: #b9b2ff; stroke-width: 18; opacity: .07; filter: blur(6px); }
+.carta-ceu .raios-c { stroke-width: .25; opacity: .22; }
+.carta-ceu .ouro-f { fill: url(#ouro); stroke: none; }
+.carta-ceu .disco { fill: #14163a; }
+.carta-ceu .esfera { stroke-width: .45; stroke-dasharray: 1 2.5; opacity: .6; }
+.carta-ceu .esfera.feita { stroke-dasharray: none; stroke-width: .6; opacity: .85; }
+.carta-ceu .nome-esf { text-anchor: middle; font-family: var(--corpo); font-size: 5.6px; letter-spacing: .28em; fill: #d9bc7c; stroke: none; opacity: .85; }
+.carta-ceu .terra-c { fill: #1b2552; }
+.carta-ceu .rota { stroke: #eee5d4; stroke-width: .7; stroke-dasharray: 1.5 3; opacity: .5; }
+.carta-ceu .rota.feita { stroke: url(#ouro); stroke-width: 1.3; stroke-dasharray: none; opacity: 1; }
+.carta-ceu .rota-brilho { stroke: #f5d78b; stroke-width: 4; opacity: .18; filter: blur(2px); }
+.carta-ceu .medalha-m { fill: #121427; stroke-width: .8; }
+.carta-ceu .medalha-in { stroke-width: .35; }
+.carta-ceu .num-m { font-family: var(--display); font-size: 6.5px; letter-spacing: .02em; fill: #e6c983; stroke: none; text-anchor: middle; }
+.carta-ceu .marco.feita .medalha-m { fill: url(#ouro-m); }
+.carta-ceu .marco.feita .medalha-in { stroke: #7a5a26; }
+.carta-ceu .marco.feita .num-m, .carta .marco.aqui .num-m { fill: #1a1430; }
+.carta-ceu .marco.aqui .medalha-m { fill: var(--nevoeiro); stroke: #fff; stroke-width: .6; }
+.carta-ceu .marco.aqui .medalha-in { stroke: #121427; opacity: .4; }
+.carta-ceu .marco.longe { opacity: .8; }
+.carta-ceu .raio-s { stroke-width: .6; }
+.carta-ceu .cartela { fill: #14163a; stroke-width: .7; }
+.carta-ceu .titulo-mapa { font-family: var(--display); font-size: 8.6px; letter-spacing: .14em; fill: #f1dfb0; stroke: none; text-anchor: middle; }
+.carta-ceu .rodape-mapa { font-family: var(--corpo); font-style: italic; font-size: 8px; letter-spacing: .12em; fill: #d9bc7c; stroke: none; text-anchor: middle; }
+.carta-ceu .voce-m .anel { stroke: var(--nevoeiro); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: anel-m 2.6s ease-out infinite; }
+.carta-ceu .voce-m .a2 { animation-delay: 1.3s; }
 @keyframes anel-m { from { transform: scale(.7); opacity: .9; } to { transform: scale(1.7); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .carta .voce-m .anel { animation: none; opacity: .6; } }
+@media (prefers-reduced-motion: reduce) { .carta-ceu .voce-m .anel { animation: none; opacity: .6; } }
 .legenda-mapa { list-style: none; margin: 0; padding: 0 4px; display: flex; flex-direction: column; gap: 2px; }
 .legenda-mapa li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center; padding: 7px 4px; border-bottom: 1px solid #1d2040; }
 .legenda-mapa .num-l { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #c9a35f; display: grid; place-items: center; font-family: var(--display); font-size: 10px; color: #c9a35f; }
@@ -2311,7 +2312,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const legenda = ESFERAS.map(([nome, esfera], i) => { const st = i < aqui ? "feita" : i === aqui ? "aqui" : "longe";
       return `<li class="${st}"><span class="num-l">${["I", "II", "III", "IV", "V", "VI", "VII", "VIII"][i]}</span><span><b>${esc(nome)}</b>${i === aqui ? '<em class="voce-l">você está aqui</em>' : ""}<small>${esc(esfera)}</small></span></li>`; }).join("");
     return `<section class="mapa"><div class="momento-cab"><h2>Mapa da jornada</h2><span class="hora">${aqui + 1} de ${ESFERAS.length}</span></div>
-      <div class="carta">${svg}</div>
+      <div class="carta-ceu">${svg}</div>
       <p class="suave miuda">No centro, o seu corpo dormindo. A cada ato, a consciência vai uma esfera mais longe, até o santuário na borda do céu.</p>
       <ol class="legenda-mapa">${legenda}</ol></section>`;
   }
