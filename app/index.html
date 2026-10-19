@@ -131,6 +131,53 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .sobre .tela { flex: 1; }
 .fechar { background: none; border: 0; color: var(--areia-2); font-size: 14px; padding: 4px 0; display: inline-flex; align-items: center; gap: 6px; }
 
+/* Entrada (como nos apps da Caravana) */
+.entrada { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; padding: 24px 20px; overflow-y: auto;
+  background: linear-gradient(rgba(10,11,24,.72), rgba(10,11,24,.86)), url("img/noite.webp") center / cover; }
+.entrada .cartao-ent { width: 100%; max-width: 340px; background: #ece5d6; color: #1d2042; border-radius: 22px; padding: 30px 24px 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; box-shadow: 0 20px 60px -20px rgba(0,0,0,.8); }
+.entrada .cartao-ent img { width: 92px; height: auto; }
+.entrada .selo { font-size: 11px; letter-spacing: .28em; color: #8a6a3c; }
+.entrada h1 { font-size: 26px; color: #1d2042; line-height: 1.15; }
+.entrada p { font-size: 14px; color: #4a4560; }
+.entrada input { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid #c9b48f; background: #fff; color: #1d2042; font: inherit; text-align: center; }
+.entrada .btn-ent { border: 0; border-radius: 999px; padding: 12px 30px; background: #1d2042; color: #ece5d6; font-weight: 600; font-size: 15px; margin-top: 4px; }
+.entrada .erro { color: #a3402a; font-size: 13px; min-height: 18px; }
+
+/* A travessia: entrar na caverna */
+.caverna { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; overflow-y: auto; transition: background 1.2s; }
+.caverna .tela { flex: 1; justify-content: space-between; text-align: center; align-items: center; }
+.caverna .passo-c { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; max-width: 34ch; }
+.caverna h1 { font-size: 30px; }
+.caverna p { font-size: 17px; line-height: 1.6; color: var(--areia); }
+.caverna .nota-c { font-size: 13px; color: var(--areia-2); }
+.caverna .ilus { max-height: 210px; }
+.caverna .luz { width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, color-mix(in srgb, var(--nevoeiro) 70%, transparent) 30%, transparent 70%); animation: respira 5s ease-in-out infinite; }
+@keyframes respira { 50% { transform: scale(1.18); opacity: .8; } }
+.caverna .segurar { width: 130px; height: 130px; border-radius: 50%; border: 1.5px solid var(--areia-2); background: radial-gradient(circle, color-mix(in srgb, var(--cristal) 35%, transparent), transparent 70%); color: var(--areia); font-size: 14px; transition: transform 4s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: none; }
+.caverna .segurar.inspira { transform: scale(1.35); }
+.caverna .marcas { display: flex; gap: 8px; justify-content: center; }
+.caverna .marcas i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--areia-2); }
+.caverna .marcas i.on { background: var(--cristal); border-color: var(--cristal); }
+.caverna .profundidade { display: flex; gap: 5px; justify-content: center; }
+.caverna .profundidade i { width: 18px; height: 3px; border-radius: 3px; background: rgba(238,229,212,.18); }
+.caverna .profundidade i.on { background: var(--areia-2); }
+.caverna .rotulo { color: var(--cristal); }
+.campo-trav { width: 100%; max-width: 300px; padding: 14px; border-radius: 14px; border: 1px solid var(--ceu-3); background: var(--ceu-2); color: var(--areia); font: inherit; font-size: 17px; text-align: center; }
+.opcoes-trav { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; }
+.op-trav { padding: 13px 16px; border-radius: 14px; border: 1px solid var(--ceu-3); background: color-mix(in srgb, var(--ceu-2) 80%, transparent); text-align: left; font-size: 15px; }
+.op-trav[aria-pressed="true"] { border-color: var(--cristal); background: color-mix(in srgb, var(--cristal) 16%, var(--ceu-2)); }
+.sono { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.sono label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--areia-2); }
+.sono input { padding: 12px; border-radius: 12px; border: 1px solid var(--ceu-3); background: var(--ceu-2); color: var(--areia); font: inherit; font-size: 22px; font-variant-numeric: tabular-nums; }
+.caminho { list-style: none; margin: 0; padding: 0 0 0 18px; border-left: 1px solid var(--ceu-3); display: flex; flex-direction: column; gap: 14px; text-align: left; max-width: 320px; }
+.caminho li { position: relative; display: flex; flex-direction: column; gap: 2px; }
+.caminho li::before { content: ""; position: absolute; left: -24px; top: 4px; width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--nevoeiro); background: var(--ceu); }
+.caminho li:nth-child(4)::before { background: var(--cristal); border-color: var(--cristal); box-shadow: 0 0 10px var(--cristal); }
+.caminho b { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--nevoeiro); }
+.caminho span { font-size: 15px; }
+.pe-trav { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+@media (prefers-reduced-motion: reduce) { .caverna .luz { animation: none; } .caverna .segurar { transition: none; } }
+
 /* Abertura: o nevoeiro */
 .abertura { padding: 0; }
 .abertura .arte { position: relative; height: 46%; min-height: 250px; }
@@ -388,7 +435,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // Estado guardado só neste aparelho.
   const guardado = (() => { try { return JSON.parse(localStorage.getItem("arhat") || "{}"); } catch (e) { return {}; } })();
-  const est = Object.assign({ nevoeiro: null, ato: 1, feitos: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0 }, guardado);
+  const est = Object.assign({ entrou: null, travessia: null, nevoeiro: null, ato: 1, feitos: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0 }, guardado);
   if (!est.inicio) { const d = new Date(); est.inicio = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
   // Dia da jornada: conta desde o primeiro dia no app (no protótipo dá para adiantar).
   function diaDaJornada() {
@@ -404,11 +451,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   function aplicarCor() { app.style.setProperty("--nevoeiro", est.nevoeiro || "#a9b2f0"); }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const nomeCor = () => (CORES.find(c => c.v === est.nevoeiro) || { nome: "o seu" }).nome;
+  const nomeCor = () => (CORES.find(c => c.v === est.nevoeiro) || { nome: "seu" }).nome;
 
   function topo() {
     return `<div class="topo"><div class="marca"><img src="${IMG.marca}" alt=""><span class="marca-nome">OSIRION<small>Sonho lúcido e viagem astral</small></span></div>
-      <button class="chip-nev" data-acao="nevoeiro"><span class="bolinha"></span>nevoeiro ${esc(nomeCor()).toLowerCase()}</button></div>`;
+      <button class="chip-nev" data-acao="nevoeiro"><span class="bolinha"></span>${est.nevoeiro ? "nevoeiro " + esc(nomeCor()).toLowerCase() : "procurando o nevoeiro"}</button></div>`;
   }
 
   function blocos(lista) {
@@ -437,7 +484,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const feitos = est.feitos[a.id] || {};
     const momentos = a.momentos.map(m => `
       <section class="momento">
-        <div class="momento-cab"><h3>${m.quando === "Noite" ? "Abaton" : m.quando}</h3><span class="hora">${m.quando === "Noite" ? "a prática da noite · " + m.hora : m.hora}</span></div>
+        <div class="momento-cab"><h3>${m.quando === "Noite" ? "Abaton" : m.quando === "04:00" ? despertar() : m.quando}</h3><span class="hora">${m.quando === "Noite" ? "a prática da noite · " + m.hora : m.hora}</span></div>
         ${m.praticas.map(p => `
           <button class="pratica ${feitos[p.k] ? "ok" : ""}" data-pratica="${p.k}">
             <span class="ico">${ICO[p.ico]}</span>
@@ -721,8 +768,177 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <p class="suave">Ontem à noite, antes de adormecer, uma esfera de luz ocupou a sua tela mental. É o seu limiar. Escolha a cor dele: o Osirion inteiro passa a ter essa luz.</p>
         <div class="cores" role="group" aria-label="Cores do nevoeiro">${CORES.map(c => `<button class="cor" data-cor="${c.v}" aria-label="${c.nome}" aria-pressed="${c.v === sel}" style="background:${c.v};color:${c.v}"></button>`).join("")}</div>
         <label class="cor-propria" for="cor-livre">Outra cor <input type="color" id="cor-livre" value="${sel}"></label>
-        <button class="btn largo" data-acao="entrar">Entrar no Osirion</button>
+        <button class="btn largo" data-acao="entrar">Esta é a minha cor</button>
+        <button class="btn fantasma largo" data-acao="sem-nevoeiro">Ainda não vi o meu nevoeiro</button>
       </div></div>`);
+  }
+
+  // ---------- Entrada, como nos apps da Caravana ----------
+  // Por enquanto a palavra-chave é conferida no próprio aparelho; com a conta na nuvem ela passa a ficar no servidor.
+  const PALAVRA = "arhat";
+  const normal = t => String(t || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  function abrirEntrada() {
+    const d = document.createElement("div"); d.className = "entrada"; d.id = "entrada";
+    d.innerHTML = `<form class="cartao-ent" id="form-ent" novalidate>
+      <img src="${IMG.marca}" alt="">
+      <span class="selo">OSIRION</span>
+      <h1>Sonho lúcido e viagem astral</h1>
+      <p>Digite seu e-mail e a palavra chave</p>
+      <input id="ent-email" type="email" placeholder="Seu e-mail" autocomplete="email" inputmode="email">
+      <input id="ent-palavra" type="text" placeholder="Palavra chave" autocomplete="off" autocapitalize="none">
+      <span class="erro" id="ent-erro"></span>
+      <button class="btn-ent" type="submit">Entrar</button></form>`;
+    app.appendChild(d);
+    d.querySelector("#form-ent").addEventListener("submit", e => {
+      e.preventDefault();
+      const email = d.querySelector("#ent-email").value.trim(), pal = d.querySelector("#ent-palavra").value;
+      const erro = d.querySelector("#ent-erro");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { erro.textContent = "Confira o seu e-mail."; return; }
+      if (normal(pal) !== PALAVRA) { erro.textContent = "Essa não é a palavra chave. Confira e tente de novo."; return; }
+      est.entrou = email; salvar(); d.remove(); seguir();
+    });
+  }
+
+  // ---------- A travessia: os portais antes do Serapeum ----------
+  // Inspirada nas telas de boas-vindas dos apps de sonho e nos templos antigos:
+  // ninguém entrava direto, passava por pátios e portais antes da câmara onde se dormia.
+  const TRAVESSIA = [
+    { tipo: "texto", cor: "#2a2650", ilus: "figura-descendo", rotulo: "Antes do Serapeum", titulo: "Ninguém entrava direto no templo", texto: "Em Puma Punku, nos Andes, o caminho passava por pátios, degraus e portais de pedra lavrada. Em Saqqara, os corredores do Serapeum só se abriam depois de muitas etapas. Aqui também: antes de sonhar com consciência, você vai atravessar alguns portais.", botao: "Atravessar o primeiro portal" },
+    { tipo: "nome", cor: "#262a52", rotulo: "Portal do nome", titulo: "Como você quer ser chamado na travessia?", texto: "É assim que o Osirion vai falar com você.", botao: "Seguir" },
+    { tipo: "escolha", campo: "lembra", cor: "#22264b", rotulo: "Portal da memória", titulo: "Você costuma lembrar dos seus sonhos?", opcoes: ["Quase nunca", "Às vezes, em pedaços", "Quase todas as manhãs"], ensina: "Todos sonham, todas as noites. Lembrar é um treino, e começa nos primeiros cinco minutos depois de acordar." },
+    { tipo: "escolha", campo: "experiencia", cor: "#1f2245", rotulo: "Portal da experiência", titulo: "Você já despertou dentro de um sonho?", opcoes: ["Nunca", "Aconteceu por acaso algumas vezes", "Estou tentando, com técnicas", "Às vezes consigo provocar", "Com frequência"], ensina: "Despertar no sonho é perceber, ali dentro, que aquilo é um sonho. Daí em diante você pode agir com a mesma consciência de agora." },
+    { tipo: "escolha", campo: "pesadelos", cor: "#1c1f40", rotulo: "Portal do medo", titulo: "Com que frequência você tem pesadelos ou paralisia do sono?", opcoes: ["Nunca", "Raramente", "Às vezes", "Com frequência"], ensina: "No Arhat, o pesadelo é uma porta: quem está atento percebe o absurdo e desperta dentro dele. E a paralisia do sono, que assusta, é passageira e inofensiva." },
+    { tipo: "multi", campo: "tecnicas", cor: "#191c3a", rotulo: "Portal do caminho já trilhado", titulo: "O que você já experimentou?", sub: "Pode marcar várias.", opcoes: ["Testes de realidade", "Acordar de madrugada e voltar a dormir", "Diário de sonhos", "Meditação antes de dormir", "Projeção astral", "Nada ainda"], botao: "Seguir" },
+    { tipo: "multi", campo: "desejos", cor: "#161935", rotulo: "Portal do desejo", titulo: "O que você quer viver do outro lado?", sub: "Pode marcar várias. São os seus alvos de viagem.", opcoes: ["Voar", "Reencontrar alguém que partiu", "Falar com meus guias", "Curar algo em mim", "Conhecer o Egito antigo", "Perder o medo da morte", "Explorar mundos impossíveis", "Ir às estrelas"], botao: "Seguir" },
+    { tipo: "sono", cor: "#13152f", rotulo: "Portal do tempo", titulo: "Qual é o seu horário de sono?", texto: "O momento dos sonhos está ligado ao seu ciclo de sono. Com ele, o Osirion calcula a hora do seu despertar de madrugada.", botao: "Seguir" },
+    { tipo: "respirar", vezes: 3, cor: "#11132a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
+    { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O livro Arhat chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
+    { tipo: "texto", cor: "#0d0f22", ilus: "maos-chama", rotulo: "Os portões do sonhar", titulo: "Procure as suas mãos", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo. E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho.", nota: "Por isso o Osirion vai te pedir, várias vezes ao dia, para olhar as suas mãos.", botao: "Descer mais" },
+    { tipo: "lembrete", cor: "#0c0d1f", rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
+    { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
+    { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Entrar no Serapeum" },
+    { tipo: "caminho", cor: "#0a0b19", rotulo: "O Serapeum", titulo: "Seu caminho para a lucidez", botao: "Começar a jornada" }
+  ];
+  function abrirTravessia() {
+    const d = document.createElement("div"); d.className = "caverna"; d.id = "caverna"; app.appendChild(d);
+    est.perfil = est.perfil || {};
+    const pf = est.perfil;
+    let i = 0;
+    const passo = () => {
+      const t = TRAVESSIA[i];
+      d.style.background = `radial-gradient(120% 70% at 50% 0%, ${t.cor}, #07080f 90%)`;
+      let meio = "";
+      if (t.tipo === "nome") meio = `<input class="campo-trav" id="trav-nome" type="text" placeholder="Seu nome" value="${esc(pf.nome || "")}" autocomplete="given-name">`;
+      if (t.tipo === "escolha" || t.tipo === "multi") {
+        const marcado = o => t.tipo === "multi" ? (pf[t.campo] || []).includes(o) : pf[t.campo] === o;
+        meio = `<div class="opcoes-trav">${t.opcoes.map(o => `<button class="op-trav" type="button" data-op="${esc(o)}" aria-pressed="${marcado(o)}">${esc(o)}</button>`).join("")}</div><p class="nota-c" id="ensina" ${t.ensina && pf[t.campo] ? "" : "hidden"}>${t.ensina || ""}</p>`;
+      }
+      if (t.tipo === "sono") meio = `<div class="sono"><label>Hora de dormir<input type="time" id="dorme" value="${pf.dorme || "23:00"}"></label><label>Acordar<input type="time" id="acorda" value="${pf.acorda || "07:00"}"></label></div><p class="nota-c" id="sono-conta"></p>`;
+      if (t.tipo === "respirar") meio = `<button class="segurar" id="segurar" type="button">segure para inspirar</button><div class="marcas">${Array.from({ length: t.vezes }, () => "<i></i>").join("")}</div>`;
+      if (t.tipo === "lembrete") meio = `<div class="notif" style="max-width:300px">${SINAL}<span><span class="linha1"><span>OSIRION</span><span>agora</span></span><span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></div>`;
+      if (t.tipo === "caminho") {
+        const desp = despertar();
+        meio = `<ol class="caminho">
+          <li><b>Hoje à noite</b><span>O Início: a prática do Abaton e a busca do seu nevoeiro.</span></li>
+          <li><b>Amanhã cedo</b><span>Os primeiros cinco minutos e a pergunta: qual a cor do seu nevoeiro?</span></li>
+          <li><b>Primeira semana</b><span>O Primeiro Ato: as raízes, a Respiração Dourada e os testes de realidade.</span></li>
+          <li><b>Em duas a três semanas</b><span>Os primeiros lampejos de lucidez e o despertar das ${desp}.</span></li>
+          <li><b>Depois</b><span>Os cinco atos do método Arhat, a viagem astral e os seus alvos.</span></li></ol>`;
+      }
+      const titulo = t.tipo === "caminho" && pf.nome ? `${esc(pf.nome)}, este é o seu caminho` : t.titulo;
+      d.innerHTML = `<div class="tela">
+        <div class="profundidade" aria-hidden="true">${TRAVESSIA.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("")}</div>
+        <div class="passo-c">
+          ${t.ilus ? `<img class="ilus" src="${ILUS(t.ilus)}" alt="">` : ""}
+          ${t.luz ? '<div class="luz" aria-hidden="true"></div>' : ""}
+          <span class="rotulo">${t.rotulo}</span>
+          <h1>${titulo}</h1>
+          ${t.texto ? `<p>${t.texto}</p>` : ""}${t.sub ? `<p class="nota-c">${t.sub}</p>` : ""}
+          ${meio}
+          ${t.nota ? `<p class="nota-c">${t.nota}</p>` : ""}
+        </div>
+        <div class="pe-trav">
+          ${t.tipo === "lembrete" ? '<button class="btn largo" id="trav-sim">Ativar os lembretes</button><button class="btn fantasma largo" id="trav-prox">Mais tarde</button>'
+            : `<button class="btn largo" id="trav-prox">${t.botao || "Seguir"}</button>`}
+          ${i > 0 ? '<button class="fechar" id="trav-volta" type="button">← voltar um portal</button>' : ""}
+        </div>
+      </div>`;
+      d.scrollTop = 0;
+      const prox = d.querySelector("#trav-prox");
+      const avanca = () => {
+        if (i < TRAVESSIA.length - 1) { i++; passo(); return; }
+        const h = new Date(); est.travessia = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
+        if (pf.desejos && pf.desejos.includes("Conhecer o Egito antigo")) est.alvo = "O Egito antigo";
+        salvar(); d.remove(); aba = "hoje"; render();
+      };
+      const volta = d.querySelector("#trav-volta"); if (volta) volta.onclick = () => { i--; passo(); };
+      if (t.tipo === "nome") {
+        const inp = d.querySelector("#trav-nome");
+        prox.disabled = !inp.value.trim();
+        inp.oninput = () => { prox.disabled = !inp.value.trim(); };
+        prox.onclick = () => { pf.nome = inp.value.trim(); salvar(); avanca(); };
+        return;
+      }
+      if (t.tipo === "escolha") {
+        prox.hidden = !pf[t.campo]; prox.textContent = "Atravessar";
+        d.querySelectorAll(".op-trav").forEach(b => b.onclick = () => {
+          pf[t.campo] = b.dataset.op; salvar();
+          d.querySelectorAll(".op-trav").forEach(o => o.setAttribute("aria-pressed", o === b));
+          const en = d.querySelector("#ensina"); if (en && t.ensina) en.hidden = false;
+          prox.hidden = false;
+        });
+      }
+      if (t.tipo === "multi") {
+        d.querySelectorAll(".op-trav").forEach(b => b.onclick = () => {
+          const lista = pf[t.campo] = pf[t.campo] || [];
+          const k = lista.indexOf(b.dataset.op);
+          if (k >= 0) lista.splice(k, 1); else lista.push(b.dataset.op);
+          b.setAttribute("aria-pressed", k < 0); salvar();
+        });
+      }
+      if (t.tipo === "sono") {
+        const conta = () => {
+          pf.dorme = d.querySelector("#dorme").value || "23:00"; pf.acorda = d.querySelector("#acorda").value || "07:00"; salvar();
+          const [h1, m1] = pf.dorme.split(":").map(Number), [h2, m2] = pf.acorda.split(":").map(Number);
+          let min = (h2 * 60 + m2) - (h1 * 60 + m1); if (min <= 0) min += 1440;
+          d.querySelector("#sono-conta").textContent = `${Math.floor(min / 60)} h ${min % 60 ? (min % 60) + " min " : ""}de sono. O seu despertar de madrugada fica por volta das ${despertar()}.`;
+        };
+        d.querySelectorAll("input[type=time]").forEach(x => x.oninput = conta); conta();
+      }
+      if (t.tipo === "lembrete") d.querySelector("#trav-sim").onclick = () => { pf.lembretes = true; salvar(); avanca(); };
+      if (t.tipo === "respirar") {
+        prox.disabled = true;
+        const seg = d.querySelector("#segurar"), marcas = d.querySelectorAll(".marcas i");
+        let feitas = 0, t0 = 0;
+        const comeca = e => { e.preventDefault(); t0 = Date.now(); seg.classList.add("inspira"); seg.textContent = "inspire…"; };
+        const solta = () => {
+          if (!t0) return;
+          const ok = Date.now() - t0 > 2500; t0 = 0; seg.classList.remove("inspira");
+          if (ok && feitas < t.vezes) { marcas[feitas].classList.add("on"); feitas++; }
+          seg.textContent = feitas >= t.vezes ? "solto" : (ok ? "expire… e de novo" : "segure um pouco mais");
+          if (feitas >= t.vezes) prox.disabled = false;
+        };
+        seg.addEventListener("pointerdown", comeca); seg.addEventListener("pointerup", solta); seg.addEventListener("pointerleave", solta); seg.addEventListener("pointercancel", solta);
+        seg.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !t0) comeca(e); });
+        seg.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") solta(); });
+      }
+      prox.onclick = avanca;
+    };
+    passo();
+  }
+  // Despertar de madrugada: cerca de cinco horas depois de deitar.
+  function despertar() {
+    const pf = est.perfil || {}; const [h, m] = (pf.dorme || "23:00").split(":").map(Number);
+    const t = (h * 60 + m + 300) % 1440;
+    return `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
+  }
+
+  // O que abre primeiro: a entrada, depois a travessia, e só na manhã seguinte a pergunta do nevoeiro.
+  function seguir() {
+    if (!est.entrou) return abrirEntrada();
+    if (!est.travessia) return abrirTravessia();
+    const h = new Date(), hoje = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
+    if (!est.nevoeiro && est.travessia !== hoje && est.perguntou !== hoje) { est.perguntou = hoje; salvar(); abrirNevoeiro(); }
   }
 
   function acharPratica(k) {
@@ -909,6 +1125,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const acao = b.dataset.acao;
     if (acao === "nevoeiro") abrirNevoeiro();
     else if (acao === "entrar") { est.nevoeiro = est.nevoeiro || CORES[0].v; salvar(); fecharSobre(); aba = "hoje"; render(); }
+    else if (acao === "sem-nevoeiro") { est.nevoeiro = null; salvar(); fecharSobre(); aba = "hoje"; render(); }
     else if (acao === "gravar") { gravando = !gravando; const t = document.getElementById("sonho").value; render(); document.getElementById("sonho").value = t; }
     else if (acao === "salvar-sonho") {
       const texto = document.getElementById("sonho").value.trim();
@@ -936,7 +1153,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("sobre") && est.nevoeiro) { fecharSobre(); render(); } });
 
   render();
-  if (!est.nevoeiro) abrirNevoeiro();
+  seguir();
 })();
 </script>
 
