@@ -471,10 +471,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { k: 0, nome: "Noite negra, sem lembranças" }, { k: 1, nome: "Noite com sonhos" },
     { k: 2, nome: "Algum grau de lucidez" }, { k: 3, nome: "Sonho lúcido ou viagem astral" }
   ];
-  const NOITE = window.ALVOS_NOITE;
-  const alvoDe = id => NOITE.find(a => a.id === id);
-  const alvoTexto = id => { const a = alvoDe(id); return a ? `${a.nome}. ${a.comando}` : ""; };
-  const chipsAlvo = () => NOITE.map(a => `<button class="alvo" data-alvo="${a.id}" aria-pressed="${est.alvo === a.id}">${esc(a.nome)}</button>`).join("");
+  const REINOS = window.REINOS;
+  const sorteia = lista => Math.floor(Math.random() * lista.length);
+  // Uma leitura é uma combinação: reino, alvo, chegada, sentido, duas tarefas e a pergunta do diário.
+  function novaLeitura(r) {
+    const t1 = sorteia(window.TAREFAS); let t2 = sorteia(window.TAREFAS); if (t2 === t1) t2 = (t2 + 1) % window.TAREFAS.length;
+    return { r, a: sorteia(REINOS[r].alvos), c: sorteia(window.CHEGADAS), s: sorteia(window.SENTIDOS), t: [t1, t2], q: sorteia(window.PERGUNTAS) };
+  }
+  function alvoDe(l) {
+    if (!l || typeof l !== "object" || !REINOS[l.r] || !REINOS[l.r].alvos[l.a]) return null;
+    const R = REINOS[l.r], [nome, cena] = R.alvos[l.a];
+    return { reino: R.nome, ilus: R.ilus, nome, cena, chegada: window.CHEGADAS[l.c], sentido: window.SENTIDOS[l.s], tarefas: l.t.map(k => window.TAREFAS[k]), pergunta: window.PERGUNTAS[l.q] };
+  }
+  const alvoTexto = l => { const a = alvoDe(l); return a ? `${a.nome}. ${a.chegada} Esta noite eu vou até lá e sei que estou sonhando.` : ""; };
 
   // Estado guardado só neste aparelho.
   const guardado = (() => { try { return JSON.parse(localStorage.getItem("arhat") || "{}"); } catch (e) { return {}; } })();
@@ -787,7 +796,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           <div><b>Peça ajuda</b>Os guias estão atentos do outro lado.</div>
         </div>${cartaoCapsula(CAPS[17], false)}</section>
       <section class="momento"><h2>Alvo da noite</h2><p class="suave">Dê o comando antes de dormir e visualize como se já estivesse lá.</p>
-        ${cartaoSorteio()}<p class="suave">Ou escolha você mesmo:</p><div class="alvos">${chipsAlvo()}</div></section>
+        ${cartaoSorteio()}</section>
     </div>`;
   }
 
@@ -834,22 +843,24 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const posRoda = (graus, r) => { const a = (graus - 90) * Math.PI / 180; return { x: 50 + r * Math.cos(a), y: 50 + r * Math.sin(a) }; };
   function cartaoSorteio() {
     const a = alvoDe(est.alvo);
-    const mini = NOITE.map((x, k) => { const p = posRoda(k * 40, 40); return `<img src="${ILUS(x.ilus)}" alt="" style="left:${p.x}%;top:${p.y}%">`; }).join("");
+    const mini = REINOS.map((x, k) => { const p = posRoda(k * 40, 40); return `<img src="${ILUS(x.ilus)}" alt="" style="left:${p.x}%;top:${p.y}%">`; }).join("");
     return `<button class="sorteio-card" data-acao="sortear"><span class="roda-mini" aria-hidden="true">${mini}<img class="centro" src="${IMG.marca}" alt="" style="left:50%;top:50%"></span>
-      <span><small>Antes de dormir</small><b>O alvo desta noite</b><span class="tx">${a ? "Esta noite: " + esc(a.nome) + ". Toque para sortear de novo." : "Sorteie o lugar que você vai imaginar ao deitar."}</span></span></button>`;
+      <span><small>Antes de dormir</small><b>O alvo desta noite</b><span class="tx">${a ? "Esta noite: " + esc(a.nome) + ". Toque para ver ou sortear de novo." : "Sorteie o lugar que você vai imaginar ao deitar."}</span></span></button>`;
   }
-  function leituraAlvo(a) {
+  function leituraAlvo(l) {
+    const a = alvoDe(l); if (!a) return "";
     return `<div class="leitura-alvo">
-      <div class="topo-l"><img src="${ILUS(a.ilus)}" alt=""><div><span class="eye">O alvo desta noite</span><h2>${esc(a.nome)}</h2></div></div>
-      <p>${esc(a.frase)}</p>
+      <div class="topo-l"><img src="${ILUS(a.ilus)}" alt=""><div><span class="eye">${esc(a.reino)}</span><h2>${esc(a.nome)}</h2></div></div>
+      <span class="eye">Como chegar</span>
+      <p>${esc(a.chegada)}</p>
       <span class="eye">A imagem para levar à cama</span>
-      ${a.imagem.map(t => `<p>${esc(t)}</p>`).join("")}
+      <p>${esc(a.cena)} ${esc(a.sentido)}</p>
       <span class="eye">O comando, antes de adormecer</span>
-      <p class="comando">“${esc(a.comando)}”</p>
+      <p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p>
       <span class="eye">Quando estiver lá, lúcido</span>
-      <ul>${a.dentro.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      <ul>${a.tarefas.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
       <span class="eye">Amanhã cedo, no diário</span>
-      <p>${esc(a.amanha)}</p></div>`;
+      <p>${esc(a.pergunta)}</p></div>`;
   }
   function ceuFundo(cv, box) {
     const x = cv.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1), quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -893,7 +904,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <h1>O alvo desta noite</h1>
         <p class="suave">Pense no lugar que a sua alma quer visitar. Segure o botão enquanto se concentra e solte quando sentir que é a hora.</p>
         <div class="altar" id="altar">${anel}<img class="centro" src="${IMG.marca}" alt="">
-          ${NOITE.map((a, k) => `<div class="item" data-k="${k}"><img src="${ILUS(a.ilus)}" alt=""><span>${esc(a.nome)}</span></div>`).join("")}</div>
+          ${REINOS.map((a, k) => `<div class="item" data-k="${k}"><img src="${ILUS(a.ilus)}" alt=""></div>`).join("")}</div>
         <div class="barra-s" aria-hidden="true"><i id="barra-s"></i></div>
         <button class="botao-s" id="botao-s" type="button">Segure para concentrar</button>
         <div id="saida-s" style="width:100%;display:flex;flex-direction:column;gap:10px"></div>
@@ -920,10 +931,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const anda = () => { if (!box.isConnected) return; pos = (pos + 1) % n; acende(pos); vibrar(18); tique(); passos--;
           if (passos > 0) { atraso *= 1.13; timers.push(setTimeout(anda, atraso)); return; }
           itens[fim].classList.add("escolhido"); sino(); vibrar([40, 60, 120]);
-          const a = NOITE[fim]; est.alvo = a.id; salvar();
+          const leit = novaLeitura(fim); est.alvo = leit; salvar();
           bt.remove(); barra.parentNode.remove();
           timers.push(setTimeout(() => {
-            saida.innerHTML = leituraAlvo(a) + `<button class="btn largo" data-acao="levar-abaton">Levar para o Abaton</button><button class="btn fantasma largo" data-acao="sortear">Sortear de novo</button>`;
+            saida.innerHTML = leituraAlvo(leit) + `<button class="btn largo" data-acao="levar-abaton">Levar para o Abaton</button><button class="btn fantasma largo" data-acao="sortear">Sortear de novo</button>`;
             saida.scrollIntoView({ behavior: "smooth", block: "start" });
           }, 600)); };
         anda(); };
@@ -932,7 +943,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       bt.addEventListener("contextmenu", e => e.preventDefault());
       bt.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !segurando) comeca(e); });
       bt.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") solta(); });
-      const ult = alvoDe(est.alvo); if (ult) saida.innerHTML = `<p class="suave">O seu alvo atual</p>` + leituraAlvo(ult);
+      if (alvoDe(est.alvo)) saida.innerHTML = `<p class="suave">O seu alvo atual</p>` + leituraAlvo(est.alvo);
     });
   }
 
@@ -988,11 +999,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     });
   }
 
-  // ---------- A travessia: os portais antes do Serapeum ----------
+  // ---------- A travessia: os portais e as purificações antes do santuário ----------
   // Inspirada nas telas de boas-vindas dos apps de sonho e nos templos antigos:
   // ninguém entrava direto, passava por pátios e portais antes da câmara onde se dormia.
   const TRAVESSIA = [
-    { tipo: "texto", cor: "#2a2650", ilus: "figura-descendo", rotulo: "Antes do Serapeum", titulo: "Ninguém entrava direto no templo", texto: "Em Puma Punku, nos Andes, o caminho passava por pátios, degraus e portais de pedra lavrada. Em Saqqara, os corredores do Serapeum só se abriam depois de muitas etapas. Aqui também: antes de sonhar com consciência, você vai atravessar alguns portais.", botao: "Atravessar o primeiro portal" },
+    { tipo: "texto", cor: "#2a2650", ilus: "figura-descendo", rotulo: "Antes do santuário", titulo: "Ninguém entrava direto no templo", texto: "Nos templos antigos, o caminho até a câmara onde se sonhava passava por pátios, degraus e portais. Em cada um, o peregrino se purificava e deixava algo para trás: lavava as mãos e os pés, fazia silêncio, passava pela fumaça das ervas, declarava a sua intenção. Só então entrava. Aqui também: antes de sonhar com consciência, você vai atravessar alguns portais.", botao: "Atravessar o primeiro portal" },
     { tipo: "nome", cor: "#262a52", rotulo: "Portal do nome", titulo: "Como você quer ser chamado na travessia?", texto: "É assim que o Osirion vai falar com você.", botao: "Seguir" },
     { tipo: "escolha", campo: "lembra", cor: "#22264b", rotulo: "Portal da memória", titulo: "Você costuma lembrar dos seus sonhos?", opcoes: ["Quase nunca", "Às vezes, em pedaços", "Quase todas as manhãs"], ensina: "Todos sonham, todas as noites. Lembrar é um treino, e começa nos primeiros cinco minutos depois de acordar." },
     { tipo: "escolha", campo: "experiencia", cor: "#1f2245", rotulo: "Portal da experiência", titulo: "Você já despertou dentro de um sonho?", opcoes: ["Nunca", "Aconteceu por acaso algumas vezes", "Estou tentando, com técnicas", "Às vezes consigo provocar", "Com frequência"], ensina: "Despertar no sonho é perceber, ali dentro, que aquilo é um sonho. Daí em diante você pode agir com a mesma consciência de agora." },
@@ -1000,13 +1011,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "multi", campo: "tecnicas", cor: "#191c3a", rotulo: "Portal do caminho já trilhado", titulo: "O que você já experimentou?", sub: "Pode marcar várias.", opcoes: ["Testes de realidade", "Acordar de madrugada e voltar a dormir", "Diário de sonhos", "Meditação antes de dormir", "Projeção astral", "Nada ainda"], botao: "Seguir" },
     { tipo: "multi", campo: "desejos", cor: "#161935", rotulo: "Portal do desejo", titulo: "O que você quer viver do outro lado?", sub: "Pode marcar várias. São os seus alvos de viagem.", opcoes: ["Voar", "Reencontrar alguém que partiu", "Falar com meus guias", "Curar algo em mim", "Conhecer o Egito antigo", "Perder o medo da morte", "Explorar mundos impossíveis", "Ir às estrelas"], botao: "Seguir" },
     { tipo: "sono", cor: "#13152f", rotulo: "Portal do tempo", titulo: "Qual é o seu horário de sono?", texto: "O momento dos sonhos está ligado ao seu ciclo de sono. Com ele, o Osirion calcula a hora do seu despertar de madrugada.", botao: "Seguir" },
-    { tipo: "respirar", vezes: 3, cor: "#11132a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
+    { tipo: "texto", cor: "#12142c", ilus: "rio", rotulo: "Portal da água", titulo: "Lavar o que ficou do dia", texto: "Antes de entrar no santuário, lavavam-se as mãos, o rosto e os pés. A água levava a poeira da estrada e marcava a passagem de um mundo para o outro.", nota: "Hoje à noite, antes de deitar, lave as mãos e o rosto devagar, com essa intenção: deixar o dia ir com a água.", botao: "Atravessar" },
+    { tipo: "texto", cor: "#11132a", ilus: "maos-chama", rotulo: "Portal do silêncio e da fumaça", titulo: "Silenciar e perfumar o caminho", texto: "Depois da água vinham o silêncio e a fumaça. Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção.", nota: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio.", botao: "Atravessar" },
+    { tipo: "respirar", vezes: 3, cor: "#10122a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
     { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O livro Arhat chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0d0f22", ilus: "maos-chama", rotulo: "Os portões do sonhar", titulo: "Procure as suas mãos", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo. E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho.", nota: "Por isso o Osirion vai te pedir, várias vezes ao dia, para olhar as suas mãos.", botao: "Descer mais" },
     { tipo: "lembrete", cor: "#0c0d1f", rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
     { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
-    { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Entrar no Serapeum" },
-    { tipo: "caminho", cor: "#0a0b19", rotulo: "O Serapeum", titulo: "Seu caminho para a lucidez", botao: "Começar a jornada" }
+    { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Entrar no santuário" },
+    { tipo: "caminho", cor: "#0a0b19", rotulo: "O santuário", titulo: "Seu caminho para a lucidez", botao: "Começar a jornada" }
   ];
   function abrirTravessia() {
     const d = document.createElement("div"); d.className = "caverna"; d.id = "caverna"; app.appendChild(d);
@@ -1057,7 +1070,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const avanca = () => {
         if (i < TRAVESSIA.length - 1) { i++; passo(); return; }
         const h = new Date(); est.travessia = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
-        if (pf.desejos && pf.desejos.includes("Conhecer o Egito antigo")) est.alvo = "egito";
+        if (pf.desejos && pf.desejos.includes("Conhecer o Egito antigo")) est.alvo = { r: 0, a: 0, c: 0, s: 0, t: [0, 1], q: 0 };
         salvar(); d.remove(); aba = "hoje"; render();
       };
       const volta = d.querySelector("#trav-volta"); if (volta) volta.onclick = () => { i--; passo(); };
@@ -1245,7 +1258,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           };
         } else if (k.t === "leva") carta.innerHTML = `${c.ilus ? `<img class="ilus pequena" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">Para levar hoje</span><p class="grande">“${esc(k.texto)}”</p>${de}`;
         else if (k.t === "alvo") {
-          carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Escolha o alvo desta noite</span><div class="alvos">${chipsAlvo()}</div><p class="resposta" id="alvo-txt" ${est.alvo ? "" : "hidden"}>${est.alvo ? esc(alvoTexto(est.alvo)) : ""}</p>`;
+          carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Sorteie o alvo desta noite</span>${cartaoSorteio()}`;
         }
       };
       d.querySelector("#ant").onclick = () => { if (i > 0) { i--; desenha(); } };
