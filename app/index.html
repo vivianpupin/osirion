@@ -962,11 +962,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   // A primeira coisa da tela inicial: o andamento da pessoa, só com os olhinhos (sem mês, sem datas).
-  // Em cima, os últimos 14 dias em duas linhas (hoje embaixo, à direita); embaixo, o placar desses dias. O calendário todo fica no Diário.
+  // Em cima, os últimos 21 dias em três linhas (hoje embaixo, à direita); embaixo, o placar desses dias. O calendário todo fica no Diário.
   function ceuDoInicio() {
     const porDia = {};
     todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
-    const N = 14, dias = Array.from({ length: N }, (_, k) => isoMais(hojeIso, k - N + 1));
+    const N = 21, dias = Array.from({ length: N }, (_, k) => isoMais(hojeIso, k - N + 1));
     const cont = [0, 0, 0, 0, 0];
     const celulas = dias.map(iso => { const t = porDia[iso]; if (t !== undefined) cont[t]++;
       return `<button class="cel ${iso === hojeIso ? "hoje" : ""}" data-ver-dia="${iso}" aria-label="${esc(deIso(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "long" }))}">${t !== undefined ? iconeNoite(t, "cel") : ""}</button>`; }).join("");
