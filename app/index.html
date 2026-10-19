@@ -268,7 +268,9 @@ textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--c
 .ic-noite .ponto-fraco { fill: rgba(238,229,212,.28); stroke: none; }
 .ic-noite .ponto-forte { fill: rgba(238,229,212,.92); stroke: none; }
 .ic-noite .pontos { fill: rgba(238,229,212,.9); stroke: none; }
-.ic-noite .lua-nova { fill: #05060d; stroke: #f5c75b; stroke-opacity: .4; stroke-width: 1.2; }
+.ic-noite .lua-nova { fill: none; stroke: #f5c75b; stroke-opacity: .45; stroke-width: 1; }
+.ic-noite .linha { stroke-width: 1.1; }
+.ic-ponto .linha { stroke-width: 1.4; }
 .ic-noite .lua-nova-halo { fill: none; stroke: #f5c75b; stroke-opacity: .22; stroke-width: 1.2; stroke-dasharray: 1.5 3; }
 .ic-noite .corona { fill: none; stroke: #f5c75b; stroke-width: 3.5; opacity: .45; filter: blur(2px); }
 .ic-noite .eclipse { fill: #05060d; stroke: url(#ouro-i); stroke-width: 1.4; }
@@ -280,7 +282,7 @@ textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--c
 .ic-noite .fino { stroke-width: 1; }
 .ic-noite .dim { opacity: .35; }
 .ic-noite .esc { fill: #0b0c18; }
-.ic-noite.n3, .ic-noite.n4 { filter: drop-shadow(0 0 4px rgba(245,199,91,.6)); }
+.ic-noite.n3, .ic-noite.n4 { filter: drop-shadow(0 0 3px rgba(245,199,91,.35)); }
 .ic-noite.peq { width: 22px; height: 22px; }
 .ic-noite.cel { width: 20px; height: 16px; }
 .cel-vazia { height: 16px; }
@@ -620,12 +622,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .grade-olhos .cel { aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
 .grade-olhos .cel:empty::after { content: ""; width: 3px; height: 3px; border-radius: 50%; background: rgba(238,229,212,.18); }
 .grade-olhos .cel.hoje { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--nevoeiro) 60%, transparent); }
-.grade-olhos .ic-noite.cel { width: 34px; height: 34px; }
-.grade-olhos .ic-noite.cel.n3, .grade-olhos .ic-noite.cel.n4 { filter: drop-shadow(0 0 6px rgba(245,199,91,.75)); }
+.grade-olhos .ic-noite.cel { width: 30px; height: 30px; }
+.grade-olhos .ic-noite.cel.n3, .grade-olhos .ic-noite.cel.n4 { filter: drop-shadow(0 0 3px rgba(245,199,91,.4)); }
 .placar { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--ceu-3); padding-top: 10px; }
 .placar span { display: flex; flex-direction: column; align-items: center; }
-.placar b { font-family: var(--display); font-weight: 400; font-size: 22px; line-height: 1.1; }
-.placar small { font-size: 10px; line-height: 1.2; text-align: center; color: var(--areia-2); }
+.placar b { font-family: var(--display); font-weight: 400; font-size: 18px; line-height: 1.1; margin-top: 2px; }
+.placar small { font-size: 9.5px; line-height: 1.25; letter-spacing: .02em; text-align: center; color: var(--areia-2); opacity: .8; }
 .cal-inicio .cal { gap: 3px; }
 .cal-inicio .cal .dsem { font-size: 9px; opacity: .45; }
 .cal-inicio .cal .dia { position: relative; background: rgba(255,255,255,.025); color: var(--areia-2); justify-content: center; }
@@ -773,11 +775,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Os símbolos das noites: a lua nova, quase invisível (noite negra), vários pontinhos (sonhos),
   // o olho entreaberto (algum grau de lucidez), o terceiro olho aberto (sonho lúcido) e a estrelinha (viagem astral).
   const ICONES_NOITE = [
-    '<circle cx="24" cy="24" r="17" class="lua-nova-halo"/><circle cx="24" cy="24" r="12.5" class="lua-nova"/>',
-    '<circle cx="24" cy="24" r="3.4" class="f"/><circle cx="11" cy="18" r="2.6" class="f"/><circle cx="37" cy="15" r="2.8" class="f"/><circle cx="14" cy="35" r="2.4" class="f"/><circle cx="35" cy="34" r="2.6" class="f"/><circle cx="24" cy="8" r="1.8" class="f"/><circle cx="25" cy="41" r="1.8" class="f"/><circle cx="5.5" cy="28" r="1.5" class="f"/><circle cx="43" cy="25" r="1.5" class="f"/>',
-    '<path d="M3 25q21 -11 42 0"/><path d="M3 25q21 13 42 0"/><path d="M15 23.5a9 9 0 0 0 18 0" class="f"/><path d="M24 5v6M13 8l2.5 5M35 8l-2.5 5" class="fino"/>',
-    '<path d="M2 24q22 -20 44 0q-22 20 -44 0z"/><circle cx="24" cy="24" r="9.5" class="f"/><circle cx="24" cy="24" r="4" class="esc"/><circle cx="27" cy="21" r="1.7" fill="#fff"/>',
-    '<path d="M24 2l4.6 15.4L44 22l-15.4 4.6L24 46l-4.6-19.4L4 22l15.4-4.6z" class="f"/>'
+    '<circle cx="24" cy="24" r="10" class="lua-nova"/>',
+    '<circle cx="24" cy="24" r="2.2" class="f"/><circle cx="14" cy="19" r="1.6" class="f"/><circle cx="34" cy="17" r="1.8" class="f"/><circle cx="17" cy="32" r="1.5" class="f"/><circle cx="32" cy="31" r="1.6" class="f"/>',
+    '<path d="M6 25q18 -10 36 0" class="linha"/><path d="M6 25q18 11 36 0" class="linha"/><path d="M18 23.6a6 6 0 0 0 12 0" class="f"/><path d="M24 9v4M16.5 11l1.6 3.4M31.5 11l-1.6 3.4" class="linha"/>',
+    '<path d="M5 24q19 -16 38 0q-19 16 -38 0z" class="linha"/><circle cx="24" cy="24" r="6.5" class="f"/><circle cx="24" cy="24" r="2.6" class="esc"/>',
+    '<path d="M24 7l2.6 14.4L41 24l-14.4 2.6L24 41l-2.6-14.4L7 24l14.4-2.6z" class="f"/>'
   ];
   const iconeNoite = (k, cls) => `<svg class="ic-noite ${cls || ""} n${k}" viewBox="0 0 48 48" aria-hidden="true">${ICONES_NOITE[k] || ICONES_NOITE[0]}</svg>`;
   const REINOS = window.REINOS;
