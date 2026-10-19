@@ -603,8 +603,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .tec-op.atual { border-color: var(--nevoeiro); background: color-mix(in srgb, var(--nevoeiro) 12%, var(--ceu-2)); }
 .tec-op em { position: absolute; top: 10px; right: 12px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--nevoeiro); font-weight: 600; }
 .passos-noite { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #c97a7c; }
-.ceu-inicio { display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 14px 12px 16px; border: 1px solid var(--ceu-3); border-radius: 22px; background: radial-gradient(120% 90% at 50% 0%, #1d2148, #0b0c18 75%); text-align: left; }
-.ceu-inicio-cab { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; }
+.cal-inicio { display: flex; flex-direction: column; gap: 10px; padding: 14px 12px 16px; border: 1px solid var(--ceu-3); border-radius: 22px; background: radial-gradient(120% 90% at 50% 0%, #1d2148, #0b0c18 75%); }
+.cal-inicio .cal .dia { background: rgba(255,255,255,.03); font-size: 11px; color: var(--areia-2); gap: 0; }
+.cal-inicio .cal .dia.tem { background: rgba(255,255,255,.06); }
+.cal-inicio .ic-noite.cel { width: 26px; height: 20px; }
 .grafico-noites { display: block; width: 100%; height: auto; overflow: visible; }
 .grafico-noites .guia { stroke: rgba(238,229,212,.07); stroke-width: 1; stroke-dasharray: 2 5; }
 .grafico-noites .horizonte { stroke: rgba(238,229,212,.18); stroke-width: 1; }
@@ -919,29 +921,29 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return n;
   }
 
-  // A primeira coisa da tela inicial: as noites da pessoa em ordem, com os olhinhos.
-  // Da esquerda (mais antigas) para a direita (ontem); quanto mais alto, mais desperta. A linha é a constelação dela.
+  // A primeira coisa da tela inicial: o calendário do mês com o olhinho de cada noite. É o andamento da pessoa.
   function ceuDoInicio() {
-    const N = 14, porDia = {};
+    const porDia = {};
     todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
-    const dias = Array.from({ length: N }, (_, k) => isoMais(hojeIso, k - N + 1));
-    const W = 340, H = 196, x0 = 22, x1 = 326, Y = [172, 136, 100, 64, 28];
-    const pts = dias.map((iso, k) => porDia[iso] === undefined ? null : { x: x0 + (x1 - x0) * k / (N - 1), y: Y[porDia[iso]], t: porDia[iso] });
-    const linha = pts.filter(Boolean).map((p, k) => `${k ? "L" : "M"}${p.x.toFixed(1)} ${p.y}`).join("");
-    const olhos = pts.map(p => p ? `<svg class="ic-ponto n${p.t}" x="${(p.x - 12).toFixed(1)}" y="${p.y - 12}" width="24" height="24" viewBox="0 0 48 48">${ICONES_NOITE[p.t]}</svg>` : "").join("");
-    const guias = Y.map((y, k) => `<path d="M8 ${y}H${W - 8}" class="${k ? "guia" : "horizonte"}"/>`).join("");
-    const lucidas = (a, b) => dias.slice(a, b).filter(iso => (porDia[iso] ?? -1) >= 2).length;
-    const agora = lucidas(7, 14), antes = lucidas(0, 7), anotadas = pts.filter(Boolean).length;
-    const frase = !anotadas ? "A primeira estrela aparece na sua primeira noite anotada."
-      : agora > antes ? `${agora} ${agora === 1 ? "noite" : "noites"} com lucidez nesta semana. A sua constelação está subindo.`
-      : agora ? `${agora} ${agora === 1 ? "noite" : "noites"} com lucidez nesta semana. Continue: a lucidez vem com a constância.`
-      : `${anotadas} ${anotadas === 1 ? "noite anotada" : "noites anotadas"}. Lembrar é o primeiro degrau.`;
-    return `<button class="ceu-inicio" data-aba="ceu" aria-label="Ver o céu das suas noites">
-      <span class="ceu-inicio-cab"><span class="rotulo">O céu das suas noites</span><span class="hora">últimos 14 dias</span></span>
-      <svg class="grafico-noites" viewBox="0 0 ${W} ${H}" aria-hidden="true">${guias}<path d="${linha}" class="constelacao"/>${olhos}
-        <text x="${x0}" y="${H - 4}" class="eixo">há 2 semanas</text><text x="${x1}" y="${H - 4}" class="eixo fim">hoje</text></svg>
+    const ano = mesVisto.getFullYear(), mes = mesVisto.getMonth();
+    const dias = new Date(ano, mes + 1, 0).getDate(), inicio = new Date(ano, mes, 1).getDay();
+    let celulas = "";
+    for (let k = 0; k < inicio; k++) celulas += '<span class="vazio"></span>';
+    const doMes = [];
+    for (let d = 1; d <= dias; d++) {
+      const iso = isoDe(new Date(ano, mes, d)), t = porDia[iso];
+      if (t !== undefined) doMes.push(t);
+      celulas += `<button class="dia ${t !== undefined ? "tem" : ""} ${iso === hojeIso ? "hoje" : ""}" data-ver-dia="${iso}" aria-label="${d}"><span>${d}</span>${t !== undefined ? iconeNoite(t, "cel") : '<span class="cel-vazia"></span>'}</button>`;
+    }
+    const lucidas = doMes.filter(t => t >= 2).length;
+    const frase = !doMes.length ? "A primeira noite anotada acende o primeiro olho do seu calendário."
+      : `${doMes.length} ${doMes.length === 1 ? "noite anotada" : "noites anotadas"} neste mês${lucidas ? `, ${lucidas} com lucidez` : ""}. ${lucidas >= 3 ? "Os seus olhos estão se abrindo." : "Lembrar é o primeiro degrau."}`;
+    const nomeMes = mesVisto.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    return `<section class="cal-inicio">
+      <div class="mes-cab"><button data-mes="-1" aria-label="Mês anterior">‹</button><h2>${esc(nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1))}</h2><button data-mes="1" aria-label="Próximo mês">›</button></div>
+      <div class="cal">${["D", "S", "T", "Q", "Q", "S", "S"].map(x => `<span class="dsem">${x}</span>`).join("")}${celulas}</div>
       <span class="legenda-olhos">${["Noite negra", "Sonhos", "Lampejo", "Lúcido", "Viagem"].map((n, k) => `<span>${iconeNoite(k, "mini")}${n}</span>`).join("")}</span>
-      <span class="ceu-frase">${esc(frase)}</span></button>`;
+      <p class="ceu-frase">${esc(frase)}</p></section>`;
   }
   function telaCeu() {
     const ex = noitesExemplo();
@@ -2220,6 +2222,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.irPessoal) { const l = novaLeitura(SEUS); l.a = +b.dataset.irPessoal; est.alvo = l; chegou = null; salvar(); render(); return; }
     if (b.dataset.tiraPessoal) { if (est.alvo && est.alvo.r === SEUS) est.alvo = null; est.pessoais.splice(+b.dataset.tiraPessoal, 1); salvar(); render(); return; }
     if (b.dataset.mes) { mesVisto = new Date(mesVisto.getFullYear(), mesVisto.getMonth() + +b.dataset.mes, 1); render(); return; }
+    if (b.dataset.verDia) { aba = "diario"; modoDiario = "calendario"; diaSel = b.dataset.verDia; busca = ""; filtro = null; render(); return; }
     if (b.dataset.dia) { diaSel = b.dataset.dia; busca = ""; filtro = null; render(); return; }
     if (b.dataset.palavra) { busca = chave(busca.trim()) === chave(b.dataset.palavra) ? "" : b.dataset.palavra; filtro = null; render(); return; }
     if (b.dataset.filtro) { filtro = filtro === +b.dataset.filtro ? null : +b.dataset.filtro; render(); return; }
