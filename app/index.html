@@ -966,12 +966,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const cont = [0, 0, 0, 0, 0];
     const celulas = dias.map(iso => { const t = porDia[iso]; if (t !== undefined) cont[t]++;
       return `<button class="cel ${iso === hojeIso ? "hoje" : ""}" data-ver-dia="${iso}" aria-label="${esc(deIso(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "long" }))}">${t !== undefined ? iconeNoite(t, "cel") : ""}</button>`; }).join("");
-    const anotadas = cont.reduce((a, b) => a + b, 0), lucidas = cont[2] + cont[3] + cont[4];
-    const frase = !anotadas ? "A primeira noite anotada acende o primeiro olho." : lucidas >= 3 ? "Os seus olhos estão se abrindo." : "Lembrar é o primeiro degrau. Continue anotando.";
     return `<section class="cal-inicio">
       <div class="grade-olhos">${celulas}</div>
-      <div class="placar">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>
-      <p class="ceu-frase">${esc(frase)}</p></section>`;
+      <div class="placar">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div></section>`;
   }
   function telaCeu() {
     const ex = noitesExemplo();
