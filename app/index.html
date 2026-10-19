@@ -895,7 +895,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function abrirSorteio() {
     destravaSom();
-    const anel = `<svg class="orbita" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="rgba(201,163,95,.35)" stroke-width=".3"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="46" stroke-dasharray="1 1.6"/><circle cx="50" cy="50" r="15"/></g></svg>`;
     abrirSobre(`<div class="sorteio" style="position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column">
       <canvas class="ceu-fundo" aria-hidden="true"></canvas>
       <div class="tela">
@@ -903,7 +902,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <span class="rotulo">Antes de dormir</span>
         <h1>O alvo desta noite</h1>
         <p class="suave">Pense no lugar que a sua alma quer visitar. Segure o botão enquanto se concentra e solte quando sentir que é a hora.</p>
-        <div class="altar" id="altar">${anel}<img class="centro" src="${IMG.marca}" alt="">
+        <div class="altar" id="altar"><img class="centro" src="${IMG.marca}" alt="">
           ${REINOS.map((a, k) => `<div class="item" data-k="${k}"><img src="${ILUS(a.ilus)}" alt=""></div>`).join("")}</div>
         <div class="barra-s" aria-hidden="true"><i id="barra-s"></i></div>
         <button class="botao-s" id="botao-s" type="button">Segure para concentrar</button>
