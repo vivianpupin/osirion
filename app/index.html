@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Osirion</title>
 <meta name="description" content="Osirion: sonho lúcido e viagem astral, de Vivian Pupin.">
 <meta name="theme-color" content="#121427">
@@ -30,6 +30,9 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+/* Sem zoom no toque duplo (o iPhone ignora o user-scalable=no; isto resolve) e sem o atraso do toque. */
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; }
+button, a, input, textarea, select, label { touch-action: manipulation; }
 html, body { height: 100%; }
 body {
   background: radial-gradient(120% 80% at 50% 0%, #1d2042 0%, var(--ceu) 60%) fixed, var(--ceu);
@@ -169,7 +172,9 @@ html:has(.abertura-app), html:has(.abertura-app) body { background: #0b0c18; }
 @media (prefers-reduced-motion: reduce) { .abertura-app *, .abertura-app { animation: none !important; } }
 
 /* A travessia: entrar na caverna */
-.caverna { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; overflow-y: auto; transition: background 1.2s; background-color: #07080f; }
+.caverna { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; overflow-y: auto; background-color: #07080f; }
+.caverna .fundo-trav { position: absolute; inset: 0; z-index: -2; pointer-events: none; opacity: 0; transition: opacity .9s ease; }
+.caverna .fundo-trav.on { opacity: 1; }
 /* Durante a frase da abertura e a travessia, o app fica escondido por baixo: nunca aparece no meio da passagem. */
 #app:has(> .caverna) > .telas, #app:has(> .caverna) > .nav,
 #app:has(> .abertura-app.com-frase) > .telas, #app:has(> .abertura-app.com-frase) > .nav { visibility: hidden; }
@@ -1627,10 +1632,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const pf = est.perfil;
     // O passo da conta só aparece quando a nuvem está ligada, e some se a pessoa já entrou.
     const PASSOS = TRAVESSIA.filter(t => t.tipo !== "conta" || (CFG && !nuvem.usuario));
+    // as ilustrações já carregadas antes: trocar de pergunta não deixa um buraco enquanto a imagem chega
+    PASSOS.forEach(t => { if (t.ilus) { const im = new Image(); im.src = ILUS(t.ilus); } });
     let i = 0;
     const passo = () => {
       const t = PASSOS[i];
-      d.style.background = `radial-gradient(130% 80% at 50% 0%, ${t.cor} 0%, color-mix(in srgb, ${t.cor} 72%, #07080f) 22%, color-mix(in srgb, ${t.cor} 45%, #07080f) 45%, color-mix(in srgb, ${t.cor} 20%, #07080f) 70%, #07080f 100%)`;
+      const grad = `radial-gradient(130% 80% at 50% 0%, ${t.cor} 0%, color-mix(in srgb, ${t.cor} 72%, #07080f) 22%, color-mix(in srgb, ${t.cor} 45%, #07080f) 45%, color-mix(in srgb, ${t.cor} 20%, #07080f) 70%, #07080f 100%)`;
       let meio = "";
       if (t.tipo === "nome") meio = `<input class="campo-trav" id="trav-nome" type="text" placeholder="Seu nome" value="${esc(pf.nome || "")}" autocomplete="given-name">`;
       if (t.tipo === "escolha" || t.tipo === "multi") {
@@ -1651,6 +1658,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           <li><b>Depois</b><span>Os cinco atos do caminho, a viagem astral e os seus alvos, até você se tornar um Arhat.</span></li></ol>`;
       }
       const titulo = t.tipo === "caminho" && pf.nome ? `${esc(pf.nome)}, este é o seu caminho` : t.titulo;
+      const fundos = [...d.querySelectorAll(".fundo-trav")];
       d.innerHTML = `<div class="tela">
         <div class="profundidade" aria-hidden="true">${PASSOS.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("")}</div>
         <div class="passo-c">
@@ -1668,6 +1676,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           ${i > 0 ? '<button class="fechar" id="trav-volta" type="button">← voltar</button>' : ""}
         </div>
       </div>`;
+      // O fundo antigo fica até o novo aparecer por cima: a cor desce devagar, sem piscar entre uma pergunta e outra.
+      fundos.forEach(f => d.prepend(f));
+      if (!fundos.length || fundos[fundos.length - 1].dataset.cor !== t.cor) {
+        const f = document.createElement("div"); f.className = "fundo-trav" + (fundos.length ? "" : " on"); f.dataset.cor = t.cor; f.style.background = grad;
+        d.insertBefore(f, d.querySelector(".tela"));
+        if (fundos.length) requestAnimationFrame(() => requestAnimationFrame(() => f.classList.add("on")));
+        setTimeout(() => fundos.forEach(v => v.remove()), 1000);
+      }
       d.scrollTop = 0;
       const prox = d.querySelector("#trav-prox");
       const avanca = () => {
