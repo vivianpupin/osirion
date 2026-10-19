@@ -265,6 +265,13 @@ textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--c
 .tipo canvas { flex: none; }
 .ic-noite { flex: none; width: 34px; height: 34px; fill: none; stroke: url(#ouro-i); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
 .ic-noite .f { fill: url(#ouro-i); stroke: none; }
+.ic-noite .ponto-fraco { fill: rgba(238,229,212,.28); stroke: none; }
+.ic-noite .ponto-forte { fill: rgba(238,229,212,.92); stroke: none; }
+.ic-noite .pontos { fill: var(--nevoeiro); stroke: none; }
+.ic-noite .estrela { fill: var(--cristal); stroke: none; }
+.ic-noite .olho-traco { fill: none; stroke: var(--cristal); stroke-width: 2.4; }
+.ic-noite .olho-iris { fill: var(--cristal); stroke: none; }
+.ic-noite .olho-pupila { fill: #0b0c18; stroke: none; }
 .ic-noite .fino { stroke-width: 1; }
 .ic-noite .dim { opacity: .35; }
 .ic-noite .esc { fill: #0b0c18; }
@@ -273,7 +280,6 @@ textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--c
 .ic-noite.cel { width: 20px; height: 16px; }
 .cel-vazia { height: 16px; }
 .tipo[aria-pressed="false"] .ic-noite { opacity: .6; }
-.tipos .tipo:last-child { grid-column: 1 / -1; }
 .entrada { border-top: 1px solid var(--ceu-3); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
 .entrada .data { font-size: 12px; color: var(--areia-2); display: flex; justify-content: space-between; }
 .entrada p { font-size: 14px; }
@@ -758,13 +764,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { k: 0, nome: "Noite negra, sem lembranças" }, { k: 1, nome: "Noite com sonhos" },
     { k: 2, nome: "Algum grau de lucidez" }, { k: 3, nome: "Sonho lúcido" }, { k: 4, nome: "Viagem astral" }
   ];
-  // Os ícones das noites: o olho do Arhat, que se abre conforme a consciência acorda. Na viagem astral, o Olho de Hórus.
+  // Os símbolos das noites: pontinho fraco (noite negra), pontinho forte (sonhos), vários pontinhos (algum grau de lucidez),
+  // o terceiro olho (sonho lúcido) e a estrelinha (viagem astral). Os mesmos do céu do Duat.
   const ICONES_NOITE = [
-    '<path d="M8 22q16 12 32 0"/><path d="M13 26.5l-2 4M19 29l-1 4.5M24 29.8v4.5M29 29l1 4.5M35 26.5l2 4" class="fino"/>',
-    '<ellipse cx="24" cy="24" rx="22" ry="15" class="fino dim" stroke-dasharray="1.5 2.5"/><g transform="translate(24 23)"><path d="M-12 0q12 8 24 0"/><path d="M-8 3l-1.5 3M-3 5l-.5 3.5M3 5l.5 3.5M8 3l1.5 3" class="fino"/></g><path d="M8.2 11a3 3 0 1 0 0 6a3.75 3.75 0 0 1 0 -6z" class="f"/><path d="M24 6.4l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z" class="f"/><path d="M38 12q3 -3 6 0q-3 3 -6 0zM44 12l2 -2v4z" class="fino"/><path d="M40 36.5q1.8 -1.6 3.5 .8q1.7 -2.4 3.5 -.8" class="fino"/><path d="M5.4 38.5v-3l2.6 -2.4 2.6 2.4v3z" class="fino"/><path d="M21 39h6" class="fino"/><circle cx="20" cy="39" r="1.4" class="fino"/>',
-    '<path d="M6 25q18 -9 36 0"/><path d="M6 25q18 11 36 0"/><path d="M17 23.5a7 7 0 0 0 14 0" class="f"/><path d="M24 8v5M15 10l2 4M33 10l-2 4" class="fino"/>',
-    '<path d="M5 24q19 -17 38 0q-19 17 -38 0z"/><circle cx="24" cy="24" r="8" class="f"/><circle cx="24" cy="24" r="3.4" class="esc"/><circle cx="26.5" cy="21.5" r="1.4" fill="#fff"/>',
-    '<path d="M7 13q17 -7 34 0"/><path d="M7 22q15 -10 31 0q-15 8 -31 0z"/><circle cx="22" cy="21.5" r="4.6" class="f"/><path d="M38 22h7"/><path d="M14 26.5l-3 13"/><path d="M21 27q-2 8 4 11q5 2 6.5 -2q0.5 -3.5 -3 -3.5q-2 0 -2 2"/>'
+    '<circle cx="24" cy="24" r="5" class="ponto-fraco"/>',
+    '<circle cx="24" cy="24" r="7" class="ponto-forte"/>',
+    '<circle cx="24" cy="24" r="4" class="pontos"/><circle cx="14" cy="17" r="3.4" class="pontos"/><circle cx="34" cy="16" r="3.4" class="pontos"/><circle cx="17" cy="33" r="3.4" class="pontos"/><circle cx="32" cy="32" r="3.4" class="pontos"/>',
+    '<path d="M5 24q19 -17 38 0q-19 17 -38 0z" class="olho-traco"/><circle cx="24" cy="24" r="8" class="olho-iris"/><circle cx="24" cy="24" r="3.4" class="olho-pupila"/><circle cx="26.5" cy="21.5" r="1.4" fill="#fff"/>',
+    '<path d="M24 6l4 13.5 13.5 4.5-13.5 4.5L24 42l-4-13.5L6.5 24 20 19.5z" class="estrela"/>'
   ];
   const iconeNoite = (k, cls) => `<svg class="ic-noite ${cls || ""} n${k}" viewBox="0 0 48 48" aria-hidden="true">${ICONES_NOITE[k] || ICONES_NOITE[0]}</svg>`;
   const REINOS = window.REINOS;
@@ -917,13 +924,17 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (tipo === 2) {
       ctx.fillStyle = cor;
       [[0, 0], [-4, -3], [4, -2], [-2, 4], [3, 4]].forEach(([dx, dy]) => { ctx.beginPath(); ctx.arc(x + dx * escala, y + dy * escala, 1.4 * escala, 0, 7); ctx.fill(); });
+    } else if (tipo === 3) {
+      const w = 9 * escala;
+      ctx.save(); ctx.shadowColor = "#f5c75b"; ctx.shadowBlur = 10 * escala; ctx.strokeStyle = "#f5c75b"; ctx.fillStyle = "#f5c75b"; ctx.lineWidth = 1.4 * escala;
+      ctx.beginPath(); ctx.moveTo(x - w, y); ctx.quadraticCurveTo(x, y - w * .9, x + w, y); ctx.quadraticCurveTo(x, y + w * .9, x - w, y); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y, w * .38, 0, 7); ctx.fill(); ctx.restore();
     } else {
       const r = 7 * escala;
       ctx.save(); ctx.shadowColor = "#f5c75b"; ctx.shadowBlur = 12 * escala; ctx.fillStyle = "#f5c75b";
       ctx.beginPath();
       for (let i = 0; i < 8; i++) { const ang = i * Math.PI / 4 - Math.PI / 2, rr = i % 2 ? r * .32 : r; ctx.lineTo(x + Math.cos(ang) * rr, y + Math.sin(ang) * rr); }
       ctx.closePath(); ctx.fill(); ctx.restore();
-      if (tipo === 4) { ctx.strokeStyle = "#c8cdff"; ctx.lineWidth = 1.2 * escala; ctx.beginPath(); ctx.arc(x, y, r * 1.5, 0, 7); ctx.stroke(); }
     }
   }
 
@@ -951,7 +962,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const frase = !anotadas ? "A primeira noite anotada acende o primeiro olho." : lucidas >= 3 ? "Os seus olhos estão se abrindo." : "Lembrar é o primeiro degrau. Continue anotando.";
     return `<section class="cal-inicio">
       <div class="grade-olhos">${celulas}</div>
-      <div class="placar">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Lúcido", "Viagem"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>
+      <div class="placar">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>
       <p class="ceu-frase">${esc(frase)}</p></section>`;
   }
   function telaCeu() {
@@ -961,7 +972,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const cont = [0, 0, 0, 0, 0]; todas.forEach(t => cont[t]++);
     return `<div class="tela">${topo()}
       <div><span class="rotulo">Duat · o mundo da noite</span><h1>O céu das suas noites</h1></div>
-      <p class="suave">Duat era, para os egípcios, o céu por onde o sol viaja à noite até renascer. Ali reinava Osíris, que eles viam no céu na constelação de Órion. Aqui é o seu diagrama de vivências: cada manhã vira um ponto. Uma estrela é um sonho lúcido; uma estrela com anel, uma viagem astral. Com os meses, a sua constelação aparece.</p>
+      <p class="suave">Duat era, para os egípcios, o céu por onde o sol viaja à noite até renascer. Ali reinava Osíris, que eles viam no céu na constelação de Órion. Aqui é o seu diagrama de vivências: cada manhã vira um ponto. O terceiro olho é um sonho lúcido; a estrela, uma viagem astral. Com os meses, a sua constelação aparece.</p>
       <div class="ceu-box"><canvas id="ceu" width="720" height="560" aria-label="Céu com ${todas.length} noites registradas"></canvas></div>
       <div class="numeros"><div><b>${todas.length}</b><span>noites</span></div><div><b>${cont[2]}</b><span>com lucidez</span></div><div><b>${cont[3] + cont[4]}</b><span>lúcidos e viagens</span></div></div>
       <div class="legenda">${TIPOS.map(t => `<div><canvas width="28" height="28" data-ponto="${t.k}"></canvas>${t.nome}</div>`).join("")}</div>
@@ -986,7 +997,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const col = i % cols, lin = Math.floor(i / cols);
       return { x: mx + col * dx + (rnd() - .5) * dx * .6, y: my + lin * dy + (rnd() - .5) * dy * .5, t };
     });
-    const estrelas = pos.filter(p => p.t === 3);
+    const estrelas = pos.filter(p => p.t >= 3);
     ctx.strokeStyle = "rgba(245,199,91,.28)"; ctx.lineWidth = 1.2; ctx.beginPath();
     estrelas.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.stroke();
     pos.forEach(p => desenharPonto(ctx, p.x, p.y, p.t, cor, 1.6));
@@ -1059,7 +1070,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function cartao(d) {
     const quando = deIso(d.iso).toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
     return `<div class="cartao"><div class="data"><span>${esc(quando)}</span>${d.exemplo ? '<span class="selo-ex">exemplo</span>' : ""}</div>
-      <div style="display:flex;align-items:center;gap:8px">${iconeNoite(d.tipo, "peq")}<b style="font-size:14px">${esc(TIPOS[d.tipo].nome)}</b></div>
+      <div style="display:flex;align-items:center;gap:8px">${iconeNoite(d.tipo, "peq")}<b style="font-size:14px">${esc(TIPOS[Math.min(3, d.tipo)].nome)}</b></div>
       ${d.cor ? `<span class="suave">Nevoeiro ${esc(d.cor)}</span>` : ""}
       <p>${d.texto ? realcar(d.texto, busca.trim()) : '<span class="suave">Nada ficou. Continue praticando com convicção.</span>'}</p></div>`;
   }
