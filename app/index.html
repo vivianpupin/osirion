@@ -59,7 +59,9 @@ html, body { margin: 0; }
   .aviso-prot { display: none; }
   /* A tela inteira, até atrás da barra de status e da barra de baixo, sem faixas de outra cor. */
   html, body { background: var(--ceu); }
-  .celular { height: 100dvh; min-height: 0; max-width: none; border-radius: 0; border: 0; box-shadow: none;
+  /* Preso nas quatro bordas da tela, e não com 100dvh: no app instalado no iPhone, 100dvh desconta a barra de status
+     e deixava uma faixa embaixo, da cor do fundo da página. */
+  .celular { position: fixed; inset: 0; height: auto; min-height: 0; max-width: none; border-radius: 0; border: 0; box-shadow: none;
     padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
   .sobre, .caverna, .abertura-app { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 }
