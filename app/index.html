@@ -865,7 +865,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         let primeira = true;
         firebase.auth().onAuthStateChanged(u => {
           nuvem.usuario = u;
-          if (primeira) { primeira = false; if (u) sincronizar(false); }
+          if (primeira) { primeira = false; if (u) { sincronizar(false); atualizarAvisos(); } }
           if (aba === "atos" && !document.getElementById("sobre")) render();
         });
       })
@@ -938,10 +938,47 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         .then(() => aviso("Enviamos um link para o seu e-mail para criar uma senha nova.", true)).catch(e => aviso(erroConta(e)));
     };
   }
+  // ---------- Lembretes: notificações de verdade no celular (como no app da Caravana) ----------
+  const AVISAR = "/.netlify/functions/avisar";
+  const ehIphone = () => /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const instalado = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  const pushPossivel = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+  const avisosLigados = () => !!est.avisos && pushPossivel() && Notification.permission === "granted";
+  const prefsAvisos = () => { const pf = est.perfil || {}; return { tz: Intl.DateTimeFormat().resolvedOptions().timeZone, acorda: pf.acorda || "07:00", dorme: pf.dorme || "23:00", despertar: despertar(), testes: 4 }; };
+  function b64u8(s) { const b = atob((s + "=".repeat((4 - s.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+  // Devolve "" quando ativou, "conta" quando falta entrar na conta, ou a frase que explica o que fazer.
+  async function ativarAvisos() {
+    if (!CFG) return "Os lembretes ainda não estão ligados nesta versão.";
+    if (ehIphone() && !instalado()) return "No iPhone, primeiro instale o app: toque em Compartilhar e depois em “Adicionar à Tela de Início”. Abra o Osirion pelo ícone e ative os lembretes de novo.";
+    if (!pushPossivel()) return "Este navegador não recebe notificações. No Android, abra pelo Chrome; no iPhone, instale o app na tela inicial.";
+    if (!nuvem.usuario) return "conta";
+    const perm = await Notification.requestPermission();
+    if (perm !== "granted") return "As notificações estão bloqueadas. Libere nos Ajustes do celular, em Notificações › Osirion.";
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const { publicKey } = await fetch(AVISAR).then(r => r.json());
+      const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u8(publicKey) });
+      await firebase.firestore().collection("avisos").doc(nuvem.usuario.uid).set(Object.assign({ sub: JSON.parse(JSON.stringify(sub)), ts: Date.now() }, prefsAvisos()));
+      est.avisos = true; salvar();
+      // um lembrete de teste, para a pessoa ver que chegou
+      nuvem.usuario.getIdToken().then(t => fetch(AVISAR, { method: "POST", headers: { Authorization: "Bearer " + t } })).catch(() => {});
+      return "";
+    } catch (e) { return "Não deu certo agora. Tente de novo em instantes."; }
+  }
+  // Toda vez que o app abre, mantém o fuso e os horários de sono atualizados para os lembretes.
+  function atualizarAvisos() {
+    if (avisosLigados() && nuvem.usuario) firebase.firestore().collection("avisos").doc(nuvem.usuario.uid).set(prefsAvisos(), { merge: true }).catch(() => {});
+  }
+  function botaoAvisos() {
+    if (!CFG) return "";
+    return avisosLigados() ? '<p>Lembretes ligados: ao acordar, o teste de realidade durante o dia, antes de dormir e na hora do despertar.</p>'
+      : '<button class="btn fantasma largo" data-acao="ativar-avisos">Ativar os lembretes no celular</button><p class="nota-c" id="aviso-res" hidden></p>';
+  }
+
   function cartaoConta() {
     if (!CFG) return "";
     const u = nuvem.usuario;
-    return u ? `<div class="conta-card"><span class="rotulo">Sua conta</span><p>A sua jornada está guardada na nuvem · ${esc(u.email || "")}</p><button class="link-conta" data-acao="sair-conta" style="align-self:flex-start;padding-left:0">Sair desta conta</button></div>`
+    return u ? `<div class="conta-card"><span class="rotulo">Sua conta</span><p>A sua jornada está guardada na nuvem · ${esc(u.email || "")}</p>${botaoAvisos()}<button class="link-conta" data-acao="sair-conta" style="align-self:flex-start;padding-left:0">Sair desta conta</button></div>`
       : `<div class="conta-card"><span class="rotulo">Sua conta</span><p>O seu diário está guardado só neste celular. Crie uma conta para não perder nada.</p><button class="btn fantasma largo" data-acao="abrir-conta">Guardar minha jornada</button></div>`;
   }
   function abrirConta() {
@@ -1565,11 +1602,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "respirar", vezes: 3, cor: "#10122a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
     { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O Osirion chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0d0f22", ilus: "maos-chama", rotulo: "Os portões do sonhar", titulo: "Procure as suas mãos", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo. E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho.", nota: "Por isso o Osirion vai te pedir, várias vezes ao dia, para olhar as suas mãos.", botao: "Descer mais" },
+    { tipo: "conta", cor: "#0c0d1f", ilus: "olho", peq: true, rotulo: "A conta", titulo: "Guarde a sua jornada", texto: "Com um e-mail e uma senha, o seu diário fica guardado e você não perde nada, nem se trocar de celular." },
     { tipo: "lembrete", cor: "#0c0d1f", ilus: "estrela-lilas", peq: true, rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
     { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Seguir" },
     { tipo: "texto", cor: "#0a0b19", ilus: "figura-dourada", rotulo: "O objetivo", titulo: "Tornar-se um Arhat", texto: "Arhat, em sânscrito, é aquele que despertou. Para ele, o sono não apaga nada: a consciência segue acesa enquanto o corpo dorme, e ele atravessa de um mundo a outro lembrando de tudo.", nota: "Esse é o objetivo do Osirion. Cada noite anotada, cada técnica e cada ato são um passo para você se tornar um Arhat.", botao: "Entrar no santuário" },
-    { tipo: "conta", cor: "#0a0b19", ilus: "olho", peq: true, rotulo: "A conta", titulo: "Guarde a sua jornada", texto: "Com um e-mail e uma senha, o seu diário fica guardado e você não perde nada, nem se trocar de celular." },
     { tipo: "caminho", cor: "#0a0b19", rotulo: "O santuário", titulo: "Seu caminho para a lucidez", texto: "Um caminho de autoaprimoramento das faculdades do sonhar: lembrar, perceber, despertar e viajar.", botao: "Começar a jornada" }
   ];
   function abrirTravessia() {
@@ -1670,7 +1707,17 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         };
         d.querySelectorAll("input[type=time]").forEach(x => x.oninput = conta); conta();
       }
-      if (t.tipo === "lembrete") d.querySelector("#trav-sim").onclick = () => { pf.lembretes = true; salvar(); avanca(); };
+      if (t.tipo === "lembrete") d.querySelector("#trav-sim").onclick = async e => {
+        pf.lembretes = true; salvar();
+        const b = e.currentTarget; b.disabled = true; b.textContent = "Um instante…";
+        const r = await ativarAvisos();
+        if (!r) { avanca(); return; }
+        // sem conta ou sem como ativar agora: explica e deixa seguir (dá para ativar depois, na Jornada)
+        b.remove(); prox.textContent = "Seguir"; prox.className = "btn largo";
+        const n = document.createElement("p"); n.className = "nota-c";
+        n.textContent = r === "conta" ? "Para receber os lembretes, crie a sua conta (o passo anterior). Você pode ativar depois, na Jornada." : r + " Você pode ativar depois, na Jornada.";
+        d.querySelector(".passo-c").appendChild(n);
+      };
       if (t.tipo === "respirar") {
         prox.disabled = true;
         const seg = d.querySelector("#segurar"), marcas = d.querySelectorAll(".marcas i");
@@ -2384,6 +2431,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.aba) { fecharSobre(); aba = b.dataset.aba; render(); return; }
     if (b.hasAttribute("data-fechar")) { fecharSobre(); render(); return; }
     if (b.dataset.acao === "abrir-conta") { abrirConta(); return; }
+    if (b.dataset.acao === "ativar-avisos") {
+      b.disabled = true;
+      ativarAvisos().then(r => {
+        if (r === "conta") { abrirConta(); return; }
+        if (!r) { render(); return; }
+        b.disabled = false; const n = document.getElementById("aviso-res"); if (n) { n.textContent = r; n.hidden = false; }
+      });
+      return;
+    }
     if (b.dataset.acao === "sair-conta") { if (nuvem.pronta) firebase.auth().signOut().then(() => { nuvem.usuario = null; render(); }); return; }
     if (b.dataset.cor) { est.nevoeiro = b.dataset.cor; aplicarCor(); document.querySelectorAll(".cor").forEach(c => c.setAttribute("aria-pressed", c === b)); const cl = document.getElementById("cor-livre"); if (cl) cl.value = b.dataset.cor; return; }
     if (b.dataset.pratica) { abrirPratica(b.dataset.pratica); return; }
@@ -2471,6 +2527,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   if (!est.entrou) { est.entrou = "sim"; salvar(); }
   iniciarNuvem();
+  // O service worker guarda o app para abrir sem internet e mostra os lembretes. Tocar num lembrete abre a aba certa.
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && !DEMO) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+    navigator.serviceWorker.addEventListener("message", e => { if (e.data && e.data.aba && !document.getElementById("caverna")) { fecharSobre(); aba = e.data.aba; render(); } });
+  }
+  { const a = new URLSearchParams(location.search).get("aba"); if (a && ["hoje", "diario", "ceu", "capsulas", "atos"].includes(a)) aba = a; }
   render();
   abrirAbertura(() => { checarConquistas(); seguir(); });
 })();
