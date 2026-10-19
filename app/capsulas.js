@@ -2,10 +2,12 @@
 // Temas: "livro" (do Osirion), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda), "mantras" (mantras e práticas do sono da Índia e do Tibete).
 // Cartas: abre · fala · revela · quiz · faca · leva · alvo
 window.CAPSULAS = [
-  { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O caminho do despertar", minutos: 2, cartas: [
-    { t: "abre", titulo: "O caminho do despertar", sub: "O começo da jornada" },
-    { t: "fala", texto: "Este é um caminho de despertar: aprender a manter a consciência acesa enquanto o corpo dorme." },
-    { t: "fala", texto: "Quem completa o caminho transcende todos os planos e pisa em todos os mundos, pois passou por todas as iniciações. É senhor de Si e caminhante do tempo." },
+  { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O que é um Arhat", minutos: 2, cartas: [
+    { t: "abre", titulo: "O que é um Arhat", sub: "O objetivo da jornada" },
+    { t: "fala", texto: "“Arhat”, em sânscrito, refere-se a alguém que alcançou o estado de iluminação ou despertar espiritual." },
+    { t: "fala", texto: "Aquele que transcende todos os planos, que pisou em todos os mundos, pois passou por todas as iniciações. É senhor de Si e caminhante do tempo." },
+    { t: "fala", texto: "Para o Arhat, o sono não apaga nada. A consciência segue acesa enquanto o corpo dorme: ele sonha lúcido, sai do corpo e volta lembrando de tudo." },
+    { t: "revela", pergunta: "E qual é o objetivo do Osirion?", resposta: "Que você se torne um Arhat. Lembrar dos sonhos, perceber os sinais, despertar dentro deles e viajar: cada passo do caminho leva até lá." },
     { t: "fala", texto: "O Osirion tem cinco atos. Você pode atravessá-los em sequência ou ficar alguns dias em cada um. A transformação da consciência demanda tempo: quanto mais tempo praticar, mais viverá seus resultados." },
     { t: "revela", pergunta: "O que o Osirion recomenda para o corpo durante a jornada?", resposta: "Uma alimentação leve e saudável, evitando carnes e bebidas alcoólicas." },
     { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!" }
@@ -14,7 +16,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "Por que a noite", sub: "A real morada da consciência" },
     { t: "quiz", pergunta: "Quanto da vida passamos dormindo?", opcoes: ["Um décimo", "Um quarto", "Um terço"], certa: 2, explica: "Cerca de um terço. Numa vida de 75 anos, são uns 25 anos de noites." },
     { t: "fala", texto: "O ponto onde nossa consciência mais se aproxima da sua real morada é durante o sono!" },
-    { t: "fala", texto: "Quem desperta nunca dorme de verdade: atua conscientemente em ambas as realidades: o dia, que é matéria, e a noite, que é espírito. Apenas atravessa de um limiar a outro." },
+    { t: "fala", texto: "O Arhat nunca dorme, mas atua conscientemente em ambas as realidades: o dia, que é matéria, e a noite, que é espírito. Apenas atravessa de um limiar a outro." },
     { t: "faca", titulo: "Hoje à noite", texto: "Tente perceber o exato momento em que você adormece. Não precisa conseguir. Só a intenção já começa a acordar algo." },
     { t: "leva", texto: "Nós não somos daqui, viemos das estrelas, mas em alguma parte do caminho nos esquecemos." }
   ] },
@@ -157,7 +159,7 @@ window.CAPSULAS = [
   { dia: 21, ilus: "figura-estrela", tema: "livro", titulo: "Abrir os olhos", minutos: 2, cartas: [
     { t: "abre", titulo: "Abrir os olhos", sub: "O fechamento" },
     { t: "fala", texto: "Quem olha para a Magia da Vida resgata um conhecimento que preenche uma lacuna mantida por eras, que revela do que somos feitos e o caminho para casa!" },
-    { t: "revela", pergunta: "O que significa despertar?", resposta: "Despertar é abrir os olhos." },
+    { t: "revela", pergunta: "O que significa Arhat?", resposta: "Arhat significa abrir os olhos." },
     { t: "faca", titulo: "Hoje", texto: "Abra o céu das suas noites e olhe a constelação que você formou. Cada ponto foi uma noite em que você se lembrou." },
     { t: "leva", texto: "Só aquele que decidiu abrir os olhos enxerga as portas da Verdade." }
   ] },

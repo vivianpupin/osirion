@@ -1204,7 +1204,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }).join("");
     return `<div class="tela">${topo()}${seg || ""}
       <div><span class="rotulo">O caminho</span><h1>Cinco atos para abrir os olhos</h1></div>
-      <p class="suave">O Osirion é um caminho de autoaprimoramento das faculdades do sonhar. Siga em sequência ou fique alguns dias em cada ato: quanto mais tempo no caminho, mais você vive os resultados.</p>
+      <p class="suave">O Osirion é um caminho de autoaprimoramento das faculdades do sonhar. O objetivo é se tornar um Arhat: aquele que despertou e segue consciente enquanto o corpo dorme. Siga em sequência ou fique alguns dias em cada ato: quanto mais tempo no caminho, mais você vive os resultados.</p>
       ${lista}
       ${est.pago ? "" : `<div class="oferta"><span class="rotulo" style="color:var(--cristal)">Jornada completa</span>
         <h2>Do Segundo ao Quinto Ato</h2>
@@ -1440,7 +1440,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "texto", cor: "#0d0f22", ilus: "maos-chama", rotulo: "Os portões do sonhar", titulo: "Procure as suas mãos", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo. E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho.", nota: "Por isso o Osirion vai te pedir, várias vezes ao dia, para olhar as suas mãos.", botao: "Descer mais" },
     { tipo: "lembrete", cor: "#0c0d1f", ilus: "estrela-lilas", peq: true, rotulo: "Portal da atenção", titulo: "Dobre as suas chances de despertar", texto: "Receba ao longo do dia o lembrete do teste de realidade. Tudo o que você faz acordado se repete no sonho." },
     { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
-    { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Entrar no santuário" },
+    { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Seguir" },
+    { tipo: "texto", cor: "#0a0b19", ilus: "figura-dourada", rotulo: "O objetivo", titulo: "Tornar-se um Arhat", texto: "Arhat, em sânscrito, é aquele que despertou. Para ele, o sono não apaga nada: a consciência segue acesa enquanto o corpo dorme, e ele atravessa de um mundo a outro lembrando de tudo.", nota: "Esse é o objetivo do Osirion. Cada noite anotada, cada técnica e cada ato são um passo para você se tornar um Arhat.", botao: "Entrar no santuário" },
     { tipo: "caminho", cor: "#0a0b19", rotulo: "O santuário", titulo: "Seu caminho para a lucidez", texto: "Um caminho de autoaprimoramento das faculdades do sonhar: lembrar, perceber, despertar e viajar.", botao: "Começar a jornada" }
   ];
   function abrirTravessia() {
@@ -1467,7 +1468,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           <li><b>Amanhã cedo</b><span>Os primeiros cinco minutos e a pergunta: qual a cor do seu nevoeiro?</span></li>
           <li><b>Primeira semana</b><span>O Primeiro Ato: as raízes, a Respiração Dourada e os testes de realidade.</span></li>
           <li><b>Em duas a três semanas</b><span>Os primeiros graus de lucidez e o despertar das ${desp}.</span></li>
-          <li><b>Depois</b><span>Os cinco atos do caminho, a viagem astral e os seus alvos.</span></li></ol>`;
+          <li><b>Depois</b><span>Os cinco atos do caminho, a viagem astral e os seus alvos, até você se tornar um Arhat.</span></li></ol>`;
       }
       const titulo = t.tipo === "caminho" && pf.nome ? `${esc(pf.nome)}, este é o seu caminho` : t.titulo;
       d.innerHTML = `<div class="tela">
