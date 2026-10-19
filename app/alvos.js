@@ -112,3 +112,11 @@ window.PERGUNTAS = [
   "Qual foi o primeiro detalhe que você lembrou ao acordar?", "Como você chegou lá?", "Quem estava com você?", "Que cor tinha a luz?",
   "O que você sentiu no corpo?", "Você trouxe alguma palavra, imagem ou presente?", "Em que momento percebeu que era sonho?", "O que ficou para você hoje?"
 ];
+// O reino da lua cheia: só aparece no altar nas noites perto da lua cheia.
+window.REINO_LUA = { id: "luacheia", ilus: "fita-estrela-lilas", nome: "A Lua Cheia", especial: true, alvos: [
+  ["O templo da Lua Cheia", "Um templo branco aberto para o céu, iluminado só pela lua, e uma água parada refletindo tudo."],
+  ["Dançar sob a lua", "Um campo prateado, tambores ao longe e o corpo leve, girando na luz."],
+  ["O lago de prata", "A lua inteira refletida num lago, e você caminha sobre o reflexo."],
+  ["Subir pelo raio de lua", "Um feixe de luz prateada desce até a sua janela, e você sobe por ele."],
+  ["A roda das sacerdotisas", "Mulheres de branco em roda, cantando para a lua, abrem um lugar para você."]
+] };

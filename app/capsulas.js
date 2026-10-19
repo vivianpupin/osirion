@@ -1,5 +1,5 @@
 // Cápsulas diárias do Arhat: uma por dia, em cartas curtas e interativas.
-// Temas: "livro" (do livro Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge).
+// Temas: "livro" (do livro Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda).
 // Cartas: abre · fala · revela · quiz · faca · leva · alvo
 window.CAPSULAS = [
   { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O que é um Arhat", minutos: 2, cartas: [
@@ -219,5 +219,30 @@ window.CAPSULAS = [
     { t: "fala", texto: "Caminhos diferentes, as mesmas chaves: relaxar o corpo sem apagar a mente, ter uma intenção clara, não ter medo das vibrações e lembrar de perguntar se está sonhando." },
     { t: "revela", pergunta: "E a chave mais esquecida?", resposta: "A constância. Quase todos contam que a primeira experiência veio depois de semanas de prática. Quanto mais tempo fizer o Arhat, mais viverá seus resultados." },
     { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!", de: "Arhat" }
+  ] },
+  { dia: 30, ilus: "maos-chama", tema: "viajantes", titulo: "Dom Juan e as mãos", minutos: 3, cartas: [
+    { t: "abre", titulo: "Dom Juan e as mãos", sub: "Carlos Castaneda, a arte de sonhar" },
+    { t: "fala", texto: "Nos livros de Carlos Castaneda, o antropólogo conta o que aprendeu com Dom Juan Matus, um mestre yaqui do México. Se Dom Juan existiu ou não é debatido até hoje. Os exercícios, esses, viraram prática de sonhadores no mundo inteiro." },
+    { t: "fala", texto: "A primeira tarefa que Dom Juan dá é simples e difícil: dentro do sonho, encontrar as próprias mãos. Ele dizia que olhar as mãos no sonho é o começo do controle." },
+    { t: "revela", pergunta: "E se o sonho começar a mudar quando você olhar?", resposta: "Dom Juan ensina a não fixar o olhar em nada por muito tempo. Olhe um detalhe só de relance, depois volte às mãos. As mãos são a âncora: cada vez que a cena se desfaz, você volta a elas." },
+    { t: "faca", titulo: "Esta noite", texto: "Antes de dormir, olhe as suas mãos por um minuto e diga: “Hoje eu vou ver as minhas mãos no sonho.” É o mesmo gesto do teste de realidade, levado para dentro do sonho." },
+    { t: "leva", texto: "Encontrar as mãos no sonho é acender a atenção lá dentro." }
+  ] },
+  { dia: 31, ilus: "figura-espiral", tema: "viajantes", titulo: "Os portões do sonhar", minutos: 3, cartas: [
+    { t: "abre", titulo: "Os portões do sonhar", sub: "Castaneda, A Arte de Sonhar" },
+    { t: "fala", texto: "Em A Arte de Sonhar, Dom Juan descreve o sonhar como uma travessia por portões. Cada portão é um obstáculo de energia que a atenção precisa vencer." },
+    { t: "revela", pergunta: "Qual é o primeiro portão?", resposta: "Perceber que você está adormecendo, ou ter um sonho tão vivo que você percebe que está dentro dele. Para Dom Juan, é ali que nasce a “atenção do sonhar”." },
+    { t: "revela", pergunta: "E o segundo?", resposta: "Acordar de um sonho para dentro de outro sonho, ou trocar de sonho de propósito, sem voltar ao corpo." },
+    { t: "revela", pergunta: "E o terceiro?", resposta: "Ver o próprio corpo dormindo. É a mesma cena que o Arhat descreve na saída do corpo." },
+    { t: "quiz", pergunta: "Em qual portão está quem se levanta no sonho e vê o próprio corpo na cama?", opcoes: ["No primeiro", "No segundo", "No terceiro"], certa: 2, explica: "Ver o próprio corpo dormindo é o terceiro portão de Dom Juan." },
+    { t: "leva", texto: "Um portão de cada vez. A atenção cresce como um músculo." }
+  ] },
+  { dia: 32, ilus: "figura-fio", tema: "viajantes", titulo: "Recapitular a vida", minutos: 3, cartas: [
+    { t: "abre", titulo: "Recapitular a vida", sub: "A energia para sonhar, segundo Dom Juan" },
+    { t: "fala", texto: "Dom Juan dizia que, para sonhar com lucidez, é preciso energia. E que a nossa energia fica presa em lembranças, mágoas e conversas que ainda giram na cabeça." },
+    { t: "fala", texto: "A prática para soltar essa energia se chama recapitulação: lembrar, uma a uma, as pessoas e as cenas da vida, com a respiração." },
+    { t: "faca", titulo: "Recapitulação", texto: "Lembre uma cena que ainda pesa. Inspire girando a cabeça devagar de um ombro ao outro, como se puxasse de volta a energia que deixou lá. Expire girando para o outro lado, soltando o que não é seu. Repita até a cena ficar leve." },
+    { t: "revela", pergunta: "O que é o “intento”?", resposta: "Para Dom Juan, é a intenção firme, sem dúvida, que move a atenção. É o mesmo que o Arhat pede com o comando antes de dormir: dizer com convicção, como se já fosse verdade." },
+    { t: "leva", texto: "Quem recolhe a própria energia tem com o que sonhar." }
   ] }
 ];
