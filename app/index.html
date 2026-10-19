@@ -575,11 +575,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sono-log label { min-width: 0; }
 .sono-log input { width: 100%; min-width: 0; }
 .mais .cheguei { flex-direction: column; }
-.agora-cab { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
-.acordar-card { display: flex; align-items: center; gap: 14px; width: 100%; padding: 16px; border-radius: 18px; text-align: left; border: 1px solid color-mix(in srgb, var(--nevoeiro) 40%, var(--ceu-3)); background: linear-gradient(150deg, color-mix(in srgb, var(--nevoeiro) 16%, var(--ceu-2)), var(--ceu-2)); }
-.acordar-card .ico svg { width: 30px; height: 30px; stroke: var(--nevoeiro); fill: none; stroke-width: 1.6; }
-.acordar-card b { display: block; font-family: var(--display); font-weight: 400; font-size: 19px; }
-.tudo-hoje[open] { gap: 14px; }
 .dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
 .cheguei { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); background: var(--ceu-2); }
 .cheguei b { font-family: var(--display); font-weight: 400; font-size: 19px; }
@@ -780,52 +775,35 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const feitoHoje = k => ((est.hist[hojeIso] || {}).tec || []).includes(k);
   const duasVezes = (m, p) => p.k !== "teste" && /pôr do sol/.test(m.hora || "");
   const vezFeita = (k, v) => !!(((est.hist[hojeIso] || {}).vezes || {})[k + ":" + v]);
-  // Hoje mostra só o que é daquela hora (manhã, dia ou noite); o resto fica em "Tudo de hoje", que se abre com um toque.
-  function periodo() { const h = new Date().getHours(); return h >= 4 && h < 11 ? "manha" : h >= 11 && h < 19 ? "dia" : "noite"; }
-  function blocoMomento(m, semCab, semTeste) {
-    return `<section class="momento">
-        ${semCab ? "" : `<div class="momento-cab"><h3>${m.quando === "Noite" ? "Abaton" : m.quando === "04:00" ? despertar() : m.quando}</h3><span class="hora">${m.quando === "Noite" ? "a prática da noite · " + m.hora : m.hora}</span></div>`}
-        ${m.praticas.filter(p => !(semTeste && p.k === "teste")).map(p => `
+  function telaHoje() {
+    const a = ATOS[est.ato];
+    const momentos = a.momentos.map(m => `
+      <section class="momento">
+        <div class="momento-cab"><h3>${m.quando === "Noite" ? "Abaton" : m.quando === "04:00" ? despertar() : m.quando}</h3><span class="hora">${m.quando === "Noite" ? "a prática da noite · " + m.hora : m.hora}</span></div>
+        ${m.praticas.map(p => `
           <button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}">
             <span class="ico">${ICO[p.ico]}</span>
             <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span>
             <span class="feito">✓</span>
           </button>${duasVezes(m, p) ? `<div class="vezes">${VEZES.map(([v, n]) => `<button class="vez" data-vez="${p.k}:${v}" aria-pressed="${vezFeita(p.k, v)}"><i></i>${n}</button>`).join("")}</div>` : ""}`).join("")}
-      </section>`;
-  }
-  function telaHoje() {
-    const a = ATOS[est.ato], per = periodo();
-    const doDia = a.momentos.find(m => m.quando === "Dia"), daNoite = a.momentos.find(m => m.quando === "Noite");
-    const teste = `<button class="notif" data-acao="teste">${SINAL}
-        <span><span class="linha1"><span>OSIRION</span><span>${testesHoje()} de 7 testes</span></span>
-        <span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></button>`;
-    const dormir = `<button class="dormir-card" data-acao="dormir"><span class="ico">${ICO.lua}</span><span><b>Vou dormir</b><span class="suave">Modo noite: tela vermelha, sons, o alvo e o despertar das ${despertar()}</span></span></button>`;
-    const agora = {
-      manha: `<div class="agora-cab"><span class="rotulo">Bom dia</span><h2>Antes de levantar, o sonho</h2></div>
-        <button class="acordar-card" data-aba="diario"><span class="ico">${ICO.pena}</span><span><b>Anotar a noite</b><span class="suave">Não abra os olhos ainda. Onde você estava?</span></span></button>
-        ${cartaoCapsula(CAPS[diaDaJornada() - 1], true)}`,
-      dia: `<div class="agora-cab"><span class="rotulo">Durante o dia</span><h2>Lembrar de lembrar</h2></div>
-        ${teste}${sinalDeSonho()}${doDia ? blocoMomento(doDia, true, true) : ""}
-        ${cartaoCapsula(CAPS[diaDaJornada() - 1], true)}`,
-      noite: `<div class="agora-cab"><span class="rotulo">Esta noite</span><h2>A travessia começa ao deitar</h2></div>
-        ${daNoite ? blocoMomento(daNoite, true) : ""}${cartaoSorteio()}${dormir}`
-    }[per];
-    const resto = a.momentos.filter(m => !(per === "dia" && m === doDia) && !(per === "noite" && m === daNoite)).map(m => blocoMomento(m)).join("");
+      </section>`).join("");
     return `<div class="tela">${topo()}
       <div class="capa"><img src="${a.capa}" alt=""><div class="txt">
         <span class="rotulo" style="color:${a.cor}">${a.nome} · dia ${diaDaJornada()} da jornada</span><h1>${a.frase}</h1></div></div>
       ${linhaStatus()}
-      ${agora}
-      <details class="mais tudo-hoje"><summary><span><b>Tudo de hoje</b><span>${{ manha: "as práticas do dia e da noite, as viagens guiadas e o alvo", dia: "a prática da noite, as viagens guiadas e o alvo", noite: "as práticas do dia, o teste e as viagens guiadas" }[per]}</span></span></summary>
-        ${a.intro ? `<p class="intro-ato">${esc(a.intro)}</p>` : ""}
-        ${per === "dia" ? "" : teste}
-        ${per === "manha" ? "" : cartaoCapsula(CAPS[diaDaJornada() - 1], true)}
-        ${resto}
-        <section class="momento"><div class="momento-cab"><h3>Viagens guiadas</h3><span class="hora">para qualquer noite</span></div>
-          ${!livre("viagens") ? trancado("viagens") : VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
-            <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>`).join("")}</section>
-        ${per === "noite" ? "" : cartaoSorteio() + dormir}
-      </details>
+      ${cartaoCapsula(CAPS[diaDaJornada() - 1], true)}
+      <button class="dormir-card" data-acao="dormir"><span class="ico">${ICO.lua}</span><span><b>Vou dormir</b><span class="suave">Modo noite: tela vermelha, sons, o alvo e o despertar das ${despertar()}</span></span></button>
+      ${a.intro ? `<p class="intro-ato">${esc(a.intro)}</p>` : ""}
+      <button class="notif" data-acao="teste">${SINAL}
+        <span><span class="linha1"><span>OSIRION</span><span>agora</span></span>
+        <span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></button>
+      ${sinalDeSonho()}
+      ${momentos}
+      <section class="momento"><div class="momento-cab"><h3>Viagens guiadas</h3><span class="hora">para qualquer noite</span></div>
+        ${!livre("viagens") ? trancado("viagens") : VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
+          <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>`).join("")}</section>
+      ${cartaoSorteio()}
+      <p class="nota-pe">Hoje: ${testesHoje()} de 7 a 10 testes de realidade</p>
     </div>`;
   }
 
