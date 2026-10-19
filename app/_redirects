@@ -1,0 +1,2 @@
+# Links antigos com /app/ continuam abrindo o app.
+/app/*  /:splat  301
