@@ -132,16 +132,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .fechar { background: none; border: 0; color: var(--areia-2); font-size: 14px; padding: 4px 0; display: inline-flex; align-items: center; gap: 6px; }
 
 /* Entrada (como nos apps da Caravana) */
-.entrada { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; padding: 24px 20px; overflow-y: auto;
-  background: linear-gradient(rgba(10,11,24,.72), rgba(10,11,24,.86)), url("img/noite.webp") center / cover; }
-.entrada .cartao-ent { width: 100%; max-width: 340px; background: #ece5d6; color: #1d2042; border-radius: 22px; padding: 30px 24px 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; box-shadow: 0 20px 60px -20px rgba(0,0,0,.8); }
-.entrada .cartao-ent img { width: 92px; height: auto; }
-.entrada .selo { font-size: 11px; letter-spacing: .28em; color: #8a6a3c; }
-.entrada h1 { font-size: 26px; color: #1d2042; line-height: 1.15; }
-.entrada p { font-size: 14px; color: #4a4560; }
-.entrada input { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid #c9b48f; background: #fff; color: #1d2042; font: inherit; text-align: center; }
-.entrada .btn-ent { border: 0; border-radius: 999px; padding: 12px 30px; background: #1d2042; color: #ece5d6; font-weight: 600; font-size: 15px; margin-top: 4px; }
-.entrada .erro { color: #a3402a; font-size: 13px; min-height: 18px; }
+.abertura-app { position: absolute; inset: 0; z-index: 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: radial-gradient(70% 50% at 50% 45%, #1f2350, #0b0c18 75%); transition: opacity .6s ease; }
+.abertura-app.sai { opacity: 0; }
+.abertura-app img { position: relative; width: 120px; height: auto; animation: ab-olho 2.2s ease-out both; }
+.abertura-app .ab-luz { position: absolute; left: 50%; top: 45%; width: 260px; height: 260px; margin: -150px 0 0 -130px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--nevoeiro) 45%, transparent), transparent 65%); animation: ab-luz 2.2s ease-out both; }
+.abertura-app .ab-nome { position: relative; font-family: var(--display); font-size: 26px; letter-spacing: .42em; padding-left: .42em; color: var(--areia); margin-top: 6px; animation: ab-texto 1.6s .5s ease-out both; }
+.abertura-app .ab-sub { position: relative; font-size: 13px; letter-spacing: .08em; color: var(--areia-2); animation: ab-texto 1.6s .8s ease-out both; }
+@keyframes ab-olho { from { opacity: 0; transform: scale(.85); filter: blur(4px); } 60% { opacity: 1; filter: blur(0) drop-shadow(0 0 22px rgba(169,178,240,.8)); } to { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 12px rgba(169,178,240,.5)); } }
+@keyframes ab-luz { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+@keyframes ab-texto { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .abertura-app *, .abertura-app { animation: none !important; } }
 
 /* A travessia: entrar na caverna */
 .caverna { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; overflow-y: auto; transition: background 1.2s; }
@@ -640,6 +640,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ouro-i" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a8"/><stop offset=".5" stop-color="#c9a35f"/><stop offset="1" stop-color="#f0d590"/></linearGradient></defs></svg>
 <div class="celular" id="app">
+  <div class="abertura-app" id="abertura-app" aria-label="Osirion"><div class="ab-luz"></div><img src="img/olho-marca.png" alt=""><span class="ab-nome">OSIRION</span><span class="ab-sub">Sonho lúcido e viagem astral</span></div>
   <div class="nevoa" aria-hidden="true"></div>
   <div class="telas" id="telas"></div>
   <nav class="nav" id="nav" aria-label="Seções">
@@ -1245,30 +1246,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       </div></div>`);
   }
 
-  // ---------- Entrada, como nos apps da Caravana ----------
-  // Por enquanto a palavra-chave é conferida no próprio aparelho; com a conta na nuvem ela passa a ficar no servidor.
-  const PALAVRA = "arhat";
-  const normal = t => String(t || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  function abrirEntrada() {
-    const d = document.createElement("div"); d.className = "entrada"; d.id = "entrada";
-    d.innerHTML = `<form class="cartao-ent" id="form-ent" novalidate>
-      <img src="${IMG.marca}" alt="">
-      <span class="selo">OSIRION</span>
-      <h1>Sonho lúcido e viagem astral</h1>
-      <p>Digite seu e-mail e a palavra chave</p>
-      <input id="ent-email" type="email" placeholder="Seu e-mail" autocomplete="email" inputmode="email">
-      <input id="ent-palavra" type="text" placeholder="Palavra chave" autocomplete="off" autocapitalize="none">
-      <span class="erro" id="ent-erro"></span>
-      <button class="btn-ent" type="submit">Entrar</button></form>`;
-    app.appendChild(d);
-    d.querySelector("#form-ent").addEventListener("submit", e => {
-      e.preventDefault();
-      const email = d.querySelector("#ent-email").value.trim(), pal = d.querySelector("#ent-palavra").value;
-      const erro = d.querySelector("#ent-erro");
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { erro.textContent = "Confira o seu e-mail."; return; }
-      if (normal(pal) !== PALAVRA) { erro.textContent = "Essa não é a palavra chave. Confira e tente de novo."; return; }
-      est.entrou = email; salvar(); d.remove(); seguir();
-    });
+  // ---------- Abertura: o olho do Osirion acende enquanto o app carrega ----------
+  // A tela já está no HTML, então aparece desde o primeiro instante; some quando o app termina de carregar.
+  function abrirAbertura(depois) {
+    const d = document.getElementById("abertura-app"); if (!d) return depois();
+    const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches, inicio = performance.now();
+    const sai = () => { d.classList.add("sai"); setTimeout(() => { d.remove(); depois(); }, 600); };
+    const fim = () => setTimeout(sai, Math.max(quieto ? 400 : 1200, (quieto ? 700 : 2200) - (performance.now() - inicio)));
+    if (document.readyState === "complete") fim(); else addEventListener("load", fim, { once: true });
   }
 
   // ---------- A travessia: os portais e as purificações antes do santuário ----------
@@ -1408,7 +1393,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // O que abre primeiro: a entrada, depois a travessia, e só na manhã seguinte a pergunta do nevoeiro.
   function seguir() {
-    if (!est.entrou) return abrirEntrada();
     if (!est.travessia) return abrirTravessia();
     const h = new Date(), hoje = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
     if (!est.nevoeiro && est.travessia !== hoje && est.perguntou !== hoje) { est.perguntou = hoje; salvar(); abrirNevoeiro(); return; }
@@ -1704,7 +1688,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // ---------- Conquistas: selos novos e cerimônia de nível ----------
   function checarConquistas() {
-    if (!est.entrou || !est.travessia || document.getElementById("sobre") || document.getElementById("entrada")) return;
+    if (!est.travessia || document.getElementById("sobre") || document.getElementById("abertura-app") || document.getElementById("caverna")) return;
     const sem = semanaAtual();
     if (sem.completa && !est.semanas[sem.chave]) est.semanas[sem.chave] = hojeIso;
     const abertos = Object.keys(LIBERA).filter(k => !est.liberados[k] && livre(k));
@@ -2171,8 +2155,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("sobre") && est.nevoeiro) { fecharSobre(); render(); } });
 
+  if (!est.entrou) { est.entrou = "sim"; salvar(); }
   render();
-  seguir();
+  abrirAbertura(() => { checarConquistas(); seguir(); });
 })();
 </script>
 
