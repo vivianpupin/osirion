@@ -334,6 +334,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "O Ba e a palavra que desperta", sub: "O sono no Egito antigo" },
     { t: "fala", texto: "Os egípcios diziam que a pessoa tinha um Ba, desenhado como um pássaro com rosto humano. O Ba podia sair do corpo e voar, e voltar a ele. Era assim que viam a alma que viaja." },
     { t: "revela", pergunta: "Como os egípcios chamavam o sonho?", resposta: "Resut. A palavra vem da mesma raiz de “despertar”. Para eles, sonhar era acordar num outro lugar." },
+    { t: "fala", texto: "Os egípcios viam Osíris no céu, na constelação de Órion, que chamavam de Sah. Uma teoria famosa liga as três pirâmides de Gizé às três estrelas do cinturão de Órion." },
     { t: "fala", texto: "Ao dormir, a alma descia como o Sol, que toda noite atravessava o Duat, o mundo da noite governado por Osíris, e renascia de manhã. Bes, o pequeno deus protetor, era esculpido nos apoios de cabeça para guardar quem dormia." },
     { t: "fala", texto: "No Serapeum de Saqqara, peregrinos dormiam no templo para receber em sonho a resposta de Serápis. É a mesma incubação dos templos gregos." },
     { t: "leva", texto: "Sonhar é despertar do outro lado." }

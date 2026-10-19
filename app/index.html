@@ -140,6 +140,10 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 /* Entrada (como nos apps da Caravana) */
 .abertura-app { position: absolute; inset: 0; z-index: 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: radial-gradient(70% 50% at 50% 45%, #1f2350, #0b0c18 75%); transition: opacity .6s ease; }
 .abertura-app.sai { opacity: 0; }
+.abertura-app .ab-frase { position: relative; width: min(340px, 88%); margin-top: 22px; display: flex; flex-direction: column; gap: 12px; text-align: center; animation: ab-texto 1.4s ease-out both; }
+.abertura-app .ab-frase p { font-family: var(--display); font-size: 19px; line-height: 1.45; color: var(--areia-2); text-wrap: balance; }
+.abertura-app .ab-frase b { font-weight: 400; color: var(--areia); }
+.abertura-app .ab-frase .btn { margin-top: 14px; }
 .abertura-app img { position: relative; width: 120px; height: auto; animation: ab-olho 2.2s ease-out both; }
 .abertura-app .ab-luz { position: absolute; left: 50%; top: 45%; width: 260px; height: 260px; margin: -150px 0 0 -130px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--nevoeiro) 45%, transparent), transparent 65%); animation: ab-luz 2.2s ease-out both; }
 .abertura-app .ab-nome { position: relative; font-family: var(--display); font-size: 26px; letter-spacing: .42em; padding-left: .42em; color: var(--areia); margin-top: 6px; animation: ab-texto 1.6s .5s ease-out both; }
@@ -847,7 +851,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const cont = [0, 0, 0, 0, 0]; todas.forEach(t => cont[t]++);
     return `<div class="tela">${topo()}
       <div><span class="rotulo">Duat · o mundo da noite</span><h1>O céu das suas noites</h1></div>
-      <p class="suave">Duat era, para os egípcios, o céu por onde o sol viaja à noite até renascer. Aqui é o seu diagrama de vivências: cada manhã vira um ponto. Uma estrela é um sonho lúcido; uma estrela com anel, uma viagem astral. Com os meses, a sua constelação aparece.</p>
+      <p class="suave">Duat era, para os egípcios, o céu por onde o sol viaja à noite até renascer. Ali reinava Osíris, que eles viam no céu na constelação de Órion. Aqui é o seu diagrama de vivências: cada manhã vira um ponto. Uma estrela é um sonho lúcido; uma estrela com anel, uma viagem astral. Com os meses, a sua constelação aparece.</p>
       <div class="ceu-box"><canvas id="ceu" width="720" height="560" aria-label="Céu com ${todas.length} noites registradas"></canvas></div>
       <div class="numeros"><div><b>${todas.length}</b><span>noites</span></div><div><b>${cont[2]}</b><span>com lucidez</span></div><div><b>${cont[3] + cont[4]}</b><span>lúcidos e viagens</span></div></div>
       <div class="legenda">${TIPOS.map(t => `<div><canvas width="28" height="28" data-ponto="${t.k}"></canvas>${t.nome}</div>`).join("")}</div>
@@ -1258,7 +1262,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const d = document.getElementById("abertura-app"); if (!d) return depois();
     const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches, inicio = performance.now();
     const sai = () => { d.classList.add("sai"); setTimeout(() => { d.remove(); depois(); }, 600); };
-    const fim = () => setTimeout(sai, Math.max(quieto ? 400 : 1200, (quieto ? 700 : 2200) - (performance.now() - inicio)));
+    // Na primeira vez, depois do olho acender, aparece a frase do Osirion e a pessoa começa a travessia.
+    const frase = () => {
+      const f = document.createElement("div"); f.className = "ab-frase";
+      f.innerHTML = `<p>Osirion é o nome de um templo egípcio dedicado a Osíris, o deus que atravessa o mundo da noite e renasce.</p>
+        <p>Toda noite fazemos essa travessia dormindo. <b>O Osirion ensina a fazê-la acordado.</b></p>
+        <button class="btn largo" type="button">Começar a travessia</button>`;
+      d.classList.add("com-frase"); d.appendChild(f);
+      f.querySelector("button").onclick = () => { destravaSom(); sino(); sai(); };
+    };
+    const fim = () => setTimeout(est.travessia ? sai : frase, Math.max(quieto ? 400 : 1200, (quieto ? 700 : 2200) - (performance.now() - inicio)));
     if (document.readyState === "complete") fim(); else addEventListener("load", fim, { once: true });
   }
 
