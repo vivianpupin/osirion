@@ -616,12 +616,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .tec-op.atual { border-color: var(--nevoeiro); background: color-mix(in srgb, var(--nevoeiro) 12%, var(--ceu-2)); }
 .tec-op em { position: absolute; top: 10px; right: 12px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--nevoeiro); font-weight: 600; }
 .passos-noite { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #c97a7c; }
-.cal-inicio { display: flex; flex-direction: column; gap: 10px; padding: 14px 12px 16px; border: 1px solid var(--ceu-3); border-radius: 22px; background: radial-gradient(120% 90% at 50% 0%, #1d2148, #0b0c18 75%); }
+.cal-inicio { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 36px 12px 16px; border: 1px solid var(--ceu-3); border-radius: 22px; background: radial-gradient(120% 90% at 50% 0%, #1d2148, #0b0c18 75%); }
 /* O olho é o que importa: grande no centro; o número do dia fica pequeno e apagado no canto. */
 .grade-olhos { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px 4px; padding: 0 2px 8px; }
 .grade-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0 4px; padding: 2px 2px 0; }
 .grade-dias span { text-align: center; font-size: 9px; letter-spacing: .08em; color: var(--areia-2); opacity: .45; }
-.ver-cal { display: block; margin: 12px auto 0; background: none; border: 0; padding: 4px 8px; font: inherit; font-size: 12px; letter-spacing: .06em; color: var(--nevoeiro); opacity: .85; cursor: pointer; }
+.ver-cal { position: absolute; top: 8px; right: 10px; width: 30px; height: 30px; display: grid; place-items: center; background: none; border: 0; padding: 0; color: var(--areia-2); opacity: .55; cursor: pointer; }
+.ver-cal svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
 .grade-olhos .cel { aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
 .grade-olhos .cel:empty::after { content: ""; width: 3px; height: 3px; border-radius: 50%; background: rgba(238,229,212,.18); }
 .grade-olhos .cel.hoje { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--nevoeiro) 60%, transparent); }
@@ -974,7 +975,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="grade-dias">${letras}</div>
       <div class="grade-olhos">${celulas}</div>
       <div class="placar">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>
-      <button class="ver-cal" data-ver-dia="${hojeIso}">Ver o calendário todo</button></section>`;
+      <button class="ver-cal" data-ver-dia="${hojeIso}" aria-label="Ver o calendário todo"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button></section>`;
   }
   function telaCeu() {
     const ex = noitesExemplo();
