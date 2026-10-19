@@ -321,5 +321,37 @@ window.CAPSULAS = [
     { t: "fala", texto: "Até hoje, entre os q’ero, os paqos, os sacerdotes andinos, muitos contam que o chamado para o caminho veio num sonho." },
     { t: "faca", titulo: "Esta noite", texto: "Pense numa montanha que você ama, ou numa que gostaria de conhecer. Antes de dormir, peça licença a ela para visitá-la em sonho." },
     { t: "leva", texto: "As montanhas também sonham." }
+  ] },
+  { dia: 43, ilus: "figura-deitada", tema: "tradicoes", titulo: "Hypnos e Morfeu", minutos: 3, cartas: [
+    { t: "abre", titulo: "Hypnos e Morfeu", sub: "Os deuses do sono na Grécia" },
+    { t: "fala", texto: "Para os gregos, o Sono era um deus: Hypnos, filho da Noite, Nyx. O irmão gêmeo dele era Thanatos, a Morte. Dormir era visitar, toda noite, a casa do irmão da morte." },
+    { t: "fala", texto: "O poeta Ovídio conta que Hypnos vivia numa caverna sem sol, à beira do Lete, o rio do esquecimento, cercado de papoulas. Ele vinha ao mortal e tocava a sua testa, e o corpo se entregava." },
+    { t: "revela", pergunta: "E quem trazia os sonhos?", resposta: "Os filhos de Hypnos. Morfeu tomava a forma de pessoas, e é dele que vem a palavra morfina. Fobetor aparecia como animais, e Fantasos como coisas e paisagens." },
+    { t: "quiz", pergunta: "O rio do esquecimento, ao lado da caverna do Sono, explica o quê?", opcoes: ["Por que sonhamos com água", "Por que esquecemos os sonhos ao acordar", "Por que dormimos à noite"], certa: 1, explica: "Quem bebe do Lete esquece. É o que o diário dos primeiros 5 minutos vence: lembrar antes de o rio levar." },
+    { t: "leva", texto: "Lembrar é atravessar o Lete de volta." }
+  ] },
+  { dia: 44, ilus: "olho", tema: "tradicoes", titulo: "O Ba e a palavra que desperta", minutos: 3, cartas: [
+    { t: "abre", titulo: "O Ba e a palavra que desperta", sub: "O sono no Egito antigo" },
+    { t: "fala", texto: "Os egípcios diziam que a pessoa tinha um Ba, desenhado como um pássaro com rosto humano. O Ba podia sair do corpo e voar, e voltar a ele. Era assim que viam a alma que viaja." },
+    { t: "revela", pergunta: "Como os egípcios chamavam o sonho?", resposta: "Resut. A palavra vem da mesma raiz de “despertar”. Para eles, sonhar era acordar num outro lugar." },
+    { t: "fala", texto: "Ao dormir, a alma descia como o Sol, que toda noite atravessava o Duat, o mundo da noite governado por Osíris, e renascia de manhã. Bes, o pequeno deus protetor, era esculpido nos apoios de cabeça para guardar quem dormia." },
+    { t: "fala", texto: "No Serapeum de Saqqara, peregrinos dormiam no templo para receber em sonho a resposta de Serápis. É a mesma incubação dos templos gregos." },
+    { t: "leva", texto: "Sonhar é despertar do outro lado." }
+  ] },
+  { dia: 45, ilus: "fita-estrela-dourada", tema: "tradicoes", titulo: "Os guardiões do sono", minutos: 3, cartas: [
+    { t: "abre", titulo: "Os guardiões do sono", sub: "Da Mesopotâmia ao Japão" },
+    { t: "fala", texto: "Na Mesopotâmia, Mamu era a deusa dos sonhos, filha do deus Sol, Shamash. Zaqiqu era o deus que levava os sonhos até quem dormia, como um sopro." },
+    { t: "fala", texto: "Na Índia, Nidra é a deusa do sono. Vishnu dorme sobre a serpente Shesha, no oceano cósmico, e enquanto dorme, sonha o universo. É por isso que se fala em Yoga Nidra: o sono do próprio deus." },
+    { t: "revela", pergunta: "E no Japão?", resposta: "Ali vive o Baku, um ser feito de partes de vários animais que come os pesadelos. Quem acordava assustado pedia: “Baku, coma o meu sonho.”" },
+    { t: "faca", titulo: "Esta noite", texto: "Antes de dormir, chame o seu guardião, com o nome que fizer sentido para você: “Guarde o meu sono e me leve com consciência.”" },
+    { t: "leva", texto: "Toda civilização deu um guardião para a noite." }
+  ] },
+  { dia: 46, ilus: "figura-cruz", tema: "tradicoes", titulo: "A Mara e quem vem à noite", minutos: 3, cartas: [
+    { t: "abre", titulo: "A Mara e quem vem à noite", sub: "Os que vinham buscar o corpo no sono" },
+    { t: "fala", texto: "Nos povos do norte da Europa, a Mara era um espírito que sentava no peito de quem dormia e o impedia de se mexer. Dela vem a palavra inglesa nightmare, o pesadelo." },
+    { t: "revela", pergunta: "O que a ciência diz sobre isso hoje?", resposta: "É a paralisia do sono: a mente acorda enquanto o corpo ainda está no modo REM, paralisado. A pressão no peito e as presenças vêm desse estado entre dois mundos. Muitos viajantes contam que é justamente dali que se sai do corpo." },
+    { t: "fala", texto: "Em outros cantos, quem vinha à noite era gentil: o João Pestana, ou o Homem da Areia das histórias europeias, jogava areia nos olhos das crianças, e o Ole Fecha-Olho, de Andersen, abria um guarda-chuva de sonhos sobre elas." },
+    { t: "faca", titulo: "Se acontecer", texto: "Se acordar sem se mexer, não lute. Diga: “Estou protegido.” Respire devagar e use o momento: imagine que rola para fora do corpo." },
+    { t: "leva", texto: "O que os antigos temiam é a porta que o viajante usa." }
   ] }
 ];
