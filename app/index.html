@@ -31,9 +31,13 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-/* Sem zoom no toque duplo (o iPhone ignora o user-scalable=no; isto resolve) e sem o atraso do toque. */
-html { touch-action: manipulation; -webkit-text-size-adjust: 100%; }
-button, a, input, textarea, select, label { touch-action: manipulation; }
+/* Sem zoom no toque duplo em nenhum lugar: o touch-action não passa de pai para filho através das áreas que rolam,
+   por isso vale para todos os elementos (o iPhone ignora o user-scalable=no). */
+html { -webkit-text-size-adjust: 100%; }
+*, *::before, *::after { touch-action: manipulation; }
+/* Nada desliza para o lado: as áreas que rolam só rolam na vertical, e palavras longas quebram a linha. */
+#app { overflow-wrap: anywhere; }
+.telas, .sobre, .caverna, .story, .modo-noite, .abertura-app { overflow-x: hidden; overscroll-behavior: contain; }
 html, body { height: 100%; }
 body {
   background: radial-gradient(120% 80% at 50% 0%, #1d2042 0%, var(--ceu) 60%) fixed, var(--ceu);
@@ -60,6 +64,8 @@ html, body { margin: 0; }
 /* No celular, o app ocupa a tela inteira, sem a moldura. */
 @media (max-width: 460px) {
   body { padding: 0; gap: 0; }
+  /* A página em si não rola nem quica: só as telas de dentro rolam. */
+  html, body { overflow: hidden; overscroll-behavior: none; }
   .aviso-prot { display: none; }
   /* A tela inteira, até atrás da barra de status e da barra de baixo, sem faixas de outra cor. */
   html, body { background: #101222; } /* a cor da barra de baixo (abas) */
@@ -795,7 +801,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       var falta = inst && /iPhone|iPod/.test(navigator.userAgent) && innerHeight > innerWidth ? screen.height - innerHeight : 0;
       document.documentElement.style.setProperty("--falta", falta > 15 && falta < 90 ? falta + "px" : "0px");
     }
-    medir(); addEventListener("resize", medir); addEventListener("orientationchange", function () { setTimeout(medir, 300); });
+    medir(); addEventListener("resize", medir);
+    // Sem zoom de pinça (o iPhone não respeita o user-scalable=no); o toque duplo já é travado pelo touch-action no CSS.
+    ["gesturestart", "gesturechange"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); }); addEventListener("orientationchange", function () { setTimeout(medir, 300); });
   })();
 </script>
 </head>
@@ -2339,7 +2347,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const ganhos = SELOS.filter(s => est.selos[s.id]).length;
     return `<section class="selos"><div class="momento-cab"><h2>Livro de selos</h2><span class="hora">${ganhos} de ${SELOS.length}</span></div>
       <div class="selos-grade">${SELOS.map(s => { const d = est.selos[s.id];
-        return `<div class="selo ${d ? "ganho" : ""}"><span class="medalha"><img src="${ILUS(s.ilus)}" alt=""></span><b>${esc(s.nome)}</b><span>${d ? deIso(d).toLocaleDateString("pt-BR", { day: "numeric", month: "short" }) : esc(s.como)}</span></div>`; }).join("")}</div></section>`;
+        return `<div class="selo ${d ? "ganho" : ""}"><span class="medalha"><img src="${ILUS(s.ilus)}" alt=""></span><b>${esc(s.nome)}</b><span>${typeof d === "string" ? deIso(d).toLocaleDateString("pt-BR", { day: "numeric", month: "short" }) : esc(s.como)}</span></div>`; }).join("")}</div></section>`;
   }
 
   // ---------- Painel do mês (no Duat) ----------
