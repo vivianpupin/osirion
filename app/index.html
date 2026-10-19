@@ -51,6 +51,8 @@ body {
   display: flex; flex-direction: column;
 }
 html, body { margin: 0; }
+.celular::after { content: ""; position: absolute; inset: 0; z-index: 30; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E"); }
 /* No celular, o app ocupa a tela inteira, sem a moldura. */
 @media (max-width: 460px) {
   body { padding: 0; gap: 0; }
@@ -1288,7 +1290,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     let i = 0;
     const passo = () => {
       const t = TRAVESSIA[i];
-      d.style.background = `radial-gradient(120% 70% at 50% 0%, ${t.cor}, #07080f 90%)`;
+      d.style.background = `radial-gradient(130% 80% at 50% 0%, ${t.cor} 0%, color-mix(in srgb, ${t.cor} 72%, #07080f) 22%, color-mix(in srgb, ${t.cor} 45%, #07080f) 45%, color-mix(in srgb, ${t.cor} 20%, #07080f) 70%, #07080f 100%)`;
       let meio = "";
       if (t.tipo === "nome") meio = `<input class="campo-trav" id="trav-nome" type="text" placeholder="Seu nome" value="${esc(pf.nome || "")}" autocomplete="given-name">`;
       if (t.tipo === "escolha" || t.tipo === "multi") {
