@@ -140,14 +140,18 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 /* Entrada (como nos apps da Caravana) */
 .abertura-app { position: absolute; inset: 0; z-index: 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: radial-gradient(70% 50% at 50% 45%, #1f2350, #0b0c18 75%); transition: opacity .6s ease; }
 .abertura-app.sai { opacity: 0; }
-.abertura-app .ab-frase { position: relative; width: min(340px, 88%); margin-top: 22px; display: flex; flex-direction: column; gap: 12px; text-align: center; animation: ab-texto 1.4s ease-out both; }
-.abertura-app .ab-frase p { font-family: var(--display); font-size: 19px; line-height: 1.45; color: var(--areia-2); text-wrap: balance; }
-.abertura-app .ab-frase b { font-weight: 400; color: var(--areia); }
-.abertura-app .ab-frase .btn { margin-top: 14px; }
+/* Primeira vez: o nome some devagar e a frase aparece aos poucos, pequena, e só depois o botão. */
+.abertura-app .ab-marca { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: opacity 1.6s ease, transform 1.6s ease; }
+.abertura-app.com-frase .ab-marca { opacity: 0; transform: scale(.92); }
+.abertura-app .ab-frase { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -42%); width: min(300px, 82%); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.abertura-app .ab-frase p { margin: 0; font-family: var(--display); font-size: 15.5px; line-height: 1.65; letter-spacing: .02em; color: var(--areia-2); text-wrap: balance; opacity: 0; animation: ab-texto 1.8s ease-out forwards; }
+.abertura-app .ab-frase p:nth-child(1) { animation-delay: 1s; }
+.abertura-app .ab-frase p:nth-child(2) { animation-delay: 3.6s; }
+.abertura-app .ab-frase p:nth-child(3) { animation-delay: 5.6s; color: var(--areia); }
+.abertura-app .btn-trav { margin-top: 18px; border: 1px solid color-mix(in srgb, var(--cristal) 60%, transparent); background: none; color: var(--cristal); border-radius: 999px; padding: 11px 26px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; opacity: 0; animation: ab-texto 1.6s 8.4s ease-out forwards; }
 .abertura-app img { position: relative; width: 120px; height: auto; animation: ab-olho 2.2s ease-out both; }
-.abertura-app .ab-luz { position: absolute; left: 50%; top: 45%; width: 260px; height: 260px; margin: -150px 0 0 -130px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--nevoeiro) 45%, transparent), transparent 65%); animation: ab-luz 2.2s ease-out both; }
+.abertura-app .ab-luz { position: absolute; left: 50%; top: 40%; width: 260px; height: 260px; margin: -130px 0 0 -130px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--nevoeiro) 45%, transparent), transparent 65%); animation: ab-luz 2.2s ease-out both; }
 .abertura-app .ab-nome { position: relative; font-family: var(--display); font-size: 26px; letter-spacing: .42em; padding-left: .42em; color: var(--areia); margin-top: 6px; animation: ab-texto 1.6s .5s ease-out both; }
-.abertura-app .ab-sub { position: relative; font-size: 13px; letter-spacing: .08em; color: var(--areia-2); animation: ab-texto 1.6s .8s ease-out both; }
 @keyframes ab-olho { from { opacity: 0; transform: scale(.85); filter: blur(4px); } 60% { opacity: 1; filter: blur(0) drop-shadow(0 0 22px rgba(169,178,240,.8)); } to { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 12px rgba(169,178,240,.5)); } }
 @keyframes ab-luz { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
 @keyframes ab-texto { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
@@ -650,7 +654,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ouro-i" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a8"/><stop offset=".5" stop-color="#c9a35f"/><stop offset="1" stop-color="#f0d590"/></linearGradient></defs></svg>
 <div class="celular" id="app">
-  <div class="abertura-app" id="abertura-app" aria-label="Osirion"><div class="ab-luz"></div><img src="img/olho-marca.png" alt=""><span class="ab-nome">OSIRION</span><span class="ab-sub">Sonho lúcido e viagem astral</span></div>
+  <div class="abertura-app" id="abertura-app" aria-label="Osirion"><div class="ab-marca"><div class="ab-luz"></div><img src="img/olho-marca.png" alt=""><span class="ab-nome">OSIRION</span></div></div>
   <div class="nevoa" aria-hidden="true"></div>
   <div class="telas" id="telas"></div>
   <nav class="nav" id="nav" aria-label="Seções">
@@ -1266,10 +1270,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const frase = () => {
       const f = document.createElement("div"); f.className = "ab-frase";
       f.innerHTML = `<p>Osirion é o nome de um templo egípcio dedicado a Osíris, o deus que atravessa o mundo da noite e renasce.</p>
-        <p>Toda noite fazemos essa travessia dormindo. <b>O Osirion ensina a fazê-la acordado: descer abaixo da superfície, e voltar trazendo o que viu do outro lado.</b></p>
-        <button class="btn largo" type="button">Começar a travessia</button>`;
+        <p>Toda noite fazemos essa travessia dormindo.</p>
+        <p>O Osirion ensina a fazê-la acordado: descer abaixo da superfície, e voltar trazendo o que viu do outro lado.</p>
+        <button class="btn-trav" type="button">Começar a travessia</button>`;
       d.classList.add("com-frase"); d.appendChild(f);
-      f.querySelector("button").onclick = () => { destravaSom(); sino(); sai(); };
+      f.querySelector(".btn-trav").onclick = () => { destravaSom(); sino(); sai(); };
     };
     const fim = () => setTimeout(est.travessia ? sai : frase, Math.max(quieto ? 400 : 1200, (quieto ? 700 : 2200) - (performance.now() - inicio)));
     if (document.readyState === "complete") fim(); else addEventListener("load", fim, { once: true });
