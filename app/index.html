@@ -140,6 +140,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 /* Entrada (como nos apps da Caravana) */
 .abertura-app { position: absolute; inset: 0; z-index: 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: radial-gradient(70% 50% at 50% 45%, #1f2350, #0b0c18 75%); transition: opacity .6s ease; }
 .abertura-app.sai { opacity: 0; }
+/* Enquanto a abertura está na tela, o fundo atrás dela (barra de status, barra de baixo do celular) fica da mesma cor. */
+html:has(#abertura-app), html:has(#abertura-app) body { background: #0b0c18; }
 /* Primeira vez: o nome some devagar e a frase aparece aos poucos, pequena, e só depois o botão. */
 .abertura-app .ab-marca { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: opacity 1.6s ease, transform 1.6s ease; }
 .abertura-app.com-frase .ab-marca { opacity: 0; transform: scale(.92); }
@@ -1394,7 +1396,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function abrirAbertura(depois) {
     const d = document.getElementById("abertura-app"); if (!d) return depois();
     const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches, inicio = performance.now();
-    const sai = () => { d.classList.add("sai"); setTimeout(() => { d.remove(); depois(); }, 600); };
+    const cor = document.querySelector('meta[name="theme-color"]'), corApp = cor && cor.content;
+    if (cor) cor.content = "#0b0c18";
+    const sai = () => { d.classList.add("sai"); setTimeout(() => { d.remove(); if (cor) cor.content = corApp; depois(); }, 600); };
     // Na primeira vez, depois do olho acender, aparece a frase do Osirion e a pessoa começa a travessia.
     const frase = () => {
       const f = document.createElement("div"); f.className = "ab-frase";
