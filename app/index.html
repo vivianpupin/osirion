@@ -144,6 +144,9 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 @keyframes ab-estrelas { from { opacity: 0; } to { opacity: .55; } }
 .abertura-app.sai { opacity: 0; }
 .abertura-app .ab-frase.some { opacity: 0; transition: opacity .45s ease; }
+.abertura-app .ab-conta { margin-top: -4px; opacity: 0; animation: ab-texto 1.6s 9s ease-out forwards; }
+.abertura-app .ab-frase.ja p, .abertura-app .ab-frase.ja .btn-trav, .abertura-app .ab-frase.ja .ab-conta { animation-delay: 0s; animation-duration: .5s; }
+.abertura-app .ab-frase .conta-form p { opacity: 1; animation: none; }
 /* Enquanto a abertura está na tela, o fundo atrás dela (barra de status, barra de baixo do celular) fica da mesma cor. */
 html:has(.abertura-app), html:has(.abertura-app) body { background: #0b0c18; }
 /* Primeira vez: o nome some devagar e a frase aparece aos poucos, pequena, e só depois o botão. */
@@ -186,6 +189,13 @@ html:has(.abertura-app), html:has(.abertura-app) body { background: #0b0c18; }
 .caverna .profundidade i { width: 18px; height: 3px; border-radius: 3px; background: rgba(238,229,212,.18); }
 .caverna .profundidade i.on { background: var(--areia-2); }
 .caverna .rotulo { color: var(--cristal); }
+.conta-form { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 320px; margin: 0 auto; }
+.conta-form .campo-trav { font-size: 16px; }
+.conta-erro { color: #e8a2a3 !important; }
+.link-conta { background: none; border: 0; padding: 6px 10px; font: inherit; font-size: 13px; color: var(--areia-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.conta-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--ceu-3); border-radius: 18px; }
+.conta-card p { margin: 0; color: var(--areia-2); font-size: 14px; }
+.conta-tela .conta-form { margin-top: 8px; }
 .campo-trav { width: 100%; max-width: 300px; padding: 14px; border-radius: 14px; border: 1px solid var(--ceu-3); background: var(--ceu-2); color: var(--areia); font: inherit; font-size: 17px; text-align: center; }
 .opcoes-trav { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; }
 .op-trav { padding: 13px 16px; border-radius: 14px; border: 1px solid var(--ceu-3); background: color-mix(in srgb, var(--ceu-2) 80%, transparent); text-align: left; font-size: 15px; }
@@ -749,6 +759,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   </nav>
 </div>
 
+<script src="firebase-config.js"></script>
 <script src="conteudo.js"></script>
 <script src="capsulas.js"></script>
 <script src="alvos.js"></script>
@@ -823,7 +834,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // Estado guardado só neste aparelho.
   const guardado = (() => { try { return JSON.parse(localStorage.getItem("arhat") || "{}"); } catch (e) { return {}; } })();
-  const est = Object.assign({ entrou: null, travessia: null, nevoeiro: null, ato: 1, feitos: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0, hist: {}, selos: {}, album: {}, pessoais: [], semanas: {}, dejavus: [], nivelVisto: 0, liberados: {} }, guardado);
+  const estPadrao = () => ({ entrou: null, travessia: null, nevoeiro: null, ato: 1, feitos: {}, testes: 2, diario: [], alvo: null, inicio: null, vistas: {}, adianta: 0, hist: {}, selos: {}, album: {}, pessoais: [], semanas: {}, dejavus: [], nivelVisto: 0, liberados: {} });
+  const est = Object.assign(estPadrao(), guardado);
   if (!est.inicio) { const d = new Date(); est.inicio = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
   // Dia da jornada: conta desde o primeiro dia no app (no protótipo dá para adiantar).
   function diaDaJornada() {
@@ -831,7 +843,112 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const passados = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(a, m - 1, d).getTime()) / 864e5);
     return Math.min(CAPS.length, Math.max(1, passados + 1 + (est.adianta || 0)));
   }
-  function salvar() { try { localStorage.setItem("arhat", JSON.stringify(est)); } catch (e) {} }
+  function salvar() { est.atualizado = Date.now(); try { localStorage.setItem("arhat", JSON.stringify(est)); } catch (e) {} enviarNuvem(); }
+
+  // ---------- Nuvem: login simples (e-mail e senha) e a jornada guardada no Firebase ----------
+  // Sem a configuração (firebase-config.js), o app funciona como antes, guardando tudo só neste aparelho.
+  const CFG = window.FIREBASE_CONFIG || null;
+  const FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+  const nuvem = { pronta: false, usuario: null, carregando: null };
+  let envio = null;
+  function carregarScript(src) { return new Promise((ok, erro) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = erro; document.head.appendChild(s); }); }
+  function iniciarNuvem() {
+    if (!CFG) return Promise.resolve();
+    if (nuvem.carregando) return nuvem.carregando;
+    nuvem.carregando = carregarScript(FB + "firebase-app-compat.js")
+      .then(() => Promise.all([carregarScript(FB + "firebase-auth-compat.js"), carregarScript(FB + "firebase-firestore-compat.js")]))
+      .then(() => {
+        firebase.initializeApp(CFG);
+        firebase.auth().languageCode = "pt";
+        nuvem.pronta = true;
+        // Só a primeira resposta (a sessão guardada no aparelho) sincroniza sozinha; entrar e criar conta cuidam do resto.
+        let primeira = true;
+        firebase.auth().onAuthStateChanged(u => {
+          nuvem.usuario = u;
+          if (primeira) { primeira = false; if (u) sincronizar(false); }
+          if (aba === "atos" && !document.getElementById("sobre")) render();
+        });
+      })
+      .catch(() => { nuvem.carregando = null; });
+    return nuvem.carregando;
+  }
+  const docDe = u => firebase.firestore().collection("jornadas").doc(u.uid);
+  function enviarNuvem() {
+    if (!nuvem.usuario) return;
+    clearTimeout(envio);
+    envio = setTimeout(() => { const u = nuvem.usuario; if (u) docDe(u).set({ estado: JSON.stringify(est), atualizado: est.atualizado || Date.now(), email: u.email || "" }).catch(() => {}); }, 1500);
+  }
+  // Se a nuvem tem uma jornada mais nova (ou a pessoa acabou de entrar na conta), ela vale neste aparelho; senão, sobe a daqui.
+  function sincronizar(trazer) {
+    const u = nuvem.usuario; if (!u) return Promise.resolve(false);
+    return docDe(u).get().then(snap => {
+      const r = snap.exists ? snap.data() : null;
+      if (r && r.estado && (trazer || (r.atualizado || 0) > (est.atualizado || 0))) {
+        const novo = JSON.parse(r.estado);
+        Object.keys(est).forEach(k => delete est[k]); Object.assign(est, estPadrao(), novo);
+        try { localStorage.setItem("arhat", JSON.stringify(est)); } catch (e) {}
+        if (!document.getElementById("caverna") && !document.querySelector(".abertura-app") && !document.getElementById("sobre")) render();
+        return true;
+      }
+      enviarNuvem(); return false;
+    }).catch(() => false);
+  }
+  function entrarConta(email, senha, criar) {
+    return iniciarNuvem().then(() => {
+      if (!nuvem.pronta) throw { code: "auth/network-request-failed" };
+      const a = firebase.auth();
+      return criar ? a.createUserWithEmailAndPassword(email, senha) : a.signInWithEmailAndPassword(email, senha);
+    }).then(c => { nuvem.usuario = c.user; if (criar) { enviarNuvem(); return false; } return sincronizar(true); });
+  }
+  function erroConta(e) {
+    const c = (e && e.code) || "";
+    if (c === "auth/invalid-email" || c === "auth/missing-email") return "Esse e-mail não parece certo.";
+    if (c === "auth/email-already-in-use") return "Esse e-mail já tem conta. Toque em “Já tenho conta”.";
+    if (c === "auth/weak-password" || c === "auth/missing-password") return "A senha precisa ter pelo menos 6 caracteres.";
+    if (/wrong-password|user-not-found|invalid-credential|invalid-login/.test(c)) return "E-mail ou senha não conferem.";
+    if (c === "auth/too-many-requests") return "Muitas tentativas. Espere um pouco e tente de novo.";
+    if (c === "auth/network-request-failed") return "Sem conexão agora. Tente de novo em instantes.";
+    return "Não deu certo. Tente de novo.";
+  }
+  const formConta = (modo, troca) => `<div class="conta-form">
+      <input class="campo-trav" id="c-email" type="email" placeholder="Seu e-mail" autocomplete="email" inputmode="email" autocapitalize="off">
+      <input class="campo-trav" id="c-senha" type="password" placeholder="${modo === "criar" ? "Crie uma senha" : "Sua senha"}" autocomplete="${modo === "criar" ? "new-password" : "current-password"}">
+      <p class="nota-c conta-erro" id="c-erro" hidden></p>
+      <button class="btn largo" id="c-ok" type="button">${modo === "criar" ? "Criar minha conta" : "Entrar"}</button>
+      ${troca !== false ? `<button class="link-conta" id="c-troca" type="button">${modo === "criar" ? "Já tenho conta" : "Criar uma conta nova"}</button>` : ""}
+      ${modo === "entrar" ? '<button class="link-conta" id="c-esqueci" type="button">Esqueci a senha</button>' : ""}
+    </div>`;
+  // Monta o formulário dentro de .conta-lugar e liga os botões. aoEntrar(trouxe) recebe true quando veio uma jornada da nuvem.
+  function ligarConta(raiz, modo, aoEntrar, troca) {
+    const lugar = raiz.querySelector(".conta-lugar"); lugar.innerHTML = formConta(modo, troca);
+    const em = lugar.querySelector("#c-email"), se = lugar.querySelector("#c-senha"), er = lugar.querySelector("#c-erro"), ok = lugar.querySelector("#c-ok");
+    const aviso = (t, bom) => { er.textContent = t; er.hidden = !t; er.classList.toggle("conta-erro", !bom); };
+    ok.onclick = () => {
+      const email = em.value.trim(), senha = se.value;
+      if (!email || !senha) return aviso("Preencha o e-mail e a senha.");
+      ok.disabled = true; ok.textContent = "Um instante…"; aviso("");
+      entrarConta(email, senha, modo === "criar").then(trouxe => aoEntrar(trouxe))
+        .catch(e => { ok.disabled = false; ok.textContent = modo === "criar" ? "Criar minha conta" : "Entrar"; aviso(erroConta(e)); });
+    };
+    const tr = lugar.querySelector("#c-troca"); if (tr) tr.onclick = () => ligarConta(raiz, modo === "criar" ? "entrar" : "criar", aoEntrar, troca);
+    const esq = lugar.querySelector("#c-esqueci");
+    if (esq) esq.onclick = () => {
+      const email = em.value.trim(); if (!email) return aviso("Escreva o seu e-mail acima e toque de novo em “Esqueci a senha”.");
+      iniciarNuvem().then(() => { if (!nuvem.pronta) throw { code: "auth/network-request-failed" }; return firebase.auth().sendPasswordResetEmail(email); })
+        .then(() => aviso("Enviamos um link para o seu e-mail para criar uma senha nova.", true)).catch(e => aviso(erroConta(e)));
+    };
+  }
+  function cartaoConta() {
+    if (!CFG) return "";
+    const u = nuvem.usuario;
+    return u ? `<div class="conta-card"><span class="rotulo">Sua conta</span><p>A sua jornada está guardada na nuvem · ${esc(u.email || "")}</p><button class="link-conta" data-acao="sair-conta" style="align-self:flex-start;padding-left:0">Sair desta conta</button></div>`
+      : `<div class="conta-card"><span class="rotulo">Sua conta</span><p>O seu diário está guardado só neste celular. Crie uma conta para não perder nada.</p><button class="btn fantasma largo" data-acao="abrir-conta">Guardar minha jornada</button></div>`;
+  }
+  function abrirConta() {
+    abrirSobre(`<div class="tela conta-tela">${voltar}<span class="rotulo">Sua conta</span><h1>Guarde a sua jornada</h1>
+      <p class="suave">Com um e-mail e uma senha, o seu diário fica guardado e você não perde nada, nem se trocar de celular.</p><div class="conta-lugar"></div></div>`,
+      d => ligarConta(d, "criar", () => { fecharSobre(); render(); }));
+  }
 
   let aba = "hoje";
   const telas = document.getElementById("telas");
@@ -1191,7 +1308,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const seg = `<div class="seg seg3" role="group" aria-label="Jornada">${[["caminho", "Caminho"], ["conquistas", "Conquistas"], ["atos", "Atos"]].map(([k, n]) => `<button data-jornada="${k}" aria-pressed="${modoJornada === k}">${n}</button>`).join("")}</div>`;
     if (modoJornada === "atos") return telaAtos(seg);
     if (modoJornada === "conquistas") return `<div class="tela">${topo()}${seg}${livre("selos") ? livroSelos() : trancado("selos")}${livre("album") ? albumAlvos() : trancado("album")}${livre("lugares") ? seusAlvos() : trancado("lugares")}</div>`;
-    return `<div class="tela">${topo()}${seg}${mapaJornada()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}</div>`;
+    return `<div class="tela">${topo()}${seg}${mapaJornada()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}${cartaoConta()}</div>`;
   }
   function telaAtos(seg) {
     const lista = ATOS.map(a => {
@@ -1409,14 +1526,22 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     // A tela seguinte (a travessia ou o app) já se monta por baixo; a abertura só se desfaz por cima dela.
     const sai = () => { d.removeAttribute("id"); depois(); d.classList.add("sai"); setTimeout(() => { d.remove(); if (cor) cor.content = corApp; }, 600); };
     // Na primeira vez, depois do olho acender, aparece a frase do Osirion e a pessoa começa a travessia.
-    const frase = () => {
-      const f = document.createElement("div"); f.className = "ab-frase";
+    const frase = ja => {
+      const f = document.createElement("div"); f.className = "ab-frase" + (ja ? " ja" : "");
       f.innerHTML = `<p>Osirion é um santuário escondido sob a terra, no Egito, dedicado a Osíris, o deus que atravessa o mundo da noite para renascer.</p>
         <p>Toda noite, ao dormir, fazemos essa mesma travessia, mas sem consciência.</p>
         <p>O Osirion ensina a cruzar esse limiar desperto: descer além da superfície e voltar trazendo tudo o que foi visto do outro lado.</p>
-        <button class="btn-trav" type="button">Começar a travessia</button>`;
+        <button class="btn-trav" type="button">Começar a travessia</button>${CFG ? '<button class="link-conta ab-conta" type="button">Já tenho uma conta</button>' : ""}`;
       d.classList.add("com-frase"); d.appendChild(f);
       f.querySelector(".btn-trav").onclick = () => { destravaSom(); sino(); f.classList.add("some"); setTimeout(sai, 450); };
+      // Em outro celular: entra na conta e continua de onde parou, sem refazer a travessia.
+      const jc = f.querySelector(".ab-conta");
+      if (jc) jc.onclick = () => {
+        f.className = "ab-frase ja";
+        f.innerHTML = `<p>Entre na sua conta para continuar de onde parou.</p><div class="conta-lugar"></div><button class="link-conta" type="button" id="ab-volta">← voltar</button>`;
+        ligarConta(f, "entrar", () => { f.classList.add("some"); setTimeout(sai, 450); }, false);
+        f.querySelector("#ab-volta").onclick = () => { f.remove(); frase(true); };
+      };
     };
     const fim = () => setTimeout(est.travessia ? sai : frase, Math.max(quieto ? 400 : 1200, (quieto ? 700 : 2200) - (performance.now() - inicio)));
     if (document.readyState === "complete") fim(); else addEventListener("load", fim, { once: true });
@@ -1441,15 +1566,18 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "texto", cor: "#0b0c1c", ilus: "fitas", rotulo: "Imagens na parede", titulo: "O que aparece ao adormecer", texto: "Surgem cores, rostos e paisagens que mudam sozinhos. São as imagens hipnagógicas. Não segure e não fuja: apenas olhe, e deixe que fiquem mais nítidas.", nota: "Vibrações, zumbidos e até alguém chamando seu nome são sinais de que você está perto.", botao: "Descer mais" },
     { tipo: "texto", cor: "#0a0b19", luz: true, rotulo: "O fundo da caverna", titulo: "No fundo, uma luz", texto: "Em algum momento, uma esfera de luz ocupa tudo. É o nevoeiro: o limiar entre este mundo e o outro. Cada pessoa tem o seu, e cada nevoeiro tem uma cor.", botao: "Seguir" },
     { tipo: "texto", cor: "#0a0b19", ilus: "figura-dourada", rotulo: "O objetivo", titulo: "Tornar-se um Arhat", texto: "Arhat, em sânscrito, é aquele que despertou. Para ele, o sono não apaga nada: a consciência segue acesa enquanto o corpo dorme, e ele atravessa de um mundo a outro lembrando de tudo.", nota: "Esse é o objetivo do Osirion. Cada noite anotada, cada técnica e cada ato são um passo para você se tornar um Arhat.", botao: "Entrar no santuário" },
+    { tipo: "conta", cor: "#0a0b19", ilus: "olho", peq: true, rotulo: "A conta", titulo: "Guarde a sua jornada", texto: "Com um e-mail e uma senha, o seu diário fica guardado e você não perde nada, nem se trocar de celular." },
     { tipo: "caminho", cor: "#0a0b19", rotulo: "O santuário", titulo: "Seu caminho para a lucidez", texto: "Um caminho de autoaprimoramento das faculdades do sonhar: lembrar, perceber, despertar e viajar.", botao: "Começar a jornada" }
   ];
   function abrirTravessia() {
     const d = document.createElement("div"); d.className = "caverna"; d.id = "caverna"; app.appendChild(d);
     est.perfil = est.perfil || {};
     const pf = est.perfil;
+    // O passo da conta só aparece quando a nuvem está ligada, e some se a pessoa já entrou.
+    const PASSOS = TRAVESSIA.filter(t => t.tipo !== "conta" || (CFG && !nuvem.usuario));
     let i = 0;
     const passo = () => {
-      const t = TRAVESSIA[i];
+      const t = PASSOS[i];
       d.style.background = `radial-gradient(130% 80% at 50% 0%, ${t.cor} 0%, color-mix(in srgb, ${t.cor} 72%, #07080f) 22%, color-mix(in srgb, ${t.cor} 45%, #07080f) 45%, color-mix(in srgb, ${t.cor} 20%, #07080f) 70%, #07080f 100%)`;
       let meio = "";
       if (t.tipo === "nome") meio = `<input class="campo-trav" id="trav-nome" type="text" placeholder="Seu nome" value="${esc(pf.nome || "")}" autocomplete="given-name">`;
@@ -1457,6 +1585,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const marcado = o => t.tipo === "multi" ? (pf[t.campo] || []).includes(o) : pf[t.campo] === o;
         meio = `<div class="opcoes-trav">${t.opcoes.map(o => `<button class="op-trav" type="button" data-op="${esc(o)}" aria-pressed="${marcado(o)}">${esc(o)}</button>`).join("")}</div><p class="nota-c" id="ensina" ${t.ensina && pf[t.campo] ? "" : "hidden"}>${t.ensina || ""}</p>`;
       }
+      if (t.tipo === "conta") meio = '<div class="conta-lugar"></div>';
       if (t.tipo === "sono") meio = `<div class="sono"><label>Hora de dormir<input type="time" id="dorme" value="${pf.dorme || "23:00"}"></label><label>Acordar<input type="time" id="acorda" value="${pf.acorda || "07:00"}"></label></div><p class="nota-c" id="sono-conta"></p>`;
       if (t.tipo === "respirar") meio = `<button class="segurar" id="segurar" type="button">segure para inspirar</button><div class="marcas">${Array.from({ length: t.vezes }, () => "<i></i>").join("")}</div>`;
       if (t.tipo === "lembrete") meio = `<div class="notif" style="max-width:300px">${SINAL}<span><span class="linha1"><span>OSIRION</span><span>agora</span></span><span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></div>`;
@@ -1471,7 +1600,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       }
       const titulo = t.tipo === "caminho" && pf.nome ? `${esc(pf.nome)}, este é o seu caminho` : t.titulo;
       d.innerHTML = `<div class="tela">
-        <div class="profundidade" aria-hidden="true">${TRAVESSIA.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("")}</div>
+        <div class="profundidade" aria-hidden="true">${PASSOS.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("")}</div>
         <div class="passo-c">
           ${t.ilus ? `<img class="ilus ${t.peq ? "pequena" : ""}" src="${ILUS(t.ilus)}" alt="">` : ""}
           ${t.luz ? '<div class="luz" aria-hidden="true"></div>' : ""}
@@ -1481,7 +1610,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           ${t.nota ? `<p class="nota-c">${t.nota}</p>` : ""}
         </div>
         <div class="pe-trav">
-          ${t.tipo === "lembrete" ? '<button class="btn largo" id="trav-sim">Ativar os lembretes</button><button class="btn fantasma largo" id="trav-prox">Mais tarde</button>'
+          ${t.tipo === "conta" ? '<button class="btn fantasma largo" id="trav-prox">Agora não</button>'
+            : t.tipo === "lembrete" ? '<button class="btn largo" id="trav-sim">Ativar os lembretes</button><button class="btn fantasma largo" id="trav-prox">Mais tarde</button>'
             : `<button class="btn largo" id="trav-prox">${t.botao || "Seguir"}</button>`}
           ${i > 0 ? '<button class="fechar" id="trav-volta" type="button">← voltar</button>' : ""}
         </div>
@@ -1489,12 +1619,21 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       d.scrollTop = 0;
       const prox = d.querySelector("#trav-prox");
       const avanca = () => {
-        if (i < TRAVESSIA.length - 1) { i++; passo(); return; }
+        if (i < PASSOS.length - 1) { i++; passo(); return; }
         const h = new Date(); est.travessia = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
         if (pf.desejos && pf.desejos.includes("Conhecer antigas civilizações")) est.alvo = { r: 0, a: 0, c: 0, s: 0, t: [0, 1], q: 0 };
         salvar(); d.remove(); aba = "hoje"; render();
       };
       const volta = d.querySelector("#trav-volta"); if (volta) volta.onclick = () => { i--; passo(); };
+      if (t.tipo === "conta") {
+        // Quem entra numa conta que já existe recebe a jornada de lá e vai direto para o app.
+        ligarConta(d, "criar", trouxe => {
+          if (!trouxe) { salvar(); avanca(); return; }
+          d.remove(); if (!est.travessia) abrirTravessia(); else { aba = "hoje"; render(); }
+        });
+        prox.onclick = avanca;
+        return;
+      }
       if (t.tipo === "nome") {
         const inp = d.querySelector("#trav-nome");
         prox.disabled = !inp.value.trim();
@@ -2241,6 +2380,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const b = e.target.closest("button"); if (!b) return;
     if (b.dataset.aba) { fecharSobre(); aba = b.dataset.aba; render(); return; }
     if (b.hasAttribute("data-fechar")) { fecharSobre(); render(); return; }
+    if (b.dataset.acao === "abrir-conta") { abrirConta(); return; }
+    if (b.dataset.acao === "sair-conta") { if (nuvem.pronta) firebase.auth().signOut().then(() => { nuvem.usuario = null; render(); }); return; }
     if (b.dataset.cor) { est.nevoeiro = b.dataset.cor; aplicarCor(); document.querySelectorAll(".cor").forEach(c => c.setAttribute("aria-pressed", c === b)); const cl = document.getElementById("cor-livre"); if (cl) cl.value = b.dataset.cor; return; }
     if (b.dataset.pratica) { abrirPratica(b.dataset.pratica); return; }
     if (b.dataset.capsula) { abrirCapsula(+b.dataset.capsula); return; }
@@ -2326,6 +2467,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("sobre") && est.nevoeiro) { fecharSobre(); render(); } });
 
   if (!est.entrou) { est.entrou = "sim"; salvar(); }
+  iniciarNuvem();
   render();
   abrirAbertura(() => { checarConquistas(); seguir(); });
 })();
