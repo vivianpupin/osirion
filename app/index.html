@@ -1333,7 +1333,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <div class="passo-c">
           ${t.ilus ? `<img class="ilus ${t.peq ? "pequena" : ""}" src="${ILUS(t.ilus)}" alt="">` : ""}
           ${t.luz ? '<div class="luz" aria-hidden="true"></div>' : ""}
-          <span class="rotulo">${t.rotulo}</span>
           <h1>${titulo}</h1>
           ${t.texto ? `<p>${t.texto}</p>` : ""}${t.sub ? `<p class="nota-c">${t.sub}</p>` : ""}
           ${meio}
@@ -1342,7 +1341,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <div class="pe-trav">
           ${t.tipo === "lembrete" ? '<button class="btn largo" id="trav-sim">Ativar os lembretes</button><button class="btn fantasma largo" id="trav-prox">Mais tarde</button>'
             : `<button class="btn largo" id="trav-prox">${t.botao || "Seguir"}</button>`}
-          ${i > 0 ? '<button class="fechar" id="trav-volta" type="button">← voltar um portal</button>' : ""}
+          ${i > 0 ? '<button class="fechar" id="trav-volta" type="button">← voltar</button>' : ""}
         </div>
       </div>`;
       d.scrollTop = 0;
