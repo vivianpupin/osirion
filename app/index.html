@@ -23,7 +23,7 @@
   --areia: #eee5d4;      /* texto */
   --areia-2: #b9b2c9;    /* texto secundário */
   --ocre: #d9662f;       /* o laranja das montanhas */
-  --cristal: #f5c75b;    /* o dourado do cristal */
+  --cristal: #f5c75b;    /* o dourado */
   --nevoeiro: #a9b2f0;   /* muda com a escolha da pessoa */
   --display: "Marcellus", "Cormorant Garamond", Georgia, serif;
   --corpo: "Karla", "Helvetica Neue", Arial, sans-serif;
@@ -77,7 +77,7 @@ p { margin: 0; }
 .suave { color: var(--areia-2); font-size: 14px; }
 .topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .marca { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 20px; letter-spacing: .3em; }
-.marca img { width: 26px; height: 26px; }
+.marca img { width: 34px; height: auto; }
 .marca-nome { display: flex; flex-direction: column; line-height: 1.1; }
 .marca-nome small { font-family: var(--corpo); font-size: 10px; letter-spacing: .08em; color: var(--areia-2); margin-top: 3px; }
 .chip-nev { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--areia-2); background: var(--ceu-2); border: 1px solid var(--ceu-3); border-radius: 999px; padding: 5px 10px 5px 6px; cursor: pointer; font-family: inherit; }
@@ -351,12 +351,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 <script src="capsulas.js"></script>
 <script>
 (function () {
-  const IMG = { noite: "img/noite.webp", fios: "img/fios.webp", cristal: "img/cristal.png" };
+  const IMG = { noite: "img/noite.webp", fios: "img/fios.webp", marca: "img/olho-marca.png" };
   // Desenhos do livro Arhat, recortados com fundo transparente.
   const ILUS = nome => `img/livro/${nome}.webp`;
   const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem") };
-  // Sinal do Osirion: a lua crescente sobre o horizonte da noite (Duat).
-  const SINAL = '<span class="sinal" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.5 4.5a5.5 5.5 0 1 0 4 9.3 6.5 6.5 0 0 1-4-9.3z"/><path d="M3 19h18"/><path d="M7 21.5h10"/></svg></span>';
+  // Sinal do Osirion nos avisos: o ícone do app, o olho do livro Arhat.
+  const SINAL = '<img class="sinal" src="apple-touch-icon.png" alt="">';
 
   const ICO = {
     sol: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
@@ -407,7 +407,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const nomeCor = () => (CORES.find(c => c.v === est.nevoeiro) || { nome: "o seu" }).nome;
 
   function topo() {
-    return `<div class="topo"><div class="marca"><img src="${IMG.cristal}" alt=""><span class="marca-nome">OSIRION<small>Sonho lúcido e viagem astral</small></span></div>
+    return `<div class="topo"><div class="marca"><img src="${IMG.marca}" alt=""><span class="marca-nome">OSIRION<small>Sonho lúcido e viagem astral</small></span></div>
       <button class="chip-nev" data-acao="nevoeiro"><span class="bolinha"></span>nevoeiro ${esc(nomeCor()).toLowerCase()}</button></div>`;
   }
 
