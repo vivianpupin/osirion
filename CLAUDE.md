@@ -6,7 +6,8 @@
 ## O app (Osirion · Sonho lúcido e viagem astral)
 - O que é: um caminho de autoaprimoramento das faculdades do sonhar (lembrar, perceber, despertar, viajar). Tudo no app serve a isso.
 - Técnicas antes de dormir (`NOITE` em `app/conteudo.js`): uma por semana (o ideal para ter resultado), em ordem das mais simples às mais avançadas. A pessoa escolhe com qual começar e pode trocar; depois de 7 dias o app sugere a próxima.
-- Método: Arhat, do livro da Vivian. Abaton = prática da noite. Duat = céu das noites.
+- Método: Arhat, do livro da Vivian. Duat = céu das noites.
+- Nomes na tela: o mínimo de nomes próprios. Não usar "Abaton" (é "a prática da noite"). "Arhat" só aparece como o objetivo (tornar-se um Arhat), sempre com a explicação; no resto, o método é "o Osirion".
 - `app/index.html`: telas e lógica (Hoje, Diário, Duat, Cápsulas, Jornada). Jornada = nível, chama, missões, mapa, selos, álbum dos alvos e os atos. Modo noite (tela vermelha, sons, despertar) abre por "Vou dormir".
 - `app/alvos.js`: o oráculo dos alvos (sorteio = sincronicidade, a pessoa não escolhe). Os lugares pessoais ficam fora do sorteio.
 - `app/conteudo.js`: as práticas dos cinco atos, com o texto do livro Arhat.

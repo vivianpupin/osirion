@@ -910,7 +910,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const a = ATOS[est.ato];
     const momentos = a.momentos.map(m => `
       <section class="momento">
-        <div class="momento-cab"><h3>${m.quando === "Noite" ? "Abaton" : m.quando === "04:00" ? despertar() : m.quando}</h3><span class="hora">${m.quando === "Noite" ? "a prática da noite · " + m.hora : m.hora}</span></div>
+        <div class="momento-cab"><h3>${m.quando === "Noite" ? "A prática da noite" : m.quando === "04:00" ? despertar() : m.quando}</h3><span class="hora">${m.hora}</span></div>
         ${m.praticas.map(p => `
           <button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}">
             <span class="ico">${ICO[p.ico]}</span>
@@ -1360,7 +1360,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           const leit = novaLeitura(+itens[fim].dataset.k); est.alvo = leit; chegou = null; registrar("sorteio"); salvar();
           bt.remove(); barra.parentNode.remove();
           timers.push(setTimeout(() => {
-            saida.innerHTML = leituraAlvo(leit) + `<button class="btn largo" data-acao="levar-abaton">Levar para o Abaton</button><button class="btn fantasma largo" data-acao="sortear">Sortear de novo</button>`;
+            saida.innerHTML = leituraAlvo(leit) + `<button class="btn largo" data-acao="levar-abaton">Levar para a prática da noite</button><button class="btn fantasma largo" data-acao="sortear">Sortear de novo</button>`;
             saida.scrollIntoView({ behavior: "smooth", block: "start" });
           }, 600)); };
         anda(); };
@@ -1464,7 +1464,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       if (t.tipo === "caminho") {
         const desp = despertar();
         meio = `<ol class="caminho">
-          <li><b>Hoje à noite</b><span>O Início: a prática do Abaton e a busca do seu nevoeiro.</span></li>
+          <li><b>Hoje à noite</b><span>O Início: a prática da noite e a busca do seu nevoeiro.</span></li>
           <li><b>Amanhã cedo</b><span>Os primeiros cinco minutos e a pergunta: qual a cor do seu nevoeiro?</span></li>
           <li><b>Primeira semana</b><span>O Primeiro Ato: as raízes, a Respiração Dourada e os testes de realidade.</span></li>
           <li><b>Em duas a três semanas</b><span>Os primeiros graus de lucidez e o despertar das ${desp}.</span></li>
@@ -1600,7 +1600,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <div><b>Prática guiada pela Vivian</b><div class="suave">o áudio será gravado por você</div><div class="trilho"><span id="trilho"></span></div></div></div>` : "";
     const fim = k === "noite" || ehViagem(k) ? "Vou dormir" : k === "madrugada" ? "Voltar a dormir" : k === "diario" ? "Abrir o diário" : "Feito";
     abrirSobre(`<div class="tela">${voltar}
-      <span class="rotulo">${esc(a.nome)} · ${m.quando === "Noite" ? "Abaton, a prática da noite" : esc(m.quando)}</span><h1>${esc(p.nome)}</h1>
+      <span class="rotulo">${esc(a.nome)} · ${m.quando === "Noite" ? "A prática da noite" : esc(m.quando)}</span><h1>${esc(p.nome)}</h1>
       ${respHtml}${player}
       <div class="passo-wrap" id="passo"></div>
       <div class="pontos" id="pontos"></div>
@@ -1818,7 +1818,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const MISSOES = [
     { txt: "Fazer 7 testes de realidade em 3 dias", meta: 3, conta: dias => dias.filter(h => (h.testes || 0) >= 7).length },
     { txt: "Anotar 4 noites no diário", meta: 4, conta: (dias, isos) => est.diario.filter(d => isos.includes(isoNoite(d))).length },
-    { txt: "Fazer o Abaton em 3 noites", meta: 3, conta: dias => dias.filter(h => (h.tec || []).includes("noite")).length },
+    { txt: "Fazer a prática da noite em 3 noites", meta: 3, conta: dias => dias.filter(h => (h.tec || []).includes("noite")).length },
     { txt: "Sortear um alvo e dormir com ele", meta: 1, conta: dias => dias.filter(h => h.sorteio).length },
     { txt: "Abrir 3 cápsulas", meta: 3, conta: dias => dias.reduce((s, h) => s + (h.capsula || 0), 0) },
     { txt: "Usar o modo noite em 2 noites", meta: 2, conta: dias => dias.filter(h => h.dormir).length },
@@ -2039,7 +2039,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   // ---------- Painel do mês (no Duat) ----------
-  const TEC = { teste: "Teste de realidade", noite: "O Abaton, a prática da noite", madrugada: "O despertar de madrugada", resp: "Respiração Dourada", dragao: "Respiração do Dragão", maos: "Mãos para o céu", pilar: "Pilar de luz", banho: "Durante o banho", raizes: "Raízes de Cura" };
+  const TEC = { teste: "Teste de realidade", noite: "A prática da noite", madrugada: "O despertar de madrugada", resp: "Respiração Dourada", dragao: "Respiração do Dragão", maos: "Mãos para o céu", pilar: "Pilar de luz", banho: "Durante o banho", raizes: "Raízes de Cura" };
   function painelMes() {
     const agora = new Date(), ano = agora.getFullYear(), mes = agora.getMonth(), corridos = agora.getDate();
     const doMes = iso => { const x = deIso(iso); return x.getFullYear() === ano && x.getMonth() === mes; };
