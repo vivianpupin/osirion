@@ -764,14 +764,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { k: 0, nome: "Noite negra, sem lembranças" }, { k: 1, nome: "Noite com sonhos" },
     { k: 2, nome: "Algum grau de lucidez" }, { k: 3, nome: "Sonho lúcido" }, { k: 4, nome: "Viagem astral" }
   ];
-  // Os símbolos das noites: pontinho fraco (noite negra), pontinho forte (sonhos), vários pontinhos (algum grau de lucidez),
-  // o terceiro olho (sonho lúcido) e a estrelinha (viagem astral). Os mesmos do céu do Duat.
+  // Os símbolos das noites, desenhados: o olho fechado (noite negra), o olho fechado com as imagens do sonho por cima (sonhos),
+  // o olho entreaberto (algum grau de lucidez), o terceiro olho aberto (sonho lúcido) e a estrelinha (viagem astral).
   const ICONES_NOITE = [
-    '<circle cx="24" cy="24" r="5" class="ponto-fraco"/>',
-    '<circle cx="24" cy="24" r="7" class="ponto-forte"/>',
-    '<circle cx="24" cy="24" r="4" class="pontos"/><circle cx="14" cy="17" r="3.4" class="pontos"/><circle cx="34" cy="16" r="3.4" class="pontos"/><circle cx="17" cy="33" r="3.4" class="pontos"/><circle cx="32" cy="32" r="3.4" class="pontos"/>',
-    '<path d="M5 24q19 -17 38 0q-19 17 -38 0z" class="olho-traco"/><circle cx="24" cy="24" r="8" class="olho-iris"/><circle cx="24" cy="24" r="3.4" class="olho-pupila"/><circle cx="26.5" cy="21.5" r="1.4" fill="#fff"/>',
-    '<path d="M24 6l4 13.5 13.5 4.5-13.5 4.5L24 42l-4-13.5L6.5 24 20 19.5z" class="estrela"/>'
+    '<path d="M8 22q16 12 32 0"/><path d="M13 26.5l-2 4M19 29l-1 4.5M24 29.8v4.5M29 29l1 4.5M35 26.5l2 4" class="fino"/>',
+    '<g transform="translate(24 25)"><path d="M-11 0q11 7.5 22 0"/><path d="M-7 3l-1.4 2.8M-2.5 4.6l-.4 3.2M2.5 4.6l.4 3.2M7 3l1.4 2.8" class="fino"/></g><path d="M11.4 8.6a3.4 3.4 0 1 0 0 6.8a4.25 4.25 0 0 1 0 -6.8z" class="f"/><path d="M24 2.8l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z" class="f"/><path d="M34.5 12q3.5 -3.4 7 0q-3.5 3.4 -7 0zM41.5 12l2.4 -2.4v4.8z" class="f"/>',
+    '<path d="M6 25q18 -9 36 0"/><path d="M6 25q18 11 36 0"/><path d="M17 23.5a7 7 0 0 0 14 0" class="f"/><path d="M24 8v5M15 10l2 4M33 10l-2 4" class="fino"/>',
+    '<path d="M5 24q19 -17 38 0q-19 17 -38 0z"/><circle cx="24" cy="24" r="8" class="f"/><circle cx="24" cy="24" r="3.4" class="esc"/><circle cx="26.5" cy="21.5" r="1.4" fill="#fff"/>',
+    '<path d="M24 6l4 13.5 13.5 4.5-13.5 4.5L24 42l-4-13.5L6.5 24 20 19.5z" class="f"/>'
   ];
   const iconeNoite = (k, cls) => `<svg class="ic-noite ${cls || ""} n${k}" viewBox="0 0 48 48" aria-hidden="true">${ICONES_NOITE[k] || ICONES_NOITE[0]}</svg>`;
   const REINOS = window.REINOS;
