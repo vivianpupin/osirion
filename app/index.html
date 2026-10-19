@@ -91,7 +91,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 
 /* Capa do ato */
 .capa { position: relative; border-radius: 22px; overflow: hidden; min-height: 210px; display: flex; align-items: flex-end; }
-.capa img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.capa { min-height: 170px; }
+.capa img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(7px) brightness(.4) saturate(.6); transform: scale(1.2); }
 .capa::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18,20,39,0) 30%, rgba(18,20,39,.92) 100%); }
 .capa .txt { position: relative; z-index: 1; padding: 18px; display: flex; flex-direction: column; gap: 4px; }
 .capa .txt .rotulo { color: var(--cristal); }
@@ -788,7 +789,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       </section>`).join("");
     return `<div class="tela">${topo()}
       <div class="capa"><img src="${a.capa}" alt=""><div class="txt">
-        <span class="rotulo" style="color:${a.cor}">${a.nome} · noite 3</span><h1>${a.frase}</h1></div></div>
+        <span class="rotulo" style="color:${a.cor}">${a.nome} · dia ${diaDaJornada()} da jornada</span><h1>${a.frase}</h1></div></div>
       ${linhaStatus()}
       ${cartaoCapsula(CAPS[diaDaJornada() - 1], true)}
       <button class="dormir-card" data-acao="dormir"><span class="ico">${ICO.lua}</span><span><b>Vou dormir</b><span class="suave">Modo noite: tela vermelha, sons, o alvo e o despertar das ${despertar()}</span></span></button>
