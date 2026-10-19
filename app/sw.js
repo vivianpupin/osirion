@@ -1,6 +1,12 @@
 // Service worker do Osirion: guarda o app para abrir sem internet (à noite, em modo avião) e mostra os lembretes.
-const CACHE = "osirion-v1", FB = "osirion-firebase";
-self.addEventListener("install", () => self.skipWaiting());
+importScripts("imagens.js");
+const CACHE = "osirion-v2", FB = "osirion-firebase";
+// Na instalação já guarda o app e todas as imagens (uma por uma: se alguma falhar, as outras ficam guardadas).
+const BASE = ["./", "index.html", "conteudo.js", "capsulas.js", "alvos.js", "imagens.js", "firebase-config.js", "manifest.webmanifest", "icone-192.png"];
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open(CACHE).then(c => Promise.allSettled(BASE.concat(self.IMAGENS || []).map(a => c.add(new Request(a, { cache: "reload" }))))));
+  self.skipWaiting();
+});
 self.addEventListener("activate", e => e.waitUntil(caches.keys()
   .then(ks => Promise.all(ks.filter(k => k !== CACHE && k !== FB).map(k => caches.delete(k))))
   .then(() => self.clients.claim())));
@@ -11,6 +17,8 @@ self.addEventListener("fetch", e => {
   if (u.hostname === "www.gstatic.com" && u.pathname.startsWith("/firebasejs/"))
     return e.respondWith(caches.open(FB).then(c => c.match(req).then(g => g || fetch(req).then(r => { if (r.ok) c.put(req, r.clone()); return r; }))));
   if (u.origin !== location.origin || u.pathname.startsWith("/.netlify/")) return;
+  // as imagens não mudam: abrem direto do celular
+  if (u.pathname.includes("/img/")) return e.respondWith(caches.match(req).then(g => g || fetch(req).then(r => { if (r.ok) { const c = r.clone(); caches.open(CACHE).then(ca => ca.put(req, c)); } return r; })));
   // o app: primeiro a rede (sempre a versão nova); sem sinal, a cópia guardada
   e.respondWith(fetch(req).then(r => { if (r.ok) { const c = r.clone(); caches.open(CACHE).then(ca => ca.put(req, c)); } return r; })
     .catch(() => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match("./index.html")).then(r => r || caches.match("./"))));

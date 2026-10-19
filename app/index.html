@@ -12,6 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icone-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" as="image" href="img/olho-marca.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:ital,wght@0,300;0,400;0,600;1,400&display=swap">
 <style>
@@ -789,6 +790,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   </nav>
 </div>
 
+<script src="imagens.js"></script>
 <script src="firebase-config.js"></script>
 <script src="conteudo.js"></script>
 <script src="capsulas.js"></script>
@@ -798,6 +800,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const IMG = { noite: "img/noite.webp", fios: "img/fios.webp", marca: "img/olho-marca.png" };
   // Desenhos do livro Arhat, recortados com fundo transparente.
   const ILUS = nome => `img/livro/${nome}.webp`;
+  // Baixa e prepara todas as imagens já na abertura (e guarda as referências): nenhuma tela espera a ilustração chegar.
+  const PRONTAS = (window.IMAGENS || []).map(src => { const im = new Image(); im.decoding = "async"; im.src = src; if (im.decode) im.decode().catch(() => {}); return im; });
   const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem"), viajantes: ILUS("textura-azul"), mantras: ILUS("textura-dourada") };
   // Sinal do Osirion nos avisos: o ícone do app, o olho do livro Arhat.
   const SINAL = '<img class="sinal" src="apple-touch-icon.png" alt="">';
@@ -1634,7 +1638,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "escolha", campo: "pesadelos", cor: "#1c1f40", ilus: "figura-cruz", peq: true, rotulo: "Portal do medo", titulo: "Com que frequência você tem pesadelos ou paralisia do sono?", opcoes: ["Nunca", "Raramente", "Às vezes", "Com frequência"], ensina: "O pesadelo é uma porta: quem está atento percebe o absurdo e desperta dentro dele. E a paralisia do sono, que assusta, é passageira e inofensiva." },
     { tipo: "multi", campo: "desejos", cor: "#161935", ilus: "voo-figura", peq: true, rotulo: "Portal do desejo", titulo: "O que você quer viver do outro lado?", sub: "Pode marcar várias. São os seus alvos de viagem.", opcoes: ["Voar", "Reencontrar alguém que partiu", "Falar com meus guias", "Curar algo em mim", "Conhecer antigas civilizações", "Perder o medo da morte", "Explorar mundos impossíveis", "Ir às estrelas"], botao: "Seguir" },
     { tipo: "sono", cor: "#13152f", ilus: "figura-deitada", peq: true, rotulo: "Portal do tempo", titulo: "Qual é o seu horário de sono?", texto: "O momento dos sonhos está ligado ao seu ciclo de sono. Com ele, o Osirion calcula a hora do seu despertar de madrugada.", botao: "Seguir" },
-    { tipo: "texto", cor: "#12142c", ilus: "estrela-cadente", rotulo: "A intenção", titulo: "Uma técnica por semana", texto: "Antes de dormir, você vai praticar técnicas dos pesquisadores do sono, dos grandes viajantes e das tradições antigas. O ideal é ficar uma semana com cada uma: é o tempo para a mente aprender e os resultados começarem a aparecer.", nota: "Você escolhe com qual começar. A sugestão para a primeira semana é uma frase simples para dizer ao deitar.", botao: "Seguir" },
+    { tipo: "texto", cor: "#12142c", ilus: "estrela-cadente", rotulo: "A intenção", titulo: "Uma técnica por semana", texto: "Antes de dormir, você vai praticar técnicas dos pesquisadores do sono, dos grandes viajantes e das tradições antigas. O ideal é ficar uma semana com cada uma: é o tempo para a mente aprender e os resultados começarem a aparecer.", botao: "Seguir" },
     { tipo: "texto", cor: "#11132a", ilus: "maos-chama", rotulo: "Portal do silêncio e da fumaça", titulo: "Silenciar e perfumar o caminho", texto: "Depois da água vinham o silêncio e a fumaça. Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção.", nota: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio.", botao: "Atravessar" },
     { tipo: "respirar", vezes: 3, cor: "#10122a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
     { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O Osirion chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },

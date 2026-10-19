@@ -9,6 +9,7 @@
 - Método: Arhat, do livro da Vivian. Duat = céu das noites.
 - Nomes na tela: o mínimo de nomes próprios. Não usar "Abaton" (é "a prática da noite"). "Arhat" só aparece como o objetivo (tornar-se um Arhat), sempre com a explicação; no resto, o método é "o Osirion".
 - `app/index.html`: telas e lógica (Hoje, Diário, Duat, Cápsulas, Jornada). Jornada = nível, chama, missões, mapa, selos, álbum dos alvos e os atos. Modo noite (tela vermelha, sons, despertar) abre por "Vou dormir".
+- Imagens: toda imagem nova em `app/img/` entra na lista de `app/imagens.js` (o app pré-carrega todas na abertura e o `app/sw.js` guarda no celular). Ao trocar uma imagem mantendo o mesmo nome, subir a versão do cache em `app/sw.js` (osirion-vN).
 - `app/alvos.js`: o oráculo dos alvos (sorteio = sincronicidade, a pessoa não escolhe). Os lugares pessoais ficam fora do sorteio.
 - `app/conteudo.js`: as práticas dos cinco atos, com o texto do livro Arhat.
 - `app/capsulas.js`: as cápsulas diárias (livro, ciência do sono, tradições). Sem interpretação de sonhos.
