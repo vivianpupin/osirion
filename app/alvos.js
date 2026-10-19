@@ -3,7 +3,7 @@
 // um caminho de chegada, um detalhe para os sentidos, duas tarefas lúcidas e uma pergunta para o diário.
 // Os alvos do livro Arhat estão entre eles (Everest, Egito antigo, Lua, Sadhus, Sirius, fundo do mar, cura).
 window.REINOS = [
-  { id: "antigos", ilus: "estrela-dourada", nome: "Os mundos antigos", alvos: [
+  { id: "antigos", ilus: "estrela-sol", nome: "Os mundos antigos", alvos: [
     ["O Egito antigo", "Pirâmides de cobre ao pôr do sol, areia morna sob os pés e cheiro de incenso e de rio."],
     ["O Serapeum de Saqqara", "Corredores de pedra sob a terra, iluminados por tochas, e grandes câmaras de granito em silêncio."],
     ["Puma Punku", "Blocos de pedra cortados com perfeição no alto dos Andes, sob um céu muito azul e frio."],
@@ -20,7 +20,7 @@ window.REINOS = [
     ["Um mosteiro no alto do Tibete", "Paredes vermelhas, tambores graves, monges cantando e o vento das alturas."],
     ["O topo de um vulcão adormecido", "Pedra escura e morna, vapor saindo da terra e o horizonte inteiro à sua volta."]
   ] },
-  { id: "ceu", ilus: "estrela-lilas", nome: "O céu e as estrelas", alvos: [
+  { id: "ceu", ilus: "lua", nome: "O céu e as estrelas", alvos: [
     ["A Lua", "Passos leves sobre a poeira cinza e a Terra azul flutuando inteira no céu negro."],
     ["Sirius", "Uma estrela azulada que cresce até ocupar tudo, e você entra na luz dela."],
     ["As Plêiades", "Sete irmãs de luz próximas umas das outras, como uma família no céu."],
@@ -45,7 +45,7 @@ window.REINOS = [
     ["As fontes termais da montanha", "Água quente saindo da pedra, vapor no frio e o corpo inteiro relaxando."],
     ["A sala do seu próprio coração", "Um quarto quente e iluminado dentro do peito, onde você pode cuidar do que precisa."]
   ] },
-  { id: "mestres", ilus: "meditacao-fita", nome: "Os mestres", alvos: [
+  { id: "mestres", ilus: "meditacao-figura", nome: "Os mestres", alvos: [
     ["Os Sadhus dos Himalaias", "Homens de cabelos longos e cinzas no corpo, meditando em silêncio na montanha."],
     ["Uma xamã da floresta", "Uma mulher pintada de urucum que canta ao lado do fogo e sabe o caminho dos sonhos."],
     ["Um sábio tibetano da yoga dos sonhos", "Um lama sorridente que ensina a reconhecer o sonho dentro do sonho."],
@@ -53,7 +53,7 @@ window.REINOS = [
     ["O seu eu do futuro", "Você mesmo, anos à frente, sereno, com algo importante para dizer."],
     ["Um velho contador de histórias", "Ao redor da fogueira, ele conta a história que você precisava ouvir."]
   ] },
-  { id: "reencontros", ilus: "figura-salto", nome: "Os reencontros", alvos: [
+  { id: "reencontros", ilus: "morro-figuras", nome: "Os reencontros", alvos: [
     ["Quem partiu", "A porta de uma casa conhecida, um cheiro que você reconhece e alguém querido sorrindo ao te ver."],
     ["Os seus avós", "Uma cozinha antiga, café no fogo e mãos que você conhece há muito tempo."],
     ["A criança que você foi", "O lugar onde você brincava, e você mesmo pequeno esperando por você."],
@@ -61,7 +61,7 @@ window.REINOS = [
     ["Os seus ancestrais", "Uma roda de pessoas antigas que te reconhecem como parte delas."],
     ["Uma amizade perdida", "Um encontro sem mágoa, só com o que vale a pena dizer."]
   ] },
-  { id: "guias", ilus: "figura-estrela", nome: "Os guias", alvos: [
+  { id: "guias", ilus: "estrela-dourada", nome: "Os guias", alvos: [
     ["Os seus guias", "Uma clareira à noite e uma luz que se aproxima entre as árvores e ganha forma."],
     ["Um animal de poder", "Uma onça, um gavião ou uma serpente que aparece e quer te mostrar um caminho."],
     ["A guardiã do portal", "Uma figura de pé diante de um portal de luz, que pergunta o que você busca."],
@@ -69,7 +69,7 @@ window.REINOS = [
     ["Um anjo da guarda", "Asas enormes, um calor no peito e a sensação de estar protegido."],
     ["O conselho dos sábios", "Uma sala redonda com pessoas sentadas em roda esperando a sua pergunta."]
   ] },
-  { id: "voo", ilus: "figura-voo", nome: "O voo e o corpo", alvos: [
+  { id: "voo", ilus: "voo-figura", nome: "O voo e o corpo", alvos: [
     ["Voar sobre a sua cidade", "As ruas de cima, as luzes da noite e o vento passando pelo corpo."],
     ["Voar com os pássaros", "Um bando que te aceita entre eles, subindo nas correntes de ar quente."],
     ["Atravessar paredes", "A parede fica macia como água e você passa para o outro lado."],
