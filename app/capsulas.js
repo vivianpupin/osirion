@@ -1,22 +1,22 @@
 // Cápsulas diárias do Arhat: uma por dia, em cartas curtas e interativas.
-// Temas: "livro" (do livro Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda), "mantras" (mantras e práticas do sono da Índia e do Tibete).
+// Temas: "livro" (do Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda), "mantras" (mantras e práticas do sono da Índia e do Tibete).
 // Cartas: abre · fala · revela · quiz · faca · leva · alvo
 window.CAPSULAS = [
   { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O que é um Arhat", minutos: 2, cartas: [
     { t: "abre", titulo: "O que é um Arhat", sub: "O começo da jornada" },
     { t: "fala", texto: "“Arhat”, em sânscrito, refere-se a alguém que alcançou o estado de iluminação ou despertar espiritual." },
-    { t: "fala", texto: "Aquele que transcende todos os planos, que pisou em todos os mundos, pois passou por todas as iniciações. É senhor de Si e caminhante do tempo.", de: "Arhat" },
+    { t: "fala", texto: "Aquele que transcende todos os planos, que pisou em todos os mundos, pois passou por todas as iniciações. É senhor de Si e caminhante do tempo." },
     { t: "fala", texto: "O livro tem cinco atos. Você pode atravessá-los em sequência ou ficar alguns dias em cada um. A transformação da consciência demanda tempo: quanto mais tempo fizer o Arhat, mais viverá seus resultados." },
     { t: "revela", pergunta: "O que o livro recomenda para o corpo durante a jornada?", resposta: "Uma alimentação leve e saudável, evitando carnes e bebidas alcoólicas." },
-    { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!", de: "Arhat" }
+    { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!" }
   ] },
   { dia: 2, ilus: "lua", tema: "livro", titulo: "Por que a noite", minutos: 2, cartas: [
     { t: "abre", titulo: "Por que a noite", sub: "A real morada da consciência" },
     { t: "quiz", pergunta: "Quanto da vida passamos dormindo?", opcoes: ["Um décimo", "Um quarto", "Um terço"], certa: 2, explica: "Cerca de um terço. Numa vida de 75 anos, são uns 25 anos de noites." },
-    { t: "fala", texto: "O ponto onde nossa consciência mais se aproxima da sua real morada é durante o sono!", de: "Arhat" },
+    { t: "fala", texto: "O ponto onde nossa consciência mais se aproxima da sua real morada é durante o sono!" },
     { t: "fala", texto: "O Arhat nunca dorme, mas atua conscientemente em ambas as realidades: o dia, que é matéria, e a noite, que é espírito. Apenas atravessa de um limiar a outro." },
     { t: "faca", titulo: "Hoje à noite", texto: "Tente perceber o exato momento em que você adormece. Não precisa conseguir. Só a intenção já começa a acordar algo." },
-    { t: "leva", texto: "Nós não somos daqui, viemos das estrelas, mas em alguma parte do caminho nos esquecemos.", de: "Arhat" }
+    { t: "leva", texto: "Nós não somos daqui, viemos das estrelas, mas em alguma parte do caminho nos esquecemos." }
   ] },
   { dia: 3, ilus: "ondas", tema: "ciencia", titulo: "Os ciclos do sono", minutos: 3, cartas: [
     { t: "abre", titulo: "Os ciclos do sono", sub: "O mapa do território" },
@@ -31,8 +31,8 @@ window.CAPSULAS = [
     { t: "fala", texto: "Todos sonham, todas as noites. Em laboratório, a maioria das pessoas acordadas durante o REM conta um sonho, até quem jura que não sonha." },
     { t: "quiz", pergunta: "Você acordou e não lembra de nada. O que fazer?", opcoes: ["Levantar logo e desistir", "Abrir os olhos e pegar o celular", "Ficar imóvel, de olhos fechados, e perguntar onde estava"], certa: 2, explica: "Mexer o corpo e abrir os olhos apaga o sonho em segundos. Quieto, o fio costuma voltar." },
     { t: "faca", titulo: "Amanhã cedo", texto: "Não levante e nem abra os olhos. Pergunte: Onde eu estava? O que eu estava sentindo? Depois anote tudo, até as lembranças pequenas e sem sentido." },
-    { t: "fala", texto: "Se você tem dificuldades para se recordar de seus sonhos é porque não teve estímulos para isso. Portanto, apenas continue treinando!", de: "Arhat" },
-    { t: "leva", texto: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!", de: "Arhat" }
+    { t: "fala", texto: "Se você tem dificuldades para se recordar de seus sonhos é porque não teve estímulos para isso. Portanto, apenas continue treinando!" },
+    { t: "leva", texto: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!" }
   ] },
   { dia: 5, ilus: "morro-figuras", tema: "tradicoes", titulo: "Os templos do sonho", minutos: 3, cartas: [
     { t: "abre", titulo: "Os templos do sonho", sub: "Quando se ia ao templo para dormir" },
@@ -45,19 +45,19 @@ window.CAPSULAS = [
   ] },
   { dia: 6, ilus: "fitas", tema: "livro", titulo: "As raízes de cura", minutos: 2, cartas: [
     { t: "abre", titulo: "As raízes de cura", sub: "O corpo invisível" },
-    { t: "fala", texto: "Temos raízes: linhas invisíveis, tentáculos tremeluzentes que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais.", de: "Arhat" },
+    { t: "fala", texto: "Temos raízes: linhas invisíveis, tentáculos tremeluzentes que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
     { t: "revela", pergunta: "Como saber que uma raiz está ativa?", resposta: "Sente-se uma leve vibração ou um amortecimento na região. É o sinal de que aquele centro de energia está funcionando." },
     { t: "faca", titulo: "Agora", texto: "Aproxime as mãos, sem encostar. Sinta as raízes dançando entre si como línguas de fogo que se entrelaçam.", segundos: 30 },
     { t: "fala", texto: "Saber recarregar-se de energia vital faz com que não precisemos absorver a energia do meio e das pessoas ao redor. É comum tentar preencher esse vazio com compulsões ou apegos." },
-    { t: "leva", texto: "Ative o seu poder sutil.", de: "Arhat" }
+    { t: "leva", texto: "Ative o seu poder sutil." }
   ] },
   { dia: 7, ilus: "fita-estrela", tema: "ciencia", titulo: "A porta entre os mundos", minutos: 3, cartas: [
     { t: "abre", titulo: "A porta entre os mundos", sub: "O estado hipnagógico" },
     { t: "fala", texto: "Entre a vigília e o sono existe um estado de passagem que a ciência chama de hipnagógico: imagens surgindo sozinhas, sons, vozes, a sensação de cair." },
     { t: "quiz", pergunta: "Aquele tranco de “cair” bem na hora de adormecer se chama…", opcoes: ["Espasmo hípnico", "Sonambulismo", "Apneia"], certa: 0, explica: "É um espasmo hípnico, muito comum e inofensivo. Sinal de que você está bem no limiar." },
-    { t: "fala", texto: "Vibrações, zumbidos, vozes chamando seu nome, movimentos involuntários: todos esses sintomas denunciam que você está prestes a passar para o outro lado.", de: "Arhat" },
+    { t: "fala", texto: "Vibrações, zumbidos, vozes chamando seu nome, movimentos involuntários: todos esses sintomas denunciam que você está prestes a passar para o outro lado." },
     { t: "revela", pergunta: "E o nevoeiro?", resposta: "Num mar de cores e formas, uma esfera de luz começa a surgir e ocupar todo o campo visual. É o seu limiar. Concentre toda a atenção nele e continue respirando até adormecer." },
-    { t: "leva", texto: "Corpo relaxado, mente desperta.", de: "Arhat" }
+    { t: "leva", texto: "Corpo relaxado, mente desperta." }
   ] },
   { dia: 8, ilus: "olho", tema: "ciencia", titulo: "Mensagens de dentro do sonho", minutos: 3, cartas: [
     { t: "abre", titulo: "Mensagens de dentro do sonho", sub: "Como a ciência provou o sonho lúcido" },
@@ -65,14 +65,14 @@ window.CAPSULAS = [
     { t: "quiz", pergunta: "Como os sonhadores lúcidos “falaram” com os cientistas?", opcoes: ["Falando dormindo", "Movendo os olhos num sinal combinado", "Apertando um botão"], certa: 1, explica: "No REM o corpo fica paralisado, mas os olhos não. Os sonhadores moviam os olhos para a esquerda e para a direita, e o sinal aparecia nos aparelhos." },
     { t: "fala", texto: "Os primeiros registros vieram nos anos 1970 e 1980, com Keith Hearne, na Inglaterra, e Stephen LaBerge, na Universidade Stanford. Pela primeira vez, alguém mandou uma mensagem de dentro de um sonho." },
     { t: "revela", pergunta: "E hoje?", resposta: "Em 2021, equipes de quatro países fizeram contas simples para sonhadores lúcidos durante o sono, e eles responderam com os olhos. Uma conversa de mão dupla entre os dois mundos." },
-    { t: "leva", texto: "É possível despertar dentro do universo onírico.", de: "Arhat" }
+    { t: "leva", texto: "É possível despertar dentro do universo onírico." }
   ] },
   { dia: 9, ilus: "figura-voo", tema: "livro", titulo: "Sonho lúcido ou viagem astral?", minutos: 2, cartas: [
     { t: "abre", titulo: "Sonho lúcido ou viagem astral?", sub: "Os dois segredos da noite" },
     { t: "quiz", pergunta: "Onde a realidade é completamente maleável e você pode transformá-la?", opcoes: ["No sonho lúcido", "Na viagem astral"], certa: 0, explica: "No sonho lúcido mergulhamos no nosso inconsciente, e tudo pode mudar com a intenção." },
     { t: "quiz", pergunta: "E onde você está sujeito às leis do lugar e precisa aprender a navegar?", opcoes: ["No sonho lúcido", "Na viagem astral"], certa: 1, explica: "Na viagem astral a consciência se desloca do corpo físico para o espiritual, numa outra frequência." },
-    { t: "fala", texto: "No início, é como se fôssemos astronautas aprendendo a caminhar na Lua, ou mergulhadores explorando as profundezas do mar.", de: "Arhat" },
-    { t: "leva", texto: "A maior expansão da consciência é o choque de realidade causado pela viagem astral.", de: "Arhat" }
+    { t: "fala", texto: "No início, é como se fôssemos astronautas aprendendo a caminhar na Lua, ou mergulhadores explorando as profundezas do mar." },
+    { t: "leva", texto: "A maior expansão da consciência é o choque de realidade causado pela viagem astral." }
   ] },
   { dia: 10, ilus: "estrela-terra", tema: "livro", titulo: "O senso crítico", minutos: 2, cartas: [
     { t: "abre", titulo: "O senso crítico", sub: "Quem garante que agora não é um sonho?" },
@@ -80,22 +80,22 @@ window.CAPSULAS = [
     { t: "faca", titulo: "Agora", texto: "Sinta os pés no chão. Olhe as mãos e conte os dedos. Puxe o indicador. Tampe o nariz e tente respirar. Pergunte: será que estou sonhando?" },
     { t: "revela", pergunta: "Por que fazer mais de um teste?", resposta: "Conforme a prática avança, o cérebro pode tentar enganar você e um teste que funcionava pode falhar. Se um não funcionar, o outro funciona." },
     { t: "fala", texto: "Tudo o que fazemos de dia se repete inconscientemente à noite. Um dia, você fará o teste dentro de um sonho e descobrirá que está sonhando." },
-    { t: "leva", texto: "O Desperto é aquele que, caminhando pela Terra, entendeu que a vida também é feita do tecido dos sonhos.", de: "Arhat" }
+    { t: "leva", texto: "O Desperto é aquele que, caminhando pela Terra, entendeu que a vida também é feita do tecido dos sonhos." }
   ] },
   { dia: 11, ilus: "figura-salto", tema: "ciencia", titulo: "Fora do corpo", minutos: 3, cartas: [
     { t: "abre", titulo: "Fora do corpo", sub: "O que a ciência observa" },
     { t: "fala", texto: "Pesquisas em vários países estimam que perto de uma em cada dez pessoas já teve ao menos uma experiência de se ver fora do próprio corpo." },
     { t: "revela", pergunta: "O que os neurologistas descobriram em 2002?", resposta: "Na Suíça, ao estimular uma pequena região do cérebro chamada junção temporoparietal, médicos provocaram numa paciente a sensação de flutuar e se ver de cima." },
     { t: "fala", texto: "Para a ciência, isso mostra onde o cérebro constrói a sensação de estar dentro do corpo. Para as tradições, mostra onde fica a porta. O Arhat convida você a experimentar e tirar as suas conclusões." },
-    { t: "fala", texto: "Vislumbramos as cores vivas do astral, atravessamos barreiras físicas e viajamos à velocidade do pensamento.", de: "Arhat" },
-    { t: "leva", texto: "O medo da morte se dissipa quando vivenciamos, na prática, a multiplicidade de nossos corpos.", de: "Arhat" }
+    { t: "fala", texto: "Vislumbramos as cores vivas do astral, atravessamos barreiras físicas e viajamos à velocidade do pensamento." },
+    { t: "leva", texto: "O medo da morte se dissipa quando vivenciamos, na prática, a multiplicidade de nossos corpos." }
   ] },
   { dia: 12, ilus: "figura-deitada", tema: "ciencia", titulo: "Paralisia do sono sem medo", minutos: 2, cartas: [
     { t: "abre", titulo: "Paralisia do sono sem medo", sub: "Quando o corpo ainda dorme" },
     { t: "fala", texto: "Às vezes você acorda e não consegue se mexer, às vezes com zumbidos, pressão no peito ou a sensação de uma presença. É a paralisia natural do REM, que continua por alguns instantes depois que a mente acordou." },
     { t: "quiz", pergunta: "A paralisia do sono é perigosa?", opcoes: ["Sim, pode parar a respiração", "Não, é passageira e inofensiva"], certa: 1, explica: "Ela assusta, mas passa sozinha e não faz mal. A respiração continua normalmente." },
     { t: "faca", titulo: "Se acontecer", texto: "Respire devagar. Afirme: “Estou protegido”. Para sair, mova um dedo bem devagar. Para atravessar, relaxe e deixe as vibrações crescerem: é o limiar." },
-    { t: "leva", texto: "Estou protegido. Estou seguro.", de: "Arhat" }
+    { t: "leva", texto: "Estou protegido. Estou seguro." }
   ] },
   { dia: 13, ilus: "rio", tema: "tradicoes", titulo: "Os sonhos contados ao amanhecer", minutos: 2, cartas: [
     { t: "abre", titulo: "Os sonhos contados ao amanhecer", sub: "Os Achuar da Amazônia" },
@@ -109,7 +109,7 @@ window.CAPSULAS = [
     { t: "fala", texto: "No budismo tibetano, a yoga dos sonhos faz parte dos Seis Yogas de Naropa. O praticante aprende a reconhecer o sonho enquanto sonha." },
     { t: "revela", pergunta: "E depois de reconhecer o sonho?", resposta: "Vem o passo mais profundo: perceber que a própria vida desperta também tem a natureza de um sonho. Dormir vira meditação, e a noite, um treino para a hora da morte." },
     { t: "faca", titulo: "Hoje, três vezes", texto: "Pare onde estiver, olhe ao redor e pense com calma: “Isto também é um sonho.” Repare no que muda dentro de você." },
-    { t: "leva", texto: "A vida também é feita do mesmo tecido dos sonhos.", de: "Arhat" }
+    { t: "leva", texto: "A vida também é feita do mesmo tecido dos sonhos." }
   ] },
   { dia: 15, ilus: "estrela-verde", tema: "tradicoes", titulo: "Os quatro estados", minutos: 2, cartas: [
     { t: "abre", titulo: "Os quatro estados", sub: "Índia" },
@@ -124,7 +124,7 @@ window.CAPSULAS = [
     { t: "revela", pergunta: "Por que funciona?", resposta: "Você volta a dormir bem quando o REM fica mais longo, e com a mente um pouco mais desperta. Um estudo australiano de 2017 mostrou que essa técnica, somada à intenção de lembrar que está sonhando, aumentou bastante os sonhos lúcidos." },
     { t: "quiz", pergunta: "É bom fazer isso todas as noites?", opcoes: ["Sim, quanto mais melhor", "Não, o sono picado cansa"], certa: 1, explica: "Faça em algumas noites da semana, de preferência quando puder dormir mais na manhã seguinte." },
     { t: "faca", titulo: "Nesta madrugada", texto: "Ao voltar para a cama, repita com sentimento: “Ao cair no sono estou consciente.”" },
-    { t: "leva", texto: "Ao cair no sono estou consciente.", de: "Arhat" }
+    { t: "leva", texto: "Ao cair no sono estou consciente." }
   ] },
   { dia: 17, ilus: "montanha-fita", tema: "tradicoes", titulo: "Sonhar longe", minutos: 2, cartas: [
     { t: "abre", titulo: "Sonhar longe", sub: "Os Yanomami" },
@@ -138,7 +138,7 @@ window.CAPSULAS = [
     { t: "quiz", pergunta: "Você está lúcido e o sonho começa a se desfazer. O que dizer?", opcoes: ["“Acordar!”", "“Clareza, agora!”", "Nada, só esperar"], certa: 1, explica: "Uma declaração direta e firme ajuda a restaurar a lucidez e o controle." },
     { t: "fala", texto: "Stephen LaBerge também estudou gestos para segurar o sonho: girar o corpo ou esfregar as mãos dentro dele." },
     { t: "revela", pergunta: "E se vier o medo?", resposta: "Afirme: “Estou protegido” ou “Estou seguro”. Em vez de fugir de um pesadelo, enfrente. O pesadelo pode ser a porta para a lucidez." },
-    { t: "leva", texto: "Esses comandos influenciam a experiência do sonho, e da vida.", de: "Arhat" }
+    { t: "leva", texto: "Esses comandos influenciam a experiência do sonho, e da vida." }
   ] },
   { dia: 19, ilus: "maos-chama", tema: "tradicoes", titulo: "O sonho partilhado", minutos: 2, cartas: [
     { t: "abre", titulo: "O sonho partilhado", sub: "América do Norte e as escrituras" },
@@ -149,22 +149,22 @@ window.CAPSULAS = [
   ] },
   { dia: 20, ilus: "estrela-fita", tema: "livro", titulo: "Os guias e os alvos", minutos: 2, cartas: [
     { t: "abre", titulo: "Os guias e os alvos", sub: "Para onde você vai esta noite?" },
-    { t: "fala", texto: "Você pode pedir auxílio para sair do corpo. Os guias estão atentos do outro lado, e podemos nos conectar com eles ao pedir sinceramente.", de: "Arhat" },
+    { t: "fala", texto: "Você pode pedir auxílio para sair do corpo. Os guias estão atentos do outro lado, e podemos nos conectar com eles ao pedir sinceramente." },
     { t: "fala", texto: "Faça uma lista de alvos para direcionar suas viagens. Dê o comando antes de dormir e visualize como se já estivesse lá." },
     { t: "alvo" },
-    { t: "leva", texto: "Quero conhecer o antigo Egito, andar pelas pirâmides na época em que o império era vivo!", de: "Arhat" }
+    { t: "leva", texto: "Quero conhecer o antigo Egito, andar pelas pirâmides na época em que o império era vivo!" }
   ] },
   { dia: 21, ilus: "figura-estrela", tema: "livro", titulo: "Abrir os olhos", minutos: 2, cartas: [
     { t: "abre", titulo: "Abrir os olhos", sub: "O fechamento" },
-    { t: "fala", texto: "Quem olha para a Magia da Vida resgata um conhecimento que preenche uma lacuna mantida por eras, que revela do que somos feitos e o caminho para casa!", de: "Arhat" },
+    { t: "fala", texto: "Quem olha para a Magia da Vida resgata um conhecimento que preenche uma lacuna mantida por eras, que revela do que somos feitos e o caminho para casa!" },
     { t: "revela", pergunta: "O que significa Arhat?", resposta: "Arhat significa abrir os olhos." },
     { t: "faca", titulo: "Hoje", texto: "Abra o céu das suas noites e olhe a constelação que você formou. Cada ponto foi uma noite em que você se lembrou." },
-    { t: "leva", texto: "Só aquele que decidiu abrir os olhos enxerga as portas da Verdade.", de: "Arhat" }
+    { t: "leva", texto: "Só aquele que decidiu abrir os olhos enxerga as portas da Verdade." }
   ] },
   { dia: 22, ilus: "figura-fio", tema: "viajantes", titulo: "Robert Monroe e as vibrações", minutos: 3, cartas: [
     { t: "abre", titulo: "Robert Monroe e as vibrações", sub: "O homem que mapeou a saída do corpo" },
     { t: "fala", texto: "Robert Monroe era um empresário de rádio nos Estados Unidos quando, nos anos 1950, começou a sair do corpo sem querer. Ele registrou tudo e publicou Viagens Fora do Corpo, em 1971." },
-    { t: "revela", pergunta: "O que acontecia antes de cada saída?", resposta: "Uma onda de vibrações tomava o corpo, às vezes com zumbido e sensação de choque. Com o tempo ele entendeu que era a porta, e não um perigo. O livro Arhat chama isso de estado vibracional." },
+    { t: "revela", pergunta: "O que acontecia antes de cada saída?", resposta: "Uma onda de vibrações tomava o corpo, às vezes com zumbido e sensação de choque. Com o tempo ele entendeu que era a porta, e não um perigo. O Arhat chama isso de estado vibracional." },
     { t: "fala", texto: "Monroe chamou de Foco 10 o estado de mente desperta e corpo dormindo. É o mesmo corpo relaxado, mente desperta do Arhat." },
     { t: "faca", titulo: "Hoje à noite", texto: "Se vierem as vibrações, não se assuste e não se mexa. Respire e deixe que elas cresçam e se espalhem pelo corpo inteiro." },
     { t: "leva", texto: "A vibração é a porta, não o perigo." }
@@ -175,7 +175,7 @@ window.CAPSULAS = [
     { t: "revela", pergunta: "Como fazer sem mexer o corpo?", resposta: "Você imagina e sente o giro de lado, sem mover um músculo. O corpo sutil acompanha o movimento e se solta do físico, como uma folha que desliza para fora de um livro." },
     { t: "quiz", pergunta: "E se você mexer o corpo físico sem querer?", opcoes: ["Acabou, perdeu a noite", "Relaxe de novo e espere as vibrações voltarem"], certa: 1, explica: "É comum no começo. Fique imóvel, respire e tente de novo quando a sensação voltar." },
     { t: "faca", titulo: "Hoje à noite", texto: "Quando sentir as vibrações ou o corpo pesado e distante, imagine que rola para o lado e caia suavemente no chão do quarto." },
-    { t: "leva", texto: "Agora eu me separo facilmente do meu corpo.", de: "Arhat" }
+    { t: "leva", texto: "Agora eu me separo facilmente do meu corpo." }
   ] },
   { dia: 24, ilus: "figura-cruz", tema: "viajantes", titulo: "A caixa das preocupações", minutos: 2, cartas: [
     { t: "abre", titulo: "A caixa das preocupações", sub: "Do método de Robert Monroe" },
@@ -195,16 +195,16 @@ window.CAPSULAS = [
   { dia: 26, ilus: "estrela-terra", tema: "viajantes", titulo: "Comandos em voz firme", minutos: 2, cartas: [
     { t: "abre", titulo: "Comandos em voz firme", sub: "Buhlman e o Arhat" },
     { t: "fala", texto: "Buhlman recomenda frases curtas, ditas com firmeza, ao adormecer e dentro da experiência. Elas acordam a atenção." },
-    { t: "quiz", pergunta: "Qual comando o livro Arhat ensina quando o sonho fica instável?", opcoes: ["“Quero acordar”", "“Clareza, agora!”", "“Não estou aqui”"], certa: 1, explica: "Buhlman ensina o mesmo pedido: clareza e consciência, agora. Dito com convicção, o ambiente se firma." },
+    { t: "quiz", pergunta: "Qual comando o Arhat ensina quando o sonho fica instável?", opcoes: ["“Quero acordar”", "“Clareza, agora!”", "“Não estou aqui”"], certa: 1, explica: "Buhlman ensina o mesmo pedido: clareza e consciência, agora. Dito com convicção, o ambiente se firma." },
     { t: "fala", texto: "Ao adormecer, repita em silêncio: “Agora estou fora do corpo.” Dentro da experiência: “Clareza, agora!” ou “Consciência, agora!”." },
-    { t: "leva", texto: "Clareza, agora!", de: "Arhat" }
+    { t: "leva", texto: "Clareza, agora!" }
   ] },
   { dia: 27, ilus: "figura-fio", tema: "viajantes", titulo: "O som que solta o corpo", minutos: 2, cartas: [
     { t: "abre", titulo: "O som que solta o corpo", sub: "Monroe, o Om e as cigarras" },
     { t: "fala", texto: "Monroe usava um exercício de ressonância: cantar um som grave e longo, sentindo a vibração no peito e na cabeça, antes de praticar." },
-    { t: "fala", texto: "O livro Arhat faz o mesmo com o Om no Quinto Ato, e conta que os Maias usavam o canto das cigarras para atravessar." },
+    { t: "fala", texto: "O Arhat faz o mesmo com o Om no Quinto Ato, e conta que os Maias usavam o canto das cigarras para atravessar." },
     { t: "faca", titulo: "Agora", texto: "Inspire fundo e solte o ar num “ommm” grave, longo. Faça três vezes e repare onde o corpo vibra.", segundos: 45 },
-    { t: "leva", texto: "Entre na vibração do som até ouvir o zumbido do outro lado.", de: "Arhat" }
+    { t: "leva", texto: "Entre na vibração do som até ouvir o zumbido do outro lado." }
   ] },
   { dia: 28, ilus: "figura-mergulho", tema: "viajantes", titulo: "Lembrar de lembrar", minutos: 3, cartas: [
     { t: "abre", titulo: "Lembrar de lembrar", sub: "A técnica de Stephen LaBerge" },
@@ -218,7 +218,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "O que todos os viajantes dizem", sub: "Monroe, Buhlman, Castaneda, LaBerge e o Arhat" },
     { t: "fala", texto: "Caminhos diferentes, as mesmas chaves: relaxar o corpo sem apagar a mente, ter uma intenção clara, não ter medo das vibrações e lembrar de perguntar se está sonhando." },
     { t: "revela", pergunta: "E a chave mais esquecida?", resposta: "A constância. Quase todos contam que a primeira experiência veio depois de semanas de prática. Quanto mais tempo fizer o Arhat, mais viverá seus resultados." },
-    { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!", de: "Arhat" }
+    { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!" }
   ] },
   { dia: 30, ilus: "maos-chama", tema: "viajantes", titulo: "Dom Juan e as mãos", minutos: 3, cartas: [
     { t: "abre", titulo: "Dom Juan e as mãos", sub: "Carlos Castaneda, a arte de sonhar" },
@@ -302,7 +302,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "O way dos maias", sub: "O companheiro que viaja à noite" },
     { t: "fala", texto: "Para os maias, cada pessoa tinha um way: um espírito companheiro, muitas vezes um animal, como a onça, que sai e viaja enquanto o corpo dorme." },
     { t: "revela", pergunta: "Como os maias escreviam a palavra way?", resposta: "Com um rosto humano coberto pela metade por pele de onça. Meio gente, meio jaguar: o eu do dia e o eu da noite no mesmo rosto." },
-    { t: "fala", texto: "Os maias também usavam sons e vibrações para alcançar estados de consciência expandida, como conta o livro Arhat sobre o canto das cigarras." },
+    { t: "fala", texto: "Os maias também usavam sons e vibrações para alcançar estados de consciência expandida, como conta o Arhat sobre o canto das cigarras." },
     { t: "faca", titulo: "Esta noite", texto: "Antes de dormir, pergunte: “Quem viaja comigo esta noite?” Não escolha a resposta. Anote de manhã o que aparecer." },
     { t: "leva", texto: "Meio dia, meio noite: os dois são você." }
   ] },

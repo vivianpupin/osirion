@@ -679,7 +679,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // O conteúdo vem do livro (conteudo.js).
   const ATOS = window.ARHAT.ATOS.map(a => Object.assign({}, a, { capa: IMG[a.capa] }));
   const CAPS = window.CAPSULAS;
-  const TEMAS = { livro: "Do livro Arhat", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho", viajantes: "Técnicas dos viajantes", mantras: "Mantras do sonho" };
+  const TEMAS = { livro: "Ensinamentos", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho", viajantes: "Técnicas dos viajantes", mantras: "Mantras do sonho" };
 
   const CORES = [
     { nome: "Lilás", v: "#a9b2f0" }, { nome: "Azul", v: "#6fa8ff" }, { nome: "Dourado", v: "#f5c75b" },
@@ -1027,7 +1027,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return `<div class="tela">${topo()}
       <div><span class="rotulo">Cápsulas</span><h1>Um ensinamento por dia</h1></div>
       <p class="suave">Cada dia abre uma cápsula de dois ou três minutos: o livro, a ciência do sono, os povos que honram os sonhos e as técnicas dos grandes viajantes.</p>
-      <div class="legenda-temas"><span class="t-livro"><i></i>Do livro Arhat</span><span class="t-ciencia"><i></i>Ciência do sono</span><span class="t-tradicoes"><i></i>Tradições do sonho</span><span class="t-viajantes"><i></i>Técnicas dos viajantes</span><span class="t-mantras"><i></i>Mantras do sonho</span></div>
+      <div class="legenda-temas"><span class="t-livro"><i></i>Ensinamentos</span><span class="t-ciencia"><i></i>Ciência do sono</span><span class="t-tradicoes"><i></i>Tradições do sonho</span><span class="t-viajantes"><i></i>Técnicas dos viajantes</span><span class="t-mantras"><i></i>Mantras do sonho</span></div>
       <div class="trilha">${nos}</div>
       <button class="btn fantasma largo" data-acao="adiantar">Adiantar um dia (só no protótipo)</button>
     </div>`;
