@@ -286,6 +286,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .t-livro { --tema: var(--cristal); }
 .t-ciencia { --tema: var(--nevoeiro); }
 .t-tradicoes { --tema: var(--ocre); }
+.t-viajantes { --tema: #7fd6c2; }
 .tema-tag { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--tema); }
 .capsula-hoje { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; text-align: left; width: 100%; border-radius: 20px; padding: 16px; border: 1px solid color-mix(in srgb, var(--tema) 45%, var(--ceu-3)); background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--tema) 22%, transparent), transparent 60%), var(--ceu-2); }
 .capsula-hoje h2 { grid-column: 1; }
@@ -363,6 +364,45 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .oferta ul { margin: 0; padding-left: 18px; font-size: 14px; color: var(--areia); display: flex; flex-direction: column; gap: 4px; }
 .preco { font-family: var(--display); font-size: 28px; }
 
+/* Sorteio do alvo da noite (como o oráculo dos planetas da Caravana) */
+.sorteio-card { display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px; border-radius: 18px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); text-align: left;
+  background: radial-gradient(1px 1px at 20% 30%, #fff8 50%, transparent), radial-gradient(1px 1px at 70% 20%, #fff6 50%, transparent), radial-gradient(1px 1px at 85% 70%, #fff5 50%, transparent), radial-gradient(120% 120% at 0% 0%, #2a2f63, #0e1024); }
+.sorteio-card .roda-mini { flex: 0 0 76px; width: 76px; height: 76px; position: relative; }
+.sorteio-card .roda-mini img { position: absolute; width: 22px; height: 22px; object-fit: contain; transform: translate(-50%, -50%); }
+.sorteio-card .roda-mini .centro { width: 34px; height: auto; }
+.sorteio-card b { font-family: var(--display); font-weight: 400; font-size: 19px; display: block; }
+.sorteio-card small { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--cristal); }
+.sorteio-card span.tx { font-size: 13px; color: var(--areia-2); }
+.sorteio { background: #07080f; }
+.sorteio .ceu-fundo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.sorteio .tela { position: relative; z-index: 1; text-align: center; align-items: center; }
+.altar { position: relative; width: min(330px, 100%); aspect-ratio: 1; margin: 4px auto 0; }
+.altar svg.orbita { position: absolute; inset: 0; width: 100%; height: 100%; }
+.altar .centro { position: absolute; left: 50%; top: 50%; width: 22%; transform: translate(-50%, -50%); filter: drop-shadow(0 0 12px rgba(169,178,240,.5)); }
+.altar .item { position: absolute; width: 21%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 2px; transition: transform .12s; }
+.altar .item img { width: 100%; aspect-ratio: 1; object-fit: contain; opacity: .55; transition: opacity .12s, filter .12s; }
+.altar .item span { font-size: 9.5px; letter-spacing: .03em; color: var(--areia-2); white-space: nowrap; text-shadow: 0 1px 3px #000; }
+.altar .item.on { transform: translate(-50%, -50%) scale(1.2); }
+.altar .item.on img { opacity: 1; filter: drop-shadow(0 0 8px #FFD27A) drop-shadow(0 0 3px #fff); }
+.altar .item.on span { color: var(--areia); }
+.altar .item.escolhido img { opacity: 1; animation: escolhido 1.6s ease-in-out infinite alternate; }
+.altar .item.escolhido span { color: var(--cristal); }
+@keyframes escolhido { from { filter: drop-shadow(0 0 3px rgba(255,214,140,.7)); } to { filter: drop-shadow(0 0 18px rgba(255,190,90,.9)) drop-shadow(0 0 4px #fff); } }
+.barra-s { height: 8px; border-radius: 9px; background: rgba(255,255,255,.1); overflow: hidden; width: min(280px, 100%); }
+.barra-s i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--nevoeiro), var(--cristal), #fff); }
+.botao-s { border: 0; border-radius: 999px; padding: 16px 26px; font-weight: 600; font-size: 15px; color: #231a07; background: linear-gradient(180deg, #f8dc95, #d9a84a); box-shadow: 0 6px 18px rgba(0,0,0,.4); user-select: none; -webkit-user-select: none; touch-action: none; -webkit-touch-callout: none; }
+.botao-s.vivo { animation: pulsa .5s ease-in-out infinite alternate; }
+@keyframes pulsa { to { transform: scale(1.06); box-shadow: 0 0 26px rgba(245,199,91,.7); } }
+.leitura-alvo { width: 100%; text-align: left; background: #ece5d6; color: #1d2042; border-radius: 18px; padding: 18px 16px; display: flex; flex-direction: column; gap: 10px; }
+.leitura-alvo .topo-l { display: flex; gap: 12px; align-items: center; }
+.leitura-alvo .topo-l img { width: 64px; height: 64px; object-fit: contain; background: #1d2042; border-radius: 14px; padding: 6px; }
+.leitura-alvo h2 { color: #1d2042; font-size: 24px; }
+.leitura-alvo .eye { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8a6a3c; font-weight: 600; margin-top: 4px; }
+.leitura-alvo p, .leitura-alvo li { font-size: 15px; line-height: 1.55; color: #2d2a3e; }
+.leitura-alvo ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.leitura-alvo .comando { font-family: var(--display); font-size: 19px; color: #1d2042; border-left: 2px solid #c9a35f; padding-left: 12px; }
+@media (prefers-reduced-motion: reduce) { .botao-s.vivo, .altar .item.escolhido img { animation: none; } }
+
 /* Socorro e alvos */
 .socorro { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .socorro div { background: var(--ceu-2); border-radius: 14px; padding: 12px; font-size: 13px; color: var(--areia-2); display: flex; flex-direction: column; gap: 4px; }
@@ -396,12 +436,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
 <script src="conteudo.js"></script>
 <script src="capsulas.js"></script>
+<script src="alvos.js"></script>
 <script>
 (function () {
   const IMG = { noite: "img/noite.webp", fios: "img/fios.webp", marca: "img/olho-marca.png" };
   // Desenhos do livro Arhat, recortados com fundo transparente.
   const ILUS = nome => `img/livro/${nome}.webp`;
-  const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem") };
+  const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem"), viajantes: ILUS("textura-azul") };
   // Sinal do Osirion nos avisos: o ícone do app, o olho do livro Arhat.
   const SINAL = '<img class="sinal" src="apple-touch-icon.png" alt="">';
 
@@ -420,7 +461,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // O conteúdo vem do livro (conteudo.js).
   const ATOS = window.ARHAT.ATOS.map(a => Object.assign({}, a, { capa: IMG[a.capa] }));
   const CAPS = window.CAPSULAS;
-  const TEMAS = { livro: "Do livro Arhat", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho" };
+  const TEMAS = { livro: "Do livro Arhat", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho", viajantes: "Técnicas dos viajantes" };
 
   const CORES = [
     { nome: "Lilás", v: "#a9b2f0" }, { nome: "Azul", v: "#6fa8ff" }, { nome: "Dourado", v: "#f5c75b" },
@@ -430,8 +471,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { k: 0, nome: "Noite negra, sem lembranças" }, { k: 1, nome: "Noite com sonhos" },
     { k: 2, nome: "Algum grau de lucidez" }, { k: 3, nome: "Sonho lúcido ou viagem astral" }
   ];
-  const ALVOS = window.ARHAT.ALVOS.map(a => a.curto);
-  const alvoTexto = curto => (window.ARHAT.ALVOS.find(a => a.curto === curto) || { texto: curto }).texto;
+  const NOITE = window.ALVOS_NOITE;
+  const alvoDe = id => NOITE.find(a => a.id === id);
+  const alvoTexto = id => { const a = alvoDe(id); return a ? `${a.nome}. ${a.comando}` : ""; };
+  const chipsAlvo = () => NOITE.map(a => `<button class="alvo" data-alvo="${a.id}" aria-pressed="${est.alvo === a.id}">${esc(a.nome)}</button>`).join("");
 
   // Estado guardado só neste aparelho.
   const guardado = (() => { try { return JSON.parse(localStorage.getItem("arhat") || "{}"); } catch (e) { return {}; } })();
@@ -501,6 +544,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <span><span class="linha1"><span>OSIRION</span><span>agora</span></span>
         <span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></button>
       ${momentos}
+      ${cartaoSorteio()}
       <p class="nota-pe">Hoje: ${est.testes} de 7 a 10 testes de realidade</p>
     </div>`;
   }
@@ -709,8 +753,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }).join("");
     return `<div class="tela">${topo()}
       <div><span class="rotulo">Cápsulas</span><h1>Um ensinamento por dia</h1></div>
-      <p class="suave">Cada dia abre uma cápsula de dois ou três minutos: o livro, a ciência do sono e os povos que honram os sonhos.</p>
-      <div class="legenda-temas"><span class="t-livro"><i></i>Do livro Arhat</span><span class="t-ciencia"><i></i>Ciência do sono</span><span class="t-tradicoes"><i></i>Tradições do sonho</span></div>
+      <p class="suave">Cada dia abre uma cápsula de dois ou três minutos: o livro, a ciência do sono, os povos que honram os sonhos e as técnicas dos grandes viajantes.</p>
+      <div class="legenda-temas"><span class="t-livro"><i></i>Do livro Arhat</span><span class="t-ciencia"><i></i>Ciência do sono</span><span class="t-tradicoes"><i></i>Tradições do sonho</span><span class="t-viajantes"><i></i>Técnicas dos viajantes</span></div>
       <div class="trilha">${nos}</div>
       <button class="btn fantasma largo" data-acao="adiantar">Adiantar um dia (só no protótipo)</button>
     </div>`;
@@ -743,8 +787,153 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           <div><b>Peça ajuda</b>Os guias estão atentos do outro lado.</div>
         </div>${cartaoCapsula(CAPS[17], false)}</section>
       <section class="momento"><h2>Alvo da noite</h2><p class="suave">Dê o comando antes de dormir e visualize como se já estivesse lá.</p>
-        <div class="alvos">${ALVOS.map(t => `<button class="alvo" data-alvo="${esc(t)}" aria-pressed="${est.alvo === t}">${esc(t)}</button>`).join("")}</div></section>
+        ${cartaoSorteio()}<p class="suave">Ou escolha você mesmo:</p><div class="alvos">${chipsAlvo()}</div></section>
     </div>`;
+  }
+
+  // ---------- Sorteio do alvo da noite ----------
+  // Mesmo esquema do oráculo dos planetas da Caravana: segurar para concentrar, a luz passa de alvo em alvo com um "tim",
+  // desacelera ao soltar e para num alvo com o som de um sino.
+  let AUDIO = null;
+  function audio() { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; return AUDIO || (AUDIO = new A()); }
+  function destravaSom() {
+    try {
+      if (navigator.audioSession) navigator.audioSession.type = "playback";
+      const ctx = audio(); if (!ctx) return; if (ctx.state !== "running") ctx.resume();
+      const b = ctx.createBufferSource(); b.buffer = ctx.createBuffer(1, 1, 22050); b.connect(ctx.destination); b.start(0);
+    } catch (e) {}
+  }
+  function tique(forte) {
+    try {
+      const ctx = audio(); if (!ctx) return; if (ctx.state === "suspended") ctx.resume();
+      const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = forte ? 1318 : 1760 + Math.random() * 220;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(forte ? .12 : .06, t + .005); g.gain.exponentialRampToValueAtTime(.0001, t + (forte ? .35 : .14));
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + .4);
+    } catch (e) {}
+  }
+  function sino() {
+    try {
+      const ctx = audio(); if (!ctx) return; if (ctx.state === "suspended") ctx.resume();
+      const t = ctx.currentTime, out = ctx.createGain(); out.gain.value = .22; out.connect(ctx.destination);
+      [[392, 1, 4.5], [392 * 2.76, .45, 3.2], [392 * 5.4, .22, 2.2], [392 * 8.93, .1, 1.4], [393.5, .6, 4.5]].forEach(([f, a, d]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(a, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+        o.connect(g); g.connect(out); o.start(t); o.stop(t + d + .1);
+      });
+    } catch (e) {}
+  }
+  function vibrar(ms) {
+    try { if (navigator.vibrate && navigator.vibrate(ms)) return true; } catch (e) {}
+    try { // iPhone (iOS 18+): tocar num interruptor dá um toque de vibração
+      const lb = document.createElement("label"); lb.style.display = "none"; const ck = document.createElement("input"); ck.type = "checkbox"; ck.setAttribute("switch", "");
+      lb.append(ck); lb.addEventListener("click", e => e.stopPropagation()); document.head.append(lb); lb.click(); lb.remove();
+    } catch (e) {}
+    return false;
+  }
+  const posRoda = (graus, r) => { const a = (graus - 90) * Math.PI / 180; return { x: 50 + r * Math.cos(a), y: 50 + r * Math.sin(a) }; };
+  function cartaoSorteio() {
+    const a = alvoDe(est.alvo);
+    const mini = NOITE.map((x, k) => { const p = posRoda(k * 40, 40); return `<img src="${ILUS(x.ilus)}" alt="" style="left:${p.x}%;top:${p.y}%">`; }).join("");
+    return `<button class="sorteio-card" data-acao="sortear"><span class="roda-mini" aria-hidden="true">${mini}<img class="centro" src="${IMG.marca}" alt="" style="left:50%;top:50%"></span>
+      <span><small>Antes de dormir</small><b>O alvo desta noite</b><span class="tx">${a ? "Esta noite: " + esc(a.nome) + ". Toque para sortear de novo." : "Sorteie o lugar que você vai imaginar ao deitar."}</span></span></button>`;
+  }
+  function leituraAlvo(a) {
+    return `<div class="leitura-alvo">
+      <div class="topo-l"><img src="${ILUS(a.ilus)}" alt=""><div><span class="eye">O alvo desta noite</span><h2>${esc(a.nome)}</h2></div></div>
+      <p>${esc(a.frase)}</p>
+      <span class="eye">A imagem para levar à cama</span>
+      ${a.imagem.map(t => `<p>${esc(t)}</p>`).join("")}
+      <span class="eye">O comando, antes de adormecer</span>
+      <p class="comando">“${esc(a.comando)}”</p>
+      <span class="eye">Quando estiver lá, lúcido</span>
+      <ul>${a.dentro.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      <span class="eye">Amanhã cedo, no diário</span>
+      <p>${esc(a.amanha)}</p></div>`;
+  }
+  function ceuFundo(cv, box) {
+    const x = cv.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1), quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = 0, H = 0, est2 = [], voando = [], prox = 1.2, ult = performance.now();
+    const ajusta = () => { W = box.clientWidth; H = box.clientHeight; cv.width = W * dpr; cv.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      est2 = Array.from({ length: 34 }, () => { const b = Math.random(), perto = Math.random() < .35; return { x: Math.random() * W, y: Math.random() * H, r: perto ? 3 + b * 7 : .5 + b * 1.1, a: perto ? .06 + b * .1 : .25 + b * .5, perto, f: .3 + Math.random() * 1.2, ph: Math.random() * 7, v: perto ? 4 + b * 4 : 1 + b * 1.5 }; }); };
+    const quadro = agora => {
+      if (!box.isConnected) return;
+      if (!W || box.clientWidth !== W) ajusta();
+      const dt = Math.min(.05, (agora - ult) / 1000), t = agora / 1000; ult = agora;
+      x.clearRect(0, 0, W, H);
+      for (const e of est2) {
+        if (!quieto) { e.y -= e.v * dt; if (e.y < -20) { e.y = H + 20; e.x = Math.random() * W; } }
+        const br = e.a * (.6 + .4 * Math.sin(t * e.f + e.ph)), r = e.perto ? e.r : e.r * 3.5;
+        const g = x.createRadialGradient(e.x, e.y, 0, e.x, e.y, r); g.addColorStop(0, `rgba(255,244,226,${br})`); g.addColorStop(1, "rgba(255,244,226,0)");
+        x.fillStyle = g; x.beginPath(); x.arc(e.x, e.y, r, 0, 7); x.fill();
+      }
+      if (!quieto) {
+        prox -= dt;
+        if (prox <= 0) { prox = 2.5 + Math.random() * 4; const ang = (20 + Math.random() * 30) * Math.PI / 180, vel = 300 + Math.random() * 220;
+          voando.push({ x: Math.random() * W * .7 - 30, y: Math.random() * H * .45, vx: Math.cos(ang) * vel, vy: Math.sin(ang) * vel, vida: 0, dur: 1.1 + Math.random() * .7, cauda: 90 + Math.random() * 90 }); }
+        voando = voando.filter(c => (c.vida += dt) < c.dur);
+        for (const c of voando) {
+          c.x += c.vx * dt; c.y += c.vy * dt; const k = Math.sin(Math.PI * Math.min(1, c.vida / c.dur)), n = Math.hypot(c.vx, c.vy), tx = c.x - c.vx / n * c.cauda, ty = c.y - c.vy / n * c.cauda;
+          const g = x.createLinearGradient(c.x, c.y, tx, ty); g.addColorStop(0, `rgba(255,252,240,${.95 * k})`); g.addColorStop(1, "rgba(255,200,140,0)");
+          x.strokeStyle = g; x.lineWidth = 1.6; x.lineCap = "round"; x.beginPath(); x.moveTo(c.x, c.y); x.lineTo(tx, ty); x.stroke();
+        }
+      }
+      requestAnimationFrame(quadro);
+    };
+    requestAnimationFrame(quadro);
+  }
+  function abrirSorteio() {
+    destravaSom();
+    const anel = `<svg class="orbita" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="rgba(201,163,95,.35)" stroke-width=".3"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="46" stroke-dasharray="1 1.6"/><circle cx="50" cy="50" r="15"/></g></svg>`;
+    abrirSobre(`<div class="sorteio" style="position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column">
+      <canvas class="ceu-fundo" aria-hidden="true"></canvas>
+      <div class="tela">
+        <div style="align-self:stretch;text-align:left">${voltar}</div>
+        <span class="rotulo">Antes de dormir</span>
+        <h1>O alvo desta noite</h1>
+        <p class="suave">Pense no lugar que a sua alma quer visitar. Segure o botão enquanto se concentra e solte quando sentir que é a hora.</p>
+        <div class="altar" id="altar">${anel}<img class="centro" src="${IMG.marca}" alt="">
+          ${NOITE.map((a, k) => `<div class="item" data-k="${k}"><img src="${ILUS(a.ilus)}" alt=""><span>${esc(a.nome)}</span></div>`).join("")}</div>
+        <div class="barra-s" aria-hidden="true"><i id="barra-s"></i></div>
+        <button class="botao-s" id="botao-s" type="button">Segure para concentrar</button>
+        <div id="saida-s" style="width:100%;display:flex;flex-direction:column;gap:10px"></div>
+      </div></div>`, d => {
+      const box = d.querySelector(".sorteio"); ceuFundo(d.querySelector(".ceu-fundo"), box);
+      const itens = [...d.querySelectorAll(".altar .item")], n = itens.length, ang = itens.map((_, k) => k * 360 / n);
+      let acelera = 1, ultimo = performance.now();
+      const poe = () => itens.forEach((el, k) => { const p = posRoda(ang[k], 40); el.style.left = p.x + "%"; el.style.top = p.y + "%"; });
+      poe();
+      const gira = agora => { if (!box.isConnected) return; const dt = Math.min(.1, (agora - ultimo) / 1000); ultimo = agora; for (let k = 0; k < n; k++) ang[k] += 5 * dt * acelera; poe(); requestAnimationFrame(gira); };
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) requestAnimationFrame(t => { ultimo = t; requestAnimationFrame(gira); });
+      const acende = i => itens.forEach((el, k) => el.classList.toggle("on", k === i));
+      const bt = d.querySelector("#botao-s"), barra = d.querySelector("#barra-s"), saida = d.querySelector("#saida-s");
+      let segurando = false, inicio = 0, pos = 0, vel = 0, raf = 0;
+      const roda = () => { if (!segurando || !box.isConnected) return; const f = Math.min(1, (performance.now() - inicio) / 3000);
+        barra.style.width = (f * 100) + "%"; vel += 16 + f * 40; acelera = 1 + f * 5;
+        if (vel > 160 - f * 120) { vel = 0; pos = (pos + 1 + Math.floor(Math.random() * 3)) % n; acende(pos); vibrar(15); tique(); }
+        raf = requestAnimationFrame(roda); };
+      const comeca = e => { e.preventDefault(); if (segurando || bt.disabled) return; segurando = true; inicio = performance.now(); vibrar(20); tique(true); bt.textContent = "Concentre-se… e solte"; bt.classList.add("vivo"); raf = requestAnimationFrame(roda); };
+      const solta = () => { if (!segurando) return; segurando = false; vibrar(30); cancelAnimationFrame(raf); bt.classList.remove("vivo"); acelera = 1;
+        if (performance.now() - inicio < 600) { bt.textContent = "Segure um pouco mais"; barra.style.width = "0"; return; }
+        bt.disabled = true;
+        const fim = Math.floor(Math.random() * n); let passos = n + ((fim - pos + n) % n), atraso = 70;
+        const anda = () => { if (!box.isConnected) return; pos = (pos + 1) % n; acende(pos); vibrar(18); tique(); passos--;
+          if (passos > 0) { atraso *= 1.13; timers.push(setTimeout(anda, atraso)); return; }
+          itens[fim].classList.add("escolhido"); sino(); vibrar([40, 60, 120]);
+          const a = NOITE[fim]; est.alvo = a.id; salvar();
+          bt.remove(); barra.parentNode.remove();
+          timers.push(setTimeout(() => {
+            saida.innerHTML = leituraAlvo(a) + `<button class="btn largo" data-acao="levar-abaton">Levar para o Abaton</button><button class="btn fantasma largo" data-acao="sortear">Sortear de novo</button>`;
+            saida.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 600)); };
+        anda(); };
+      bt.addEventListener("pointerdown", comeca); bt.addEventListener("pointerup", solta); bt.addEventListener("pointerleave", solta); bt.addEventListener("pointercancel", solta);
+      ["touchstart", "touchend", "click"].forEach(ev => bt.addEventListener(ev, destravaSom, { passive: true }));
+      bt.addEventListener("contextmenu", e => e.preventDefault());
+      bt.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !segurando) comeca(e); });
+      bt.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") solta(); });
+      const ult = alvoDe(est.alvo); if (ult) saida.innerHTML = `<p class="suave">O seu alvo atual</p>` + leituraAlvo(ult);
+    });
   }
 
   // ---------- Sobreposições ----------
@@ -868,7 +1057,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const avanca = () => {
         if (i < TRAVESSIA.length - 1) { i++; passo(); return; }
         const h = new Date(); est.travessia = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
-        if (pf.desejos && pf.desejos.includes("Conhecer o Egito antigo")) est.alvo = "O Egito antigo";
+        if (pf.desejos && pf.desejos.includes("Conhecer o Egito antigo")) est.alvo = "egito";
         salvar(); d.remove(); aba = "hoje"; render();
       };
       const volta = d.querySelector("#trav-volta"); if (volta) volta.onclick = () => { i--; passo(); };
@@ -1056,7 +1245,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           };
         } else if (k.t === "leva") carta.innerHTML = `${c.ilus ? `<img class="ilus pequena" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">Para levar hoje</span><p class="grande">“${esc(k.texto)}”</p>${de}`;
         else if (k.t === "alvo") {
-          carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Escolha o alvo desta noite</span><div class="alvos">${ALVOS.map(t => `<button class="alvo" data-alvo="${esc(t)}" aria-pressed="${est.alvo === t}">${esc(t)}</button>`).join("")}</div><p class="resposta" id="alvo-txt" ${est.alvo ? "" : "hidden"}>${est.alvo ? esc(alvoTexto(est.alvo)) : ""}</p>`;
+          carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Escolha o alvo desta noite</span><div class="alvos">${chipsAlvo()}</div><p class="resposta" id="alvo-txt" ${est.alvo ? "" : "hidden"}>${est.alvo ? esc(alvoTexto(est.alvo)) : ""}</p>`;
         }
       };
       d.querySelector("#ant").onclick = () => { if (i > 0) { i--; desenha(); } };
@@ -1125,6 +1314,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const acao = b.dataset.acao;
     if (acao === "nevoeiro") abrirNevoeiro();
     else if (acao === "entrar") { est.nevoeiro = est.nevoeiro || CORES[0].v; salvar(); fecharSobre(); aba = "hoje"; render(); }
+    else if (acao === "sortear") abrirSorteio();
+    else if (acao === "levar-abaton") { fecharSobre(); aba = "hoje"; render(); abrirPratica("noite"); }
     else if (acao === "sem-nevoeiro") { est.nevoeiro = null; salvar(); fecharSobre(); aba = "hoje"; render(); }
     else if (acao === "gravar") { gravando = !gravando; const t = document.getElementById("sonho").value; render(); document.getElementById("sonho").value = t; }
     else if (acao === "salvar-sonho") {

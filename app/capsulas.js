@@ -1,5 +1,5 @@
 // Cápsulas diárias do Arhat: uma por dia, em cartas curtas e interativas.
-// Temas: "livro" (do livro Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos).
+// Temas: "livro" (do livro Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge).
 // Cartas: abre · fala · revela · quiz · faca · leva · alvo
 window.CAPSULAS = [
   { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O que é um Arhat", minutos: 2, cartas: [
@@ -160,5 +160,64 @@ window.CAPSULAS = [
     { t: "revela", pergunta: "O que significa Arhat?", resposta: "Arhat significa abrir os olhos." },
     { t: "faca", titulo: "Hoje", texto: "Abra o céu das suas noites e olhe a constelação que você formou. Cada ponto foi uma noite em que você se lembrou." },
     { t: "leva", texto: "Só aquele que decidiu abrir os olhos enxerga as portas da Verdade.", de: "Arhat" }
+  ] },
+  { dia: 22, ilus: "figura-fio", tema: "viajantes", titulo: "Robert Monroe e as vibrações", minutos: 3, cartas: [
+    { t: "abre", titulo: "Robert Monroe e as vibrações", sub: "O homem que mapeou a saída do corpo" },
+    { t: "fala", texto: "Robert Monroe era um empresário de rádio nos Estados Unidos quando, nos anos 1950, começou a sair do corpo sem querer. Ele registrou tudo e publicou Viagens Fora do Corpo, em 1971." },
+    { t: "revela", pergunta: "O que acontecia antes de cada saída?", resposta: "Uma onda de vibrações tomava o corpo, às vezes com zumbido e sensação de choque. Com o tempo ele entendeu que era a porta, e não um perigo. O livro Arhat chama isso de estado vibracional." },
+    { t: "fala", texto: "Monroe chamou de Foco 10 o estado de mente desperta e corpo dormindo. É o mesmo corpo relaxado, mente desperta do Arhat." },
+    { t: "faca", titulo: "Hoje à noite", texto: "Se vierem as vibrações, não se assuste e não se mexa. Respire e deixe que elas cresçam e se espalhem pelo corpo inteiro." },
+    { t: "leva", texto: "A vibração é a porta, não o perigo." }
+  ] },
+  { dia: 23, ilus: "figura-deitada", tema: "viajantes", titulo: "Rolar para fora", minutos: 2, cartas: [
+    { t: "abre", titulo: "Rolar para fora", sub: "Uma técnica de Robert Monroe" },
+    { t: "fala", texto: "Quando o corpo físico já dorme e as vibrações chegam, Monroe ensinava a sair de um jeito simples: rolar, como quem vira na cama." },
+    { t: "revela", pergunta: "Como fazer sem mexer o corpo?", resposta: "Você imagina e sente o giro de lado, sem mover um músculo. O corpo sutil acompanha o movimento e se solta do físico, como uma folha que desliza para fora de um livro." },
+    { t: "quiz", pergunta: "E se você mexer o corpo físico sem querer?", opcoes: ["Acabou, perdeu a noite", "Relaxe de novo e espere as vibrações voltarem"], certa: 1, explica: "É comum no começo. Fique imóvel, respire e tente de novo quando a sensação voltar." },
+    { t: "faca", titulo: "Hoje à noite", texto: "Quando sentir as vibrações ou o corpo pesado e distante, imagine que rola para o lado e caia suavemente no chão do quarto." },
+    { t: "leva", texto: "Agora eu me separo facilmente do meu corpo.", de: "Arhat" }
+  ] },
+  { dia: 24, ilus: "figura-cruz", tema: "viajantes", titulo: "A caixa das preocupações", minutos: 2, cartas: [
+    { t: "abre", titulo: "A caixa das preocupações", sub: "Do método de Robert Monroe" },
+    { t: "fala", texto: "No programa que Monroe criou no seu instituto, a primeira coisa a fazer antes de uma prática é guardar o que pesa." },
+    { t: "revela", pergunta: "Como funciona?", resposta: "Você imagina uma caixa forte, com tampa. Coloca dentro dela, uma por uma, as preocupações do dia: contas, conversas, medos. Fecha a tampa e deixa a caixa do lado de fora da prática. Amanhã elas continuam lá, se você quiser buscá-las." },
+    { t: "faca", titulo: "Agora", texto: "Feche os olhos e guarde três preocupações na caixa. Feche a tampa.", segundos: 40 },
+    { t: "leva", texto: "Deixe o dia na entrada." }
+  ] },
+  { dia: 25, ilus: "fita-estrela-dourada", tema: "viajantes", titulo: "O alvo de William Buhlman", minutos: 3, cartas: [
+    { t: "abre", titulo: "O alvo de William Buhlman", sub: "Escolher para onde ir" },
+    { t: "fala", texto: "William Buhlman pesquisa a experiência fora do corpo há décadas e escreveu Aventuras Além do Corpo. Ele ensina que a intenção clara é o que mais leva alguém para fora." },
+    { t: "revela", pergunta: "O que é a técnica do alvo?", resposta: "Escolha um lugar real que você conhece bem, como outro cômodo da casa, e três objetos dele. Durante o dia, observe esses objetos com atenção. À noite, ao deitar, sinta-se lá, tocando cada um." },
+    { t: "fala", texto: "Repare: é o mesmo exercício do Segundo Ato do Arhat, caminhar em outro cômodo com o corpo sutil. Tradições diferentes chegando ao mesmo caminho." },
+    { t: "faca", titulo: "Hoje", texto: "Escolha um cômodo e três objetos. Olhe para eles hoje como se fosse a primeira vez." },
+    { t: "leva", texto: "Para onde vai a atenção, vai o corpo sutil." }
+  ] },
+  { dia: 26, ilus: "estrela-terra", tema: "viajantes", titulo: "Comandos em voz firme", minutos: 2, cartas: [
+    { t: "abre", titulo: "Comandos em voz firme", sub: "Buhlman e o Arhat" },
+    { t: "fala", texto: "Buhlman recomenda frases curtas, ditas com firmeza, ao adormecer e dentro da experiência. Elas acordam a atenção." },
+    { t: "quiz", pergunta: "Qual comando o livro Arhat ensina quando o sonho fica instável?", opcoes: ["“Quero acordar”", "“Clareza, agora!”", "“Não estou aqui”"], certa: 1, explica: "Buhlman ensina o mesmo pedido: clareza e consciência, agora. Dito com convicção, o ambiente se firma." },
+    { t: "fala", texto: "Ao adormecer, repita em silêncio: “Agora estou fora do corpo.” Dentro da experiência: “Clareza, agora!” ou “Consciência, agora!”." },
+    { t: "leva", texto: "Clareza, agora!", de: "Arhat" }
+  ] },
+  { dia: 27, ilus: "figura-fio", tema: "viajantes", titulo: "O som que solta o corpo", minutos: 2, cartas: [
+    { t: "abre", titulo: "O som que solta o corpo", sub: "Monroe, o Om e as cigarras" },
+    { t: "fala", texto: "Monroe usava um exercício de ressonância: cantar um som grave e longo, sentindo a vibração no peito e na cabeça, antes de praticar." },
+    { t: "fala", texto: "O livro Arhat faz o mesmo com o Om no Quinto Ato, e conta que os Maias usavam o canto das cigarras para atravessar." },
+    { t: "faca", titulo: "Agora", texto: "Inspire fundo e solte o ar num “ommm” grave, longo. Faça três vezes e repare onde o corpo vibra.", segundos: 45 },
+    { t: "leva", texto: "Entre na vibração do som até ouvir o zumbido do outro lado.", de: "Arhat" }
+  ] },
+  { dia: 28, ilus: "figura-mergulho", tema: "viajantes", titulo: "Lembrar de lembrar", minutos: 3, cartas: [
+    { t: "abre", titulo: "Lembrar de lembrar", sub: "A técnica de Stephen LaBerge" },
+    { t: "fala", texto: "Stephen LaBerge, o pesquisador de Stanford que provou o sonho lúcido com o movimento dos olhos, criou uma técnica chamada MILD: indução do sonho lúcido pela memória." },
+    { t: "revela", pergunta: "Como fazer?", resposta: "Ao acordar de um sonho, de madrugada, relembre-o. Depois, voltando a dormir, repita: “Da próxima vez que eu sonhar, vou lembrar que estou sonhando.” E imagine-se de volta naquele sonho, percebendo que é sonho." },
+    { t: "fala", texto: "Ela funciona ainda melhor somada ao despertar de madrugada do Arhat." },
+    { t: "faca", titulo: "Nesta madrugada", texto: "Quando o Osirion te despertar, relembre o último sonho e repita a frase até adormecer." },
+    { t: "leva", texto: "Da próxima vez que eu sonhar, vou lembrar que estou sonhando." }
+  ] },
+  { dia: 29, ilus: "estrela-cadente", tema: "viajantes", titulo: "O que todos os viajantes dizem", minutos: 2, cartas: [
+    { t: "abre", titulo: "O que todos os viajantes dizem", sub: "Monroe, Buhlman, Castaneda, LaBerge e o Arhat" },
+    { t: "fala", texto: "Caminhos diferentes, as mesmas chaves: relaxar o corpo sem apagar a mente, ter uma intenção clara, não ter medo das vibrações e lembrar de perguntar se está sonhando." },
+    { t: "revela", pergunta: "E a chave mais esquecida?", resposta: "A constância. Quase todos contam que a primeira experiência veio depois de semanas de prática. Quanto mais tempo fizer o Arhat, mais viverá seus resultados." },
+    { t: "leva", texto: "Dedique-se, pois sem dedicação, nada obterá!", de: "Arhat" }
   ] }
 ];
