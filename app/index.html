@@ -695,6 +695,32 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .legenda-olhos > span { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: var(--areia-2); }
 .ic-noite.mini { width: 24px; height: 24px; }
 .ceu-frase { font-family: var(--display); font-size: 16px; line-height: 1.4; color: var(--areia); padding: 2px 4px 0; }
+.agora { display: flex; flex-direction: column; gap: 8px; padding: 18px 18px 16px; border: 1px solid color-mix(in srgb, var(--nevoeiro) 30%, var(--ceu-3)); border-radius: 22px; background: linear-gradient(180deg, color-mix(in srgb, var(--nevoeiro) 9%, var(--ceu-2)), var(--ceu-2)); }
+.agora h2 { margin: 2px 0 0; font-size: 24px; }
+.agora p { margin: 0 0 6px; }
+.roteiro { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
+.roteiro span { display: flex; flex-direction: column; gap: 6px; font-size: 11px; letter-spacing: .04em; color: var(--areia-2); opacity: .6; }
+.roteiro span i { height: 3px; border-radius: 3px; background: var(--ceu-3); }
+.roteiro span.ok i { background: var(--cristal); }
+.roteiro span.ok, .roteiro span.atual { opacity: 1; }
+.roteiro span.atual i { background: var(--nevoeiro); }
+.ver-tudo { align-self: center; background: none; border: 0; padding: 8px 14px; font: inherit; font-size: 13px; letter-spacing: .06em; color: var(--areia-2); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.lista-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.lista-cab h1 { margin: 0; }
+.btn-cal { display: inline-flex; align-items: center; gap: 6px; background: none; border: 1px solid var(--ceu-3); border-radius: 999px; padding: 7px 12px; font: inherit; font-size: 13px; color: var(--areia-2); cursor: pointer; }
+.btn-cal svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; }
+.lista-sonhos { display: flex; flex-direction: column; gap: 8px; }
+.item-sonho { border: 1px solid var(--ceu-3); border-radius: 16px; background: var(--ceu-2); }
+.item-sonho summary { list-style: none; display: flex; gap: 12px; align-items: flex-start; padding: 13px 14px; cursor: pointer; }
+.item-sonho summary::-webkit-details-marker { display: none; }
+.item-sonho summary > span { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.item-sonho .quando { font-size: 12px; letter-spacing: .04em; color: var(--areia-2); }
+.item-sonho .comeco { font-size: 15px; line-height: 1.45; }
+.item-sonho[open] .comeco { display: none; }
+.item-sonho p { margin: 0; padding: 0 14px 14px 48px; font-size: 15px; line-height: 1.55; }
+.item-sonho .ic-noite.peq { flex: none; margin-top: 2px; }
+.vazio-diario { text-align: center; padding: 26px 10px; border: 1px dashed var(--ceu-3); border-radius: 18px; }
+.vazio-diario p { margin: 4px 0; }
 .frase-ato { margin: 0; display: flex; flex-direction: column; gap: 4px; font-family: var(--display); font-size: 21px; line-height: 1.3; color: var(--areia); }
 .frase-ato .rotulo { font-family: var(--corpo); }
 .dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
@@ -1101,6 +1127,35 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="lista-tec">${NOITE.map((t, k) => `<button class="tec-op ${k === i ? "atual" : ""}" data-tecnica="${k}"><img src="${ILUS(t.ilus)}" alt="">
         <span><b>${k + 1}. ${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span><span class="tx">${esc(t.texto)}</span></span>${k === i ? '<em>agora</em>' : ""}</button>`).join("")}</div></div>`);
   }
+  // ---------- Hoje: um só próximo passo, conforme a hora do dia e o que já foi feito ----------
+  // O roteiro do dia segue a ordem do Arhat: lembrar (anotar o sonho), entender (o ensinamento), praticar (de dia) e a noite.
+  let verTudo = false;
+  function roteiroHoje() {
+    const hr = new Date().getHours(), cap = CAPS[diaDaJornada() - 1];
+    const anotou = est.diario.some(d => isoNoite(d) === hojeIso);
+    const entendeu = !cap || !!est.vistas[cap.dia];
+    const pendente = ((ATOS[est.ato].momentos.find(m => m.quando === "Dia") || {}).praticas || []).find(p => !feitoHoje(p.k));
+    const praticou = !pendente && testesHoje() >= 3;
+    const passos = [["anotar", "Lembrar", anotou], ["entender", "Entender", entendeu], ["praticar", "Praticar", praticou], ["noite", "A noite", est.ultimaNoite === hojeIso]];
+    let agora;
+    if (!anotou && hr >= 4 && hr < 12) agora = ["anotar", "Ao acordar", "Anote o seu sonho", "Antes de levantar: onde você estava? O que sentia? Até um fragmento conta.", "Anotar", 'data-acao="anotar-agora"'];
+    else if (hr >= 19 || hr < 4) agora = ["noite", "A noite", "Vou dormir", `A afirmação desta noite, a técnica da semana e o despertar das ${despertar()}.`, "Vou dormir", 'data-acao="dormir"'];
+    else if (!entendeu) agora = ["entender", "O ensinamento de hoje", cap.titulo, `${cap.minutos} min · ${cap.cartas.length} cartas`, "Abrir", `data-capsula="${cap.dia}"`];
+    else if (pendente) agora = ["praticar", "A prática do dia", pendente.nome, pendente.det, "Fazer agora", `data-pratica="${pendente.k}"`];
+    else if (testesHoje() < 7) agora = ["praticar", "Durante o dia", "Será que estou sonhando?", `Olhe para as suas mãos e conte os dedos. Hoje: ${testesHoje()} de 7 testes.`, "Fazer o teste", 'data-acao="teste"'];
+    else agora = ["noite", "Mais tarde", "O dia está feito", "À noite, toque em “Vou dormir”.", "Vou dormir", 'data-acao="dormir"'];
+    return { passos, agora };
+  }
+  function cartaoAgora() {
+    const { passos, agora: [k, rot, tit, tx, btn, attr] } = roteiroHoje(), a = ATOS[est.ato];
+    return `<section class="agora">
+      <div class="roteiro">${passos.map(([pk, nome, ok]) => `<span class="${ok ? "ok" : ""} ${pk === k ? "atual" : ""}"><i></i>${nome}</span>`).join("")}</div>
+      <span class="rotulo">${esc(a.nome)} · dia ${diaDaJornada()} · ${rot}</span>
+      <h2>${esc(tit)}</h2><p class="suave">${tx}</p>
+      <button class="btn largo" ${attr}>${btn}</button>
+    </section>`;
+  }
+
   function telaHoje() {
     const a = ATOS[est.ato];
     const momentos = a.momentos.map(m => `
@@ -1113,24 +1168,22 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
             <span class="feito">✓</span>
           </button>${duasVezes(m, p) ? `<div class="vezes">${VEZES.map(([v, n]) => `<button class="vez" data-vez="${p.k}:${v}" aria-pressed="${vezFeita(p.k, v)}"><i></i>${n}</button>`).join("")}</div>` : ""}`).join("")}
       </section>`).join("");
+    // Em cima, o andamento e o próximo passo. O resto do dia fica guardado em "Tudo de hoje", sem amontoar a tela.
     return `<div class="tela">${topo()}
       ${ceuDoInicio()}
-      <p class="frase-ato"><span class="rotulo" style="color:${a.cor}">${a.nome} · dia ${diaDaJornada()} da jornada</span>${a.frase}</p>
-      ${linhaStatus()}
+      ${cartaoAgora()}
+      <button class="ver-tudo" data-acao="ver-tudo" aria-expanded="${verTudo}">${verTudo ? "Fechar" : "Tudo de hoje"}</button>
+      ${!verTudo ? "" : `
+      ${sinalDeSonho()}
       ${cartaoCapsula(CAPS[diaDaJornada() - 1], true)}
       <button class="dormir-card" data-acao="dormir"><span class="ico">${ICO.lua}</span><span><b>Vou dormir</b><span class="suave">Modo noite: tela vermelha, sons, o alvo e o despertar das ${despertar()}</span></span></button>
-      ${a.intro ? `<p class="intro-ato">${esc(a.intro)}</p>` : ""}
-      <button class="notif" data-acao="teste">${SINAL}
-        <span><span class="linha1"><span>OSIRION</span><span>agora</span></span>
-        <span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></button>
-      ${sinalDeSonho()}
       ${momentos}
       ${cartaoTecnica()}
       <section class="momento"><div class="momento-cab"><h3>Viagens guiadas</h3><span class="hora">para qualquer noite</span></div>
         ${!livre("viagens") ? trancado("viagens") : VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
           <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>`).join("")}</section>
       ${cartaoSorteio()}
-      <p class="nota-pe">Hoje: ${testesHoje()} de 7 a 10 testes de realidade</p>
+      <p class="nota-pe">Hoje: ${testesHoje()} de 7 a 10 testes de realidade</p>`}
     </div>`;
   }
 
@@ -1155,8 +1208,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
   }
 
-  // As noites de exemplo só aparecem no protótipo (arquivo local, prévia do Claude ou ?demo). No app de verdade, tudo começa vazio.
-  const DEMO = location.protocol === "file:" || /claude|usercontent/.test(location.hostname) || /[?&]demo\b/.test(location.search);
+  // As noites de exemplo só aparecem com ?demo no endereço. Em todo o resto (app e protótipo), tudo começa vazio.
+  const DEMO = /[?&]demo\b/.test(location.search);
   // Noites de exemplo: 9 semanas de prática, ficando mais lúcidas com o tempo.
   function noitesExemplo() {
     if (!DEMO) return [];
@@ -1263,7 +1316,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   let tipoEscolhido = 1, manha = false, modoAnota = "gravar", expSel = new Set(), chegou = null;
   // O que aconteceu na noite: vira selos e ajuda a ver o caminho. "ponte" marca um sonho que parece avisar algo.
   const EXPS = [["voo", "Voei"], ["saida", "Saí do corpo"], ["vibra", "Vibrações"], ["nevoeiro", "Vi o nevoeiro"], ["nome", "Ouvi meu nome"], ["paralisia", "Paralisia do sono"], ["ponte", "Parece um aviso"]];
-  let modoDiario = "gravar", mesVisto = new Date(new Date().getFullYear(), new Date().getMonth(), 1), diaSel = hojeIso, busca = "", filtro = null;
+  let modoDiario = "lista", mesVisto = new Date(new Date().getFullYear(), new Date().getMonth(), 1), diaSel = hojeIso, busca = "", filtro = null;
 
   const semAcento = c => c.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   const chave = t => [...t].map(c => semAcento(c).charAt(0) || c).join("");
@@ -1335,12 +1388,29 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="alvos">${TIPOS.map(t => `<button class="alvo" data-filtro="${t.k}" aria-pressed="${filtro === t.k}">${iconeNoite(t.k, "peq")} ${["Sem lembrança", "Sonhos", "Lucidez", "Sonho lúcido", "Viagem astral"][t.k]}</button>`).join("")}</div>
       <div id="lista-cal" style="display:flex;flex-direction:column;gap:10px">${listaCalendario()}</div>
       ${pontes()}
-      <div class="guardado"><svg viewBox="0 0 24 24"><path d="M7 18a5 5 0 0 1-.6-10A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/></svg>
-        <span>No app de verdade, cada noite fica guardada na sua conta: troca de celular e não perde nada, e dá para baixar tudo. Neste protótipo, fica só neste aparelho.</span></div>`;
+`;
   }
 
+  // O diário abre na lista dos sonhos (o começo de cada texto). O calendário fica num botão.
+  function itemSonho(d) {
+    const q = deIso(isoNoite(d)).toLocaleDateString("pt-BR", { weekday: "short", day: "numeric", month: "short" }), quando = q.charAt(0).toUpperCase() + q.slice(1);
+    const t = (d.texto || "").trim();
+    return `<details class="item-sonho"><summary>${iconeNoite(d.tipo, "peq")}<span><span class="quando">${esc(quando)} · ${esc(TIPOS[Math.min(4, d.tipo)].nome)}</span>
+      <span class="comeco">${t ? esc(t.length > 110 ? t.slice(0, 110).replace(/\s+\S*$/, "") + "…" : t) : '<span class="suave">Nada ficou desta noite.</span>'}</span></span></summary>
+      ${t.length > 110 ? `<p>${esc(t)}</p>` : ""}</details>`;
+  }
+  function telaLista() {
+    const todas = todasEntradas(), termo = busca.trim();
+    const achadas = termo ? todas.filter(d => chave(d.texto || "").includes(chave(termo))) : todas;
+    return `<div class="lista-cab"><h1>Meus sonhos</h1><button class="btn-cal" data-modo="calendario"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Calendário</button></div>
+      ${todas.length ? `<input class="busca" id="busca-lista" type="search" placeholder="Buscar nos sonhos: água, avó, Egito…" value="${esc(busca)}" aria-label="Buscar nos sonhos">` : ""}
+      <div class="lista-sonhos" id="lista-sonhos">${achadas.length ? achadas.map(itemSonho).join("") : todas.length ? '<p class="suave" style="text-align:center">Nenhum sonho com essa palavra.</p>'
+        : '<div class="vazio-diario"><p>Nenhum sonho anotado ainda.</p><p class="suave">Amanhã cedo, antes de levantar, anote o que lembrar. Até um fragmento conta.</p></div>'}</div>
+      <button class="btn largo" data-modo="gravar">Anotar um sonho</button>`;
+  }
   function telaDiario() {
-    const seg = `<div class="seg" role="group" aria-label="Diário"><button data-modo="gravar" aria-pressed="${modoDiario === "gravar"}">Anotar</button><button data-modo="calendario" aria-pressed="${modoDiario === "calendario"}">Calendário</button></div>`;
+    if (modoDiario === "lista") return `<div class="tela">${topo()}${telaLista()}</div>`;
+    const seg = `<button class="fechar" data-modo="lista" style="align-self:flex-start">← Meus sonhos</button>`;
     if (modoDiario === "calendario") return `<div class="tela">${topo()}${seg}${telaCalendario()}</div>`;
     const a = alvoDe(est.alvo), hora = agoraHM();
     return `<div class="tela diario ${manha ? "manha" : ""}">${seg}
@@ -2527,6 +2597,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "tecnica") abrirTecnica();
     else if (acao === "escolher-tecnica") abrirEscolhaTecnica();
     else if (acao === "teste") abrirTeste();
+    else if (acao === "ver-tudo") { verTudo = !verTudo; render(); }
+    else if (acao === "anotar-agora") { aba = "diario"; modoDiario = "gravar"; manha = true; render(); }
     else if (acao === "dejavu") abrirDejavu();
     else if (acao === "salvar-dejavu") { const t = document.getElementById("deja-tx").value.trim(); if (t) { est.dejavus.push({ iso: hojeIso, texto: t }); salvar(); } fecharSobre(); render(); }
     else if (acao === "salvar-aconteceu") { const d = est.diario[+b.dataset.i]; d.ponte = { aconteceu: hojeIso, como: document.getElementById("acont-tx").value.trim() }; salvar(); fecharSobre(); render(); }
@@ -2550,7 +2622,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       est.diario.push(noite);
       const ato = ATOS[est.ato].id; est.feitos[ato] = est.feitos[ato] || {}; est.feitos[ato].diario = true;
       salvar(); expSel = new Set(); chegou = null; manha = false;
-      modoDiario = "calendario"; diaSel = hojeIso; busca = ""; filtro = null;
+      modoDiario = "lista"; diaSel = hojeIso; busca = ""; filtro = null;
       mesVisto = new Date(new Date().getFullYear(), new Date().getMonth(), 1); render();
     }
     else if (acao === "acordado") { registrar("testes"); if (testesHoje() >= 7) marcar("teste"); salvar(); fecharSobre(); render(); }
@@ -2559,6 +2631,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "feito") { const k = b.dataset.k; marcar(k); fecharSobre(); if (k === "diario") { aba = "diario"; modoDiario = "gravar"; } render(); }
   });
   app.addEventListener("input", e => {
+    if (e.target.id === "busca-lista") {
+      busca = e.target.value;
+      const todas = todasEntradas(), t = busca.trim(), ach = t ? todas.filter(d => chave(d.texto || "").includes(chave(t))) : todas;
+      document.getElementById("lista-sonhos").innerHTML = ach.length ? ach.map(itemSonho).join("") : '<p class="suave" style="text-align:center">Nenhum sonho com essa palavra.</p>';
+      return;
+    }
     if (e.target.id === "busca") {
       busca = e.target.value;
       document.getElementById("lista-cal").innerHTML = listaCalendario();
