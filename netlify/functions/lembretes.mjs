@@ -15,6 +15,30 @@ const TESTES = [
   "Dê um pequeno pulo. No sonho, você flutua.",
   "Olhe um relógio, desvie o olhar e olhe de novo. Os números mudaram?"
 ];
+// As afirmações antes de dormir (a mesma lista e a mesma ordem de app/conteudo.js): uma por noite.
+const AFIRMACOES = [
+  // Na linha de William Buhlman
+  "Eu sou mais do que o meu corpo físico.",
+  "Agora eu estou fora do corpo.",
+  "Clareza, agora!",
+  "Consciência, agora!",
+  "Esta noite eu me lembro de tudo.",
+  // Sobre quem eu sou
+  "Eu sou um ser multidimensional.",
+  "Eu sou consciência além deste corpo.",
+  "Eu sou um espírito que atravessa os mundos.",
+  "O meu corpo dorme; eu permaneço desperto.",
+  "Eu sou luz, e a luz não dorme.",
+  // Para despertar no sonho
+  "Ao cair no sono, eu permaneço consciente.",
+  "Esta noite eu percebo que estou sonhando.",
+  "Quando algo estranho acontecer, eu desperto.",
+  "Eu atravesso o limiar e volto lembrando de tudo.",
+  // De proteção e entrega
+  "Só o que é da luz me alcança nesta noite.",
+  "Eu viajo em segurança e volto inteiro ao meu corpo."
+];
+const afirmacao = dia => { const [a, m, d] = dia.split("-").map(Number); return AFIRMACOES[Math.floor(Date.UTC(a, m - 1, d) / 864e5) % AFIRMACOES.length]; };
 const minutos = s => { const [h, m] = String(s || "0:0").split(":").map(Number); return (h || 0) * 60 + (m || 0); };
 function agoraEm(tz) {
   const p = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
@@ -47,7 +71,7 @@ export default async () => {
       const frase = TESTES[Math.floor(r() * TESTES.length)];
       if (naHora(m) && !ja.includes("teste" + i)) vai.push(["teste" + i, { title: "Osirion", body: frase, tag: "teste", url: "./?aba=hoje" }]);
     });
-    if (naHora(dorme - 30) && !ja.includes("noite")) vai.push(["noite", { title: "Hora de preparar a noite", body: "A técnica da semana e o alvo desta noite estão esperando. Toque em “Vou dormir”.", tag: "noite", url: "./?aba=hoje" }]);
+    if (naHora(dorme - 30) && !ja.includes("noite")) vai.push(["noite", { title: "Hora de preparar a noite", body: "A afirmação desta noite: “" + afirmacao(t.dia) + "” Toque em “Vou dormir”.", tag: "noite", url: "./?aba=hoje" }]);
     if (a.despertar && naHora(minutos(a.despertar)) && !ja.includes("despertar")) vai.push(["despertar", { title: "A hora do despertar", body: "Relembre o último sonho, diga a sua frase e volte a dormir com a mente acesa.", tag: "despertar", url: "./?aba=hoje", requireInteraction: true }]);
     if (!vai.length) return;
     const n = await enviarDoc(k, s, vai.map(v => v[1]), 1800);

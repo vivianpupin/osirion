@@ -325,5 +325,29 @@ window.ARHAT = (function () {
       passos: ["Escolha um cômodo da casa e três objetos dele.", "Ao deitar, sinta-se lá, tocando cada um: a textura, a temperatura, o peso.", "Diga por dentro: “Agora eu estou lá.” e adormeça nessa cena."] }
   ];
 
-  return { ATOS, ALVOS, VIAGENS, NOITE };
+  // As afirmações antes de dormir: uma por noite, em sequência (a mesma lista está em netlify/functions/lembretes.mjs).
+  const AFIRMACOES = [
+    // Na linha de William Buhlman
+    "Eu sou mais do que o meu corpo físico.",
+    "Agora eu estou fora do corpo.",
+    "Clareza, agora!",
+    "Consciência, agora!",
+    "Esta noite eu me lembro de tudo.",
+    // Sobre quem eu sou
+    "Eu sou um ser multidimensional.",
+    "Eu sou consciência além deste corpo.",
+    "Eu sou um espírito que atravessa os mundos.",
+    "O meu corpo dorme; eu permaneço desperto.",
+    "Eu sou luz, e a luz não dorme.",
+    // Para despertar no sonho
+    "Ao cair no sono, eu permaneço consciente.",
+    "Esta noite eu percebo que estou sonhando.",
+    "Quando algo estranho acontecer, eu desperto.",
+    "Eu atravesso o limiar e volto lembrando de tudo.",
+    // De proteção e entrega
+    "Só o que é da luz me alcança nesta noite.",
+    "Eu viajo em segurança e volto inteiro ao meu corpo."
+  ];
+
+  return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES };
 })();

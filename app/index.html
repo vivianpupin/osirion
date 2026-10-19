@@ -714,6 +714,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .modo-noite section { display: flex; flex-direction: column; gap: 8px; }
 .modo-noite .relogio { font-family: var(--display); font-size: 64px; text-align: center; line-height: 1; color: #e0565b; font-variant-numeric: tabular-nums; }
 .afirm-noite { font-family: var(--display); font-size: 20px; text-align: center; color: #e08a8b; text-wrap: balance; }
+.afirm-bloco { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.afirm-bloco .afirm-noite { margin: 0; }
+.afirm-bloco .miuda { margin: 0; }
 .modo-noite .comando { font-family: var(--display); font-size: 17px; border-left: 2px solid #7a2a2d; padding-left: 10px; }
 .modo-noite .btn { background: #7a1f23; color: #f2b8b9; }
 .modo-noite .btn.fantasma { background: none; border-color: #4a1719; color: #e08a8b; }
@@ -1029,6 +1032,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // A técnica antes de dormir: uma por semana (é o tempo para a mente aprender e os resultados aparecerem).
   // A pessoa escolhe com qual começar e pode trocar; depois de 7 dias o app sugere a próxima.
   const NOITE = window.ARHAT.NOITE || [];
+  // A afirmação desta noite: muda a cada noite, na mesma ordem para todos (igual à do lembrete antes de dormir).
+  const AFIRMACOES = window.ARHAT.AFIRMACOES || [];
+  function afirmacaoDaNoite() {
+    if (!AFIRMACOES.length) return "";
+    const h = new Date(); h.setHours(h.getHours() - 5); // de madrugada ainda vale a da noite anterior
+    return AFIRMACOES[Math.floor(Date.UTC(h.getFullYear(), h.getMonth(), h.getDate()) / 864e5) % AFIRMACOES.length];
+  }
   function tecnicaAtual() {
     if (!est.tecnica) est.tecnica = { i: 0, desde: hojeIso };
     const t = NOITE[est.tecnica.i] || NOITE[0];
@@ -2333,7 +2343,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     abrirSobre(`<div class="modo-noite"><div class="tela">
         <div class="topo">${voltar}<span class="rotulo">Modo noite</span></div>
         <div class="relogio" id="relogio">${agoraHM()}</div>
-        <p class="afirm-noite">${esc(ATOS[est.ato].frase)}</p>
+        <div class="afirm-bloco"><span class="rotulo">A afirmação desta noite</span><p class="afirm-noite">“${esc(afirmacaoDaNoite() || ATOS[est.ato].frase)}”</p><p class="suave miuda">Deitado, olhos fechados: repita devagar, com convicção, até adormecer.</p></div>
         ${NOITE.length ? `<section><span class="rotulo">A técnica da semana · ${esc(tecnicaDaNoite().nome)}</span><ol class="passos-noite">${tecnicaDaNoite().passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol></section>` : ""}
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
         <section><span class="rotulo">Alvo desta noite</span>${a ? `<p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p>` : livre("sorteio") ? '<button class="btn fantasma largo" data-acao="sortear">Sortear o alvo</button>' : trancado("sorteio")}</section>
