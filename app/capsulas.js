@@ -407,5 +407,31 @@ window.CAPSULAS = [
     { t: "fala", texto: "Os egípcios viam Osíris no céu, na constelação de Órion." },
     { t: "fala", texto: "Toda noite, ao dormir, fazemos essa mesma travessia, mas sem consciência." },
     { t: "leva", texto: "O Osirion ensina a cruzar esse limiar desperto: descer além da superfície e voltar trazendo tudo o que foi visto do outro lado." }
+  ] },
+  // A energia: a circulação, os centros e o estado vibracional (com desenhos: t "desenho", d = nome do desenho em index.html).
+  { dia: 55, ilus: "espiral-figura", tema: "livro", titulo: "A energia que circula", minutos: 2, cartas: [
+    { t: "abre", titulo: "A energia que circula", sub: "O corpo de energia" },
+    { t: "fala", texto: "Além do corpo físico, as tradições descrevem um corpo de energia: correntes sutis que percorrem o corpo como rios." },
+    { t: "desenho", d: "circulacao", texto: "A energia entra pela terra e pelo alto da cabeça, sobe pelas costas e desce pela frente do corpo, num circuito contínuo." },
+    { t: "fala", texto: "Quando essa corrente flui, o corpo fica leve e a mente clara. Quando trava, vêm o peso, o cansaço e o sono pesado, sem lembranças." },
+    { t: "faca", titulo: "Agora", texto: "Inspire imaginando a luz subindo pelas costas até o alto da cabeça. Expire deixando-a descer pela frente do corpo até o ventre. Faça o circuito algumas vezes.", segundos: 60 },
+    { t: "leva", texto: "A energia segue a atenção." }
+  ] },
+  { dia: 56, ilus: "fita-estrela", tema: "livro", titulo: "Os centros de energia", minutos: 2, cartas: [
+    { t: "abre", titulo: "Os centros de energia", sub: "Por que desobstruir" },
+    { t: "fala", texto: "Ao longo do corpo há centros onde as correntes de energia se encontram, da base da coluna ao alto da cabeça. Na Índia, eles se chamam chakras." },
+    { t: "desenho", d: "centros", texto: "Sete centros, da base à coroa. Cada um se abre com atenção e respiração." },
+    { t: "fala", texto: "Quando um centro está obstruído, a energia não sobe. Por isso as meditações do dia desobstruem os centros: com eles livres, a consciência consegue atravessar a noite acordada." },
+    { t: "revela", pergunta: "Por que liberar os centros antes de viajar?", resposta: "Porque a lucidez e a saída do corpo pedem energia livre, circulando. Um centro travado segura a consciência no corpo pesado." },
+    { t: "leva", texto: "Centro livre, consciência livre." }
+  ] },
+  { dia: 57, ilus: "ondas", tema: "viajantes", titulo: "O estado vibracional", minutos: 2, cartas: [
+    { t: "abre", titulo: "O estado vibracional", sub: "A porta da saída do corpo" },
+    { t: "fala", texto: "Pouco antes de sair do corpo, muitos viajantes contam a mesma coisa: uma onda de vibração que toma o corpo inteiro." },
+    { t: "desenho", d: "vibracao", texto: "As vibrações começam numa parte do corpo e se espalham. Às vezes vêm com zumbido, calor ou sensação de choque." },
+    { t: "fala", texto: "Não é perigo: é o corpo de energia se soltando do físico. Quem se assusta volta. Quem respira e deixa vir atravessa." },
+    { t: "faca", titulo: "Quando vierem", texto: "Fique imóvel. Respire devagar. Imagine as vibrações cada vez mais rápidas e suaves, até virarem um zumbido fino. Então role para fora, ou flutue até o teto." },
+    { t: "fala", texto: "Dá para treinar acordado: deite, relaxe e imagine uma onda subindo dos pés à cabeça, cada vez mais rápida." },
+    { t: "leva", texto: "A vibração é a porta se abrindo." }
   ] }
 ];
