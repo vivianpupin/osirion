@@ -27,7 +27,8 @@ window.REINOS = [
     ["O cinturão de Órion", "Três estrelas em linha, a alma de Osíris no céu, e um caminho de luz entre elas."],
     ["O corpo de Nut", "O céu estrelado curvado sobre a Terra como uma deusa, e você caminha pela pele dela."],
     ["Saturno e seus anéis", "Faixas de gelo e poeira brilhando à sua volta, e um silêncio enorme."],
-    ["A Via Láctea vista de fora", "Um redemoinho de bilhões de estrelas, e você flutua acima dele."]
+    ["A Via Láctea vista de fora", "Um redemoinho de bilhões de estrelas, e você flutua acima dele."],
+    ["O Rio dos Espíritos", "A faixa branca da Via Láctea corre como um rio de luz, e você mergulha nela e deixa a correnteza te levar."]
   ] },
   { id: "aguas", ilus: "ondas", nome: "As águas", alvos: [
     ["O fundo do mar", "Você respira debaixo d'água, a luz vai ficando azul e uma baleia canta ao seu lado."],

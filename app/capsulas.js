@@ -1,5 +1,5 @@
 // Cápsulas diárias do Arhat: uma por dia, em cartas curtas e interativas.
-// Temas: "livro" (do livro Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda).
+// Temas: "livro" (do livro Arhat), "ciencia" (ciência do sono), "tradicoes" (povos e templos), "viajantes" (técnicas de Monroe, Buhlman, LaBerge, Castaneda), "mantras" (mantras e práticas do sono da Índia e do Tibete).
 // Cartas: abre · fala · revela · quiz · faca · leva · alvo
 window.CAPSULAS = [
   { dia: 1, ilus: "meditacao-fita", tema: "livro", titulo: "O que é um Arhat", minutos: 2, cartas: [
@@ -244,5 +244,82 @@ window.CAPSULAS = [
     { t: "faca", titulo: "Recapitulação", texto: "Lembre uma cena que ainda pesa. Inspire girando a cabeça devagar de um ombro ao outro, como se puxasse de volta a energia que deixou lá. Expire girando para o outro lado, soltando o que não é seu. Repita até a cena ficar leve." },
     { t: "revela", pergunta: "O que é o “intento”?", resposta: "Para Dom Juan, é a intenção firme, sem dúvida, que move a atenção. É o mesmo que o Arhat pede com o comando antes de dormir: dizer com convicção, como se já fosse verdade." },
     { t: "leva", texto: "Quem recolhe a própria energia tem com o que sonhar." }
+  ] },
+  { dia: 33, ilus: "olho", tema: "viajantes", titulo: "Ver, não só olhar", minutos: 3, cartas: [
+    { t: "abre", titulo: "Ver, não só olhar", sub: "Castaneda, Uma Estranha Realidade" },
+    { t: "fala", texto: "Em Uma Estranha Realidade, Dom Juan separa duas coisas: olhar e ver. Olhar é o jeito comum, que só confirma o que a gente já sabe. Ver é perceber o mundo como ele é, sem a descrição que aprendemos." },
+    { t: "revela", pergunta: "O que Dom Juan dizia que se percebe quando se vê?", resposta: "Que as pessoas e as coisas são feitas de energia: fibras de luz, como ovos luminosos. Ver não depende dos olhos; é um outro jeito de perceber, que aparece quando a mente se cala." },
+    { t: "quiz", pergunta: "Para Dom Juan, o que mais impede de ver?", opcoes: ["Os olhos cansados", "A conversa que não para dentro da cabeça", "A falta de luz"], certa: 1, explica: "O diálogo interno. Enquanto a mente narra o mundo, ela só repete o que já conhece." },
+    { t: "faca", titulo: "Hoje", texto: "Olhe uma árvore sem dizer “árvore” por dentro. Desfoque um pouco o olhar, sem fixar em nada, e repare no que aparece quando o nome some." },
+    { t: "leva", texto: "Olhar confirma o mundo. Ver o abre." }
+  ] },
+  { dia: 34, ilus: "meditacao-figura", tema: "viajantes", titulo: "Parar o diálogo interno", minutos: 3, cartas: [
+    { t: "abre", titulo: "Parar o diálogo interno", sub: "O silêncio que abre a porta" },
+    { t: "fala", texto: "Dom Juan ensinava que repetimos o mundo para nós mesmos o tempo todo, numa conversa interna sem fim. É ela que mantém o mundo sempre igual." },
+    { t: "fala", texto: "Quando o diálogo para, Dom Juan dizia que o mundo “para” também. É nesse silêncio que o sonhar e o ver ficam possíveis." },
+    { t: "revela", pergunta: "Como ele ensinava a calar a conversa?", resposta: "Escutando. Prestar atenção aos sons do mundo, e principalmente aos espaços entre eles, ocupa a mente de um jeito que ela esquece de falar." },
+    { t: "faca", titulo: "Ao deitar", texto: "De olhos fechados, escute o som mais distante que existir. Depois o silêncio entre um som e outro. Fique ali. É o mesmo silêncio do limiar do sono." },
+    { t: "leva", texto: "No silêncio entre os sons, a porta se abre." }
+  ] },
+  { dia: 35, ilus: "estrela-sol", tema: "mantras", titulo: "O som do AUM", minutos: 3, cartas: [
+    { t: "abre", titulo: "O som do AUM", sub: "A Mandukya Upanishad" },
+    { t: "fala", texto: "A Mandukya Upanishad explica o Om em quatro partes. O A é a vigília. O U é o sonho. O M é o sono profundo." },
+    { t: "revela", pergunta: "E o silêncio depois do M?", resposta: "É o quarto estado, Turiya: a consciência que fica acordada através dos outros três. É exatamente o que o Osirion busca: estar presente também no sonho." },
+    { t: "quiz", pergunta: "Qual som do AUM corresponde ao sonho?", opcoes: ["O A", "O U", "O M"], certa: 1, explica: "O U, o som do meio, a ponte entre o dia e o sono profundo." },
+    { t: "faca", titulo: "Antes de dormir", texto: "Entoe o AUM três vezes, devagar. Sinta o A no peito, o U na garganta e o M na cabeça. Depois fique no silêncio que vem em seguida, até o sono chegar." },
+    { t: "leva", texto: "No silêncio depois do M, a consciência continua acordada." }
+  ] },
+  { dia: 36, ilus: "figura-deitada", tema: "mantras", titulo: "Yoga Nidra", minutos: 3, cartas: [
+    { t: "abre", titulo: "Yoga Nidra", sub: "O sono yogue" },
+    { t: "fala", texto: "Nidra quer dizer sono. A Yoga Nidra é deitar e descer até a beira do sono sem cair nele: o corpo dorme, a consciência fica." },
+    { t: "fala", texto: "Ela foi organizada no século 20 por Swami Satyananda Saraswati, a partir de práticas tântricas antigas de levar a atenção pelo corpo, parte por parte." },
+    { t: "revela", pergunta: "O que é o sankalpa?", resposta: "Uma intenção curta e positiva, dita no começo e no fim da prática. Plantada no limiar do sono, ela entra fundo, como uma semente. Por exemplo: “Eu desperto dentro dos meus sonhos.”" },
+    { t: "faca", titulo: "Seu sankalpa", texto: "Escolha uma frase curta, no presente, e use sempre a mesma. Repita três vezes ao deitar, com convicção." },
+    { t: "leva", texto: "O corpo dorme. A consciência fica." }
+  ] },
+  { dia: 37, ilus: "espiral-figura", tema: "mantras", titulo: "So Ham", minutos: 2, cartas: [
+    { t: "abre", titulo: "So Ham", sub: "O mantra da respiração" },
+    { t: "fala", texto: "So Ham quer dizer “Eu sou Aquilo”. A tradição diz que a própria respiração já repete esse mantra: So na entrada do ar, Ham na saída." },
+    { t: "revela", pergunta: "Por que ele ajuda a adormecer consciente?", resposta: "Porque não exige esforço: você só acompanha o que o corpo já faz. A mente fica ocupada com o som suave, e o corpo vai dormindo sozinho." },
+    { t: "faca", titulo: "Ao deitar", texto: "Inspire ouvindo por dentro “So”. Expire ouvindo “Ham”. Não controle o ar, só escute. Se se perder, volte ao próximo So." },
+    { t: "leva", texto: "Eu sou Aquilo." }
+  ] },
+  { dia: 38, ilus: "rio", tema: "mantras", titulo: "Taraka, o mantra que atravessa", minutos: 2, cartas: [
+    { t: "abre", titulo: "Taraka", sub: "O mantra que faz atravessar" },
+    { t: "fala", texto: "Taraka vem de “tar”, atravessar. Em Kashi, a cidade de Shiva à beira do Ganges, conta-se que Shiva sussurra o mantra Taraka ao ouvido de quem parte, e a alma atravessa." },
+    { t: "revela", pergunta: "O que isso tem a ver com o sono?", resposta: "Para muitas tradições, adormecer é uma pequena travessia. Um mantra na hora de dormir é como um barqueiro: leva a consciência de uma margem à outra sem que ela se perca." },
+    { t: "faca", titulo: "Esta noite", texto: "Escolha o seu mantra de travessia, o Om ou o Om Namah Shivaya, e repita em silêncio até o último pensamento do dia." },
+    { t: "leva", texto: "Adormecer também é atravessar o rio." }
+  ] },
+  { dia: 39, ilus: "fita-estrela-lilas", tema: "mantras", titulo: "A sílaba na garganta", minutos: 2, cartas: [
+    { t: "abre", titulo: "A sílaba na garganta", sub: "A yoga dos sonhos tibetana" },
+    { t: "fala", texto: "Na yoga dos sonhos ensinada por Tenzin Wangyal Rinpoche, da tradição Bön do Tibete, a garganta é o centro do sonho." },
+    { t: "revela", pergunta: "O que se faz ao deitar?", resposta: "Visualiza-se, na garganta, uma sílaba sagrada vermelha e luminosa, a letra A, sobre um lótus. A atenção repousa nela até o sono vir. É um jeito de entrar no sono com uma luz acesa." },
+    { t: "faca", titulo: "Ao deitar", texto: "Leve a atenção à garganta. Imagine ali uma pequena luz vermelha, quente e calma. Não force: deixe a luz ficar enquanto o corpo adormece." },
+    { t: "leva", texto: "Entre no sono com uma luz acesa." }
+  ] },
+  { dia: 40, ilus: "estrela-verde", tema: "tradicoes", titulo: "O way dos maias", minutos: 3, cartas: [
+    { t: "abre", titulo: "O way dos maias", sub: "O companheiro que viaja à noite" },
+    { t: "fala", texto: "Para os maias, cada pessoa tinha um way: um espírito companheiro, muitas vezes um animal, como a onça, que sai e viaja enquanto o corpo dorme." },
+    { t: "revela", pergunta: "Como os maias escreviam a palavra way?", resposta: "Com um rosto humano coberto pela metade por pele de onça. Meio gente, meio jaguar: o eu do dia e o eu da noite no mesmo rosto." },
+    { t: "fala", texto: "Os maias também usavam sons e vibrações para alcançar estados de consciência expandida, como conta o livro Arhat sobre o canto das cigarras." },
+    { t: "faca", titulo: "Esta noite", texto: "Antes de dormir, pergunte: “Quem viaja comigo esta noite?” Não escolha a resposta. Anote de manhã o que aparecer." },
+    { t: "leva", texto: "Meio dia, meio noite: os dois são você." }
+  ] },
+  { dia: 41, ilus: "estrela-terra", tema: "tradicoes", titulo: "O espelho fumegante", minutos: 3, cartas: [
+    { t: "abre", titulo: "O espelho fumegante", sub: "Os sonhadores do México antigo" },
+    { t: "fala", texto: "Entre os astecas, o nahualli era quem sabia mudar de forma e viajar em sonho. Os toltecas, mais antigos, são o povo a quem Castaneda liga os ensinamentos de Dom Juan." },
+    { t: "revela", pergunta: "Quem era Tezcatlipoca?", resposta: "O senhor da noite, cujo nome quer dizer “espelho fumegante”. Um espelho escuro de obsidiana, onde se via o que não aparece de dia." },
+    { t: "fala", texto: "O frei Bernardino de Sahagún, que registrou a vida dos astecas no século 16, conta que havia gente dedicada a cuidar dos sonhos da comunidade." },
+    { t: "faca", titulo: "Hoje", texto: "Olhe para uma superfície escura, uma janela à noite ou a tela apagada do celular, e lembre: o sonho é esse espelho. O que aparece nele também é você." },
+    { t: "leva", texto: "A noite é um espelho." }
+  ] },
+  { dia: 42, ilus: "montanha-fita", tema: "tradicoes", titulo: "Mosqoy: o sonho nos Andes", minutos: 3, cartas: [
+    { t: "abre", titulo: "Mosqoy", sub: "O sonho nos Andes" },
+    { t: "fala", texto: "Em quíchua, a língua dos incas, sonho é mosqoy. Nos Andes, o sonho é um lugar onde se recebem mensagens." },
+    { t: "revela", pergunta: "De quem vêm essas mensagens?", resposta: "Dos apus, os espíritos das montanhas, de Pachamama e dos ancestrais. As montanhas são vistas como seres vivos que cuidam de quem vive aos seus pés." },
+    { t: "fala", texto: "Até hoje, entre os q’ero, os paqos, os sacerdotes andinos, muitos contam que o chamado para o caminho veio num sonho." },
+    { t: "faca", titulo: "Esta noite", texto: "Pense numa montanha que você ama, ou numa que gostaria de conhecer. Antes de dormir, peça licença a ela para visitá-la em sonho." },
+    { t: "leva", texto: "As montanhas também sonham." }
   ] }
 ];

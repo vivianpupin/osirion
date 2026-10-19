@@ -287,6 +287,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .t-ciencia { --tema: var(--nevoeiro); }
 .t-tradicoes { --tema: var(--ocre); }
 .t-viajantes { --tema: #7fd6c2; }
+.t-mantras { --tema: #f0a3c4; }
 .tema-tag { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--tema); }
 .capsula-hoje { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; text-align: left; width: 100%; border-radius: 20px; padding: 16px; border: 1px solid color-mix(in srgb, var(--tema) 45%, var(--ceu-3)); background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--tema) 22%, transparent), transparent 60%), var(--ceu-2); }
 .capsula-hoje h2 { grid-column: 1; }
@@ -449,40 +450,57 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .trilho-m { display: block; height: 4px; border-radius: 999px; background: var(--ceu-3); margin-top: 6px; overflow: hidden; }
 .trilho-m i { display: block; height: 100%; background: var(--cristal); }
 .mapa { background: #0b0c18; padding: 14px 10px; }
-.mapa .momento-cab { padding: 0 6px; }
+.mapa .momento-cab, .mapa > p { padding: 0 6px; }
 .carta { border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
 .carta svg { display: block; width: 100%; height: auto; fill: none; stroke: #c9a35f; stroke-width: .8; stroke-linecap: round; stroke-linejoin: round; }
-.carta .mar path { stroke-width: .6; opacity: .3; }
-.carta .ondas path { stroke-width: .7; }
-.carta .terra { fill: #1b1e3a; stroke-width: 1.3; }
-.carta .interior { stroke-width: .6; stroke-dasharray: 1 2.5; opacity: .55; }
-.carta .arv path { fill: #1b1e3a; stroke-width: .7; opacity: .75; }
-.carta .rio { stroke: #6fa8ff; stroke-width: 2; opacity: .55; }
-.carta .m-traco { fill: #1b1e3a; stroke-width: 1; }
-.carta .m-sombra { stroke-width: .6; opacity: .7; }
+.carta .via-larga { stroke: #cfc6ff; stroke-width: 46; opacity: .13; }
+.carta .via-meio { stroke: #fff4dc; stroke-width: 12; opacity: .16; }
+.carta .brilho { fill: #fff6e0; stroke: none; animation: brilha 4s ease-in-out infinite; }
+@keyframes brilha { 50% { opacity: .25; } }
+.carta .nuvem { fill: #1d1f40; stroke-width: .9; }
+.carta .nuvem-l { stroke-width: .6; opacity: .6; }
+.carta .rocha { fill: #191b37; stroke-width: 1; }
+.carta .hachura { stroke-width: .6; opacity: .65; }
+.carta .raiz { stroke: #7fd6c2; stroke-width: .7; opacity: .55; }
+.carta .haste { stroke: #7fd6c2; stroke-width: .7; }
+.carta .luz-v { fill: #7fd6c2; stroke: none; filter: drop-shadow(0 0 2px #7fd6c2); }
+.carta .luz-r { fill: #f0a3c4; stroke: none; filter: drop-shadow(0 0 2px #f0a3c4); }
+.carta .planeta { fill: #3a2f66; stroke-width: 1; }
+.carta .faixa-p { stroke: #cfc6ff; stroke-width: .6; opacity: .35; }
+.carta .anel-p { stroke: #f5c75b; stroke-width: 1.2; opacity: .7; }
+.carta .topo-i { fill: #26305a; stroke-width: 1.1; }
+.carta .grama { stroke: #7fd6c2; stroke-width: 1.1; opacity: .8; }
+.carta .agua { fill: #2a4c8f; stroke: #6fa8ff; }
+.carta .cachoeira { stroke: #9cc3ff; stroke-width: 1.2; stroke-dasharray: 2 3; opacity: .6; animation: cai 1.6s linear infinite; }
+.carta .cachoeira.c2 { opacity: .35; animation-duration: 2.1s; }
+@keyframes cai { to { stroke-dashoffset: -10; } }
 .carta .cheio { fill: #c9a35f; }
 .carta .escuro { fill: #07080f; }
-.carta .agua { fill: #1f2c5c; }
 .carta .chama { fill: #f5c75b; stroke: none; }
-.carta .azul { fill: rgba(111,168,255,.28); stroke: #6fa8ff; }
+.carta .azul { fill: rgba(111,168,255,.3); stroke: #6fa8ff; }
+.carta .sol { fill: #f5c75b; stroke: none; filter: drop-shadow(0 0 4px #f5c75b); }
+.carta .lotus { stroke: #f0a3c4; }
 .carta .raios { stroke: #f5c75b; }
-.carta .cartela { fill: #1b1e38; stroke-width: 1; }
+.carta .cartela { fill: #15173a; stroke-width: 1; }
+.carta .constela { stroke: #cfc6ff; stroke-width: .6; opacity: .55; }
+.carta .estrela-c { fill: #fff6e0; stroke: none; filter: drop-shadow(0 0 2px #fff); }
+.carta .nome-c { font-family: var(--corpo); font-style: italic; font-size: 8px; fill: #cfc6ff; }
 .carta text { stroke: none; fill: #eee5d4; text-anchor: middle; }
 .carta .titulo-mapa { font-family: var(--display); font-size: 15px; letter-spacing: .04em; }
 .carta .sub-mapa { font-family: var(--corpo); font-style: italic; font-size: 8.5px; fill: #c9a35f; letter-spacing: .06em; }
 .carta .rosa-n { font-family: var(--display); font-size: 10px; fill: #c9a35f; }
-.carta .rota { stroke: #c9a35f; stroke-width: 1.4; stroke-dasharray: 3 4; opacity: .55; }
-.carta .rota.feita { stroke: #f5c75b; stroke-width: 2.2; stroke-dasharray: none; opacity: 1; filter: drop-shadow(0 0 3px rgba(245,199,91,.7)); }
-.carta .seta { stroke: #c9a35f; stroke-width: 1.2; opacity: .6; }
-.carta .seta.feita { stroke: #f5c75b; opacity: 1; }
-.carta .parada.longe > g:first-child { opacity: .45; }
-.carta .parada.feita > g:first-child, .carta .parada.aqui > g:first-child { stroke: #f5c75b; filter: drop-shadow(0 0 4px rgba(245,199,91,.55)); }
+.carta .rota { stroke: #fff4dc; stroke-width: 1.3; stroke-dasharray: 2 5; opacity: .5; }
+.carta .rota.feita { stroke: #f5c75b; stroke-width: 2.2; stroke-dasharray: none; opacity: 1; filter: drop-shadow(0 0 4px rgba(245,199,91,.8)); }
+.carta .flutua { animation: flutua 6s ease-in-out infinite; }
+@keyframes flutua { 50% { transform: translateY(-3px); } }
+.carta .parada.longe .flutua { opacity: .55; }
+.carta .parada.feita .flutua > g, .carta .parada.aqui .flutua > g { stroke: #f5c75b; }
+.carta .parada.aqui .flutua { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--nevoeiro) 70%, transparent)); }
 .carta .medalha-m { fill: #121427; stroke-width: 1; }
 .carta .num-m { font-family: var(--display); font-size: 9px; fill: #c9a35f; }
 .carta .parada.feita .medalha-m { fill: #c9a35f; }
-.carta .parada.feita .num-m { fill: #121427; }
+.carta .parada.feita .num-m, .carta .parada.aqui .num-m { fill: #121427; }
 .carta .parada.aqui .medalha-m { fill: var(--nevoeiro); stroke: var(--nevoeiro); }
-.carta .parada.aqui .num-m { fill: #121427; }
 .carta .rot-m { font-family: var(--corpo); font-style: italic; font-size: 10.5px; paint-order: stroke; stroke: #121427; stroke-width: 3px; }
 .carta .parada.aqui .rot-m { font-weight: 600; fill: #fff; }
 .carta .parada.longe .rot-m { fill: #b9b2c9; }
@@ -491,7 +509,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 @keyframes anel-m { from { transform: scale(.6); opacity: .9; } to { transform: scale(1.5); opacity: 0; } }
 .carta .voce-m rect { fill: var(--nevoeiro); stroke: none; }
 .carta .voce-m text { font-family: var(--corpo); font-size: 9px; font-weight: 600; letter-spacing: .08em; fill: #121427; text-transform: uppercase; }
-@media (prefers-reduced-motion: reduce) { .carta .voce-m .anel { animation: none; opacity: .6; } }
+@media (prefers-reduced-motion: reduce) { .carta .voce-m .anel, .carta .flutua, .carta .brilho, .carta .cachoeira { animation: none; } }
 .selos-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 8px; }
 .selo { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
 .selo .medalha { width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; background: var(--ceu); border: 1.5px dashed var(--ceu-3); }
@@ -540,6 +558,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 /* ---------- Diário: manhã, alvo, sono, pontes ---------- */
 .diario.manha { background: #050509; }
 .diario.manha .perguntas, .diario.manha .suave { opacity: .8; }
+.dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
 .cheguei { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); background: var(--ceu-2); }
 .cheguei b { font-family: var(--display); font-weight: 400; font-size: 19px; }
 .sono-log { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -583,6 +602,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .sons button { padding: 10px 6px; border-radius: 12px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; font-size: 13px; }
 .sons button[aria-pressed="true"] { background: #4a1316; border-color: #c24a4e; color: #f2b8b9; }
+.sons.viagens { grid-template-columns: 1fr 1fr; }
 .sons.tempo button { padding: 6px; font-size: 12px; }
 .desp { display: flex; align-items: center; gap: 14px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; }
 .desp b { font-family: var(--display); font-weight: 400; font-size: 30px; color: #8a3a3d; }
@@ -623,7 +643,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const IMG = { noite: "img/noite.webp", fios: "img/fios.webp", marca: "img/olho-marca.png" };
   // Desenhos do livro Arhat, recortados com fundo transparente.
   const ILUS = nome => `img/livro/${nome}.webp`;
-  const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem"), viajantes: ILUS("textura-azul") };
+  const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem"), viajantes: ILUS("textura-azul"), mantras: ILUS("textura-dourada") };
   // Sinal do Osirion nos avisos: o ícone do app, o olho do livro Arhat.
   const SINAL = '<img class="sinal" src="apple-touch-icon.png" alt="">';
 
@@ -642,7 +662,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // O conteúdo vem do livro (conteudo.js).
   const ATOS = window.ARHAT.ATOS.map(a => Object.assign({}, a, { capa: IMG[a.capa] }));
   const CAPS = window.CAPSULAS;
-  const TEMAS = { livro: "Do livro Arhat", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho", viajantes: "Técnicas dos viajantes" };
+  const TEMAS = { livro: "Do livro Arhat", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho", viajantes: "Técnicas dos viajantes", mantras: "Mantras do sonho" };
 
   const CORES = [
     { nome: "Lilás", v: "#a9b2f0" }, { nome: "Azul", v: "#6fa8ff" }, { nome: "Dourado", v: "#f5c75b" },
@@ -752,6 +772,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></button>
       ${sinalDeSonho()}
       ${momentos}
+      <section class="momento"><div class="momento-cab"><h3>Viagens guiadas</h3><span class="hora">para qualquer noite</span></div>
+        ${VIAGENS.map(p => `<button class="pratica ${feitoHoje(p.k) ? "ok" : ""}" data-pratica="${p.k}"><span class="ico">${ICO[p.ico]}</span>
+          <span><span class="nome">${p.nome}</span><br><span class="det">${p.det}</span></span><span class="feito">✓</span></button>`).join("")}</section>
       ${cartaoSorteio()}
       <p class="nota-pe">Hoje: ${testesHoje()} de 7 a 10 testes de realidade</p>
     </div>`;
@@ -860,7 +883,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       .sort((a, b) => (a.iso < b.iso ? 1 : a.iso > b.iso ? -1 : 0));
   }
 
-  let tipoEscolhido = 1, manha = false, expSel = new Set(), chegou = null;
+  let tipoEscolhido = 1, manha = false, modoAnota = "gravar", expSel = new Set(), chegou = null;
   // O que aconteceu na noite: vira selos e ajuda a ver o caminho. "ponte" marca um sonho que parece avisar algo.
   const EXPS = [["voo", "Voei"], ["saida", "Saí do corpo"], ["vibra", "Vibrações"], ["nevoeiro", "Vi o nevoeiro"], ["nome", "Ouvi meu nome"], ["paralisia", "Paralisia do sono"], ["ponte", "Parece um aviso"]];
   let modoDiario = "gravar", mesVisto = new Date(new Date().getFullYear(), new Date().getMonth(), 1), diaSel = hojeIso, busca = "", filtro = null;
@@ -946,8 +969,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return `<div class="tela diario ${manha ? "manha" : ""}">${seg}
       <div class="topo"><span class="rotulo">Os primeiros 5 minutos</span><span class="hora">${hora}</span></div>
       <div class="perguntas"><span>Não levante. Não abra os olhos.</span><span style="color:var(--areia)">Onde eu estava?</span><span style="color:var(--areia)">O que eu estava sentindo?</span></div>
-      <button class="gravar" id="gravar" data-acao="gravar">Gravar sonho</button>
-      <p class="suave" id="gravar-tx" style="text-align:center">Toque e fale de olhos fechados, em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga…”. A voz vira texto. Até lembranças pequenas contam.</p>
+      <div class="seg" role="group" aria-label="Como anotar"><button data-anota="gravar" aria-pressed="${modoAnota === "gravar"}">Falar</button><button data-anota="escrever" aria-pressed="${modoAnota === "escrever"}">Escrever</button></div>
+      ${modoAnota === "gravar" ? `<button class="gravar" id="gravar" data-acao="gravar">Gravar sonho</button>
+      <p class="suave" id="gravar-tx" style="text-align:center">Toque e fale de olhos fechados. A sua voz vira texto aqui embaixo.</p>` : ""}
+      <p class="dica-pessoa">Conte em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga, a luz é laranja…”. Até lembranças pequenas contam.</p>
       <label for="sonho" class="rotulo">O que veio</label>
       <textarea id="sonho" placeholder="Estou numa casa antiga, a luz é laranja…"></textarea>
       <span class="rotulo">Como foi a noite</span>
@@ -974,7 +999,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return `<div class="tela">${topo()}
       <div><span class="rotulo">Cápsulas</span><h1>Um ensinamento por dia</h1></div>
       <p class="suave">Cada dia abre uma cápsula de dois ou três minutos: o livro, a ciência do sono, os povos que honram os sonhos e as técnicas dos grandes viajantes.</p>
-      <div class="legenda-temas"><span class="t-livro"><i></i>Do livro Arhat</span><span class="t-ciencia"><i></i>Ciência do sono</span><span class="t-tradicoes"><i></i>Tradições do sonho</span><span class="t-viajantes"><i></i>Técnicas dos viajantes</span></div>
+      <div class="legenda-temas"><span class="t-livro"><i></i>Do livro Arhat</span><span class="t-ciencia"><i></i>Ciência do sono</span><span class="t-tradicoes"><i></i>Tradições do sonho</span><span class="t-viajantes"><i></i>Técnicas dos viajantes</span><span class="t-mantras"><i></i>Mantras do sonho</span></div>
       <div class="trilha">${nos}</div>
       <button class="btn fantasma largo" data-acao="adiantar">Adiantar um dia (só no protótipo)</button>
     </div>`;
@@ -1366,9 +1391,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
   }
 
+  // As viagens guiadas valem em qualquer ato (conteudo.js).
+  const VIAGENS = window.ARHAT.VIAGENS || [];
+  const ehViagem = k => VIAGENS.some(v => v.k === k);
   function acharPratica(k) {
     const a = ATOS[est.ato];
     for (const m of a.momentos) for (const p of m.praticas) if (p.k === k) return { a, m, p };
+    const v = VIAGENS.find(x => x.k === k);
+    if (v) return { a: { nome: "Viagem guiada" }, m: { quando: "para qualquer noite", hora: "ao deitar" }, p: v };
     return null;
   }
 
@@ -1390,7 +1420,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <button class="btn" id="iniciar">Começar</button></div>` : "";
     const player = p.audio ? `<div class="player"><button class="play" id="play" aria-label="Ouvir a prática">▶</button>
         <div><b>Prática guiada pela Vivian</b><div class="suave">o áudio será gravado por você</div><div class="trilho"><span id="trilho"></span></div></div></div>` : "";
-    const fim = k === "noite" ? "Vou dormir" : k === "madrugada" ? "Voltar a dormir" : k === "diario" ? "Abrir o diário" : "Feito";
+    const fim = k === "noite" || ehViagem(k) ? "Vou dormir" : k === "madrugada" ? "Voltar a dormir" : k === "diario" ? "Abrir o diário" : "Feito";
     abrirSobre(`<div class="tela">${voltar}
       <span class="rotulo">${esc(a.nome)} · ${m.quando === "Noite" ? "Abaton, a prática da noite" : esc(m.quando)}</span><h1>${esc(p.nome)}</h1>
       ${respHtml}${player}
@@ -1413,7 +1443,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         fecharSobre();
         if (k === "diario") { aba = "diario"; modoDiario = "gravar"; }
         render();
-        if (k === "noite" || k === "madrugada") abrirModoNoite();
+        if (k === "noite" || k === "madrugada" || ehViagem(k)) abrirModoNoite();
       };
       mostra();
       const play = d.querySelector("#play");
@@ -1682,41 +1712,42 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${s.lista.map(x => `<div class="missao ${x.ok ? "ok" : ""}"><span class="marca-m">${x.ok ? "✦" : ""}</span><span>${esc(x.m.txt)}<span class="trilho-m"><i style="width:${x.v / x.m.meta * 100}%"></i></span></span><b>${x.v}/${x.m.meta}</b></div>`).join("")}
       <p class="suave miuda">${s.completa ? "Semana cumprida. O selo da semana inteira é seu." : "Cumpra as três até domingo e ganhe o selo da semana inteira. Toda segunda chegam missões novas."}</p></section>`;
   }
-  // O mapa da jornada: a carta antiga da Ilha dos Sonhos (mapa.js), com a rota numerada e a pessoa marcada.
+  // O mapa da jornada: o Céu dos Sonhos (mapa.js), ilhas flutuantes ligadas pela Via Láctea, com a pessoa marcada.
   const ESTACOES = [
-    ["travessia", "A travessia", 0, 26, "middle"], ["inicio", "O Início", -24, 4, "end"], ["ato1", "Primeiro Ato", 0, 27, "middle"],
-    ["lago", "Segundo Ato", 0, 27, "middle"], ["ato3", "Terceiro Ato", 0, 29, "middle"], ["ato4", "Quarto Ato", 0, 26, "middle"],
-    ["ato5", "Quinto Ato", 24, 8, "start"], ["santuario", "O Santuário", 26, -4, "start"]
+    ["travessia", "A travessia", 0, 30, "middle"], ["inicio", "O Início", -42, 6, "end"], ["ato1", "Primeiro Ato", 0, 60, "middle"],
+    ["lago", "Segundo Ato", 42, 6, "start"], ["ato3", "Terceiro Ato", 0, 58, "middle"], ["ato4", "Quarto Ato", 0, 56, "middle"],
+    ["ato5", "Quinto Ato", 0, 54, "middle"], ["santuario", "O Santuário", -46, 8, "end"]
   ];
   function mapaJornada() {
-    const M = window.MAPA_ILHA, P = ESTACOES.map(p => M.est[p[0]]);
+    const M = window.MAPA_CEU, P = ESTACOES.map(p => M.est[p[0]]);
     const aqui = est.travessia ? est.ato + 1 : 0;
     // Curva suave pelos pontos (Catmull-Rom), e uma seta no meio de cada trecho.
     const trecho = i => { const a = P[i - 2] || P[i - 1], b = P[i - 1], c = P[i], d = P[i + 1] || P[i];
       return `C${b[0] + (c[0] - a[0]) / 6} ${b[1] + (c[1] - a[1]) / 6} ${c[0] - (d[0] - b[0]) / 6} ${c[1] - (d[1] - b[1]) / 6} ${c[0]} ${c[1]}`; };
     const rota = n => `M${P[0][0]} ${P[0][1]}` + Array.from({ length: n }, (_, k) => trecho(k + 1)).join("");
-    const setas = P.slice(1).map((c, k) => { const b = P[k], mx = (b[0] + c[0]) / 2, my = (b[1] + c[1]) / 2, ang = Math.atan2(c[1] - b[1], c[0] - b[0]) * 180 / Math.PI;
-      return `<path d="M-4 -3.5L2 0L-4 3.5" transform="translate(${mx} ${my}) rotate(${ang})" class="seta ${k < aqui ? "feita" : ""}"/>`; }).join("");
     const paradas = ESTACOES.map(([k, nome, dx, dy, ancora], i) => { const [x, y] = P[i], st = i < aqui ? "feita" : i === aqui ? "aqui" : "longe";
-      return `<g class="parada ${st}">${M.glifos[k]}
-        <g transform="translate(${x - 19} ${y - 15})"><circle r="7" class="medalha-m"/><text y="3.2" class="num-m">${i + 1}</text></g>
-        <text x="${x + dx}" y="${y + dy}" text-anchor="${ancora}" class="rot-m">${esc(nome)}</text></g>`; }).join("");
+      return `<g class="parada ${st}"><g class="flutua" style="animation-delay:${-i * .7}s">${M.ilhas[k]}
+        <g transform="translate(${x - 26} ${y - 26})"><circle r="7" class="medalha-m"/><text y="3.2" class="num-m">${i + 1}</text></g></g>
+        <text x="${x + dx}" y="${y + dy}" style="text-anchor:${ancora}" class="rot-m">${esc(nome)}</text></g>`; }).join("");
     const [vx, vy] = P[aqui];
     return `<section class="mapa"><div class="momento-cab"><h2>Mapa da jornada</h2><span class="hora">${aqui + 1} de ${ESTACOES.length}</span></div>
       <div class="carta"><svg viewBox="0 0 ${M.W} ${M.H}" role="img" aria-label="Mapa da jornada: você está em ${esc(ESTACOES[aqui][1])}">
-        <defs><radialGradient id="vinheta" cx="50%" cy="45%" r="70%"><stop offset=".55" stop-color="#121427" stop-opacity="0"/><stop offset="1" stop-color="#05060d" stop-opacity=".85"/></radialGradient>
-          <filter id="papel"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .79  0 0 0 0 .64  0 0 0 0 .37  0 0 0 .07 0"/></filter></defs>
-        <rect width="${M.W}" height="${M.H}" fill="#121427"/>
-        <g class="mar">${M.mar}</g><g class="ondas">${M.ondas}</g>
-        <path d="${M.terra}" class="terra"/><path d="${M.interior}" class="interior"/>
-        <g class="arv">${M.arv}</g>${M.rio}<g class="mont">${M.mont}</g>
-        <path d="${rota(P.length - 1)}" class="rota"/>${aqui ? `<path d="${rota(aqui)}" class="rota feita"/>` : ""}${setas}
+        <defs><linearGradient id="ceu-m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0f24"/><stop offset=".55" stop-color="#171a3a"/><stop offset="1" stop-color="#241b3f"/></linearGradient>
+          <filter id="neb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="28"/></filter>
+          <filter id="borra" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>
+          <filter id="borra2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+          <radialGradient id="vinheta" cx="50%" cy="45%" r="70%"><stop offset=".6" stop-color="#05060d" stop-opacity="0"/><stop offset="1" stop-color="#05060d" stop-opacity=".8"/></radialGradient>
+          <filter id="papel"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .79  0 0 0 0 .64  0 0 0 0 .37  0 0 0 .06 0"/></filter></defs>
+        <rect width="${M.W}" height="${M.H}" fill="url(#ceu-m)"/>
+        <g>${M.fundo}</g><g>${M.via}</g><g class="brilhos">${M.brilhos}</g><g>${M.nuvens}</g>
+        <path d="${rota(P.length - 1)}" class="rota"/>${aqui ? `<path d="${rota(aqui)}" class="rota feita"/>` : ""}
         ${paradas}
-        <g transform="translate(${vx} ${vy})" class="voce-m"><circle r="24" class="anel"/><circle r="24" class="anel a2"/>
-          <g transform="translate(0 ${aqui === ESTACOES.length - 1 ? 40 : -42})"><rect x="-40" y="-9" width="80" height="16" rx="8"/><text y="3">você está aqui</text></g></g>
+        <g transform="translate(${vx} ${vy})" class="voce-m"><circle r="26" class="anel"/><circle r="26" class="anel a2"/>
+          <g transform="translate(${aqui === ESTACOES.length - 1 ? "0 72" : vx < 180 ? "74 -12" : "-74 -12"})"><rect x="-40" y="-9" width="80" height="16" rx="8"/><text y="3">você está aqui</text></g></g>
         <g class="deco">${M.deco}</g><g class="mold">${M.mold}</g>
         <rect width="${M.W}" height="${M.H}" fill="url(#vinheta)" pointer-events="none"/><rect width="${M.W}" height="${M.H}" filter="url(#papel)" pointer-events="none"/>
-      </svg></div></section>`;
+      </svg></div>
+      <p class="suave miuda">O caminho é a Via Láctea, o Rio dos Espíritos. Cada ilha é um ato; no alto, o santuário.</p></section>`;
   }
   // Álbum dos alvos: todos os lugares do sorteio; ganham cor quando a pessoa chega lá.
   function albumAlvos() {
@@ -1857,6 +1888,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <section><span class="rotulo">Sons da noite</span>
           <div class="sons">${SONS.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>
           <div class="sons tempo">${[15, 30, 60].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
+        <section><span class="rotulo">Viagem guiada</span><div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div></section>
         <section><span class="rotulo">Despertar de madrugada</span>
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>
           <p class="suave miuda">Funciona com o Osirion aberto nesta tela, o celular carregando e o som ligado. A tela fica escura, mas acordada. <button class="link" id="ouvir-sino">Ouvir o sino</button></p></section>
@@ -1962,6 +1994,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       est.ato = a.id; salvar(); aba = "hoje"; render(); return;
     }
     if (b.dataset.modo) { modoDiario = b.dataset.modo; render(); return; }
+    if (b.dataset.anota) { if (rec) rec.stop(); const t = document.getElementById("sonho").value; modoAnota = b.dataset.anota; render(); const a = document.getElementById("sonho"); a.value = t; if (modoAnota === "escrever") a.focus(); return; }
     if (b.dataset.jornada) { modoJornada = b.dataset.jornada; render(); return; }
     if (b.dataset.exp) { const k = b.dataset.exp; expSel.has(k) ? expSel.delete(k) : expSel.add(k); b.setAttribute("aria-pressed", expSel.has(k)); return; }
     if (b.dataset.chegou) { chegou = chegou === b.dataset.chegou ? null : b.dataset.chegou; document.querySelectorAll("[data-chegou]").forEach(x => x.setAttribute("aria-pressed", x.dataset.chegou === chegou)); return; }

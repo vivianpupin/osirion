@@ -239,5 +239,51 @@ window.ARHAT = (function () {
     { curto: "O fundo do mar", texto: "Quero nadar com os grandes animais do fundo do mar. Baleias e criaturas marinhas desconhecidas que só vivem lá, bem no fundo negro do oceano!" }
   ];
 
-  return { ATOS, ALVOS };
+  // Viagens guiadas: práticas da noite que valem em qualquer ato (escritas para o app, a Vivian revisa).
+  const VIAGENS = [
+    {
+      k: "rio", ilus: "estrela-cadente", ico: "agua", nome: "O Rio dos Espíritos", det: "Lançar-se na Via Láctea", audio: true,
+      texto: [
+        { p: "Muitos povos viram na Via Láctea um rio. Os incas a chamavam de Mayu, o rio do céu. Os tupis, de Tapi’i rapé, o caminho da anta. Para os lakota, é o caminho por onde os espíritos viajam. Os egípcios viam nela o corpo estrelado de Nut, e um Nilo no céu." },
+        { sub: "Antes de começar" }, { p: "Deite de barriga para cima, num quarto escuro. Esta viagem é para a beira do sono: você vai adormecer dentro dela." },
+        { passos: [
+          "Respire devagar: inspire contando até quatro, expire contando até seis. Faça isso dez vezes.",
+          "A cada expiração, o corpo afunda na cama e você fica mais leve.",
+          "Imagine o teto se abrindo. Acima de você, o céu da noite, e atravessando o céu inteiro, a faixa branca da Via Láctea.",
+          "Suba devagar até a margem desse rio de estrelas. Sinta a luz fria no rosto e escute o som dele, como água correndo longe.",
+          "Agora lance-se. Mergulhe no rio e deixe a correnteza te levar.",
+          "Diga por dentro: “Leve-me aonde eu preciso ir.” Não escolha o destino. O rio sabe.",
+          "Observe onde a correnteza te deixa. Fique nessa imagem e deixe o sono vir ali."
+        ] },
+        { afirm: "Eu me entrego ao Rio dos Espíritos e desperto do outro lado." },
+        { p: "Amanhã cedo, antes de abrir os olhos, pergunte: onde o rio me deixou?" }
+      ]
+    },
+    {
+      k: "sair", ilus: "salto-figura", ico: "espiral", nome: "Sentir o corpo sair", det: "Respirar, relaxar e se soltar", audio: true,
+      texto: [
+        { p: "Esta prática reúne o que os grandes viajantes ensinam, como William Buhlman e Robert Monroe: o corpo dorme, a consciência fica, e a intenção firme leva para fora." },
+        { sub: "Respirar e relaxar" }, { passos: [
+          "Deite de barriga para cima. Inspire em quatro tempos, expire em seis. Dez vezes.",
+          "Solte o corpo dos pés à cabeça: pés, pernas, quadril, barriga, peito, ombros, braços, pescoço, rosto. Ele fica pesado, como areia molhada.",
+          "Não se mexa mais. Se coçar, deixe passar."
+        ] },
+        { sub: "Tirar a atenção do corpo" }, { passos: [
+          "Sinta o corpo inteiro como um bloco pesado, lá embaixo.",
+          "Agora leve a atenção um pouco acima do peito, como se você estivesse alguns centímetros acima da pele.",
+          "Perceba o espaço ao redor: acima da cabeça, dos lados, atrás. Perceba mais o espaço do que o corpo."
+        ] },
+        { afirm: "Agora eu estou fora do corpo." },
+        { sub: "Se as vibrações vierem" }, { passos: [
+          "Formigamento, zumbido, ondas elétricas, sensação de cair ou de crescer: é a ponte. Não tenha medo e não ajude. Só observe e deixe crescer.",
+          "Quando as ondas estiverem fortes, diga por dentro: “Agora!”",
+          "Saia de um só jeito, sem pensar muito: role para o lado, levante como névoa ou flutue até o teto.",
+          "Fora do corpo, afaste-se do quarto. Se a visão estiver turva, peça: “Clareza, agora!”"
+        ] },
+        { p: "Se não sair, tudo bem. Adormeça repetindo a afirmação. Muitas vezes a saída vem mais tarde, de madrugada." }
+      ]
+    }
+  ];
+
+  return { ATOS, ALVOS, VIAGENS };
 })();
