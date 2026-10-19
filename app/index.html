@@ -593,6 +593,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .tecnica-noite small { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--nevoeiro); font-weight: 600; }
 .tecnica-noite b { display: block; font-family: var(--display); font-weight: 400; font-size: 19px; margin: 2px 0; }
 .tecnica-noite .suave { font-size: 13px; }
+.tecnica-noite .trilho-m { margin-top: 8px; }
+.lista-tec { display: flex; flex-direction: column; gap: 10px; }
+.tec-op { position: relative; display: grid; grid-template-columns: 52px 1fr; gap: 12px; align-items: start; text-align: left; padding: 12px; border-radius: 16px; border: 1px solid var(--ceu-3); background: var(--ceu-2); }
+.tec-op img { width: 52px; height: 52px; object-fit: contain; }
+.tec-op b { display: block; font-family: var(--display); font-weight: 400; font-size: 17px; }
+.tec-op .suave { display: block; font-size: 12px; }
+.tec-op .tx { display: block; font-size: 13px; color: var(--areia-2); margin-top: 4px; }
+.tec-op.atual { border-color: var(--nevoeiro); background: color-mix(in srgb, var(--nevoeiro) 12%, var(--ceu-2)); }
+.tec-op em { position: absolute; top: 10px; right: 12px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--nevoeiro); font-weight: 600; }
 .passos-noite { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #c97a7c; }
 .dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
 .cheguei { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); background: var(--ceu-2); }
@@ -794,18 +803,39 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const feitoHoje = k => ((est.hist[hojeIso] || {}).tec || []).includes(k);
   const duasVezes = (m, p) => p.k !== "teste" && /pôr do sol/.test(m.hora || "");
   const vezFeita = (k, v) => !!(((est.hist[hojeIso] || {}).vezes || {})[k + ":" + v]);
+  // A técnica antes de dormir: uma por semana (é o tempo para a mente aprender e os resultados aparecerem).
+  // A pessoa escolhe com qual começar e pode trocar; depois de 7 dias o app sugere a próxima.
   const NOITE = window.ARHAT.NOITE || [];
-  const tecnicaDaNoite = () => NOITE[(diaDaJornada() - 1) % NOITE.length];
+  function tecnicaAtual() {
+    if (!est.tecnica) est.tecnica = { i: 0, desde: hojeIso };
+    const t = NOITE[est.tecnica.i] || NOITE[0];
+    const dia = Math.max(1, Math.round((deIso(hojeIso) - deIso(est.tecnica.desde)) / 864e5) + 1);
+    return { t, i: est.tecnica.i, dia, completa: dia > 7 };
+  }
+  const tecnicaDaNoite = () => tecnicaAtual().t;
   function cartaoTecnica() {
-    const t = tecnicaDaNoite(); if (!t) return "";
-    return `<button class="tecnica-noite" data-acao="tecnica"><img src="${ILUS(t.ilus)}" alt=""><span><small>A técnica desta noite</small><b>${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span></span></button>`;
+    if (!NOITE.length) return "";
+    const { t, dia, completa } = tecnicaAtual();
+    return `<button class="tecnica-noite" data-acao="tecnica"><img src="${ILUS(t.ilus)}" alt=""><span><small>A técnica da semana · ${completa ? "semana completa ✓" : `dia ${dia} de 7`}</small><b>${esc(t.nome)}</b>
+      <span class="suave">${esc(t.de)}</span><span class="trilho-m"><i style="width:${Math.min(7, dia) / 7 * 100}%"></i></span></span></button>`;
   }
   function abrirTecnica() {
-    const t = tecnicaDaNoite();
-    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">A técnica desta noite · ${esc(t.de)}</span><h1>${esc(t.nome)}</h1>
+    const { t, i, dia, completa } = tecnicaAtual(), prox = NOITE[(i + 1) % NOITE.length];
+    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">A técnica da semana · ${completa ? "semana completa" : `dia ${dia} de 7`}</span><h1>${esc(t.nome)}</h1>
+      <span class="suave">${esc(t.de)}</span>
       <img class="ilus" src="${ILUS(t.ilus)}" alt=""><p class="grande-p" style="font-size:17px;line-height:1.6">${esc(t.texto)}</p>
       <ol class="roteiro">${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
-      <button class="btn largo" data-acao="dormir">Vou dormir</button></div>`);
+      ${completa ? `<div class="cartao"><b>Você completou a semana com esta técnica.</b><span class="suave">Se ela já está funcionando, pode continuar. Ou siga para a próxima: ${esc(prox.nome)}.</span>
+        <button class="btn" data-tecnica="${(i + 1) % NOITE.length}">Começar ${esc(prox.nome)}</button></div>` : ""}
+      <button class="btn largo" data-acao="dormir">Vou dormir</button>
+      <button class="btn fantasma largo" data-acao="escolher-tecnica">Escolher outra técnica</button></div>`);
+  }
+  function abrirEscolhaTecnica() {
+    const { i } = tecnicaAtual();
+    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">As técnicas antes de dormir</span><h1>Escolha a sua técnica</h1>
+      <p class="suave">O ideal é ficar uma semana com cada técnica: é o tempo para a mente aprender o gesto e os resultados começarem a aparecer. Você escolhe com qual começar. Elas estão em ordem, das mais simples às mais avançadas.</p>
+      <div class="lista-tec">${NOITE.map((t, k) => `<button class="tec-op ${k === i ? "atual" : ""}" data-tecnica="${k}"><img src="${ILUS(t.ilus)}" alt="">
+        <span><b>${k + 1}. ${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span><span class="tx">${esc(t.texto)}</span></span>${k === i ? '<em>agora</em>' : ""}</button>`).join("")}</div></div>`);
   }
   function telaHoje() {
     const a = ATOS[est.ato];
@@ -1311,7 +1341,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     { tipo: "multi", campo: "tecnicas", cor: "#191c3a", ilus: "fita-estrela-2", peq: true, rotulo: "Portal do caminho já trilhado", titulo: "O que você já experimentou?", sub: "Pode marcar várias.", opcoes: ["Testes de realidade", "Acordar de madrugada e voltar a dormir", "Diário de sonhos", "Meditação antes de dormir", "Projeção astral", "Nada ainda"], botao: "Seguir" },
     { tipo: "multi", campo: "desejos", cor: "#161935", ilus: "voo-figura", peq: true, rotulo: "Portal do desejo", titulo: "O que você quer viver do outro lado?", sub: "Pode marcar várias. São os seus alvos de viagem.", opcoes: ["Voar", "Reencontrar alguém que partiu", "Falar com meus guias", "Curar algo em mim", "Conhecer o Egito antigo", "Perder o medo da morte", "Explorar mundos impossíveis", "Ir às estrelas"], botao: "Seguir" },
     { tipo: "sono", cor: "#13152f", ilus: "figura-deitada", peq: true, rotulo: "Portal do tempo", titulo: "Qual é o seu horário de sono?", texto: "O momento dos sonhos está ligado ao seu ciclo de sono. Com ele, o Osirion calcula a hora do seu despertar de madrugada.", botao: "Seguir" },
-    { tipo: "texto", cor: "#12142c", ilus: "estrela-cadente", rotulo: "A intenção", titulo: "Cada noite, uma técnica", texto: "Antes de dormir, o Osirion vai te ensinar uma técnica diferente a cada noite: dos pesquisadores do sono, dos grandes viajantes e das tradições antigas. Elas mudam conforme você avança.", nota: "A primeira é hoje: uma frase para dizer ao deitar.", botao: "Seguir" },
+    { tipo: "texto", cor: "#12142c", ilus: "estrela-cadente", rotulo: "A intenção", titulo: "Uma técnica por semana", texto: "Antes de dormir, você vai praticar técnicas dos pesquisadores do sono, dos grandes viajantes e das tradições antigas. O ideal é ficar uma semana com cada uma: é o tempo para a mente aprender e os resultados começarem a aparecer.", nota: "Você escolhe com qual começar. A sugestão para a primeira semana é uma frase simples para dizer ao deitar.", botao: "Seguir" },
     { tipo: "texto", cor: "#11132a", ilus: "maos-chama", rotulo: "Portal do silêncio e da fumaça", titulo: "Silenciar e perfumar o caminho", texto: "Depois da água vinham o silêncio e a fumaça. Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção.", nota: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio.", botao: "Atravessar" },
     { tipo: "respirar", vezes: 3, cor: "#10122a", rotulo: "Portal do sopro", titulo: "Deixe o dia na entrada", texto: "Segure o círculo e respire fundo. A cada expiração, solte um pedaço do dia: as conversas, as telas, as pressas.", botao: "Seguir" },
     { tipo: "texto", cor: "#0f1126", ilus: "meditacao-fita", rotulo: "Corredor escuro", titulo: "Os olhos se acostumam ao escuro", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta. O livro Arhat chama esse estado de corpo relaxado, mente desperta.", botao: "Descer mais" },
@@ -2023,7 +2053,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <div class="topo">${voltar}<span class="rotulo">Modo noite</span></div>
         <div class="relogio" id="relogio">${agoraHM()}</div>
         <p class="afirm-noite">${esc(ATOS[est.ato].frase)}</p>
-        ${tecnicaDaNoite() ? `<section><span class="rotulo">A técnica desta noite · ${esc(tecnicaDaNoite().nome)}</span><ol class="passos-noite">${tecnicaDaNoite().passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol></section>` : ""}
+        ${NOITE.length ? `<section><span class="rotulo">A técnica da semana · ${esc(tecnicaDaNoite().nome)}</span><ol class="passos-noite">${tecnicaDaNoite().passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol></section>` : ""}
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
         <section><span class="rotulo">Alvo desta noite</span>${a ? `<p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p>` : livre("sorteio") ? '<button class="btn fantasma largo" data-acao="sortear">Sortear o alvo</button>' : trancado("sorteio")}</section>
         <section><span class="rotulo">Sons da noite</span>
@@ -2136,6 +2166,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
     if (b.dataset.modo) { modoDiario = b.dataset.modo; render(); return; }
     if (b.dataset.anota) { if (rec) rec.stop(); const t = document.getElementById("sonho").value; modoAnota = b.dataset.anota; render(); const a = document.getElementById("sonho"); a.value = t; if (modoAnota === "escrever") a.focus(); return; }
+    if (b.dataset.tecnica) { est.tecnica = { i: +b.dataset.tecnica, desde: hojeIso }; salvar(); fecharSobre(); render(); abrirTecnica(); return; }
     if (b.dataset.jornada) { modoJornada = b.dataset.jornada; render(); return; }
     if (b.dataset.exp) { const k = b.dataset.exp; expSel.has(k) ? expSel.delete(k) : expSel.add(k); b.setAttribute("aria-pressed", expSel.has(k)); return; }
     if (b.dataset.chegou) { chegou = chegou === b.dataset.chegou ? null : b.dataset.chegou; document.querySelectorAll("[data-chegou]").forEach(x => x.setAttribute("aria-pressed", x.dataset.chegou === chegou)); return; }
@@ -2156,6 +2187,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "gravar") gravarVoz(b);
     else if (acao === "dormir") abrirModoNoite();
     else if (acao === "tecnica") abrirTecnica();
+    else if (acao === "escolher-tecnica") abrirEscolhaTecnica();
     else if (acao === "teste") abrirTeste();
     else if (acao === "dejavu") abrirDejavu();
     else if (acao === "salvar-dejavu") { const t = document.getElementById("deja-tx").value.trim(); if (t) { est.dejavus.push({ iso: hojeIso, texto: t }); salvar(); } fecharSobre(); render(); }
