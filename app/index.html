@@ -450,18 +450,48 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .trilho-m i { display: block; height: 100%; background: var(--cristal); }
 .mapa { background: #0b0c18; padding: 14px 10px; }
 .mapa .momento-cab { padding: 0 6px; }
-.mapa-box { position: relative; width: 100%; }
-.mapa-box svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.estacao { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 3px; width: 110px; }
-.estacao .disco { width: 50px; height: 50px; border-radius: 50%; background: #14162c; border: 1.5px solid #2c3058; display: grid; place-items: center; }
-.estacao .disco img { width: 38px; height: 38px; object-fit: contain; opacity: .35; filter: grayscale(1); }
-.estacao .nome-e { font-size: 11px; color: var(--areia-2); text-align: center; text-shadow: 0 1px 3px #000; }
-.estacao.feita .disco { border-color: var(--cristal); box-shadow: 0 0 14px rgba(245,199,91,.45); }
-.estacao.feita .disco img { opacity: 1; filter: none; }
-.estacao.aqui .disco { border-color: var(--nevoeiro); box-shadow: 0 0 0 4px color-mix(in srgb, var(--nevoeiro) 25%, transparent), 0 0 24px var(--nevoeiro); animation: pulsar 2s ease-in-out infinite; }
-.estacao.aqui .disco img { opacity: 1; filter: none; }
-.estacao.aqui .nome-e { color: var(--areia); font-weight: 600; }
-.estacao .voce { position: absolute; top: -12px; right: 18px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; background: var(--nevoeiro); color: var(--ceu); padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+.carta { border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+.carta svg { display: block; width: 100%; height: auto; fill: none; stroke: #c9a35f; stroke-width: .8; stroke-linecap: round; stroke-linejoin: round; }
+.carta .mar path { stroke-width: .6; opacity: .3; }
+.carta .ondas path { stroke-width: .7; }
+.carta .terra { fill: #1b1e3a; stroke-width: 1.3; }
+.carta .interior { stroke-width: .6; stroke-dasharray: 1 2.5; opacity: .55; }
+.carta .arv path { fill: #1b1e3a; stroke-width: .7; opacity: .75; }
+.carta .rio { stroke: #6fa8ff; stroke-width: 2; opacity: .55; }
+.carta .m-traco { fill: #1b1e3a; stroke-width: 1; }
+.carta .m-sombra { stroke-width: .6; opacity: .7; }
+.carta .cheio { fill: #c9a35f; }
+.carta .escuro { fill: #07080f; }
+.carta .agua { fill: #1f2c5c; }
+.carta .chama { fill: #f5c75b; stroke: none; }
+.carta .azul { fill: rgba(111,168,255,.28); stroke: #6fa8ff; }
+.carta .raios { stroke: #f5c75b; }
+.carta .cartela { fill: #1b1e38; stroke-width: 1; }
+.carta text { stroke: none; fill: #eee5d4; text-anchor: middle; }
+.carta .titulo-mapa { font-family: var(--display); font-size: 15px; letter-spacing: .04em; }
+.carta .sub-mapa { font-family: var(--corpo); font-style: italic; font-size: 8.5px; fill: #c9a35f; letter-spacing: .06em; }
+.carta .rosa-n { font-family: var(--display); font-size: 10px; fill: #c9a35f; }
+.carta .rota { stroke: #c9a35f; stroke-width: 1.4; stroke-dasharray: 3 4; opacity: .55; }
+.carta .rota.feita { stroke: #f5c75b; stroke-width: 2.2; stroke-dasharray: none; opacity: 1; filter: drop-shadow(0 0 3px rgba(245,199,91,.7)); }
+.carta .seta { stroke: #c9a35f; stroke-width: 1.2; opacity: .6; }
+.carta .seta.feita { stroke: #f5c75b; opacity: 1; }
+.carta .parada.longe > g:first-child { opacity: .45; }
+.carta .parada.feita > g:first-child, .carta .parada.aqui > g:first-child { stroke: #f5c75b; filter: drop-shadow(0 0 4px rgba(245,199,91,.55)); }
+.carta .medalha-m { fill: #121427; stroke-width: 1; }
+.carta .num-m { font-family: var(--display); font-size: 9px; fill: #c9a35f; }
+.carta .parada.feita .medalha-m { fill: #c9a35f; }
+.carta .parada.feita .num-m { fill: #121427; }
+.carta .parada.aqui .medalha-m { fill: var(--nevoeiro); stroke: var(--nevoeiro); }
+.carta .parada.aqui .num-m { fill: #121427; }
+.carta .rot-m { font-family: var(--corpo); font-style: italic; font-size: 10.5px; paint-order: stroke; stroke: #121427; stroke-width: 3px; }
+.carta .parada.aqui .rot-m { font-weight: 600; fill: #fff; }
+.carta .parada.longe .rot-m { fill: #b9b2c9; }
+.carta .voce-m .anel { stroke: var(--nevoeiro); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; animation: anel-m 2.4s ease-out infinite; }
+.carta .voce-m .a2 { animation-delay: 1.2s; }
+@keyframes anel-m { from { transform: scale(.6); opacity: .9; } to { transform: scale(1.5); opacity: 0; } }
+.carta .voce-m rect { fill: var(--nevoeiro); stroke: none; }
+.carta .voce-m text { font-family: var(--corpo); font-size: 9px; font-weight: 600; letter-spacing: .08em; fill: #121427; text-transform: uppercase; }
+@media (prefers-reduced-motion: reduce) { .carta .voce-m .anel { animation: none; opacity: .6; } }
 .selos-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 8px; }
 .selo { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
 .selo .medalha { width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; background: var(--ceu); border: 1.5px dashed var(--ceu-3); }
@@ -587,6 +617,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 <script src="conteudo.js"></script>
 <script src="capsulas.js"></script>
 <script src="alvos.js"></script>
+<script src="mapa.js"></script>
 <script>
 (function () {
   const IMG = { noite: "img/noite.webp", fios: "img/fios.webp", marca: "img/olho-marca.png" };
@@ -1651,28 +1682,41 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${s.lista.map(x => `<div class="missao ${x.ok ? "ok" : ""}"><span class="marca-m">${x.ok ? "✦" : ""}</span><span>${esc(x.m.txt)}<span class="trilho-m"><i style="width:${x.v / x.m.meta * 100}%"></i></span></span><b>${x.v}/${x.m.meta}</b></div>`).join("")}
       <p class="suave miuda">${s.completa ? "Semana cumprida. O selo da semana inteira é seu." : "Cumpra as três até domingo e ganhe o selo da semana inteira. Toda segunda chegam missões novas."}</p></section>`;
   }
-  // O mapa da jornada: a descida pela caverna, da travessia ao santuário, com a pessoa marcada onde está.
+  // O mapa da jornada: a carta antiga da Ilha dos Sonhos (mapa.js), com a rota numerada e a pessoa marcada.
+  const ESTACOES = [
+    ["travessia", "A travessia", 0, 26, "middle"], ["inicio", "O Início", -24, 4, "end"], ["ato1", "Primeiro Ato", 0, 27, "middle"],
+    ["lago", "Segundo Ato", 0, 27, "middle"], ["ato3", "Terceiro Ato", 0, 29, "middle"], ["ato4", "Quarto Ato", 0, 26, "middle"],
+    ["ato5", "Quinto Ato", 24, 8, "start"], ["santuario", "O Santuário", 26, -4, "start"]
+  ];
   function mapaJornada() {
-    const W = 340, passo = 84, est8 = [["A travessia", "rio"]].concat(ATOS.map(a => [a.nome, a.ilus]), [["O santuário", "figura-dourada"]]);
-    const H = 70 + passo * (est8.length - 1) + 70, xs = [170, 250, 92, 248, 92, 250, 96, 170];
-    const pts = est8.map((_, i) => ({ x: xs[i], y: 56 + i * passo }));
+    const M = window.MAPA_ILHA, P = ESTACOES.map(p => M.est[p[0]]);
     const aqui = est.travessia ? est.ato + 1 : 0;
-    const curva = (a, b) => `C${a.x} ${a.y + passo / 2} ${b.x} ${b.y - passo / 2} ${b.x} ${b.y}`;
-    const caminho = n => pts.slice(0, n + 1).map((p, i) => i ? curva(pts[i - 1], p) : `M${p.x} ${p.y}`).join(" ");
-    const parede = lado => { let d = ""; for (let y = 0; y <= H; y += 46) { const v = 18 + ((y * 37) % 29); d += `L${lado ? W - v : v} ${y} `; } return lado ? `M${W} 0 ${d}L${W} ${H}Z` : `M0 0 ${d}L0 ${H}Z`; };
-    return `<section class="mapa"><div class="momento-cab"><h2>Mapa da jornada</h2><span class="hora">até o santuário</span></div>
-      <div class="mapa-box" style="aspect-ratio:${W}/${H}">
-        <svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs>
-          <radialGradient id="boca" cx="50%" cy="0%" r="60%"><stop offset="0" stop-color="#3a3f7a" stop-opacity=".9"/><stop offset="1" stop-color="#3a3f7a" stop-opacity="0"/></radialGradient>
-          <radialGradient id="fundo-s" cx="50%" cy="100%" r="45%"><stop offset="0" stop-color="#f5c75b" stop-opacity=".45"/><stop offset="1" stop-color="#f5c75b" stop-opacity="0"/></radialGradient></defs>
-          <rect width="${W}" height="${H}" fill="url(#boca)"/><rect width="${W}" height="${H}" fill="url(#fundo-s)"/>
-          <path d="${parede(0)}" fill="#07080f"/><path d="${parede(1)}" fill="#07080f"/>
-          <path d="${caminho(pts.length - 1)}" fill="none" stroke="#3a3f6a" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
-          <path d="${caminho(aqui)}" fill="none" stroke="#f5c75b" stroke-width="3" stroke-linecap="round" opacity=".85"/></svg>
-        ${pts.map((p, i) => `<div class="estacao ${i < aqui ? "feita" : i === aqui ? "aqui" : ""}" style="left:${p.x / W * 100}%;top:${p.y / H * 100}%">
-          <span class="disco"><img src="${ILUS(est8[i][1])}" alt=""></span><span class="nome-e">${esc(est8[i][0])}</span>
-          ${i === aqui ? '<span class="voce">você</span>' : ""}</div>`).join("")}
-      </div></section>`;
+    // Curva suave pelos pontos (Catmull-Rom), e uma seta no meio de cada trecho.
+    const trecho = i => { const a = P[i - 2] || P[i - 1], b = P[i - 1], c = P[i], d = P[i + 1] || P[i];
+      return `C${b[0] + (c[0] - a[0]) / 6} ${b[1] + (c[1] - a[1]) / 6} ${c[0] - (d[0] - b[0]) / 6} ${c[1] - (d[1] - b[1]) / 6} ${c[0]} ${c[1]}`; };
+    const rota = n => `M${P[0][0]} ${P[0][1]}` + Array.from({ length: n }, (_, k) => trecho(k + 1)).join("");
+    const setas = P.slice(1).map((c, k) => { const b = P[k], mx = (b[0] + c[0]) / 2, my = (b[1] + c[1]) / 2, ang = Math.atan2(c[1] - b[1], c[0] - b[0]) * 180 / Math.PI;
+      return `<path d="M-4 -3.5L2 0L-4 3.5" transform="translate(${mx} ${my}) rotate(${ang})" class="seta ${k < aqui ? "feita" : ""}"/>`; }).join("");
+    const paradas = ESTACOES.map(([k, nome, dx, dy, ancora], i) => { const [x, y] = P[i], st = i < aqui ? "feita" : i === aqui ? "aqui" : "longe";
+      return `<g class="parada ${st}">${M.glifos[k]}
+        <g transform="translate(${x - 19} ${y - 15})"><circle r="7" class="medalha-m"/><text y="3.2" class="num-m">${i + 1}</text></g>
+        <text x="${x + dx}" y="${y + dy}" text-anchor="${ancora}" class="rot-m">${esc(nome)}</text></g>`; }).join("");
+    const [vx, vy] = P[aqui];
+    return `<section class="mapa"><div class="momento-cab"><h2>Mapa da jornada</h2><span class="hora">${aqui + 1} de ${ESTACOES.length}</span></div>
+      <div class="carta"><svg viewBox="0 0 ${M.W} ${M.H}" role="img" aria-label="Mapa da jornada: você está em ${esc(ESTACOES[aqui][1])}">
+        <defs><radialGradient id="vinheta" cx="50%" cy="45%" r="70%"><stop offset=".55" stop-color="#121427" stop-opacity="0"/><stop offset="1" stop-color="#05060d" stop-opacity=".85"/></radialGradient>
+          <filter id="papel"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .79  0 0 0 0 .64  0 0 0 0 .37  0 0 0 .07 0"/></filter></defs>
+        <rect width="${M.W}" height="${M.H}" fill="#121427"/>
+        <g class="mar">${M.mar}</g><g class="ondas">${M.ondas}</g>
+        <path d="${M.terra}" class="terra"/><path d="${M.interior}" class="interior"/>
+        <g class="arv">${M.arv}</g>${M.rio}<g class="mont">${M.mont}</g>
+        <path d="${rota(P.length - 1)}" class="rota"/>${aqui ? `<path d="${rota(aqui)}" class="rota feita"/>` : ""}${setas}
+        ${paradas}
+        <g transform="translate(${vx} ${vy})" class="voce-m"><circle r="24" class="anel"/><circle r="24" class="anel a2"/>
+          <g transform="translate(0 ${aqui === ESTACOES.length - 1 ? 40 : -42})"><rect x="-40" y="-9" width="80" height="16" rx="8"/><text y="3">você está aqui</text></g></g>
+        <g class="deco">${M.deco}</g><g class="mold">${M.mold}</g>
+        <rect width="${M.W}" height="${M.H}" fill="url(#vinheta)" pointer-events="none"/><rect width="${M.W}" height="${M.H}" filter="url(#papel)" pointer-events="none"/>
+      </svg></div></section>`;
   }
   // Álbum dos alvos: todos os lugares do sorteio; ganham cor quando a pessoa chega lá.
   function albumAlvos() {
