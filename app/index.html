@@ -603,6 +603,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .tec-op.atual { border-color: var(--nevoeiro); background: color-mix(in srgb, var(--nevoeiro) 12%, var(--ceu-2)); }
 .tec-op em { position: absolute; top: 10px; right: 12px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--nevoeiro); font-weight: 600; }
 .passos-noite { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #c97a7c; }
+.ceu-inicio { display: block; width: 100%; padding: 0; border: 1px solid var(--ceu-3); border-radius: 22px; overflow: hidden; background: #0b0c18; text-align: left; }
+.ceu-inicio canvas { display: block; width: 100%; height: auto; }
+.ceu-inicio-pe { display: flex; flex-direction: column; gap: 6px; padding: 12px 16px 14px; background: linear-gradient(180deg, rgba(11,12,24,0), #0b0c18 40%); margin-top: -28px; position: relative; }
+.ceu-inicio .nums { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--areia-2); }
+.ceu-inicio .nums b { font-family: var(--display); font-weight: 400; font-size: 20px; color: var(--areia); margin-right: 4px; }
+.frase-ato { margin: 0; display: flex; flex-direction: column; gap: 4px; font-family: var(--display); font-size: 21px; line-height: 1.3; color: var(--areia); }
+.frase-ato .rotulo { font-family: var(--corpo); }
 .dica-pessoa { font-size: 13px; color: var(--areia-2); text-align: center; text-wrap: balance; }
 .cheguei { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); background: var(--ceu-2); }
 .cheguei b { font-family: var(--display); font-weight: 400; font-size: 19px; }
@@ -850,8 +857,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           </button>${duasVezes(m, p) ? `<div class="vezes">${VEZES.map(([v, n]) => `<button class="vez" data-vez="${p.k}:${v}" aria-pressed="${vezFeita(p.k, v)}"><i></i>${n}</button>`).join("")}</div>` : ""}`).join("")}
       </section>`).join("");
     return `<div class="tela">${topo()}
-      <div class="capa"><img src="${a.capa}" alt=""><div class="txt">
-        <span class="rotulo" style="color:${a.cor}">${a.nome} · dia ${diaDaJornada()} da jornada</span><h1>${a.frase}</h1></div></div>
+      ${ceuDoInicio()}
+      <p class="frase-ato"><span class="rotulo" style="color:${a.cor}">${a.nome} · dia ${diaDaJornada()} da jornada</span>${a.frase}</p>
       ${linhaStatus()}
       ${cartaoCapsula(CAPS[diaDaJornada() - 1], true)}
       <button class="dormir-card" data-acao="dormir"><span class="ico">${ICO.lua}</span><span><b>Vou dormir</b><span class="suave">Modo noite: tela vermelha, sons, o alvo e o despertar das ${despertar()}</span></span></button>
@@ -898,6 +905,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return n;
   }
 
+  // A primeira coisa da tela inicial: o céu das noites da pessoa (a constelação dela), que leva ao Duat.
+  function ceuDoInicio() {
+    const todas = noitesExemplo().concat(est.diario.map(d => d.tipo)), cont = [0, 0, 0, 0, 0]; todas.forEach(t => cont[t]++);
+    return `<button class="ceu-inicio" data-aba="ceu" aria-label="Ver o céu das suas noites"><canvas id="ceu" width="720" height="420"></canvas>
+      <span class="ceu-inicio-pe"><span class="rotulo">O céu das suas noites</span>
+        <span class="nums"><span><b>${todas.length}</b> noites</span><span><b>${cont[2]}</b> com lucidez</span><span><b>${cont[3] + cont[4]}</b> lúcidos e viagens</span></span></span></button>`;
+  }
   function telaCeu() {
     const ex = noitesExemplo();
     const minhas = est.diario.map(d => d.tipo);
