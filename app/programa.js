@@ -37,7 +37,9 @@ window.ESTILOS = [
   { id: "energia", nome: "A luz do corpo", sub: "As raízes, os centros e as três forças", ilus: "estrela-sol",
     dia: { k: "forcas" }, tecnicas: [8, 5, 2], ensinamentos: [6, 55, 56, 57] },
   { id: "tradicoes", nome: "O silêncio e o som", sub: "As tradições do Tibete e da Índia", ilus: "meditacao-figura",
-    dia: { k: "atencao" }, tecnicas: [8, 6, 5, 2], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31] },
+    dia: { k: "atencao" }, tecnicas: [2, 14, 8, 6, 5], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31] },
   { id: "incubar", nome: "O Oráculo", sub: "Como nos templos de incubação: perguntar e receber a resposta", ilus: "morro-figuras",
-    dia: { k: "teste" }, tecnicas: [7, 3, 0], ensinamentos: [5, 13, 8, 19, 43, 44] }
+    dia: { k: "teste" }, tecnicas: [7, 3, 0], ensinamentos: [5, 13, 8, 19, 43, 44] },
+  { id: "guerreiro", nome: "O caminho do guerreiro", sub: "A arte de sonhar de Dom Juan, nos livros de Castaneda", ilus: "maos-chama",
+    dia: { k: "dialogo" }, tecnicas: [1, 12, 13, 3], ensinamentos: [30, 34, 33, 32, 31] }
 ];

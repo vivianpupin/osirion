@@ -1614,7 +1614,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const k = estagioAtual(), E = ESTAGIOS[k], med0 = praticaDoDia(E), med = med0 && med0.p.k !== "teste" ? med0 : praticaDoAto(E.ato, E.meditacao);
     const f = [
       { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
-      med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : "meditação do dia" } : null,
+      med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : med === med0 && estiloAtual() ? "prática do dia" : "meditação do dia" } : null,
       livre("sorteio") && { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" },
       CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
     ].filter(Boolean);

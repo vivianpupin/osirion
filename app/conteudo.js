@@ -36,6 +36,28 @@ window.ARHAT = (function () {
       { p: "Fique assim por alguns minutos. Quando um pensamento puxar, volte ao ponto." }
     ]
   };
+  const DIALOGO = {
+    k: "dialogo", ilus: "olho", ico: "luz", nome: "Parar o diálogo interno", det: "Caminhar em silêncio, sem nomear",
+    texto: [
+      { p: "Dom Juan dizia que o mundo se mantém como o conhecemos porque falamos dele o tempo todo, por dentro. Quando essa conversa para, a percepção se abre, e é nesse silêncio que se aprende a sonhar." },
+      { p: "Saia para caminhar devagar, de preferência num lugar com árvores ou céu aberto." },
+      { p: "Deixe os olhos levemente desfocados, olhando um pouco acima da linha do horizonte, sem fixar em nada." },
+      { p: "Não dê nome ao que vê: só perceba as formas, as cores, os sons, o vento na pele." },
+      { p: "Quando um pensamento começar a falar, não brigue com ele: volte à sensação dos pés tocando o chão." },
+      { p: "Comece com dez minutos. Com o tempo, os intervalos de silêncio ficam maiores." }
+    ]
+  };
+  const VER = {
+    k: "ver", ilus: "olho", ico: "luz", nome: "Ver, não só olhar", det: "O olhar que abrange tudo em volta",
+    texto: [
+      { p: "Olhar é fixar uma coisa e dar nome a ela. Ver é perceber tudo de uma vez, sem escolher. Nos livros de Castaneda, ver é a percepção do guerreiro: direta, sem o filtro das palavras." },
+      { p: "Sente-se num lugar tranquilo, com a coluna ereta, e escolha um ponto à sua frente." },
+      { p: "Mantenha o olhar parado nesse ponto e, sem mexer os olhos, comece a perceber o que está nas bordas da visão: em cima, embaixo, dos lados." },
+      { p: "Abra a percepção até abranger tudo ao mesmo tempo, como se os olhos ficassem largos." },
+      { p: "Sinta também os sons e a temperatura do ar, tudo junto, sem dar nome." },
+      { p: "Fique assim alguns minutos. No sonho, esse mesmo olhar ajuda a perceber que o cenário não é comum." }
+    ]
+  };
   const FORCAS = {
     k: "forcas", ilus: "estrela-terra", traco: "tres-forcas", ico: "espiral", nome: "As três forças", det: "Do alto, da frente e da Terra",
     texto: [
@@ -349,7 +371,17 @@ window.ARHAT = (function () {
       passos: ["Deite de barriga para cima e fique imóvel.", "Observe o escuro atrás dos olhos, sem esperar nada.", "Quando as imagens vierem, só olhe. Deixe que fiquem mais nítidas até virar cena."] },
     { nome: "O alvo de três objetos", afirm: ["Agora eu estou fora do corpo.", "Eu viajo em segurança e volto inteiro ao meu corpo."], de: "William Buhlman", ilus: "fita-estrela-dourada",
       texto: "A intenção clara é o que mais leva para fora do corpo. Um lugar conhecido, com detalhes, vira um alvo para a consciência.",
-      passos: ["Escolha um cômodo da casa e três objetos dele.", "Ao deitar, sinta-se lá, tocando cada um: a textura, a temperatura, o peso.", "Diga por dentro: “Agora eu estou lá.” e adormeça nessa cena."] }
+      passos: ["Escolha um cômodo da casa e três objetos dele.", "Ao deitar, sinta-se lá, tocando cada um: a textura, a temperatura, o peso.", "Diga por dentro: “Agora eu estou lá.” e adormeça nessa cena."] },
+    // Textos escritos para o app, com base nos livros de Castaneda e na tradição da Yoga Nidra (a Vivian revisa)
+    { nome: "A recapitulação com a respiração", afirm: ["Eu recolho a minha energia de volta.", "Eu solto o que não é meu."], de: "Dom Juan, nos livros de Castaneda", ilus: "figura-espiral",
+      texto: "Dom Juan ensinava que cada cena vivida deixa presa uma parte da nossa energia. Relembrar a cena com a respiração devolve essa energia, e é com ela que se sonha.",
+      passos: ["Deitado, escolha uma cena do dia, ou uma antiga, que ainda mexa com você.", "Reviva a cena com detalhes: o lugar, as pessoas, o que você sentiu.", "Vire a cabeça devagar para um lado, inspirando: puxe de volta a energia que deixou ali.", "Vire para o outro lado, expirando: solte o que recebeu dos outros naquela cena.", "Repita até a cena ficar leve. Depois, adormeça em silêncio."] },
+    { nome: "Os portões do sonhar", afirm: ["Eu firmo a minha atenção dentro do sonho.", "Eu passo de um sonho para outro, desperto."], de: "Dom Juan, nos livros de Castaneda", ilus: "figura-cruz",
+      texto: "Nos livros de Castaneda, a arte de sonhar tem portões. O primeiro é perceber que se está sonhando e firmar a atenção ali dentro. O segundo é passar de um sonho para outro sem acordar.",
+      passos: ["Ao deitar, decida: esta noite eu vou encontrar o primeiro portão.", "No sonho, olhe para as suas mãos ou para um objeto. Quando a cena começar a mudar, volte a olhar para ele.", "Olhe rápido para algo e volte às mãos, várias vezes: assim a atenção fica firme e o sonho não se desfaz.", "Quando já firmar a atenção com facilidade, tente o segundo portão: ao sentir o sonho acabando, pense num outro lugar e deixe-se levar até ele, sem acordar."] },
+    { nome: "Yoga Nidra completa", afirm: ["Eu desperto dentro dos meus sonhos."], de: "Yoga Nidra", ilus: "figura-deitada",
+      texto: "O sono yóguico: o corpo dorme, a consciência fica. É a prática tradicional da fronteira entre a vigília e o sono, feita deitado e de olhos fechados, sem se mexer.",
+      passos: ["Deite de barriga para cima, braços ao lado do corpo, palmas para cima. Diga a si mesmo: eu não vou dormir, vou ficar consciente.", "O sankalpa: repita três vezes a sua frase de intenção, curta e no presente.", "A rotação: leve a atenção, sem mexer, por cada parte do corpo: o polegar direito, o indicador, o médio, o anelar, o mínimo, a palma, o pulso… até percorrer o corpo inteiro, lado direito e depois o esquerdo.", "A respiração: conte de 27 até 1, uma respiração por número. Se perder a conta, recomece.", "As sensações opostas: sinta o corpo pesado como pedra; depois leve como uma pena. Frio, depois calor.", "As imagens: veja, uma após a outra, um céu estrelado, um rio, uma vela acesa, o mar à noite.", "Repita o sankalpa três vezes e deixe o sono vir, ainda observando."] },
   ];
 
   // As afirmações antes de dormir: uma por noite, em sequência (a mesma lista está em netlify/functions/lembretes.mjs).
@@ -377,7 +409,7 @@ window.ARHAT = (function () {
   ];
 
   // Depois dos cinco atos do Arhat: as práticas que não são do livro
-  const EXTRAS = [ATENCAO, FORCAS];
+  const EXTRAS = [ATENCAO, FORCAS, DIALOGO, VER];
 
   return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES, EXTRAS };
 })();
