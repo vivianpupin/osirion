@@ -305,10 +305,10 @@ ol.roteiro li::marker { color: var(--nevoeiro); font-family: var(--display); }
 
 /* Diário */
 .diario { background: #0b0c18; }
-/* Gravar sonho: uma moeda antiga com um microfone gravado. Ao gravar, ela só brilha por dentro: não cresce nem cobre o que está em volta. */
+/* Gravar sonho: uma moeda antiga com o olho do Osirion gravado. Ao gravar, ela só brilha por dentro: não cresce nem cobre o que está em volta. */
 .gravar { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 10px 0 2px; background: none; border: 0; color: var(--areia); font-family: var(--display); font-size: 16px; }
 .gravar .moeda-antiga { --tam: 116px; box-shadow: 0 0 14px 1px rgba(214,170,90,.25), 0 10px 22px -8px rgba(0,0,0,.65), inset 0 0 0 2px #6b4a1c; transition: box-shadow .4s ease; }
-.gravar .moeda-antiga svg { position: relative; z-index: 1; width: 46px; height: 46px; fill: none; stroke: #5c3f15; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 0 rgba(255,236,190,.55)); }
+.gravar .moeda-antiga i.olho-g { width: 66px; -webkit-mask-image: url("img/livro/olho.webp"); mask-image: url("img/livro/olho.webp"); }
 .gravar .gravar-t { min-height: 1.4em; white-space: nowrap; }
 .gravar.ativo .moeda-antiga { animation: gravando 1.6s ease-in-out infinite; }
 .gravar.ativo .gravar-t { color: var(--cristal); }
@@ -1659,7 +1659,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="topo"><span class="rotulo">Os primeiros 5 minutos</span><span class="hora">${hora}</span></div>
       <div class="perguntas"><span>Não levante. Não abra os olhos.</span><span style="color:var(--areia)">Onde eu estava?</span><span style="color:var(--areia)">O que eu estava sentindo?</span></div>
       <div class="seg" role="group" aria-label="Como anotar"><button data-anota="gravar" aria-pressed="${modoAnota === "gravar"}">Falar</button><button data-anota="escrever" aria-pressed="${modoAnota === "escrever"}">Escrever</button></div>
-      ${modoAnota === "gravar" ? `<button class="gravar" id="gravar" data-acao="gravar"><span class="moeda-antiga"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></svg></span><span class="gravar-t">Gravar sonho</span></button>
+      ${modoAnota === "gravar" ? `<button class="gravar" id="gravar" data-acao="gravar"><span class="moeda-antiga"><span class="relevo"><i class="olho-g"></i></span></span><span class="gravar-t">Gravar sonho</span></button>
       <p class="suave" id="gravar-tx" style="text-align:center">Toque e fale de olhos fechados. A sua voz vira texto aqui embaixo.</p>` : ""}
       <p class="dica-pessoa">Conte em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga, a luz é laranja…”. Até lembranças pequenas contam.</p>
       <label for="sonho" class="rotulo">Diário</label>
