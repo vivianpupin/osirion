@@ -24,3 +24,20 @@ window.ESTAGIOS = [
     dica: "Quando vierem as vibrações, não se mexa: imagine que rola para fora do corpo, ou que flutua até o teto.",
     ensinamentos: [25, 26, 27, 29, 43, 44, 45, 46, 21] }
 ];
+
+// Os estilos de prática: depois da primeira semana, a pessoa pode seguir outro caminho além do Arhat.
+// Cada estilo é um pacote pronto: a prática do dia, as técnicas da noite (uma por semana, nesta ordem)
+// e os ensinamentos (em sequência). O Arhat continua sendo o caminho padrão (os estágios).
+window.ESTILOS = [
+  { id: "arhat", nome: "O caminho do Arhat", sub: "As lições do livro, ato por ato, até a viagem astral", ilus: "figura-dourada" },
+  { id: "lucido", nome: "Sonho lúcido", sub: "Perceber, dentro do sonho, que é sonho", ilus: "olho",
+    dia: { k: "teste" }, tecnicas: [0, 9, 1, 10], ensinamentos: [10, 28, 47, 30, 16, 18, 21, 3] },
+  { id: "astral", nome: "Viagem astral", sub: "Sair do corpo com consciência, como Monroe e Buhlman", ilus: "salto-figura",
+    dia: { k: "pilar", ato: 5 }, tecnicas: [4, 11, 10], viagem: "sair", ensinamentos: [22, 57, 23, 27, 25, 26, 11, 29, 12] },
+  { id: "energia", nome: "Energia e corpo sutil", sub: "As raízes, os centros e as três forças", ilus: "estrela-sol",
+    dia: { k: "forcas" }, tecnicas: [8, 5, 2], ensinamentos: [6, 55, 56, 57] },
+  { id: "tradicoes", nome: "Yoga dos sonhos e mantras", sub: "As tradições do Tibete e da Índia", ilus: "meditacao-figura",
+    dia: { k: "atencao" }, tecnicas: [8, 6, 5, 2], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31] },
+  { id: "incubar", nome: "Pedir sonhos", sub: "Como nos templos de incubação: perguntar e receber a resposta", ilus: "morro-figuras",
+    dia: { k: "teste" }, tecnicas: [7, 3, 0], ensinamentos: [5, 13, 8, 19, 43, 44] }
+];
