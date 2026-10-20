@@ -769,9 +769,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .dormir-topo .ico svg { width: 22px; height: 22px; stroke: #e0565b; fill: none; stroke-width: 1.6; }
 .dormir-topo b { font-family: var(--display); font-weight: 400; font-size: 19px; flex: 1; }
 .dormir-topo .suave { font-size: 12px; color: #c27b7c; }
-.chama-topo { flex: none; display: flex; flex-direction: column; align-items: center; gap: 0; margin: -10px 2px -12px 0; padding: 0; background: none; border: 0; cursor: pointer; }
-.chama-topo .chama-templo { width: 40px; height: 64px; overflow: visible; }
-.chama-topo span { font-size: 11px; font-weight: 600; letter-spacing: .04em; color: #f5d78b; margin-top: -4px; }
+.chama-topo { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin: 0 4px 0 0; padding: 0; background: none; border: 0; cursor: pointer; }
+.chama-topo .chama-templo { width: 30px; height: 48px; overflow: visible; }
 .ct-fogo { animation: ct-respira 3.4s ease-in-out infinite; }
 .ct-f1 { animation: ct-tremula 1.1s ease-in-out infinite alternate; }
 .ct-f2 { animation: ct-tremula .8s ease-in-out infinite alternate-reverse; }
@@ -2288,7 +2287,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   let idTemplo = 0;
   function chamaTemplo(nivel, cor) {
     const P = CORES_CHAMA[cor] || CORES_CHAMA.ouro, id = "ct" + (idTemplo++), k = [.34, .5, .66, .83, 1][nivel], g = [.3, .48, .66, .84, 1][nivel];
-    const base = 88, cx = 30, H = 76 * k, W = 9 + 4 * k;
+    // a chama fica centrada na altura (o centro dela no meio do desenho), em qualquer nível
+    const cx = 30, H = 76 * k, W = 9 + 4 * k, base = 48 + H * .5;
     const lingua = (h, w) => `M${cx - w} ${base}C${cx - w * 1.15} ${base - h * .38} ${cx - w * .35} ${base - h * .72} ${cx} ${base - h}C${cx + w * .3} ${base - h * .7} ${cx + w * 1.15} ${base - h * .38} ${cx + w} ${base}Q${cx} ${base + w * .9} ${cx - w} ${base}Z`;
     const fagulhas = nivel >= 3 ? [[-7, 6], [6, 12], [-2, 20], [9, 2]].slice(0, nivel === 4 ? 4 : 2).map(([dx, dy], i) => `<circle class="ct-faisca" style="animation-delay:${i * .7}s" cx="${cx + dx}" cy="${base - H - dy}" r="${.7 + (i % 2) * .4}" fill="${P.mid}"/>`).join("") : "";
     return `<svg class="chama-templo" viewBox="0 0 60 96" aria-hidden="true"><defs>
@@ -2304,7 +2304,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function chamaTopo() {
     const c = chama(), nv = nivelChama(c.n);
-    return `<button class="chama-topo n${nv}" data-aba="atos" aria-label="A chama: ${NIVEIS_CHAMA[nv]}, ${c.seq} ${c.seq === 1 ? "dia" : "dias"}">${chamaTemplo(nv, est.corChama || "ouro")}<span>${c.seq} ${c.seq === 1 ? "dia" : "dias"}</span></button>`;
+    return `<button class="chama-topo n${nv}" data-aba="atos" aria-label="A chama: ${NIVEIS_CHAMA[nv]}">${chamaTemplo(nv, est.corChama || "ouro")}</button>`;
   }
   let idChama = 0;
   function svgChama(f, cls) {
