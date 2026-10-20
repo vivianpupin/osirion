@@ -994,7 +994,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .grupo-som { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-top: 6px; }
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo3 { grid-template-columns: repeat(3, 1fr); }
-.sons.tempo2 { grid-template-columns: repeat(2, 1fr); }
+.sons button small { display: block; font-size: 11px; opacity: .7; margin-top: 2px; }
 .sons.tempo button { padding: 6px; font-size: 12px; }
 .desp { display: flex; align-items: center; gap: 14px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; }
 .desp b { font-family: var(--display); font-weight: 400; font-size: 30px; color: #8a3a3d; }
@@ -3110,37 +3110,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return { parar() { const a = ctx.currentTime; out.gain.cancelScheduledValues(a); out.gain.setValueAtTime(out.gain.value, a); out.gain.linearRampToValueAtTime(0, a + 2); setTimeout(() => { nos.forEach(n => { try { n.stop(); } catch (e) {} }); out.disconnect(); }, 2300); } };
   }
 
-  // ---------- A jornada do tambor (feita no próprio aparelho, sem gravação de ninguém) ----------
-  // O tambor bate firme, uns 4 por segundo, pelo tempo escolhido. No fim, o sinal de volta tradicional:
-  // 4 séries de 7 batidas, um rufar rápido e de novo 4 séries de 7. Opções: chocalho e um batimento de fundo.
-  function tocarTambor(minutos, chocalho, batimento, aoAcabar) {
-    const ctx = audio(); if (!ctx) return null; if (ctx.state === "suspended") ctx.resume();
-    const out = ctx.createGain(); out.gain.value = .9; out.connect(ctx.destination);
-    const pele = ruido(ctx, .3, false), inicio = ctx.currentTime + .3, ev = [];
-    let x = 0; const jornada = minutos * 60;
-    while (x < jornada) { ev.push([x, "b", .5 + Math.random() * .1]); x += 1 / 4.2 + (Math.random() - .5) * .01; }
-    const sinal = () => { for (let s = 0; s < 4; s++) { for (let k = 0; k < 7; k++) { ev.push([x, "b", .75]); x += .45; } x += 1.4; } };
-    x += 1.5; sinal(); const fimRufar = x + 35; while (x < fimRufar) { ev.push([x, "b", .38 + Math.random() * .06]); x += 1 / 7; } x += 1; sinal();
-    const total = x + 2;
-    if (batimento) for (let y = 0; y < total; y += 1) { ev.push([y, "c", .3]); ev.push([y + .28, "c", .2]); }
-    ev.sort((a, b) => a[0] - b[0]);
-    const filtro = (tipo, f) => { const q = ctx.createBiquadFilter(); q.type = tipo; q.frequency.value = f; return q; };
-    const batida = (q, v) => { // o couro: um grave que cai rápido e o estalo da pele
-      const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(115, q); o.frequency.exponentialRampToValueAtTime(52, q + .14);
-      g.gain.setValueAtTime(0, q); g.gain.linearRampToValueAtTime(v, q + .003); g.gain.exponentialRampToValueAtTime(.0005, q + .45); o.connect(g); g.connect(out); o.start(q); o.stop(q + .5);
-      const n = ctx.createBufferSource(), bp = filtro("bandpass", 320), gn = ctx.createGain(); n.buffer = pele; bp.Q.value = 1.5;
-      gn.gain.setValueAtTime(v * .5, q); gn.gain.exponentialRampToValueAtTime(.0005, q + .09); n.connect(bp); bp.connect(gn); gn.connect(out); n.start(q); n.stop(q + .12);
-      if (chocalho) { const c = ctx.createBufferSource(), hp = filtro("highpass", 4500), gc = ctx.createGain(); c.buffer = pele; c.playbackRate.value = .8 + Math.random() * .4;
-        gc.gain.setValueAtTime(0, q + .01); gc.gain.linearRampToValueAtTime(.09 * v / .5, q + .025); gc.gain.exponentialRampToValueAtTime(.0005, q + .1); c.connect(hp); hp.connect(gc); gc.connect(out); c.start(q); c.stop(q + .12); }
-    };
-    const coracao = (q, v) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(60, q); o.frequency.exponentialRampToValueAtTime(40, q + .1);
-      g.gain.setValueAtTime(0, q); g.gain.linearRampToValueAtTime(v, q + .01); g.gain.exponentialRampToValueAtTime(.0005, q + .25); o.connect(g); g.connect(out); o.start(q); o.stop(q + .3); };
-    let i = 0;
-    const agenda = () => { const ate = ctx.currentTime + 2; while (i < ev.length && inicio + ev[i][0] < ate) { const [y, tipo, v] = ev[i++]; (tipo === "b" ? batida : coracao)(inicio + y, v); } };
-    agenda(); const int = setInterval(agenda, 500), fim = setTimeout(() => { parar(); if (aoAcabar) aoAcabar(); }, (total + 1) * 1000);
-    function parar() { clearInterval(int); clearTimeout(fim); const a = ctx.currentTime; out.gain.cancelScheduledValues(a); out.gain.setValueAtTime(out.gain.value, a); out.gain.linearRampToValueAtTime(0, a + 1); setTimeout(() => out.disconnect(), 1200); }
-    return { parar };
-  }
+  // ---------- A jornada do tambor: gravações de tambor (em sons/), tocadas direto, sem guardar no celular ----------
+  const TAMBORES = [["tambor-1", "Tambor 1", 30], ["tambor-2", "Tambor 2", 15], ["tambor-3", "Tambor 3", 15]];
 
   // ---------- Modo noite ----------
   const PURIF = ["Uma chuva imaginária limpa o quarto", "Celular em modo avião, longe da cama", "Diário e caneta ao lado", "Deitado de barriga para cima", "A mente no seu nevoeiro"];
@@ -3178,10 +3149,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           <details class="como-sons"><summary>Como funcionam os sons</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone. O som de ondas ao fundo acalma e ajuda a não se distrair. É só deitar, fechar os olhos e deixar tocar.</p></details>
           <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
         <section class="tambor"><span class="rotulo">Jornada do tambor</span>
-          <p class="suave">O tambor bate firme e constante, como nas jornadas xamânicas. Deite, feche os olhos e deixe a batida levar. No fim, o sinal de volta: quatro séries de sete batidas, um rufar rápido e de novo as quatro séries. É a hora de voltar devagar.</p>
-          <div class="sons tempo3">${[10, 15, 20].map(m => `<button data-tambor-min="${m}" aria-pressed="${m === 15}">${m} min</button>`).join("")}</div>
-          <div class="sons tempo2"><button data-tambor-op="chocalho" aria-pressed="false">Chocalho</button><button data-tambor-op="batimento" aria-pressed="false">Batimento de fundo</button></div>
-          <button class="btn fantasma largo" id="tambor-bt">Começar a jornada</button></section>
+          <p class="suave">O tambor bate firme e constante, como nas jornadas xamânicas. Deite, feche os olhos e deixe a batida levar. Quando o tambor parar, volte devagar.</p>
+          <div class="sons tempo3">${TAMBORES.map(([k, n, m]) => `<button data-tambor="${k}" aria-pressed="false">${n}<small>${m} min</small></button>`).join("")}</div></section>
         <section><span class="rotulo">Viagem guiada</span>${livre("viagens") ? `<div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div>` : trancado("viagens")}</section>
         <section><span class="rotulo">Despertar de madrugada</span>${!livre("despertar") ? trancado("despertar") : `
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>
@@ -3201,8 +3170,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const pede = async () => { try { if ("wakeLock" in navigator) lock = await navigator.wakeLock.request("screen"); } catch (e) {} };
       const vis = () => { if (document.visibilityState === "visible" && d.isConnected) pede(); };
       document.addEventListener("visibilitychange", vis); pede();
-      let tambor = null, tamborMin = 15;
-      const pararTambor = () => { if (tambor) tambor.parar(); tambor = null; const bt = d.querySelector("#tambor-bt"); if (bt) bt.textContent = "Começar a jornada"; };
+      let tambor = null;
+      const pararTambor = () => { if (tambor) { tambor.pause(); tambor.removeAttribute("src"); tambor.load(); } tambor = null; d.querySelectorAll("[data-tambor]").forEach(x => x.setAttribute("aria-pressed", "false")); };
       const pararSom = () => { if (som) som.parar(); som = null; nomeSom = null; clearTimeout(fimSom); d.querySelectorAll("[data-som]").forEach(b => b.setAttribute("aria-pressed", "false")); };
       const pararSino = () => { clearInterval(tocando); tocando = 0; };
       const proximo = () => { const [h, m] = despertar().split(":").map(Number), x = new Date(); x.setHours(h, m, 0, 0); if (x <= new Date()) x.setDate(x.getDate() + 1); return x.getTime(); };
@@ -3217,13 +3186,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const b = e.target.closest("button"); if (!b) return;
         destravaSom();
         if (b.dataset.check) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true");
-        else if (b.dataset.tamborMin) { tamborMin = +b.dataset.tamborMin; d.querySelectorAll("[data-tambor-min]").forEach(x => x.setAttribute("aria-pressed", x === b)); }
-        else if (b.dataset.tamborOp) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true");
-        else if (b.id === "tambor-bt") {
-          if (tambor) { pararTambor(); return; }
-          pararSom(); const op = k => d.querySelector(`[data-tambor-op="${k}"]`).getAttribute("aria-pressed") === "true";
-          tambor = tocarTambor(tamborMin, op("chocalho"), op("batimento"), () => { tambor = null; b.textContent = "Começar a jornada"; });
-          if (tambor) b.textContent = "Parar o tambor";
+        else if (b.dataset.tambor) {
+          const era = tambor && tambor.dataset.k; pararTambor(); if (era === b.dataset.tambor) return;
+          pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + ".mp3"); tambor.dataset.k = b.dataset.tambor;
+          tambor.onended = pararTambor; tambor.play().catch(() => {}); b.setAttribute("aria-pressed", "true");
         }
         else if (b.dataset.som) {
           const k = b.dataset.som; const era = nomeSom; pararSom(); pararTambor(); if (era === k) return;

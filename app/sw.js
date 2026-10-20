@@ -25,6 +25,8 @@ self.addEventListener("fetch", e => {
       return g || rede;
     })));
   if (u.origin !== location.origin || u.pathname.startsWith("/.netlify/")) return;
+  // os tambores são grandes: tocam direto da rede, sem passar pelo cache
+  if (u.pathname.includes("/sons/")) return;
   // as imagens não mudam: abrem direto do celular
   if (u.pathname.includes("/img/")) return e.respondWith(caches.match(req).then(g => g || fetch(req).then(r => { if (r.ok) { const c = r.clone(); caches.open(CACHE).then(ca => ca.put(req, c)); } return r; })));
   // o app: primeiro a rede (sempre a versão nova); sem sinal, a cópia guardada
