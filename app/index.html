@@ -2980,7 +2980,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     pulsar: { pares: [[120, .2, 5, 3.5], [240, .12, 5, 3.5]], surf: { p: 14, v: .24 }, pulsar: [2.4, .06] },
     esferas: { pares: [[100, .18, 7, 4], [200, .1, 7, 4], [300, .05, 7, 4]], surf: { p: 16, v: .22 }, esferas: [65.4, [2, 3, 4, 5, 6, 8], .035] },
     orbita: { pares: [[105, .2, 6, 3], [210, .12, 6, 3], [315, .05, 6, 3]], surf: { p: 20, v: .3, gira: 20 }, pad: [[164.8, 246.9], .02, 20] },
-    vazio: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], estrelas: [6, .05, 1200, 2600], desce: 1800 }
+    vazio: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], estrelas: [6, .05, 1200, 2600], desce: 1800 },
+    vazioprofundo: { pares: [[60, .26, 1, .5], [120, .12, 1, .5]], surf: { p: 30, v: .14 }, drone: [[30, .11]], estrelas: [4, .05, 1000, 2000], desce: 1800 },
+    poeira: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], estrelas: [50, .018, 2500, 6000], desce: 1800 },
+    cosmos: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], pad: [[55, 82.4, 110], .035, 40], estrelas: [5, .05, 1200, 2400], desce: 1800 },
+    buraco: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], rumor: [.3, 30], desce: 1800 },
+    aurora: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], pad: [[880, 1108.7, 1318.5], .006, 18], estrelas: [6, .045, 1400, 2800], desce: 1800 }
   };
   function tocarSom(nome) {
     const ctx = audio(); if (!ctx) return null; if (ctx.state === "suspended") ctx.resume();
@@ -3022,6 +3027,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const [notas, v, lento] = S.pad;
         notas.forEach((f, k) => [-.4, .4].forEach((d, lado) => { const g = ganho(v), lfo = osc(1 / (lento * (.7 + Math.random() * .6))), lg = ganho(v * .6);
           lfo.connect(lg); lg.connect(g.gain); osc(f + d).connect(g); const h = ganho(v * .3); osc(2 * (f + d)).connect(h); h.connect(g); g.connect(painel(lado ? .6 : -.6)); }));
+      }
+      if (S.rumor && ctx.createStereoPanner) { // um rumor muito grave girando devagar em volta da cabeça
+        const [v, volta] = S.rumor, g = rosaFiltrada(25, 180, v), pan = ctx.createStereoPanner(), lfo = osc(1 / volta); lfo.connect(pan.pan); g.connect(pan); pan.connect(out);
       }
       if (S.vento) { // um vento entre as estrelas, que varre do grave ao agudo e volta
         const [v, per] = S.vento, g = rosaFiltrada(100, 9000, v), bp = filtro("bandpass", 1200), lfo = osc(1 / per), prof = ganho(1000);
@@ -3111,7 +3119,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ["elevar", "Elevar-se", "Os tons sobem bem devagar: a sensação de subir."], ["alem", "Além do tempo", "A pulsação mais lenta de todas, quase silêncio."]]],
     ["Galácticos · com fone", [["vazio", "O vazio entre as estrelas", "Quase silêncio, bem grave, com estrelas raras e eco longo."], ["vialactea", "Via Láctea", "Um acorde estelar que respira e estrelinhas caindo."],
       ["nebulosa", "Nebulosa", "Grave e enevoado, com um vento que varre o céu devagar."], ["pulsar", "Pulsar", "Uma estrela que pulsa devagar, como um farol no espaço."],
-      ["esferas", "O canto das esferas", "Notas que entram e saem como órbitas de planetas."], ["orbita", "Órbita", "O som gira em volta da cabeça, como dar a volta num planeta."]]],
+      ["esferas", "O canto das esferas", "Notas que entram e saem como órbitas de planetas."], ["orbita", "Órbita", "O som gira em volta da cabeça, como dar a volta num planeta."],
+      ["vazioprofundo", "O vazio profundo", "Ainda mais lento e mais grave, com estrelas raríssimas."], ["poeira", "Poeira estelar", "O vazio com uma poeira de brilhos bem baixinhos, como estrelas muito longe."],
+      ["cosmos", "O silêncio do cosmos", "O vazio com um acorde muito grave, que mais se sente do que se ouve."], ["buraco", "O buraco negro", "Um rumor bem grave girando devagar em volta da cabeça."],
+      ["aurora", "Aurora", "Um véu agudo e etéreo que aparece e some, como a luz de uma aurora."]]],
     ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo por 40 minutos, o surf e as taças."]]]
   ];
   const SONS = SONS_GRUPOS.flatMap(g => g[1]);
