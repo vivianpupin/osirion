@@ -38,6 +38,6 @@ window.ESTILOS = [
     dia: { k: "forcas" }, tecnicas: [8, 5, 2], ensinamentos: [6, 55, 56, 57] },
   { id: "tradicoes", nome: "O silêncio e o som", sub: "As tradições do Tibete e da Índia", ilus: "meditacao-figura",
     dia: { k: "atencao" }, tecnicas: [8, 6, 5, 2], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31] },
-  { id: "incubar", nome: "A pergunta à noite", sub: "Como nos templos de incubação: perguntar e receber a resposta", ilus: "morro-figuras",
+  { id: "incubar", nome: "O Oráculo", sub: "Como nos templos de incubação: perguntar e receber a resposta", ilus: "morro-figuras",
     dia: { k: "teste" }, tecnicas: [7, 3, 0], ensinamentos: [5, 13, 8, 19, 43, 44] }
 ];
