@@ -636,9 +636,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   background: radial-gradient(circle at 34% 28%, #fff4cf, #f2c766 38%, #c08a2c 72%, #8a5a18);
   box-shadow: 0 0 0 1px #fbe4a6, 0 0 34px 6px rgba(245,199,91,.55), 0 14px 30px -6px rgba(0,0,0,.6), inset 0 -6px 12px rgba(90,50,10,.45);
   animation: moeda-gira 1.1s cubic-bezier(.2,.9,.3,1.2) both; }
-.toast-selo .moeda::before { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #2a2350, #121427 75%); box-shadow: 0 0 0 1.5px #fff1c4aa, inset 0 0 14px rgba(245,199,91,.25); }
+.toast-selo .moeda::before { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 40% 32%, #f7d687, #d9a441 55%, #a87322); box-shadow: 0 0 0 1.5px #fff1c4cc, inset 0 2px 6px rgba(255,244,207,.55), inset 0 -4px 10px rgba(110,66,14,.45); }
 .toast-selo .moeda::after { content: ""; position: absolute; inset: -40%; background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,.75) 50%, transparent 58%); transform: translateX(-70%); z-index: 2; opacity: .6; animation: moeda-brilho 2.6s .9s ease-in-out infinite; }
-.toast-selo .moeda img { position: relative; z-index: 1; width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(245,199,91,.45)); }
+/* a pessoa voando de lado, em relevo dourado (o desenho do livro usado como molde) */
+.toast-selo .moeda .relevo { position: relative; z-index: 1; display: grid; filter: drop-shadow(0 1.5px 0 rgba(100,58,10,.75)) drop-shadow(0 -1px 0 rgba(255,250,232,.7)) drop-shadow(0 0 6px rgba(255,240,200,.35)); }
+.toast-selo .moeda i { width: 80px; height: 80px; background: linear-gradient(160deg, #fffaf0, #fbe2a0 55%, #f0c463);
+  -webkit-mask: url("img/livro/voo-figura.webp") center / contain no-repeat; mask: url("img/livro/voo-figura.webp") center / contain no-repeat;
+}
 .toast-selo small { font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--cristal); }
 .toast-selo b { font-family: var(--display); font-weight: 400; font-size: 21px; color: var(--areia); text-shadow: 0 2px 12px rgba(0,0,0,.6); max-width: 80%; }
 @keyframes selo-vem { 0% { opacity: 0; } 8%, 84% { opacity: 1; } 100% { opacity: 0; } }
@@ -2463,7 +2467,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function avisoSelo(novos, titulo) {
     const s = novos[0], t = document.createElement("div"); t.className = "toast-selo"; t.setAttribute("role", "status");
-    t.innerHTML = `<div class="moeda"><img src="${ILUS(s.ilus)}" alt=""></div><small>${titulo || "Nova descoberta"}${novos.length > 1 ? ` · e mais ${novos.length - 1}` : ""}</small><b>${esc(s.nome)}</b>`;
+    t.innerHTML = `<div class="moeda"><span class="relevo"><i></i></span></div><small>${titulo || "Nova descoberta"}${novos.length > 1 ? ` · e mais ${novos.length - 1}` : ""}</small><b>${esc(s.nome)}</b>`;
     app.appendChild(t); setTimeout(() => t.remove(), 4200);
   }
   function abrirCerimonia(i) {
