@@ -816,6 +816,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .item-sonho .quando { font-size: 12px; letter-spacing: .04em; color: var(--areia-2); }
 .item-sonho .comeco { font-size: 15px; line-height: 1.45; }
 .item-sonho[open] .comeco { display: none; }
+.palavras-lista { display: flex; flex-direction: column; gap: 8px; }
+.item-sonho mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: inherit; border-radius: 3px; padding: 0 2px; }
 .item-sonho p { margin: 0; padding: 0 14px 14px 48px; font-size: 15px; line-height: 1.55; }
 .item-sonho .ic-noite.peq { flex: none; margin-top: 2px; }
 .vazio-diario { text-align: center; padding: 26px 10px; border: 1px dashed var(--ceu-3); border-radius: 18px; }
@@ -1577,16 +1579,26 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // O diário abre na lista dos sonhos (o começo de cada texto). O calendário fica num botão.
   function itemSonho(d) {
     const q = deIso(isoNoite(d)).toLocaleDateString("pt-BR", { weekday: "short", day: "numeric", month: "short" }), quando = q.charAt(0).toUpperCase() + q.slice(1);
-    const t = (d.texto || "").trim();
-    return `<details class="item-sonho"><summary>${iconeNoite(d.tipo, "peq")}<span><span class="quando">${esc(quando)} · ${esc(TIPOS[Math.min(4, d.tipo)].nome)}</span>
-      <span class="comeco">${t ? esc(t.length > 110 ? t.slice(0, 110).replace(/\s+\S*$/, "") + "…" : t) : '<span class="suave">Nada ficou desta noite.</span>'}</span></span></summary>
-      ${t.length > 110 ? `<p>${esc(t)}</p>` : ""}</details>`;
+    const t = (d.texto || "").trim(), termo = busca.trim();
+    // Com busca: o trecho onde a palavra aparece, destacada, e o sonho já aberto.
+    let comeco, aberto = false;
+    if (termo && t && chave(t).includes(chave(termo))) {
+      const k = chave(t).indexOf(chave(termo)), ini = Math.max(0, t.lastIndexOf(" ", Math.max(0, k - 50)));
+      comeco = (ini > 0 ? "…" : "") + realcar(t.slice(ini, ini + 130).trim(), termo) + (ini + 130 < t.length ? "…" : "");
+      aberto = t.length > 130;
+    } else comeco = t ? esc(t.length > 110 ? t.slice(0, 110).replace(/\s+\S*$/, "") + "…" : t) : '<span class="suave">Nada ficou desta noite.</span>';
+    return `<details class="item-sonho" ${aberto ? "open" : ""}><summary>${iconeNoite(d.tipo, "peq")}<span><span class="quando">${esc(quando)} · ${esc(TIPOS[Math.min(4, d.tipo)].nome)}</span>
+      <span class="comeco">${comeco}</span></span></summary>
+      ${t.length > 110 ? `<p>${realcar(t, termo)}</p>` : ""}</details>`;
   }
   function telaLista() {
     const todas = todasEntradas(), termo = busca.trim();
     const achadas = termo ? todas.filter(d => chave(d.texto || "").includes(chave(termo))) : todas;
     return `<div class="lista-cab"><h1>Meus sonhos</h1><span class="lista-botoes"><button class="btn-cal" data-aba="ceu"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/></svg>Céu</button><button class="btn-cal" data-modo="calendario"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Calendário</button></span></div>
       ${todas.length ? `<input class="busca" id="busca-lista" type="search" placeholder="Buscar nos sonhos: água, avó, Egito…" value="${esc(busca)}" aria-label="Buscar nos sonhos">` : ""}
+      ${(() => { const ps = palavrasQueSeRepetem(); return ps.length ? `<div class="palavras-lista"><span class="rotulo">Palavras que se repetem nos seus sonhos</span>
+        <div class="alvos">${ps.map(([w, n]) => `<button class="alvo" data-palavra="${esc(w)}" aria-pressed="${chave(busca.trim()) === chave(w)}">${esc(w)} <span class="suave" style="font-size:12px">${n}</span></button>`).join("")}</div></div>` : ""; })()}
+      ${busca.trim() ? `<span class="suave" style="font-size:13px">${achadas.length} ${achadas.length === 1 ? "sonho com" : "sonhos com"} “${esc(busca.trim())}”</span>` : ""}
       <div class="lista-sonhos" id="lista-sonhos">${achadas.length ? achadas.map(itemSonho).join("") : todas.length ? '<p class="suave" style="text-align:center">Nenhum sonho com essa palavra.</p>'
         : '<div class="vazio-diario"><p>Nenhum sonho anotado ainda.</p><p class="suave">Amanhã cedo, antes de levantar, anote o que lembrar. Até um fragmento conta.</p></div>'}</div>
       <button class="btn largo" data-modo="gravar">Anotar um sonho</button>`;
