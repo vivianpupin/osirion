@@ -948,8 +948,24 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .audio-reino .suave { color: var(--areia-2); font-size: 12px; }
 /* ---------- Modo noite: vermelho escuro, para não acordar os olhos ---------- */
 .modo-noite { position: absolute; inset: 0; overflow-y: auto; background: #0d0304; color: #d4686a; --nevoeiro: #c24a4e; --areia: #e08a8b; --areia-2: #a65558; --ceu-2: #1a0708; --ceu-3: #3a1214; --cristal: #c24a4e; }
-.modo-noite .tela { gap: 16px; }
-.modo-noite section { display: flex; flex-direction: column; gap: 8px; }
+/* A página da noite com respiro: cada parte separada por uma linha fina e espaço, letras maiores e entrelinha folgada. */
+.modo-noite .tela { gap: 0; padding-bottom: 40px; }
+.modo-noite .tela > * + * { margin-top: 22px; }
+.modo-noite section { display: flex; flex-direction: column; gap: 14px; padding-top: 28px; margin-top: 28px !important; border-top: 1px solid #2a0c0e; }
+.modo-noite section > .rotulo { letter-spacing: .14em; }
+.modo-noite section p { margin: 0; line-height: 1.7; font-size: 15.5px; }
+.modo-noite .relogio { margin-top: 10px; }
+.modo-noite .afirm-bloco { gap: 12px; padding: 8px 4px 4px; }
+.modo-noite .afirm-noite { font-size: 23px; line-height: 1.45; }
+.modo-noite .afirm-bloco .miuda { line-height: 1.65; max-width: 30ch; }
+.modo-noite .passos-noite { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 14px; }
+.modo-noite .passos-noite li { line-height: 1.65; font-size: 15.5px; padding-left: 4px; }
+.modo-noite .checks { gap: 10px; }
+.modo-noite .check { padding: 14px; font-size: 15px; }
+.modo-noite .sons { gap: 8px; }
+.modo-noite .sons + .sons { margin-top: 2px; }
+.modo-noite .comando { line-height: 1.55; padding: 4px 0 4px 14px; }
+.modo-noite .apagar { margin-top: 40px !important; }
 .modo-noite .relogio { font-family: var(--display); font-size: 64px; text-align: center; line-height: 1; color: #e0565b; font-variant-numeric: tabular-nums; }
 .afirm-noite { font-family: var(--display); font-size: 20px; text-align: center; color: #e08a8b; text-wrap: balance; }
 .afirm-bloco { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
