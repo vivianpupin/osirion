@@ -1187,7 +1187,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const instalado = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
   const pushPossivel = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
   const avisosLigados = () => !!est.avisos && pushPossivel() && Notification.permission === "granted";
-  const prefsAvisos = () => { const pf = est.perfil || {}; return { tz: Intl.DateTimeFormat().resolvedOptions().timeZone, acorda: pf.acorda || "07:00", dorme: pf.dorme || "23:00", despertar: livre("despertar") ? despertar() : null, testes: 4 }; };
+  const prefsAvisos = () => { const pf = est.perfil || {}; return { tz: Intl.DateTimeFormat().resolvedOptions().timeZone, acorda: pf.acorda || "07:00", dorme: pf.dorme || "23:00", despertar: livre("despertar") ? despertar() : null, testes: metaTestes() }; };
   function b64u8(s) { const b = atob((s + "=".repeat((4 - s.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
   // Devolve "" quando ativou, "conta" quando falta entrar na conta, ou a frase que explica o que fazer.
   async function ativarAvisos() {
@@ -1378,7 +1378,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       itens.push(linhaRito(`data-pratica="${med.p.k}"`, med.p.ico, med.p.nome, "Meditação do dia · " + med.p.det, feitoHoje(med.p.k)));
       if (duasVezes(med.m, med.p)) itens.push(`<div class="vezes">${VEZES.map(([v, nm]) => `<button class="vez" data-vez="${med.p.k}:${v}" aria-pressed="${vezFeita(med.p.k, v)}"><i></i>${nm}</button>`).join("")}</div>`);
     }
-    if (k >= 1 || est.vistas[10]) itens.push(linhaRito('data-acao="teste"', "mao", "Teste de realidade", `${testesHoje()} de 7 hoje · será que estou sonhando?`, testesHoje() >= 7));
+    if (k >= 1 || est.vistas[10]) itens.push(linhaRito('data-acao="teste"', "mao", "Teste de realidade", `${testesHoje()} de ${metaTestes()} hoje · será que estou sonhando?`, testesHoje() >= metaTestes()));
     const pn = praticaDoAto(E.ato, "noite");
     if (pn) itens.push(linhaRito('data-pratica="noite"', pn.p.ico, pn.p.nome, "A prática da noite · " + pn.p.det, feitoHoje("noite")));
     const { t, dia } = tecnicaAtual();
@@ -2316,7 +2316,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   function abrirTeste() {
-    const bolas = Array.from({ length: 10 }, (_, i) => `<i class="${i < testesHoje() ? "on" : ""}"></i>`).join("");
+    const bolas = Array.from({ length: Math.max(metaTestes(), testesHoje()) }, (_, i) => `<i class="${i < testesHoje() ? "on" : ""}"></i>`).join("");
     abrirSobre(`<div class="tela">${voltar}
       <span class="rotulo">Teste de realidade</span><h1>Será que estou sonhando?</h1>
       <p class="suave">Pare. Sinta os pés firmes no chão. Faça uma inspiração consciente.</p>
@@ -2366,6 +2366,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Cinco níveis pelos dias de prática nos últimos 7: brasa, chama baixa, chama, chama alta, fogo do templo.
   const NIVEIS_CHAMA = ["Brasa", "Chama baixa", "Chama", "Chama alta", "Fogo do templo"];
   const nivelChama = n => n <= 1 ? 0 : n <= 3 ? 1 : n === 4 ? 2 : n === 5 ? 3 : 4;
+  // Os testes de realidade do dia crescem com a chama: poucos no começo, mais conforme a prática fica constante.
+  // Vale para a meta no app e para os lembretes que chegam no celular.
+  const TESTES_CHAMA = [2, 3, 4, 5, 7];
+  const metaTestes = () => TESTES_CHAMA[nivelChama(chama().n)];
   const CORES_CHAMA = {
     ouro: { core: "#fffbef", mid: "#ffd780", edge: "#f08a2e", tip: "#c2461f", glow: "245,170,70" },
     alvorada: { core: "#fff6f0", mid: "#ffc9a0", edge: "#f08aa8", tip: "#a8466e", glow: "240,140,160" }
@@ -2469,7 +2473,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // ---------- Missões da semana ----------
   function inicioSemana(iso) { const d = deIso(iso); d.setDate(d.getDate() - (d.getDay() + 6) % 7); return isoDe(d); }
   const MISSOES = [
-    { txt: "Fazer 7 testes de realidade em 3 dias", meta: 3, conta: dias => dias.filter(h => (h.testes || 0) >= 7).length },
+    { txt: "Completar os testes de realidade do dia em 3 dias", meta: 3, conta: dias => dias.filter(h => (h.tec || []).includes("teste")).length },
     { txt: "Anotar 4 noites no diário", meta: 4, conta: (dias, isos) => est.diario.filter(d => isos.includes(isoNoite(d))).length },
     { txt: "Fazer a prática da noite em 3 noites", meta: 3, conta: dias => dias.filter(h => (h.tec || []).includes("noite")).length },
     { txt: "Sortear um alvo e dormir com ele", meta: 1, conta: dias => dias.filter(h => h.sorteio).length },
@@ -2997,7 +3001,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       modoDiario = "lista"; diaSel = hojeIso; busca = ""; filtro = null;
       mesVisto = new Date(new Date().getFullYear(), new Date().getMonth(), 1); render();
     }
-    else if (acao === "acordado") { registrar("testes"); if (testesHoje() >= 7) marcar("teste"); salvar(); fecharSobre(); render(); }
+    else if (acao === "acordado") { registrar("testes"); if (testesHoje() >= metaTestes()) marcar("teste"); salvar(); fecharSobre(); render(); }
     else if (acao === "adiantar") { est.adianta = (est.adianta || 0) + 1; salvar(); render(); }
     else if (acao === "comprar") { if (!VENDA) return; est.pago = true; salvar(); render(); }
     else if (acao === "feito") { const k = b.dataset.k; marcar(k); fecharSobre(); if (k === "diario") { aba = "diario"; modoDiario = "gravar"; } render(); }
@@ -3030,7 +3034,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible") return;
     const virou = atualizarDia();
-    if (nuvem.usuario) { nuvem.sincronizado = false; sincronizar(false); }
+    if (nuvem.usuario) { nuvem.sincronizado = false; sincronizar(false); atualizarAvisos(); }
     if (virou && !document.getElementById("caverna") && !document.querySelector(".abertura-app") && !document.getElementById("sobre") && !document.querySelector(".modo-noite")) render();
   });
   // O service worker guarda o app para abrir sem internet e mostra os lembretes. Tocar num lembrete abre a aba certa.
