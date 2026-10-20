@@ -988,6 +988,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons button { padding: 10px 6px; border-radius: 12px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; font-size: 13px; }
 .sons button[aria-pressed="true"] { background: #4a1316; border-color: #c24a4e; color: #f2b8b9; }
 .sons.viagens, .sons.quatro { grid-template-columns: 1fr 1fr; }
+.grupo-som { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-top: 6px; }
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo button { padding: 6px; font-size: 12px; }
 .desp { display: flex; align-items: center; gap: 14px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; }
@@ -2953,10 +2954,23 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   // Os Focos, no estilo dos áudios de Robert Monroe: vários pares de tons em camadas (um tom em cada ouvido),
   // todos na mesma pulsação, sobre o "surf", um ruído rosado que sobe e desce como ondas longe. Precisa de fone.
-  const FOCOS = {
-    foco10: [[100, 7, 4, .2], [200, 7, 4, .14], [300, 7, 4, .07]],   // corpo dormindo, mente acordada (teta)
-    foco12: [[150, 10, 7, .17], [250, 4, 4, .11], [400, 10, 7, .06]], // consciência expandida (alfa e teta)
-    foco21: [[90, 3, 1.5, .22], [180, 3, 1.5, .14], [480, 40, 40, .02]] // a ponte para o outro lado (delta)
+  // Os sons com fone, no estilo dos áudios de Robert Monroe: vários pares de tons em camadas (um tom em cada ouvido;
+  // a diferença entre eles é a pulsação, que desce devagar) sobre o "surf", um ruído rosado que sobe e desce como ondas.
+  // pares: [tom, volume, pulsação do início, pulsação do fim]; desce: em quantos segundos a pulsação chega ao fim.
+  const SOM = {
+    tacas: { pares: [[130.8, .07, 8, 6], [196.2, .04, 8, 6]], surf: { p: 16, v: .22 }, tacas: [8, 14, .08] },
+    chuvabin: { pares: [[180, .12, 7, 4], [270, .07, 7, 4], [360, .03, 7, 4]], chuva: true },
+    sono: { pares: [[120, .15, 3, 1.5], [240, .08, 3, 1.5], [360, .03, 3, 1.5]], surf: { p: 22, v: .24 }, desce: 1800 },
+    foco10: { pares: [[100, .2, 7, 4], [200, .14, 7, 4], [300, .07, 7, 4]], surf: { p: 14, v: .32 } },
+    foco12: { pares: [[150, .17, 10, 7], [250, .11, 4, 4], [400, .06, 10, 7]], surf: { p: 14, v: .3 } },
+    foco21: { pares: [[90, .22, 3, 1.5], [180, .14, 3, 1.5], [480, .02, 40, 40]], surf: { p: 16, v: .32 } },
+    limiar: { pares: [[90, .2, 5, 3.5], [180, .13, 5, 3.5], [270, .06, 5, 3.5]], surf: { p: 16, v: .32 } },
+    vibracoes: { pares: [[100, .18, 4.5, 4], [200, .11, 4.5, 4]], surf: { p: 12, v: .22 }, vib: [48, .2, 600], zum: [.04, 600] },
+    zumbido: { pares: [[110, .12, 8, 5], [220, .07, 8, 5], [330, .03, 8, 5]], surf: { p: 12, v: .2 }, vib: [55, .14, 30], zum: [.035, 30] },
+    desprendimento: { pares: [[110, .18, 6, 3], [220, .11, 6, 3], [330, .05, 6, 3]], surf: { p: 14, v: .35, gira: 18 } },
+    elevar: { pares: [[100, .18, 4, 4], [150, .12, 4, 4], [300, .05, 4, 4]], sobe: 1.35, surf: { p: 14, v: .2 }, ar: .1 },
+    alem: { pares: [[80, .2, 2, 1], [160, .12, 2, 1]], surf: { p: 24, v: .25 }, desce: 1800 },
+    tempo: { pares: [[136.1, .13, 6, 2], [272.2, .07, 6, 2], [408.3, .03, 6, 2]], surf: { p: 18, v: .25 }, drone: [[68.05, .09]], tacas: [70, 150, .06], desce: 2400 }
   };
   function tocarSom(nome) {
     const ctx = audio(); if (!ctx) return null; if (ctx.state === "suspended") ctx.resume();
@@ -2966,16 +2980,40 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const ganho = v => { const g = ctx.createGain(); g.gain.value = v; return g; };
     const filtro = (tipo, f) => { const q = ctx.createBiquadFilter(); q.type = tipo; q.frequency.value = f; return q; };
     const osc = (f, tipo) => { const o = ctx.createOscillator(); o.type = tipo || "sine"; o.frequency.value = f; o.start(); nos.push(o); return o; };
-    if (FOCOS[nome]) {
-      const junta = ctx.createChannelMerger(2), gt = ganho(1); junta.connect(gt); gt.connect(out);
-      FOCOS[nome].forEach(([base, b0, b1, v]) => {
-        const esq = osc(base), dir = osc(base + b0), ge = ganho(v), gd = ganho(v);
-        dir.frequency.setValueAtTime(base + b0, t); dir.frequency.linearRampToValueAtTime(base + b1, t + 1200);
+    if (SOM[nome]) {
+      const S = SOM[nome], desce = S.desce || 1200, junta = ctx.createChannelMerger(2); junta.connect(out);
+      (S.pares || []).forEach(([base, v, b0, b1]) => {
+        const esq = osc(base), dir = osc(base + b0), ge = ganho(v), gd = ganho(v), alto = S.sobe || 1;
+        esq.frequency.setValueAtTime(base, t); esq.frequency.linearRampToValueAtTime(base * alto, t + desce);
+        dir.frequency.setValueAtTime(base + b0, t); dir.frequency.linearRampToValueAtTime(base * alto + b1, t + desce);
         esq.connect(ge); ge.connect(junta, 0, 0); dir.connect(gd); gd.connect(junta, 0, 1);
       });
-      const surf = (lado) => { const s = ctx.createBufferSource(); s.buffer = rosa(ctx, 9); s.loop = true; s.start(); nos.push(s);
-        const lp = filtro("lowpass", 4000), hp = filtro("highpass", 60), g = ganho(.32); s.connect(hp); hp.connect(lp); lp.connect(g); g.connect(junta, 0, lado); return g; };
-      const sL = surf(0), sR = surf(1), onda = osc(1 / 14), prof = ganho(.2); onda.connect(prof); prof.connect(sL.gain); prof.connect(sR.gain);
+      const rosaFiltrada = (lo, hi, v) => { const s = ctx.createBufferSource(); s.buffer = rosa(ctx, 9); s.loop = true; s.start(); nos.push(s);
+        const hp = filtro("highpass", lo), lp = filtro("lowpass", hi), g = ganho(v); s.connect(hp); hp.connect(lp); lp.connect(g); return g; };
+      if (S.surf) {
+        const onda = osc(1 / S.surf.p), prof = ganho(S.surf.v * .6);
+        if (S.surf.gira && ctx.createStereoPanner) { // o surf gira devagar em volta da cabeça
+          const g = rosaFiltrada(80, 3500, S.surf.v * 1.2), pan = ctx.createStereoPanner(), volta = osc(1 / S.surf.gira); volta.connect(pan.pan); g.connect(pan); pan.connect(out);
+        } else { [0, 1].forEach(lado => { const g = rosaFiltrada(60, 4000, S.surf.v); onda.connect(prof); prof.connect(g.gain); g.connect(junta, 0, lado); }); }
+      }
+      (S.drone || []).forEach(([f, v]) => { const g = ganho(v); osc(f).connect(g); g.connect(out); });
+      if (S.vib) { // a vibração grave que pulsa no corpo e vai crescendo
+        const [f, v, cresce] = S.vib, g = ctx.createGain(), am = ganho(.5), lfo = osc(4), lg = ganho(.5);
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + cresce); lfo.connect(lg); lg.connect(am.gain); osc(f).connect(am); am.connect(g); g.connect(out);
+      }
+      if (S.zum) { const [v, cresce] = S.zum, g = rosaFiltrada(3000, 9000, 0); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + cresce); g.connect(out); }
+      if (S.ar) { const g = rosaFiltrada(400, 8000, 0); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(S.ar, t + desce); g.connect(out); }
+      if (S.chuva) { const c = tocarSom("chuva"); if (c) nos.push({ stop() { c.parar(); } }); }
+      if (S.tacas) { // o toque de uma taça tibetana que se apaga devagar
+        const [a, b, v] = S.tacas;
+        const taca = quando => {
+          const f = [392, 329.6, 293.7, 261.6, 440][Math.floor(Math.random() * 5)], g = ctx.createGain(); g.connect(out);
+          g.gain.setValueAtTime(0, quando); g.gain.linearRampToValueAtTime(v, quando + .02); g.gain.exponentialRampToValueAtTime(.0005, quando + 16);
+          [[1, 1], [2.76, .45], [5.4, .2]].forEach(([m, vv]) => { const o = ctx.createOscillator(), go = ctx.createGain(); o.frequency.value = f * m; go.gain.value = vv; o.connect(go); go.connect(g); o.start(quando); o.stop(quando + 17); });
+        };
+        let prox = t + 4; const agenda = () => { while (prox < ctx.currentTime + 60) { taca(prox); prox += a + Math.random() * (b - a); } };
+        agenda(); const intT = setInterval(agenda, 20000); nos.push({ stop() { clearInterval(intT); } });
+      }
       out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 20);
     } else if (nome === "chuva") {
       // a chuva: um chiado rosado e macio dos dois lados, um rumor grave e gotinhas de água (estalos curtos de ruído, sem tom)
@@ -3020,7 +3058,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // ---------- Modo noite ----------
   const PURIF = ["Uma chuva imaginária limpa o quarto", "Celular em modo avião, longe da cama", "Diário e caneta ao lado", "Deitado de barriga para cima", "A mente no seu nevoeiro"];
-  const SONS = [["chuva", "Chuva"], ["mar", "Mar"], ["mata", "Noite na mata"], ["foco10", "Foco 10 · fone"], ["foco12", "Foco 12 · fone"], ["foco21", "Foco 21 · fone"], ["tempo", "Atravessar o tempo · fone"]];
+  const SONS_GRUPOS = [
+    ["Natureza", [["chuva", "Chuva", "Chuva macia caindo, com gotinhas de água."], ["mar", "Mar", "Ondas lentas indo e vindo."], ["mata", "Noite na mata", "Grilos, folhas ao vento e um sapo longe."]]],
+    ["Para adormecer · com fone", [["tacas", "Taças tibetanas", "Taças que se apagam devagar sobre tons suaves e o surf."], ["chuvabin", "Chuva e binaural", "Tons em camadas descendo devagar, com a chuva por baixo."], ["sono", "Sono profundo", "Tons bem lentos, a pulsação do sono profundo."]]],
+    ["Para sair do corpo · com fone", [["foco10", "Foco 10", "Corpo dormindo, mente acordada."], ["foco12", "Foco 12", "Consciência expandida."], ["foco21", "Foco 21", "A ponte para o outro lado."],
+      ["limiar", "O limiar", "Mais fundo que o Foco 10: ficar no ponto em que o corpo dorme e a mente não."], ["vibracoes", "As vibrações", "Uma vibração grave que cresce e pulsa, como no estado vibracional."],
+      ["zumbido", "O zumbido do outro lado", "O chiado e a vibração que vêm antes da saída."], ["desprendimento", "O desprendimento", "O som gira devagar em volta da cabeça: para rolar para fora."],
+      ["elevar", "Elevar-se", "Os tons sobem bem devagar: a sensação de subir."], ["alem", "Além do tempo", "A pulsação mais lenta de todas, quase silêncio."]]],
+    ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo por 40 minutos, o surf e as taças."]]]
+  ];
+  const SONS = SONS_GRUPOS.flatMap(g => g[1]);
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
   function abrirModoNoite(somInicial) {
     registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); salvar();
@@ -3034,8 +3081,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         ${a ? `<section><span class="rotulo">Alvo desta noite</span><p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p></section>`
           : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite · se quiser</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
         <section><span class="rotulo">Sons da noite</span>
-          <div class="sons quatro">${SONS.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>
-          <p class="suave miuda" id="aviso-fone" hidden>Use fone de ouvido: um tom em cada ouvido. A pulsação desce devagar até a beira do sono, para o corpo dormir com a mente acordada. O som toca pelo tempo escolhido e some devagar.</p>
+          ${SONS_GRUPOS.map(([g, lista]) => `<span class="grupo-som">${g}</span><div class="sons quatro">${lista.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>`).join("")}
+          <p class="suave miuda" id="aviso-fone" hidden></p>
           <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
         <section><span class="rotulo">Viagem guiada</span>${livre("viagens") ? `<div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div>` : trancado("viagens")}</section>
         <section><span class="rotulo">Despertar de madrugada</span>${!livre("despertar") ? trancado("despertar") : `
@@ -3073,7 +3120,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         else if (b.dataset.som) {
           const k = b.dataset.som; const era = nomeSom; pararSom(); if (era === k) return;
           som = tocarSom(k); nomeSom = k; b.setAttribute("aria-pressed", "true"); fimSom = setTimeout(pararSom, minutos * 6e4);
-          const av = d.querySelector("#aviso-fone"); if (av) av.hidden = !FOCOS[k] && k !== "tempo";
+          const av = d.querySelector("#aviso-fone"), sd = SONS.find(x => x[0] === k);
+          if (av && sd) { av.textContent = sd[2] + (SOM[k] ? " Use fone de ouvido: um tom em cada ouvido." : "") + " Toca pelo tempo escolhido e some devagar."; av.hidden = false; }
         } else if (b.dataset.tempo) {
           minutos = +b.dataset.tempo; d.querySelectorAll("[data-tempo]").forEach(x => x.setAttribute("aria-pressed", x === b));
           if (som) { clearTimeout(fimSom); fimSom = setTimeout(pararSom, minutos * 6e4); }
