@@ -2704,6 +2704,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // ---------- Diário: voz que vira texto ----------
   let rec = null;
+  // A caixa do diário cresce com o texto e sempre mostra a última frase (ao falar ou ao escrever).
+  function acompanhar(area) {
+    area.style.height = "auto";
+    area.style.height = Math.min(area.scrollHeight + 2, Math.round(innerHeight * .55)) + "px";
+    area.scrollTop = area.scrollHeight;
+    const r = area.getBoundingClientRect(), nav = document.getElementById("nav"), limite = nav ? nav.getBoundingClientRect().top - 12 : innerHeight;
+    if (r.bottom > limite) telas.scrollTop += r.bottom - limite;
+  }
   function gravarVoz(b) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition, tx = document.getElementById("gravar-tx"), area = document.getElementById("sonho");
     if (rec) { rec.stop(); return; }
@@ -2713,7 +2721,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     rec.onresult = e => {
       let prov = "";
       for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) final += r[0].transcript.trim() + " "; else prov += r[0].transcript; }
-      area.value = base + final + prov;
+      area.value = base + final + prov; acompanhar(area);
     };
     rec.onerror = e => { tx.textContent = e.error === "not-allowed" || e.error === "service-not-allowed" ? "O Osirion precisa da permissão do microfone. Ou use o microfone do teclado." : "Não consegui ouvir. Tente de novo ou use o microfone do teclado."; };
     rec.onend = () => { rec = null; b.classList.remove("ativo"); b.textContent = "Gravar sonho"; };
@@ -2833,6 +2841,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "feito") { const k = b.dataset.k; marcar(k); fecharSobre(); if (k === "diario") { aba = "diario"; modoDiario = "gravar"; } render(); }
   });
   app.addEventListener("input", e => {
+    if (e.target.id === "sonho") { acompanhar(e.target); return; }
     if (e.target.id === "busca-lista") {
       busca = e.target.value;
       const todas = todasEntradas(), t = busca.trim(), ach = t ? todas.filter(d => chave(d.texto || "").includes(chave(t))) : todas;
