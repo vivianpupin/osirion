@@ -988,6 +988,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons button { padding: 10px 6px; border-radius: 12px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; font-size: 13px; }
 .sons button[aria-pressed="true"] { background: #4a1316; border-color: #c24a4e; color: #f2b8b9; }
 .sons.viagens, .sons.quatro { grid-template-columns: 1fr 1fr; }
+.sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo button { padding: 6px; font-size: 12px; }
 .desp { display: flex; align-items: center; gap: 14px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; }
 .desp b { font-family: var(--display); font-weight: 400; font-size: 30px; color: #8a3a3d; }
@@ -2956,6 +2957,23 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       esq.connect(junta, 0, 0); dir.connect(junta, 0, 1); junta.connect(gt); gt.connect(out);
       const lp = filtro("lowpass", 500), gf = ganho(.12); fonte(true).connect(lp); lp.connect(gf); gf.connect(out); // um mar bem baixo por baixo
       out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 20);
+    } else if (nome === "tempo") {
+      // Atravessar o tempo: o tom grave do om, um binaural mais fundo (de 6 a 2 por segundo, em 40 minutos),
+      // um vento suave e, de tempos em tempos, o toque de uma taça tibetana que se apaga devagar.
+      const base = 136.1, junta = ctx.createChannelMerger(2), gt = ganho(.12);
+      const esq = osc(base), dir = osc(base + 6);
+      dir.frequency.setValueAtTime(base + 6, t); dir.frequency.linearRampToValueAtTime(base + 2, t + 2400);
+      esq.connect(junta, 0, 0); dir.connect(junta, 0, 1); junta.connect(gt); gt.connect(out);
+      const gd = ganho(.09), resp = osc(1 / 17), rg = ganho(.015); osc(68.05).connect(gd); osc(204.15).connect(ganho(.2)).connect(gd); resp.connect(rg); rg.connect(gd.gain); gd.connect(out);
+      const lp = filtro("lowpass", 380), gv = ganho(.1); fonte(true).connect(lp); lp.connect(gv); gv.connect(out);
+      const taca = quando => {
+        const f = [392, 329.6, 293.7, 261.6][Math.floor(Math.random() * 4)], g = ctx.createGain(); g.connect(out);
+        g.gain.setValueAtTime(0, quando); g.gain.linearRampToValueAtTime(.06, quando + .02); g.gain.exponentialRampToValueAtTime(.0005, quando + 18);
+        [[1, 1], [2.76, .45], [5.4, .2]].forEach(([m, v]) => { const o = ctx.createOscillator(), gv2 = ctx.createGain(); o.frequency.value = f * m; gv2.gain.value = v; o.connect(gv2); gv2.connect(g); o.start(quando); o.stop(quando + 19); });
+      };
+      let prox = t + 8; const agenda = () => { while (prox < ctx.currentTime + 120) { taca(prox); prox += 70 + Math.random() * 80; } };
+      agenda(); const intTaca = setInterval(agenda, 60000); nos.push({ stop() { clearInterval(intTaca); } });
+      out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 20);
     } else if (nome === "chuva") {
       const hp = filtro("highpass", 500), lp = filtro("lowpass", 6000), g = ganho(.1); fonte(false).connect(hp); hp.connect(lp); lp.connect(g); g.connect(out);
       const g2 = ganho(.3); fonte(true).connect(g2); g2.connect(out);
@@ -2976,7 +2994,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // ---------- Modo noite ----------
   const PURIF = ["Uma chuva imaginária limpa o quarto", "Celular em modo avião, longe da cama", "Diário e caneta ao lado", "Deitado de barriga para cima", "A mente no seu nevoeiro"];
-  const SONS = [["chuva", "Chuva"], ["mar", "Mar"], ["mata", "Noite na mata"], ["binaural", "Som binaural · fone"]];
+  const SONS = [["chuva", "Chuva"], ["mar", "Mar"], ["mata", "Noite na mata"], ["binaural", "Som binaural · fone"], ["tempo", "Atravessar o tempo · fone"]];
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
   function abrirModoNoite(somInicial) {
     registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); salvar();
@@ -2991,8 +3009,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite · se quiser</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
         <section><span class="rotulo">Sons da noite</span>
           <div class="sons quatro">${SONS.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>
-          <p class="suave miuda" id="aviso-fone" hidden>Use fone de ouvido: um tom em cada ouvido. A pulsação desce devagar até a beira do sono, para o corpo dormir com a mente acordada.</p>
-          <div class="sons tempo">${[15, 30, 60].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
+          <p class="suave miuda" id="aviso-fone" hidden>Use fone de ouvido: um tom em cada ouvido. A pulsação desce devagar até a beira do sono, para o corpo dormir com a mente acordada. O som toca pelo tempo escolhido e some devagar.</p>
+          <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
         <section><span class="rotulo">Viagem guiada</span>${livre("viagens") ? `<div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div>` : trancado("viagens")}</section>
         <section><span class="rotulo">Despertar de madrugada</span>${!livre("despertar") ? trancado("despertar") : `
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>
@@ -3029,7 +3047,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         else if (b.dataset.som) {
           const k = b.dataset.som; const era = nomeSom; pararSom(); if (era === k) return;
           som = tocarSom(k); nomeSom = k; b.setAttribute("aria-pressed", "true"); fimSom = setTimeout(pararSom, minutos * 6e4);
-          const av = d.querySelector("#aviso-fone"); if (av) av.hidden = k !== "binaural";
+          const av = d.querySelector("#aviso-fone"); if (av) av.hidden = k !== "binaural" && k !== "tempo";
         } else if (b.dataset.tempo) {
           minutos = +b.dataset.tempo; d.querySelectorAll("[data-tempo]").forEach(x => x.setAttribute("aria-pressed", x === b));
           if (som) { clearTimeout(fimSom); fimSom = setTimeout(pararSom, minutos * 6e4); }
