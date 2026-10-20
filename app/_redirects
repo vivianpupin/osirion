@@ -1,2 +1,5 @@
 # Links antigos com /app/ continuam abrindo o app.
 /app/*  /:splat  301
+
+# O convite para mandar às pessoas
+/convite  /convite.html  200

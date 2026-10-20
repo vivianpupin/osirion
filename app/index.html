@@ -6,6 +6,12 @@
 <title>Osirion</title>
 <meta name="description" content="Osirion: sonho lúcido e viagem astral, de Vivian Pupin.">
 <meta name="theme-color" content="#121427">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Osirion · Sonho lúcido e viagem astral">
+<meta property="og:description" content="Um caminho para lembrar dos sonhos, despertar dentro deles e viajar além do corpo. De Vivian Pupin.">
+<meta property="og:image" content="https://ooosirion.netlify.app/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Osirion">
@@ -1308,6 +1314,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return u ? `<div class="conta-card"><span class="rotulo">Sua conta</span><p>A sua jornada está guardada na nuvem · ${esc(u.email || "")}</p>${botaoAvisos()}<button class="link-conta" data-acao="sair-conta" style="align-self:flex-start;padding-left:0">Sair desta conta</button></div>`
       : `<div class="conta-card"><span class="rotulo">Sua conta</span><p>O seu diário está guardado só neste celular. Crie uma conta para não perder nada.</p><button class="btn fantasma largo" data-acao="abrir-conta">Guardar minha jornada</button></div>`;
   }
+  function cartaoConvite() {
+    return `<div class="conta-card"><span class="rotulo">Convide alguém</span><p>Mande o Osirion para quem também quer sonhar acordado. O link abre uma página que ensina a instalar no celular.</p><button class="btn fantasma largo" data-acao="convidar">Enviar o convite</button><p class="nota-c" id="convite-res" hidden></p></div>`;
+  }
   function abrirConta() {
     abrirSobre(`<div class="tela conta-tela">${voltar}<span class="rotulo">Sua conta</span><h1>Guarde a sua jornada</h1>
       <p class="suave">Com um e-mail e uma senha, o seu diário fica guardado e você não perde nada, nem se trocar de celular.</p><div class="conta-lugar"></div></div>`,
@@ -1903,7 +1912,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function telaJornada() {
     const seg = `<div class="seg" role="group" aria-label="Jornada">${[["caminho", "Mapa"], ["conquistas", "Conquistas"]].map(([k, n]) => `<button data-jornada="${k}" aria-pressed="${modoJornada === k}">${n}</button>`).join("")}</div>`;
     if (modoJornada === "conquistas") return `<div class="tela">${topo()}${seg}${livre("selos") ? livroSelos() : trancado("selos")}${livre("album") ? albumAlvos() : trancado("album")}${livre("lugares") ? seusAlvos() : trancado("lugares")}</div>`;
-    return `<div class="tela">${topo()}${seg}${mapaJornada()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}${cartaoConta()}</div>`;
+    return `<div class="tela">${topo()}${seg}${mapaJornada()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}${cartaoConta()}${cartaoConvite()}</div>`;
   }
   function telaAtos(seg) {
     const lista = ATOS.map(a => {
@@ -3269,6 +3278,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         if (!r) { render(); return; }
         b.disabled = false; const n = document.getElementById("aviso-res"); if (n) { n.textContent = r; n.hidden = false; }
       });
+      return;
+    }
+    if (b.dataset.acao === "convidar") {
+      const url = location.origin + "/convite", texto = "Osirion: sonho lúcido e viagem astral. Abre e instala no celular:";
+      const ok = m => { const n = document.getElementById("convite-res"); if (n) { n.textContent = m; n.hidden = false; } };
+      if (navigator.share) navigator.share({ title: "Osirion", text: texto, url }).catch(() => {});
+      else if (navigator.clipboard) navigator.clipboard.writeText(texto + " " + url).then(() => ok("Link copiado. É só colar na conversa."), () => ok(url));
+      else ok(url);
       return;
     }
     if (b.dataset.acao === "sair-conta") {
