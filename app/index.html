@@ -1099,6 +1099,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const t1 = sorteia(window.TAREFAS); let t2 = sorteia(window.TAREFAS); if (t2 === t1) t2 = (t2 + 1) % window.TAREFAS.length;
     return { r, a: sorteia(reino(r).alvos), c: sorteia(window.CHEGADAS), s: sorteia(window.SENTIDOS), t: [t1, t2], q: sorteia(window.PERGUNTAS) };
   }
+  // Não é toda noite que tem alvo: ele vale para a noite em que foi sorteado (e para a manhã seguinte, no diário).
+  const alvoDaNoite = () => est.alvo && (est.alvoNoite === hojeIso || est.alvoNoite === isoMais(hojeIso, -1)) ? alvoDe(est.alvo) : null;
   function alvoDe(l) {
     const R = l && typeof l === "object" ? reino(l.r) : null;
     if (!R || !R.alvos[l.a]) return null;
@@ -1465,6 +1467,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <p class="suave">Cada estágio tem ensinamentos, uma meditação do dia e as técnicas da noite. Você avança praticando. As conquistas podem chegar a qualquer momento.</p>
       <section class="conquistas-m"><span class="rotulo">Conquistas</span><div class="marcos">${Object.entries(MARCOS).map(([id, m]) => `<span class="marco ${marcos[id] ? "on" : ""}"><img src="${ILUS(m.ilus)}" alt=""><small>${esc(m.nome)}</small></span>`).join("")}</div></section>
       <div class="trilha-est">${trilha}</div>
+      <section class="momento"><div class="momento-cab"><h3>Depois dos cinco atos</h3></div>
+        ${livre("extras") ? (window.ARHAT.EXTRAS || []).map(p => linhaRito(`data-pratica="${p.k}"`, p.ico, p.nome, p.det, feitoHoje(p.k))).join("") + linhaRito('data-acao="sortear"', "espiral", "Oráculo dos alvos", "Sortear o alvo de uma noite", false) : trancado("extras")}
+      </section>
     </div>`;
   }
   // Um estágio por dentro: os ensinamentos (em sequência), a meditação do dia, as práticas do ato, as técnicas e o marco.
@@ -1566,7 +1571,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const f = [
       { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
       med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : "meditação do dia" } : null,
-      livre("sorteio") && { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDe(est.alvo) ? "esta noite: " + alvoDe(est.alvo).nome : "sortear o alvo da noite" },
+      livre("sorteio") && { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" },
       CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
     ].filter(Boolean);
     return `<section class="ferramentas"><h3>Ferramentas</h3><div class="ferr-grade">${f.map(x => `<button class="ferr" ${x.attr}><img src="${ILUS(x.ilus)}" alt=""><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></button>`).join("")}</div></section>`;
@@ -1816,7 +1821,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (modoDiario === "lista") return `<div class="tela">${topo()}${telaLista()}</div>`;
     const seg = `<button class="fechar" data-modo="lista" style="align-self:flex-start">← Meus sonhos</button>`;
     if (modoDiario === "calendario") return `<div class="tela">${topo()}${seg}${telaCalendario()}</div>`;
-    const a = alvoDe(est.alvo), hora = agoraHM();
+    const a = alvoDaNoite(), hora = agoraHM();
     return `<div class="tela diario ${manha ? "manha" : ""}">${seg}
       <div class="topo"><span class="rotulo">Os primeiros 5 minutos</span><span class="hora">${hora}</span></div>
       <div class="perguntas"><span>Não levante. Não abra os olhos.</span><span style="color:var(--areia)">Onde eu estava?</span><span style="color:var(--areia)">O que eu estava sentindo?</span></div>
@@ -2008,7 +2013,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const anda = () => { if (!box.isConnected) return; pos = (pos + 1) % n; acende(pos); vibrar(18); tique(); passos--;
           if (passos > 0) { atraso *= 1.13; timers.push(setTimeout(anda, atraso)); return; }
           itens[fim].classList.add("escolhido"); sino(); vibrar([40, 60, 120]);
-          const leit = novaLeitura(+itens[fim].dataset.k); est.alvo = leit; chegou = null; registrar("sorteio"); salvar();
+          const leit = novaLeitura(+itens[fim].dataset.k); est.alvo = leit; est.alvoNoite = hojeIso; chegou = null; registrar("sorteio"); salvar();
           bt.remove(); barra.parentNode.remove();
           timers.push(setTimeout(() => {
             saida.innerHTML = leituraAlvo(leit) + `<button class="btn largo" data-acao="levar-abaton">Levar para a prática da noite</button><button class="btn fantasma largo" data-acao="sortear">Sortear de novo</button>`;
@@ -2159,7 +2164,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const avanca = () => {
         if (i < PASSOS.length - 1) { i++; passo(); return; }
         const h = new Date(); est.travessia = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
-        if (pf.desejos && pf.desejos.includes("Conhecer antigas civilizações")) est.alvo = { r: 0, a: 0, c: 0, s: 0, t: [0, 1], q: 0 };
         salvar(); d.remove(); aba = "hoje"; render();
       };
       const volta = d.querySelector("#trav-volta"); if (volta) volta.onclick = () => { i--; passo(); };
@@ -2262,6 +2266,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function acharPratica(k, at) {
     const a = ATOS[at ?? est.ato];
     for (const m of a.momentos) for (const p of m.praticas) if (p.k === k) return { a, m, p };
+    const x = (window.ARHAT.EXTRAS || []).find(e => e.k === k);
+    if (x) return { a: { nome: "Além dos atos" }, m: { quando: "Dia", hora: "quando quiser" }, p: x };
     const v = VIAGENS.find(x => x.k === k);
     if (v) return { a: { nome: "Viagem guiada" }, m: { quando: "para qualquer noite", hora: "ao deitar" }, p: v };
     return null;
@@ -2415,7 +2421,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           };
         } else if (k.t === "leva") carta.innerHTML = `${c.ilus ? `<img class="ilus pequena" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">Para levar hoje</span><p class="grande">“${esc(k.texto)}”</p>${de}`;
         else if (k.t === "alvo") {
-          carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Sorteie o alvo desta noite</span>${cartaoSorteio(true)}`;
+          carta.innerHTML = livre("sorteio") ? `<span class="rotulo" style="color:var(--tema)">Sorteie o alvo desta noite</span>${cartaoSorteio()}`
+            : `<span class="rotulo" style="color:var(--tema)">Faça · a sua lista</span><p class="grande media">Escreva três lugares que você quer visitar. Numa noite em que se sentir pronto, escolha um, dê o comando antes de dormir e visualize como se já estivesse lá.</p><p class="suave">O oráculo dos alvos abre depois dos cinco atos.</p>`;
           // sortear sai da cápsula: ela já conta como lida
           carta.querySelector('[data-acao="sortear"]')?.addEventListener("click", () => { if (!est.vistas[c.dia]) registrar("capsula"); est.vistas[c.dia] = true; salvar(); });
         }
@@ -2607,14 +2614,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // ---------- O que se abre aos poucos ----------
   // Como num mapa de videogame: tudo aparece desde o começo, mas fechado, com o aviso de quando abre.
   const noitesAnotadas = () => est.diario.length;
+  // Primeiro as lições do Arhat, ato por ato. O que não é do livro (o oráculo, as viagens guiadas, as práticas extras)
+  // abre depois dos cinco atos: quando o último estágio estiver completo.
+  const atosConcluidos = () => estagioAtual() === ESTAGIOS.length - 1 && progressoEstagio(ESTAGIOS.length - 1).pronto;
+  const DEPOIS = "Abre depois dos cinco atos do Arhat: primeiro as lições, ato por ato.";
   const LIBERA = {
-    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Abre com o ensinamento “Os guias e os alvos”, no estágio 2: primeiro você aprende a ter um alvo.", ok: () => !!est.vistas[20] },
+    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: DEPOIS, ok: atosConcluidos },
+    extras: { nome: "Práticas além dos atos", ilus: "estrela-terra", quando: DEPOIS, ok: atosConcluidos },
     selos: { nome: "O livro de selos", ilus: "estrela-dourada", quando: "Abre depois da sua primeira noite anotada no diário.", ok: () => noitesAnotadas() >= 1 },
     missoes: { nome: "As missões da semana", ilus: "fita-estrela-2", quando: "Abre quando você tiver 3 noites anotadas.", ok: () => noitesAnotadas() >= 3 },
     album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
-    lugares: { nome: "Os seus lugares", ilus: "olho", quando: "Abre quando você chegar ao nível Sonhador.", ok: () => nivel().i >= 1 },
+    lugares: { nome: "Os seus lugares", ilus: "olho", quando: DEPOIS, ok: atosConcluidos },
     painel: { nome: "O painel do mês", ilus: "estrela-lilas", quando: "Abre quando você tiver 7 noites anotadas.", ok: () => noitesAnotadas() >= 7 },
-    viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: "Abrem no Segundo Ato.", ok: () => est.ato >= 2 },
+    viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: DEPOIS, ok: atosConcluidos },
     despertar: { nome: "O despertar de madrugada", ilus: "lua", quando: "Abre no Segundo Ato, quando começam as práticas das 4 da manhã.", ok: () => est.ato >= 2 }
   };
   const livre = k => LIBERA[k].ok();
@@ -2914,14 +2926,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
   function abrirModoNoite() {
     registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); salvar();
-    const a = alvoDe(est.alvo), temMadrugada = !!acharPratica("madrugada");
+    const a = est.alvoNoite === hojeIso ? alvoDe(est.alvo) : null, temMadrugada = !!acharPratica("madrugada");
     abrirSobre(`<div class="modo-noite"><div class="tela">
         <div class="topo">${voltar}<span class="rotulo">Modo noite</span></div>
         <div class="relogio" id="relogio">${agoraHM()}</div>
         <div class="afirm-bloco"><span class="rotulo">A afirmação desta noite</span><p class="afirm-noite">“${esc(afirmacaoDaNoite() || ATOS[est.ato].frase)}”</p><p class="suave miuda">Deitado, olhos fechados: repita devagar, com convicção, até adormecer.</p></div>
         ${NOITE.length ? `<section><span class="rotulo">A técnica da semana · ${esc(tecnicaDaNoite().nome)}</span><ol class="passos-noite">${tecnicaDaNoite().passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol></section>` : ""}
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
-        <section><span class="rotulo">Alvo desta noite</span>${a ? `<p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p>` : livre("sorteio") ? '<button class="btn fantasma largo" data-acao="sortear">Sortear o alvo</button>' : trancado("sorteio")}</section>
+        ${a ? `<section><span class="rotulo">Alvo desta noite</span><p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p></section>`
+          : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite · se quiser</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
         <section><span class="rotulo">Sons da noite</span>
           <div class="sons">${SONS.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>
           <div class="sons tempo">${[15, 30, 60].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
@@ -3066,7 +3079,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.chegou) { chegou = chegou === b.dataset.chegou ? null : b.dataset.chegou; document.querySelectorAll("[data-chegou]").forEach(x => x.setAttribute("aria-pressed", x.dataset.chegou === chegou)); return; }
     if (b.dataset.vez) { const [k, v] = b.dataset.vez.split(":"); marcarVez(k, v, vezFeita(k, v)); render(); return; }
     if (b.dataset.aconteceu) { abrirAconteceu(+b.dataset.aconteceu); return; }
-    if (b.dataset.irPessoal) { const l = novaLeitura(SEUS); l.a = +b.dataset.irPessoal; est.alvo = l; chegou = null; salvar(); render(); return; }
+    if (b.dataset.irPessoal) { const l = novaLeitura(SEUS); l.a = +b.dataset.irPessoal; est.alvo = l; est.alvoNoite = hojeIso; chegou = null; salvar(); render(); return; }
     if (b.dataset.tiraPessoal) { if (est.alvo && est.alvo.r === SEUS) est.alvo = null; est.pessoais.splice(+b.dataset.tiraPessoal, 1); salvar(); render(); return; }
     if (b.dataset.mes) { mesVisto = new Date(mesVisto.getFullYear(), mesVisto.getMonth() + +b.dataset.mes, 1); render(); return; }
     if (b.dataset.verDia) { aba = "diario"; modoDiario = "calendario"; diaSel = b.dataset.verDia; busca = ""; filtro = null; render(); return; }

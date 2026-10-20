@@ -100,7 +100,7 @@ window.ARHAT = (function () {
       momentos: [
         { quando: "Ao acordar", hora: "primeiros 5 min", praticas: [
           { k: "diario", ico: "pena", nome: "Diário dos 5 minutos", det: "Onde eu estava? O que eu sentia?", irDiario: true } ] },
-        { quando: "Dia", hora: "ao amanhecer e no pôr do sol", praticas: [ RESP_DOURADA, ATENCAO, TESTE ] },
+        { quando: "Dia", hora: "ao amanhecer e no pôr do sol", praticas: [ RESP_DOURADA, TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
           { k: "noite", ilus: "fita-estrela", ico: "lua", nome: "Preparando o ambiente", det: "A chuva no quarto e a afirmação", audio: true, texto: [
             { afirm: "Eu sou consciência além deste corpo.\nPor isso, posso perceber o que existe além do mundo dos sentidos.\nAbro-me para expandir, explorar e compreender as forças sutis que me atravessam,\ne para usá-las com sabedoria, para o meu bem e o de quem eu amo.\nChamo para perto de mim os guias e conselheiros de jornada\ncuja luz e sabedoria me conduzem com amor.\nQue nada menor do que a minha verdade me alcance nesta noite.\nEu sou consciência além deste corpo.", fonte: "Afirmação" },
@@ -127,7 +127,7 @@ window.ARHAT = (function () {
             { afirm: "Eu sou desprovido de dualidade\nMinha forma é sem forma\nEu existo em todos os lugares\nImpregnando todos os sentidos\nEu não sou nem apegado, nem livre, nem cativo,\nEu sou a fôrma da consciência\nEu sou o Espírito Livre.", fonte: "Nirvana Shatakam" }
           ].concat(OUTRO_COMODO) } ] },
         { quando: "Dia", hora: "ao longo do dia", praticas: [
-          Object.assign({}, RESP_DOURADA, { det: "7 vezes" }), FORCAS, TESTE ] },
+          Object.assign({}, RESP_DOURADA, { det: "7 vezes" }), TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
           { k: "noite", ilus: "figura-fio", ico: "lua", nome: "Estou consciente", det: "Afirmação em voz alta e o nevoeiro", audio: true, texto: [
             { p: "Deitado, afirme em voz alta e em seguida mentalmente:" },
@@ -376,5 +376,8 @@ window.ARHAT = (function () {
     "Eu viajo em segurança e volto inteiro ao meu corpo."
   ];
 
-  return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES };
+  // Depois dos cinco atos do Arhat: as práticas que não são do livro
+  const EXTRAS = [ATENCAO, FORCAS];
+
+  return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES, EXTRAS };
 })();
