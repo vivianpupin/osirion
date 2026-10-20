@@ -776,6 +776,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .ct-f2 { animation: ct-tremula .8s ease-in-out infinite alternate-reverse; }
 .ct-halo { transform-box: fill-box; transform-origin: center; animation: ct-halo 3.4s ease-in-out infinite; }
 .ct-faisca { animation: ct-sobe 2.2s ease-out infinite; }
+.chama-topo { position: relative; }
+.chama-topo .chama-templo { position: relative; }
+.nevoa-chama { position: absolute; left: 50%; top: 50%; width: calc(80px + 60px * var(--n)); height: calc(64px + 44px * var(--n)); transform: translate(-50%, -50%); pointer-events: none; opacity: calc(.55 + .45 * var(--n)); }
+.nevoa-chama i { position: absolute; border-radius: 50%; filter: blur(9px); background: radial-gradient(closest-side, rgba(var(--c), .75), rgba(var(--c), .28) 60%, transparent); animation: nevoa-passa 12s ease-in-out infinite alternate; }
+.nevoa-chama i:nth-child(1) { left: 15%; top: 20%; width: 70%; height: 60%; }
+.nevoa-chama i:nth-child(2) { left: 0; top: 40%; width: 55%; height: 40%; background: radial-gradient(closest-side, rgba(225, 220, 255, .5), transparent); animation-duration: 15s; animation-direction: alternate-reverse; }
+.nevoa-chama i:nth-child(3) { right: 0; top: 10%; width: 55%; height: 45%; background: radial-gradient(closest-side, rgba(225, 220, 255, .45), transparent); animation-duration: 18s; }
+.nevoa-chama i:nth-child(4) { left: 25%; top: 0; width: 50%; height: 35%; animation-duration: 10s; animation-direction: alternate-reverse; }
+@keyframes nevoa-passa { 0% { transform: translate(-8px, 3px) scale(.9); opacity: .7; } 50% { opacity: 1; } 100% { transform: translate(8px, -4px) scale(1.12); opacity: .75; } }
 @keyframes ct-respira { 0%, 100% { transform: scale(.95); } 50% { transform: scale(1.05); } }
 @keyframes ct-tremula { 0% { transform: skewX(-2deg) scaleY(.97); } 100% { transform: skewX(2deg) scaleY(1.03); } }
 @keyframes ct-halo { 0%, 100% { opacity: .6; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.1); } }
@@ -2284,7 +2293,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     alvorada: { core: "#fff6f0", mid: "#ffc9a0", edge: "#f08aa8", tip: "#a8466e", glow: "240,140,160" }
   };
   let idTemplo = 0;
-  function chamaTemplo(nivel, cor) {
+    function chamaTemplo(nivel, cor) {
     const P = CORES_CHAMA[cor] || CORES_CHAMA.ouro, id = "ct" + (idTemplo++), k = [.34, .5, .66, .83, 1][nivel], g = [.3, .48, .66, .84, 1][nivel];
     // a chama fica centrada na altura (o centro dela no meio do desenho), em qualquer nível
     const cx = 30, H = 76 * k, W = 9 + 4 * k, base = 48 + H * .5;
@@ -2294,7 +2303,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <linearGradient id="${id}g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${P.mid}"/><stop offset=".45" stop-color="${P.edge}"/><stop offset="1" stop-color="${P.tip}" stop-opacity=".2"/></linearGradient>
       <linearGradient id="${id}m" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${P.core}"/><stop offset=".55" stop-color="${P.mid}"/><stop offset="1" stop-color="${P.edge}" stop-opacity=".3"/></linearGradient>
       <radialGradient id="${id}h"><stop offset="0" stop-color="rgb(${P.glow})" stop-opacity="${.6 * g}"/><stop offset="1" stop-color="rgb(${P.glow})" stop-opacity="0"/></radialGradient>
-      <filter id="${id}s" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation=".8"/></filter></defs>
+      <filter id="${id}s" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation=".8"/></filter>
+</defs>
       <ellipse class="ct-halo" cx="${cx}" cy="${base - H * .45}" rx="${20 + 12 * k}" ry="${16 + 22 * k}" fill="url(#${id}h)"/>
       <g class="ct-fogo" filter="url(#${id}s)" style="transform-origin:${cx}px ${base}px">
         <path class="ct-f1" style="transform-origin:${cx}px ${base}px" d="${lingua(H * 1.05, W * .62)}" fill="url(#${id}g)" opacity=".95"/>
@@ -2303,7 +2313,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function chamaTopo() {
     const c = chama(), nv = nivelChama(c.n);
-    return `<button class="chama-topo n${nv}" data-aba="atos" aria-label="A chama: ${NIVEIS_CHAMA[nv]}">${chamaTemplo(nv, est.corChama || "ouro")}</button>`;
+    const nevoa = c.seq > 7 ? Math.min(1, (c.seq - 7) / 23) : 0;
+    // Depois de 7 dias seguidos, uma névoa de luz passa em volta da chama e cresce até os 30 dias.
+    const nv2 = nevoa ? `<span class="nevoa-chama" style="--n:${nevoa.toFixed(2)};--c:${CORES_CHAMA[est.corChama || "ouro"].glow}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>` : "";
+    return `<button class="chama-topo n${nv}" data-aba="atos" aria-label="A chama: ${NIVEIS_CHAMA[nv]}">${nv2}${chamaTemplo(nv, est.corChama || "ouro")}</button>`;
   }
   let idChama = 0;
   function svgChama(f, cls) {
