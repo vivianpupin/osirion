@@ -895,7 +895,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 </head>
 <body>
 
-<p class="aviso-prot"><b>Versão de teste do Osirion.</b> O que você anotar fica só neste aparelho.</p>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ouro-i" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a8"/><stop offset=".5" stop-color="#c9a35f"/><stop offset="1" stop-color="#f0d590"/></linearGradient></defs></svg>
 <div class="celular" id="app">
@@ -1253,8 +1252,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <h2>Do Segundo ao Quinto Ato</h2>
         <ul><li>O despertar das 4 da manhã, ato por ato</li><li>As práticas da noite guiadas pela voz da Vivian</li><li>O céu das suas noites sem limite</li><li>Os alvos das viagens e o socorro dentro do sonho</li></ul>
         <span class="preco">R$ 97</span><span class="suave">pagamento único · ou R$ 19,90 por mês</span>
-        <button class="btn largo" data-acao="comprar">Abrir a jornada</button>
-        <span class="suave" style="font-size:12px">No protótipo o botão só abre os atos, sem cobrar.</span></div>`;
+        <button class="btn largo" data-acao="comprar">Abrir a jornada</button></div>`;
   }
   // ---------- Agora: o estágio, o objetivo e o rito do dia (nada escondido, numa ordem só) ----------
   function cartaoEstagio() {
@@ -2056,8 +2054,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <div class="contagem" id="cont">0 / ${p.resp.n}</div>
         <p class="fase" id="fase">Leia os passos e depois respire junto.</p>
         <button class="btn" id="iniciar">Começar</button></div>` : "";
-    const player = p.audio ? `<div class="player"><button class="play" id="play" aria-label="Ouvir a prática">▶</button>
-        <div><b>Prática guiada pela Vivian</b><div class="suave">o áudio será gravado por você</div><div class="trilho"><span id="trilho"></span></div></div></div>` : "";
+    const player = p.audioSrc ? `<div class="player"><button class="play" id="play" aria-label="Ouvir a prática">▶</button>
+        <div><b>Prática guiada pela Vivian</b><div class="trilho"><span id="trilho"></span></div></div></div>` : "";
     const fim = k === "noite" || ehViagem(k) ? "Vou dormir" : k === "madrugada" ? "Voltar a dormir" : k === "diario" ? "Abrir o diário" : "Feito";
     abrirSobre(`<div class="tela">${voltar}
       <span class="rotulo">${esc(a.nome)} · ${m.quando === "Noite" ? "A prática da noite" : esc(m.quando)}</span><h1>${esc(p.nome)}</h1>
