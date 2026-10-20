@@ -28,12 +28,14 @@ window.CAPSULAS = [
     { t: "fala", texto: "É por isso que o Osirion te desperta às 4 da manhã: você volta a dormir bem na janela dos sonhos mais longos, com a mente um pouco mais acordada." },
     { t: "leva", texto: "A madrugada é a hora do sonho." }
   ] },
-  { dia: 4, ilus: "estrela-lilas", tema: "livro", titulo: "Lembrar é um treino", minutos: 2, cartas: [
+  { dia: 4, ilus: "estrela-lilas", tema: "livro", titulo: "Lembrar é um treino", minutos: 3, cartas: [
     { t: "abre", titulo: "Lembrar é um treino", sub: "Os primeiros 5 minutos" },
-    { t: "fala", texto: "Todos sonham, todas as noites. Em laboratório, a maioria das pessoas acordadas durante o REM conta um sonho, até quem jura que não sonha." },
+    { t: "fala", texto: "É nativo do ser humano a vida dual – matéria x espírito – todos, sem exceção de nenhum, passam por atividades noturnas de desdobramento. Todos possuem um cérebro com memória ativa. Se você tem dificuldades para se recordar de seus sonhos é porque não teve estímulos para isso, portanto, apenas continue treinando!", de: "Arhat" },
+    { t: "fala", texto: "Ao escrevermos nossos sonhos imediatamente após acordar, mostramos ao cérebro a importância de recordar as experiências do plano extrafísico, incentivando-o a não mais ocultar essa valiosa informação.", de: "Arhat" },
+    { t: "fala", texto: "Os primeiros 5 minutos após o despertar são cruciais!", de: "Arhat" },
     { t: "quiz", pergunta: "Você acordou e não lembra de nada. O que fazer?", opcoes: ["Levantar logo e desistir", "Abrir os olhos e pegar o celular", "Ficar imóvel, de olhos fechados, e perguntar onde estava"], certa: 2, explica: "Mexer o corpo e abrir os olhos apaga o sonho em segundos. Quieto, o fio costuma voltar." },
     { t: "faca", titulo: "Amanhã cedo", texto: "Não levante e nem abra os olhos. Pergunte: Onde eu estava? O que eu estava sentindo? Depois anote tudo, até as lembranças pequenas e sem sentido." },
-    { t: "fala", texto: "Se você tem dificuldades para se recordar de seus sonhos é porque não teve estímulos para isso. Portanto, apenas continue treinando!" },
+    { t: "fala", texto: "Se não houver qualquer lembrança, continue praticando com convicção!", de: "Arhat" },
     { t: "leva", texto: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!" }
   ] },
   { dia: 5, ilus: "morro-figuras", tema: "tradicoes", titulo: "Os templos do sonho", minutos: 3, cartas: [
