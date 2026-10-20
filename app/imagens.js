@@ -1,6 +1,16 @@
 // Todas as imagens do app. O app baixa e prepara todas na abertura, e o service worker guarda no celular:
 // assim nenhuma ilustração aparece atrasada. Ao colocar uma imagem nova em img/, acrescente aqui.
 self.IMAGENS = [
+  "img/traco/corpo-de-luz.svg",
+  "img/traco/corpo-eletrico.svg",
+  "img/traco/espiral-coroa.svg",
+  "img/traco/espiral-galaxia.svg",
+  "img/traco/mente-coracao.svg",
+  "img/traco/olho-galaxia.svg",
+  "img/traco/orbita-estrelas.svg",
+  "img/traco/tensoes.svg",
+  "img/traco/terra-lua.svg",
+  "img/traco/tres-forcas.svg",
   "img/fios.webp",
   "img/livro/espiral-figura.webp",
   "img/livro/estrela-cadente.webp",

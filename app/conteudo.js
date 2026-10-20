@@ -11,7 +11,7 @@ window.ARHAT = (function () {
   ];
 
   const RESP_DOURADA = {
-    k: "resp", ilus: "estrela-dourada", ico: "sol", nome: "Respiração Dourada", det: "7 respirações pelo terceiro olho",
+    k: "resp", ilus: "estrela-dourada", traco: "olho-galaxia", ico: "sol", nome: "Respiração Dourada", det: "7 respirações pelo terceiro olho",
     resp: { n: 7, inspire: "Inspire: um filamento dourado desce do sol central, penetra o terceiro olho, ilumina os olhos, o topo da cabeça e a nuca.", expire: "Expire: a energia faz o caminho de volta e libera as impurezas que bloqueiam os centros espirituais.", fim: "Todo o corpo se ilumina. Estimule a vibração das raízes extrafísicas: elas são a porta de entrada para algo totalmente novo." },
     texto: [
       { p: "Há dois grandes sóis centrais que sustentam a vida deste universo." },
@@ -42,7 +42,7 @@ window.ARHAT = (function () {
             { p: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!" }
           ] } ] },
         { quando: "Dia", hora: "quando quiser", praticas: [
-          { k: "raizes", ilus: "fitas", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
+          { k: "raizes", ilus: "fitas", traco: "tres-forcas", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
             { p: "Temos raízes, linhas invisíveis, tentáculos tremeluzentes pouco opacos que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
             { p: "Esses filamentos sutis, parte importante de nosso corpo invisível, são usados por curandeiros para penetrar em outros corpos, curar e manipular energia." },
             { p: "Quando as raízes estão ativas, sente-se uma leve vibração ou sensação de amortecimento na região: é um sinal de que aquele centro de energia está em funcionamento!" },
@@ -52,7 +52,7 @@ window.ARHAT = (function () {
             { p: "Aproxime suas mãos, sinta suas raízes dançando entre si como línguas de fogo que se entrelaçam! Brinque e dance com elas, ative o seu poder sutil." }
           ] } ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
-          { k: "noite", ilus: "meditacao-fita", ico: "lua", nome: "Corpo relaxado, mente desperta", det: "Encontre o seu nevoeiro", audio: true, texto: [
+          { k: "noite", ilus: "meditacao-fita", traco: "tensoes", ico: "lua", nome: "Corpo relaxado, mente desperta", det: "Encontre o seu nevoeiro", audio: true, texto: [
             { p: "Ao deitar-se, inicie limpando sua mente e respire profundamente para relaxar todo o corpo. Foque sua atenção na respiração e na planta dos pés. Permita que os pensamentos fluam livremente, sem se prender a eles. Se uma ideia intrusiva surgir, simplesmente comande sua consciência:" },
             { afirm: "Vá além disso… Vá além disso…" },
             { p: "Continue com essa concentração e observe enquanto seu corpo se entrega ao sono gradualmente. Esse estado é conhecido como “Corpo relaxado, mente desperta”, no qual você atravessa o véu do sono conscientemente, mantendo sua consciência ativa e presente durante o processo de adormecimento." },
@@ -131,7 +131,7 @@ window.ARHAT = (function () {
             { afirm: "Estou leve e posso flutuar até o teto." }
           ] } ] },
         { quando: "Dia", hora: "ao longo do dia", praticas: [
-          { k: "dragao", ilus: "figura-espiral", ico: "sol", nome: "Respiração do Dragão", det: "O Estado Vibracional",
+          { k: "dragao", ilus: "figura-espiral", traco: "espiral-coroa", ico: "sol", nome: "Respiração do Dragão", det: "O Estado Vibracional",
             resp: { n: 7, segura: true, inspire: "Inspire: a energia do centro da Terra sobe pela coluna, pelo umbigo, coração e garganta, ilumina a pineal, o terceiro olho e a coroa, e sai em direção ao Sol central.", segurar: "Não respire ainda. Sinta o esvaziamento e a liberdade.", expire: "Expire: a energia desce pelo terceiro olho, olhos, coroa e pineal, pela coluna, ativando cada centro, até voltar à Terra.", fim: "Estado vibracional: todos os centros ativos, o corpo astral mais solto." },
             texto: [
               { p: "Ao inspirar, visualize a energia do centro da Terra subindo pela sua coluna vertebral, passando pelo Chakra Umbilical, pelo Chakra Cardíaco e pelo Chakra Laríngeo, iluminando os cristais da glândula Pineal na nuca, o Terceiro Olho e a coroa da cabeça, e saindo para fora do seu corpo em direção ao Sol central." },
@@ -242,7 +242,7 @@ window.ARHAT = (function () {
   // Viagens guiadas: práticas da noite que valem em qualquer ato (escritas para o app, a Vivian revisa).
   const VIAGENS = [
     {
-      k: "rio", ilus: "estrela-cadente", ico: "agua", nome: "O Rio dos Espíritos", det: "Lançar-se na Via Láctea", audio: true,
+      k: "rio", ilus: "estrela-cadente", traco: "espiral-galaxia", ico: "agua", nome: "O Rio dos Espíritos", det: "Lançar-se na Via Láctea", audio: true,
       texto: [
         { p: "Muitos povos viram na Via Láctea um rio. Os incas a chamavam de Mayu, o rio do céu. Os tupis, de Tapi’i rapé, o caminho da anta. Para os lakota, é o caminho por onde os espíritos viajam. Os egípcios viam nela o corpo estrelado de Nut, e um Nilo no céu." },
         { sub: "Antes de começar" }, { p: "Deite de barriga para cima, num quarto escuro. Esta viagem é para a beira do sono: você vai adormecer dentro dela." },
@@ -260,7 +260,7 @@ window.ARHAT = (function () {
       ]
     },
     {
-      k: "sair", ilus: "salto-figura", ico: "espiral", nome: "Sentir o corpo sair", det: "Respirar, relaxar e se soltar", audio: true,
+      k: "sair", ilus: "salto-figura", traco: "corpo-de-luz", ico: "espiral", nome: "Sentir o corpo sair", det: "Respirar, relaxar e se soltar", audio: true,
       texto: [
         { p: "Esta prática reúne o que os grandes viajantes ensinam, como William Buhlman e Robert Monroe: o corpo dorme, a consciência fica, e a intenção firme leva para fora." },
         { sub: "Respirar e relaxar" }, { passos: [

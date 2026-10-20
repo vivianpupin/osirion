@@ -1,6 +1,6 @@
 // Service worker do Osirion: guarda o app para abrir sem internet (à noite, em modo avião) e mostra os lembretes.
 importScripts("imagens.js");
-const CACHE = "osirion-v3", FB = "osirion-firebase", FONTES = "osirion-fontes";
+const CACHE = "osirion-v4", FB = "osirion-firebase", FONTES = "osirion-fontes";
 // Na instalação já guarda o app e todas as imagens (uma por uma: se alguma falhar, as outras ficam guardadas).
 const BASE = ["./", "index.html", "conteudo.js", "capsulas.js", "programa.js", "alvos.js", "imagens.js", "firebase-config.js", "manifest.webmanifest", "icone-192.png"];
 self.addEventListener("install", e => {

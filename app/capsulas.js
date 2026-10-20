@@ -49,6 +49,7 @@ window.CAPSULAS = [
   ] },
   { dia: 6, ilus: "fitas", tema: "livro", titulo: "As raízes de cura", minutos: 2, cartas: [
     { t: "abre", titulo: "As raízes de cura", sub: "O corpo invisível" },
+    { t: "traco", img: "tres-forcas", texto: "As três forças: a do universo entra pelo alto da cabeça, a cósmica pela frente e a da Terra sobe pelos pés." },
     { t: "fala", texto: "Temos raízes: linhas invisíveis, tentáculos tremeluzentes que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
     { t: "revela", pergunta: "Como saber que uma raiz está ativa?", resposta: "Sente-se uma leve vibração ou um amortecimento na região. É o sinal de que aquele centro de energia está funcionando." },
     { t: "faca", titulo: "Agora", texto: "Aproxime as mãos, sem encostar. Sinta as raízes dançando entre si como línguas de fogo que se entrelaçam.", segundos: 30 },
@@ -88,6 +89,7 @@ window.CAPSULAS = [
   ] },
   { dia: 11, ilus: "figura-salto", tema: "ciencia", titulo: "Fora do corpo", minutos: 3, cartas: [
     { t: "abre", titulo: "Fora do corpo", sub: "O que a ciência observa" },
+    { t: "traco", img: "corpo-de-luz", texto: "O corpo fica em repouso; a consciência se ergue no corpo de luz." },
     { t: "fala", texto: "Pesquisas em vários países estimam que perto de uma em cada dez pessoas já teve ao menos uma experiência de se ver fora do próprio corpo." },
     { t: "revela", pergunta: "O que os neurologistas descobriram em 2002?", resposta: "Na Suíça, ao estimular uma pequena região do cérebro chamada junção temporoparietal, médicos provocaram numa paciente a sensação de flutuar e se ver de cima." },
     { t: "fala", texto: "Para a ciência, isso mostra onde o cérebro constrói a sensação de estar dentro do corpo. Para as tradições, mostra onde fica a porta. O Osirion convida você a experimentar e tirar as suas conclusões." },
@@ -153,6 +155,7 @@ window.CAPSULAS = [
   ] },
   { dia: 20, ilus: "estrela-fita", tema: "livro", titulo: "Os guias e os alvos", minutos: 2, cartas: [
     { t: "abre", titulo: "Os guias e os alvos", sub: "Para onde você vai esta noite?" },
+    { t: "traco", img: "terra-lua", texto: "A Terra e a Lua recebem a luz de todas as estrelas. Na lua cheia, essa luz fica mais forte." },
     { t: "fala", texto: "Você pode pedir auxílio para sair do corpo. Os guias estão atentos do outro lado, e podemos nos conectar com eles ao pedir sinceramente." },
     { t: "fala", texto: "Faça uma lista de alvos para direcionar suas viagens. Dê o comando antes de dormir e visualize como se já estivesse lá." },
     { t: "alvo" },
@@ -374,6 +377,7 @@ window.CAPSULAS = [
   ] },
   { dia: 49, ilus: "meditacao-fita", tema: "livro", titulo: "Corpo relaxado, mente desperta", minutos: 1, cartas: [
     { t: "abre", titulo: "Corpo relaxado, mente desperta", sub: "O estado que abre a porta" },
+    { t: "traco", img: "tensoes", texto: "Onde há tensão, a energia trava. Solte cada ponto antes de adormecer." },
     { t: "fala", texto: "O sono não é um apagão. É uma travessia: o corpo adormece e a mente pode continuar desperta." },
     { t: "fala", texto: "O Osirion chama esse estado de corpo relaxado, mente desperta. Todas as práticas da noite levam até ele." },
     { t: "leva", texto: "O corpo dorme. Eu continuo aqui." }
@@ -415,6 +419,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "A energia que circula", sub: "O corpo de energia" },
     { t: "fala", texto: "Além do corpo físico, as tradições descrevem um corpo de energia: correntes sutis que percorrem o corpo como rios." },
     { t: "desenho", d: "circulacao", texto: "A energia entra pela terra e pelo alto da cabeça, sobe pelas costas e desce pela frente do corpo, num circuito contínuo." },
+    { t: "traco", img: "orbita-estrelas", texto: "A energia sobe pelas costas, desce pela frente e se liga às estrelas acima da cabeça." },
     { t: "fala", texto: "Quando essa corrente flui, o corpo fica leve e a mente clara. Quando trava, vêm o peso, o cansaço e o sono pesado, sem lembranças." },
     { t: "faca", titulo: "Agora", texto: "Inspire imaginando a luz subindo pelas costas até o alto da cabeça. Expire deixando-a descer pela frente do corpo até o ventre. Faça o circuito algumas vezes.", segundos: 60 },
     { t: "leva", texto: "A energia segue a atenção." }
@@ -423,6 +428,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "Os centros de energia", sub: "Por que desobstruir" },
     { t: "fala", texto: "Ao longo do corpo há centros onde as correntes de energia se encontram, da base da coluna ao alto da cabeça. Na Índia, eles se chamam chakras." },
     { t: "desenho", d: "centros", texto: "Sete centros, da base à coroa. Cada um se abre com atenção e respiração." },
+    { t: "traco", img: "mente-coracao", texto: "Os olhos, a mente e o coração juntos: a atenção inteira num ponto só." },
     { t: "fala", texto: "Quando um centro está obstruído, a energia não sobe. Por isso as meditações do dia desobstruem os centros: com eles livres, a consciência consegue atravessar a noite acordada." },
     { t: "revela", pergunta: "Por que liberar os centros antes de viajar?", resposta: "Porque a lucidez e a saída do corpo pedem energia livre, circulando. Um centro travado segura a consciência no corpo pesado." },
     { t: "leva", texto: "Centro livre, consciência livre." }
@@ -431,6 +437,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "O estado vibracional", sub: "A porta da saída do corpo" },
     { t: "fala", texto: "Pouco antes de sair do corpo, muitos viajantes contam a mesma coisa: uma onda de vibração que toma o corpo inteiro." },
     { t: "desenho", d: "vibracao", texto: "As vibrações começam numa parte do corpo e se espalham. Às vezes vêm com zumbido, calor ou sensação de choque." },
+    { t: "traco", img: "corpo-eletrico", texto: "O corpo tem um campo em volta. Nas vibrações, é esse campo que você sente." },
     { t: "fala", texto: "Não é perigo: é o corpo de energia se soltando do físico. Quem se assusta volta. Quem respira e deixa vir atravessa." },
     { t: "faca", titulo: "Quando vierem", texto: "Fique imóvel. Respire devagar. Imagine as vibrações cada vez mais rápidas e suaves, até virarem um zumbido fino. Então role para fora, ou flutue até o teto." },
     { t: "fala", texto: "Dá para treinar acordado: deite, relaxe e imagine uma onda subindo dos pés à cabeça, cada vez mais rápida." },

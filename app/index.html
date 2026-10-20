@@ -432,6 +432,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .desenho .onda { fill: none; stroke: #a9b2f0; stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: onda 3s ease-out infinite; }
 .desenho .o2 { animation-delay: 1s; } .desenho .o3 { animation-delay: 2s; }
 .desenho .treme { animation: treme .18s linear infinite; }
+/* os desenhos no traço dos livros (dourado, linha fina, energia pontilhada) */
+.traco { display: block; width: 100%; max-width: 290px; max-height: 50vh; aspect-ratio: 300 / 430; object-fit: contain; margin: 0 auto; }
 .legenda-d { font-family: var(--display); font-size: 19px; line-height: 1.4; text-align: center; margin: 0; }
 @keyframes flui { to { stroke-dashoffset: -32; } }
 @keyframes aura { 50% { transform: scale(1.8); opacity: .05; } }
@@ -2277,7 +2279,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const mostra = () => {
         const bl = passos[i] || [];
         const alvo = k === "noite" && est.alvo && i === passos.length - 1 ? `<div class="cartao"><span class="rotulo">Alvo desta noite</span><p>${esc(alvoTexto(est.alvo))}</p></div>` : "";
-        d.querySelector("#passo").innerHTML = (i === 0 && p.ilus ? `<img class="ilus" src="${ILUS(p.ilus)}" alt="">` : "") + blocos(bl.map(b => b.p && b.p.length < 400 ? Object.assign({}, b, { grande: true }) : b)) + alvo;
+        d.querySelector("#passo").innerHTML = (i === 0 && p.traco ? `<img class="traco" src="img/traco/${p.traco}.svg" alt="">` : i === 0 && p.ilus ? `<img class="ilus" src="${ILUS(p.ilus)}" alt="">` : "") + blocos(bl.map(b => b.p && b.p.length < 400 ? Object.assign({}, b, { grande: true }) : b)) + alvo;
         d.querySelector("#pontos").innerHTML = passos.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("");
         d.querySelector("#ant").disabled = i === 0;
         d.querySelector("#prox").textContent = i < passos.length - 1 ? "Próximo" : fim;
@@ -2374,6 +2376,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         if (k.t === "abre") carta.innerHTML = `${c.ilus ? `<img class="ilus grande" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">${c.minutos} min</span><h1 class="capa-t">${esc(k.titulo)}</h1><p class="suave" style="font-size:17px">${esc(k.sub)}</p>`;
         else if (k.t === "fala") carta.innerHTML = `<p class="grande ${k.texto.length > 170 ? "media" : ""}">${esc(k.texto)}</p>${de}`;
         else if (k.t === "desenho") carta.innerHTML = `${DESENHOS[k.d] || ""}<p class="legenda-d">${esc(k.texto || "")}</p>`;
+        else if (k.t === "traco") carta.innerHTML = `<img class="traco" src="img/traco/${k.img}.svg" alt=""><p class="legenda-d">${esc(k.texto || "")}</p>`;
         else if (k.t === "revela") {
           carta.innerHTML = `<p class="grande media">${esc(k.pergunta)}</p><div class="mesmo-lugar"><button class="btn fantasma reserva" id="rev">Revelar</button><p class="resposta reserva oculto" id="resp">${esc(k.resposta)}</p></div>`;
           // o botão e a resposta dividem o mesmo lugar: a carta não pula quando a resposta aparece
