@@ -398,6 +398,22 @@ window.ARHAT = (function () {
     { nome: "Os sons e as vibrações", afirm: ["Eu deixo as vibrações crescerem.", "Eu fico quieto e saio."], de: "William Buhlman", ilus: "figura-estrela",
       texto: "Na beira do sono podem vir zumbidos, chiados, sons de vento e vibrações pelo corpo. Muitos acordam assustados nessa hora, mas é justamente o sinal de que a saída está perto.",
       passos: ["Ao deitar, decida antes: se vierem sons ou vibrações, eu fico quieto.", "Quando vierem, não abra os olhos e não mexa o corpo físico.", "Deixe as vibrações crescerem, como uma onda que sobe. Respire devagar e diga: “Mais forte.”", "Quando estiverem intensas, imagine que rola para o lado ou que flutua até o teto, sem usar os músculos."] },
+    // Robert Monroe (textos escritos para o app; a Vivian revisa)
+    { nome: "Foco 10: corpo dormindo, mente acordada", afirm: ["O meu corpo dorme e eu fico acordado.", "Eu sou mais do que o meu corpo físico."], de: "Robert Monroe", ilus: "figura-deitada",
+      texto: "Monroe chamou de Foco 10 o estado em que o corpo adormece e a mente continua alerta. É a base de todas as saídas: sem ele, a consciência dorme junto com o corpo.",
+      passos: ["Deite de barriga para cima e relaxe parte por parte, dos pés até a cabeça.", "Mantenha um ponto de atenção leve, por exemplo a respiração ou um ponto escuro à frente dos olhos fechados.", "Deixe o corpo ficar pesado e dormente, até não sentir mais onde estão as mãos. Não se mexa.", "Se a mente começar a cochilar, aprofunde a atenção sem abrir os olhos. Fique nesse limiar o máximo que puder."] },
+    { nome: "A ressonância", afirm: ["Eu entro na vibração do som.", "O som solta o meu corpo."], de: "Robert Monroe", ilus: "figura-estrela",
+      texto: "Antes de praticar, Monroe usava um canto grave e longo para fazer o corpo vibrar por dentro. A vibração do som prepara o corpo para a vibração da saída.",
+      passos: ["Deitado, inspire fundo pelo nariz.", "Solte o ar num som grave e longo, com a boca quase fechada, como um “ommm” baixinho.", "Sinta onde o corpo vibra: o peito, a garganta, a cabeça. Imagine essa vibração se espalhando pelo corpo inteiro.", "Faça de cinco a dez vezes. Depois fique em silêncio, ouvindo o zumbido que continua por dentro."] },
+    { nome: "Rolar para fora", afirm: ["Eu rolo para fora do corpo.", "Agora eu estou fora do corpo."], de: "Robert Monroe", ilus: "salto-figura",
+      texto: "Quando o corpo já dorme e as vibrações chegam, Monroe ensinava a sair do jeito mais simples: rolar de lado, como quem vira na cama, mas sem mexer nenhum músculo.",
+      passos: ["Chegue ao Foco 10: corpo dormindo, mente acordada.", "Quando sentir vibrações ou o corpo muito pesado, não se mexa.", "Imagine e sinta, com toda a atenção, que está virando de lado na cama, devagar.", "Continue o giro até sentir que deslizou para fora, como uma folha que escorrega de dentro de um livro. Se o corpo físico se mexer, relaxe e tente de novo quando a sensação voltar."] },
+    { nome: "Elevar-se", afirm: ["Eu sou leve e subo.", "Eu flutuo até o teto."], de: "Robert Monroe", ilus: "figura-voo",
+      texto: "A outra saída que Monroe descreve é a elevação: em vez de rolar, sentir-se leve como um balão e subir devagar, até flutuar acima do corpo.",
+      passos: ["No Foco 10, com o corpo imóvel, pense em como seria flutuar.", "Sinta o corpo ficando leve, cada vez mais leve, como se perdesse o peso.", "Imagine que sobe devagar, alguns centímetros, depois mais, até o teto.", "Quando se sentir acima, não olhe logo para o corpo: olhe para o teto, para a janela, e se afaste."] },
+    { nome: "A mão que atravessa", afirm: ["A minha mão sutil se solta.", "Eu sinto o meu corpo de luz."], de: "Robert Monroe", ilus: "maos-chama",
+      texto: "Monroe começou a perceber o corpo sutil pelas mãos: sentia a mão atravessar o lençol, o chão. Esse pequeno desprendimento é o primeiro sinal de que a separação é possível.",
+      passos: ["No Foco 10, com as vibrações ou o corpo muito pesado, concentre-se numa das mãos.", "Sem mexer a mão física, sinta a mão sutil se erguendo dela, ou descendo e atravessando o colchão.", "Deixe os dedos explorarem: o que eles tocam? Frio, tecido, chão?", "Se a mão sair, tente estender o braço inteiro e, depois, rolar ou se elevar."] },
 
   ];
 

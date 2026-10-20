@@ -33,7 +33,7 @@ window.ESTILOS = [
   { id: "lucido", nome: "O despertar no sonho", sub: "Perceber, dentro do sonho, que é sonho", ilus: "olho",
     dia: { k: "teste" }, tecnicas: [0, 9, 15, 16, 1, 10], ensinamentos: [10, 28, 47, 30, 16, 18, 21, 3] },
   { id: "astral", nome: "O voo da alma", sub: "Sair do corpo com consciência, como Monroe e Buhlman", ilus: "salto-figura",
-    dia: { k: "pilar", ato: 5 }, tecnicas: [4, 17, 18, 19, 11, 10], viagem: "sair", ensinamentos: [22, 57, 23, 27, 25, 26, 11, 29, 12] },
+    dia: { k: "pilar", ato: 5 }, tecnicas: [4, 20, 21, 17, 19, 22, 23, 24, 18, 11], viagem: "sair", ensinamentos: [22, 57, 23, 27, 25, 26, 11, 29, 12] },
   { id: "energia", nome: "A luz do corpo", sub: "As raízes, os centros e as três forças", ilus: "estrela-sol",
     dia: { k: "forcas" }, tecnicas: [8, 5, 2], ensinamentos: [6, 55, 56, 57] },
   { id: "tradicoes", nome: "O silêncio e o som", sub: "As tradições do Tibete e da Índia", ilus: "meditacao-figura",
