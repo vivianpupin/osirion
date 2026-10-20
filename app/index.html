@@ -2776,7 +2776,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="album-alvos">${R.alvos.map((x, a) => { total++; const v = est.album[`${r}-${a}`]; if (v === "sim") foi++;
         return `<span class="album-alvo ${v || ""}">${v === "sim" ? "✦ " : v === "quase" ? "◐ " : ""}${esc(x[0])}</span>`; }).join("")}</div></div>`).join("");
     return `<section class="album"><div class="momento-cab"><h2>Álbum dos alvos</h2><span class="hora">${foi} de ${total} visitados</span></div>
-      <p class="suave">Cada lugar ganha cor quando você responde “Cheguei” no diário. “Quase” fica pela metade.</p>${html}</section>`;
+      ${html}</section>`;
   }
   function seusAlvos() {
     return `<section class="momento"><h2>Os seus lugares</h2>
