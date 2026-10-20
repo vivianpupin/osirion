@@ -771,7 +771,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .dormir-topo .suave { font-size: 12px; color: #c27b7c; }
 .chama-topo { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin: -12px 4px 0 0; padding: 0; background: none; border: 0; cursor: pointer; }
 .chama-topo .chama-templo { width: 30px; height: 48px; overflow: visible; }
-.ct-halo { transform-box: fill-box; transform-origin: center; animation: ct-halo 2.9s ease-in-out infinite; }
 .ct-faisca { animation: ct-sobe 2.2s ease-out infinite; }
 .chama-topo { position: relative; }
 .chama-topo .chama-templo { position: relative; }
@@ -782,7 +781,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .nevoa-chama i:nth-child(3) { right: 0; top: 10%; width: 55%; height: 45%; background: radial-gradient(closest-side, rgba(225, 220, 255, .45), transparent); animation-duration: 18s; }
 .nevoa-chama i:nth-child(4) { left: 25%; top: 0; width: 50%; height: 35%; animation-duration: 10s; animation-direction: alternate-reverse; }
 @keyframes nevoa-passa { 0% { transform: translate(-8px, 3px) scale(.9); opacity: .7; } 50% { opacity: 1; } 100% { transform: translate(8px, -4px) scale(1.12); opacity: .75; } }
-@keyframes ct-halo { 0%, 100% { opacity: .75; transform: scale(.96); } 30% { opacity: .95; transform: scale(1.04); } 55% { opacity: .8; transform: scale(.99); } 80% { opacity: 1; transform: scale(1.06); } }
 @keyframes ct-sobe { 0% { transform: translateY(6px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-10px); opacity: 0; } }
 .pe-estagio { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
 .objetivo { display: flex; align-items: center; gap: 10px; margin: 2px 0; font-size: 15px; color: var(--areia); }
@@ -2295,24 +2293,24 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     // lingua de fogo: altura, largura, para onde a ponta pende (s) e qual lado estufa (b)
     const f = n => n.toFixed(2);
     const lingua = (h, w, s = 0, b = 0) => `M${f(cx - w)} ${f(base)}C${f(cx - w * (1.15 + b))} ${f(base - h * .38)} ${f(cx - w * .35 + s * .5)} ${f(base - h * .72)} ${f(cx + s)} ${f(base - h)}C${f(cx + w * .3 + s * .5)} ${f(base - h * .7)} ${f(cx + w * (1.15 - b))} ${f(base - h * .38)} ${f(cx + w)} ${f(base)}Q${f(cx)} ${f(base + w * .9)} ${f(cx - w)} ${f(base)}Z`;
-    // o corpo do fogo pende junto para o mesmo lado; as camadas de dentro seguem com um leve atraso e menos amplitude
-    const GESTO = [[1, 0, 0], [1.05, -.9, .1], [.97, .4, -.06], [1.08, 1, -.12], [.99, -.5, .05], [1.04, .3, 0], [.96, -.2, .04]];
+    // viva sem tremeluzir: o corpo do fogo só pende devagar de um lado para o outro; as camadas de dentro seguem com um leve atraso
+    const GESTO = [[1, 0, 0], [1, -.7, .07], [1, 0, 0], [1, .7, -.07]];
     const vivo = (h, w, amp, atraso) => {
       const formas = GESTO.map(([dh, ds, db]) => lingua(h * (1 + (dh - 1) * (1.4 - amp)), w * (1.5 - dh * .5), ds * w * amp * 1.3, db * amp)), todas = [...formas, formas[0]];
-      return `d="${formas[0]}"><animate attributeName="d" dur="3.1s" begin="-${atraso}s" repeatCount="indefinite" calcMode="spline" keySplines="${todas.slice(1).map(() => ".42 0 .58 1").join(";")}" values="${todas.join(";")}"/>`;
+      return `d="${formas[0]}"><animate attributeName="d" dur="4.2s" begin="-${atraso}s" repeatCount="indefinite" calcMode="spline" keySplines="${todas.slice(1).map(() => ".42 0 .58 1").join(";")}" values="${todas.join(";")}"/>`;
     };
     const fagulhas = nivel >= 3 ? [[-7, 6], [6, 12], [-2, 20], [9, 2]].slice(0, nivel === 4 ? 4 : 2).map(([dx, dy], i) => `<circle class="ct-faisca" style="animation-delay:${i * .7}s" cx="${cx + dx}" cy="${base - H - dy}" r="${.7 + (i % 2) * .4}" fill="${P.mid}"/>`).join("") : "";
     return `<svg class="chama-templo" viewBox="0 0 60 96" aria-hidden="true"><defs>
       <linearGradient id="${id}g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${P.mid}"/><stop offset=".45" stop-color="${P.edge}"/><stop offset="1" stop-color="${P.tip}" stop-opacity=".2"/></linearGradient>
       <linearGradient id="${id}m" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${P.core}"/><stop offset=".55" stop-color="${P.mid}"/><stop offset="1" stop-color="${P.edge}" stop-opacity=".3"/></linearGradient>
       <radialGradient id="${id}h"><stop offset="0" stop-color="rgb(${P.glow})" stop-opacity="${.6 * g}"/><stop offset="1" stop-color="rgb(${P.glow})" stop-opacity="0"/></radialGradient>
-      <filter id="${id}s" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency=".035 .07" numOctaves="1" seed="${nivel + 3}" result="r"><animate attributeName="baseFrequency" dur="4.3s" repeatCount="indefinite" values=".035 .07;.04 .085;.032 .065;.035 .07"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="r" scale="${(1.6 + 1.2 * k).toFixed(1)}" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".7"/></filter>
+      <filter id="${id}s" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency=".035 .07" numOctaves="1" seed="${nivel + 3}" result="r"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="r" scale="${(1.6 + 1.2 * k).toFixed(1)}" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".7"/></filter>
 </defs>
       <ellipse class="ct-halo" cx="${cx}" cy="${base - H * .45}" rx="${18 + 10 * k}" ry="${16 + 22 * k}" fill="url(#${id}h)"/>
       <g class="ct-fogo" filter="url(#${id}s)" style="transform-origin:${cx}px ${base}px">
         <path fill="url(#${id}g)" opacity=".95" ${vivo(H * 1.05, W * .62, 1, 0)}</path>
-        <path fill="url(#${id}m)" ${vivo(H * .76, W * .44, .7, .18)}</path>
-        <path fill="${P.core}" opacity=".95" ${vivo(H * .4, W * .26, .35, .32)}</path></g>${fagulhas}</svg>`;
+        <path fill="url(#${id}m)" ${vivo(H * .76, W * .44, .7, .3)}</path>
+        <path fill="${P.core}" opacity=".95" ${vivo(H * .4, W * .26, .35, .55)}</path></g>${fagulhas}</svg>`;
   }
   function chamaTopo() {
     const c = chama(), nv = nivelChama(c.n);
