@@ -773,6 +773,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .chama-topo .chama-templo { width: 30px; height: 48px; overflow: visible; }
 .reserva { transition: opacity .5s ease; }
 .reserva.oculto { visibility: hidden; opacity: 0; }
+.mesmo-lugar { display: grid; align-items: center; }
+.mesmo-lugar > * { grid-area: 1 / 1; }
+.mesmo-lugar .resposta { justify-self: stretch; text-align: left; }
 .ct-faisca { animation: ct-sobe 2.2s ease-out infinite; }
 .chama-topo { position: relative; }
 .chama-topo .chama-templo { position: relative; }
@@ -2201,13 +2204,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         else if (k.t === "fala") carta.innerHTML = `<p class="grande ${k.texto.length > 170 ? "media" : ""}">${esc(k.texto)}</p>${de}`;
         else if (k.t === "desenho") carta.innerHTML = `${DESENHOS[k.d] || ""}<p class="legenda-d">${esc(k.texto || "")}</p>`;
         else if (k.t === "revela") {
-          carta.innerHTML = `<p class="grande media">${esc(k.pergunta)}</p><button class="btn fantasma" id="rev">Revelar</button><p class="resposta" id="resp" hidden>${esc(k.resposta)}</p>`;
-          carta.querySelector("#rev").onclick = e => { e.target.hidden = true; carta.querySelector("#resp").hidden = false; };
+          carta.innerHTML = `<p class="grande media">${esc(k.pergunta)}</p><div class="mesmo-lugar"><button class="btn fantasma reserva" id="rev">Revelar</button><p class="resposta reserva oculto" id="resp">${esc(k.resposta)}</p></div>`;
+          // o botão e a resposta dividem o mesmo lugar: a carta não pula quando a resposta aparece
+          carta.querySelector("#rev").onclick = e => { e.target.classList.add("oculto"); carta.querySelector("#resp").classList.remove("oculto"); };
         } else if (k.t === "quiz") {
-          carta.innerHTML = `<p class="grande media">${esc(k.pergunta)}</p><div style="display:flex;flex-direction:column;gap:8px">${k.opcoes.map((o, j) => `<button class="opcao" data-op="${j}">${esc(o)}</button>`).join("")}</div><p class="explica" id="exp" hidden></p>`;
+          carta.innerHTML = `<p class="grande media">${esc(k.pergunta)}</p><div style="display:flex;flex-direction:column;gap:8px">${k.opcoes.map((o, j) => `<button class="opcao" data-op="${j}">${esc(o)}</button>`).join("")}</div><p class="explica reserva oculto" id="exp">Quase. ${esc(k.explica)}</p>`;
           carta.querySelectorAll(".opcao").forEach(b => b.onclick = () => {
             carta.querySelectorAll(".opcao").forEach(o => { o.disabled = true; o.classList.add(+o.dataset.op === k.certa ? "certa" : "errada"); });
-            const ex = carta.querySelector("#exp"); ex.hidden = false;
+            const ex = carta.querySelector("#exp"); ex.classList.remove("oculto");
             ex.textContent = (+b.dataset.op === k.certa ? "Isso. " : "Quase. ") + k.explica;
           });
         } else if (k.t === "faca") {
