@@ -1339,7 +1339,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       pronto: k < estagioAtual() || (lidos >= E.ensinamentos.length && med >= (E.dias || 5) && noites >= (E.noites || 7)) };
   }
   const proximoEnsinamento = k => ESTAGIOS[k].ensinamentos.find(n => !est.vistas[n]);
-  const estagioLivre = k => ATOS[ESTAGIOS[k].ato].gratis || est.pago;
+  // Venda da jornada completa: desligada por enquanto (só a Vivian usa o app). Desligada, tudo fica aberto e a oferta não aparece.
+  const VENDA = false;
+  const pago = () => !VENDA || !!est.pago;
+  const estagioLivre = k => ATOS[ESTAGIOS[k].ato].gratis || pago();
   const praticaDoAto = (ato, k) => { for (const m of ATOS[ato].momentos) for (const x of m.praticas) if (x.k === k) return { m, p: x }; return null; };
   function ofertaJornada() {
     return `<div class="oferta"><span class="rotulo" style="color:var(--cristal)">Jornada completa</span>
@@ -1734,7 +1737,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function telaAtos(seg) {
     const lista = ATOS.map(a => {
-      const aberto = a.gratis || est.pago;
+      const aberto = a.gratis || pago();
       return `<button class="ato ${a.id === est.ato ? "atual" : ""} ${aberto ? "" : "fechado"}" data-ato="${a.id}">
         <span class="num" style="color:${a.cor}">${a.ilus ? `<img src="${ILUS(a.ilus)}" alt="">` : ["", "I", "II", "III", "IV", "V"][a.id]}</span>
         <span><h3>${a.nome}</h3><span class="sub">${a.sub}</span></span>
@@ -1745,7 +1748,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div><span class="rotulo">O caminho</span><h1>Cinco atos para abrir os olhos</h1></div>
       <p class="suave">O Osirion é um caminho de autoaprimoramento das faculdades do sonhar. O objetivo é se tornar um Arhat: aquele que despertou e segue consciente enquanto o corpo dorme. Siga em sequência ou fique alguns dias em cada ato: quanto mais tempo no caminho, mais você vive os resultados.</p>
       ${lista}
-      ${est.pago ? "" : ofertaJornada()}
+      ${pago() ? "" : ofertaJornada()}
       <section class="momento"><h2>Dentro do sonho</h2>
         <div class="socorro">
           <div><b>“Clareza, agora!”</b>Quando o sonho fica instável e a lucidez escapa.</div>
@@ -2933,7 +2936,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
     if (b.dataset.ato) {
       const a = ATOS[+b.dataset.ato];
-      if (!a.gratis && !est.pago) { fecharSobre(); aba = "atos"; render(); const o = document.querySelector(".oferta"); if (o) o.scrollIntoView({ block: "center" }); return; }
+      if (!a.gratis && !pago()) { fecharSobre(); aba = "atos"; render(); const o = document.querySelector(".oferta"); if (o) o.scrollIntoView({ block: "center" }); return; }
       est.ato = a.id; salvar(); aba = "hoje"; render(); return;
     }
     if (b.dataset.modo) { modoDiario = b.dataset.modo; render(); return; }
@@ -2996,7 +2999,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
     else if (acao === "acordado") { registrar("testes"); if (testesHoje() >= 7) marcar("teste"); salvar(); fecharSobre(); render(); }
     else if (acao === "adiantar") { est.adianta = (est.adianta || 0) + 1; salvar(); render(); }
-    else if (acao === "comprar") { est.pago = true; salvar(); render(); }
+    else if (acao === "comprar") { if (!VENDA) return; est.pago = true; salvar(); render(); }
     else if (acao === "feito") { const k = b.dataset.k; marcar(k); fecharSobre(); if (k === "diario") { aba = "diario"; modoDiario = "gravar"; } render(); }
   });
   app.addEventListener("input", e => {
