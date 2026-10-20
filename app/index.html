@@ -737,6 +737,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .placar { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--ceu-3); padding-top: 10px; }
 .placar span { display: flex; flex-direction: column; align-items: center; }
 .placar b { font-family: var(--corpo); font-weight: 600; font-size: 17px; line-height: 1; margin: 6px 0 4px; font-variant-numeric: tabular-nums; color: var(--areia); }
+.placar-diario { border: 1px solid var(--ceu-3); border-radius: 18px; padding: 12px 6px 10px; background: var(--ceu-2); }
 .placar small { font-size: 9.5px; line-height: 1.25; letter-spacing: .02em; text-align: center; color: var(--areia-2); opacity: .8; }
 .cal-inicio .cal { gap: 3px; }
 .cal-inicio .cal .dsem { font-size: 9px; opacity: .45; }
@@ -765,6 +766,46 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .legenda-olhos > span { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: var(--areia-2); }
 .ic-noite.mini { width: 24px; height: 24px; }
 .ceu-frase { font-family: var(--display); font-size: 16px; line-height: 1.4; color: var(--areia); padding: 2px 4px 0; }
+/* A aba Agora (nova) */
+.noites7 { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 14px 14px 12px; border: 1px solid var(--ceu-3); border-radius: 20px; background: linear-gradient(180deg, #171a3a, #0d0f22); }
+.n7-cab { display: flex; align-items: center; gap: 10px; padding-right: 34px; }
+.n7-cab .seq { margin-left: auto; font-size: 12px; color: var(--cristal); }
+.noites7 .ver-cal { top: 8px; right: 8px; }
+.n7-linha { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.n7 { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 0; background: none; border: 0; color: var(--areia-2); font-size: 11px; }
+.n7 .bola { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ceu-2); border: 1px solid var(--ceu-3); }
+.n7 .bola svg { width: 22px; height: 22px; }
+.n7 small { font-size: 10px; opacity: .6; letter-spacing: .06em; }
+.n7 b { font-weight: 400; font-size: 12px; }
+.n7.hoje .bola { border-color: var(--nevoeiro); box-shadow: 0 0 10px -2px var(--nevoeiro); }
+.n7.hoje b { color: var(--areia); }
+.cartao-agora { display: flex; flex-direction: column; gap: 12px; padding: 18px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); border-radius: 22px; background: radial-gradient(120% 90% at 85% 0%, rgba(233,201,122,.10), transparent 60%), linear-gradient(180deg, #1c1f45, #12142c); }
+.ca-topo { display: flex; align-items: center; gap: 14px; }
+.ca-arte { flex: none; width: 64px; height: 64px; display: grid; place-items: center; }
+.ca-arte img { max-width: 64px; max-height: 64px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.4)); }
+.ca-arte .moeda-antiga.mini { --tam: 62px; }
+.ca-arte .moeda-antiga.mini::before { inset: 4px; }
+.ca-arte .moeda-antiga.mini i.olho-g { width: 36px; height: 36px; background: linear-gradient(160deg, #4a3010, #5e3e14 55%, #6e4a1a); -webkit-mask-image: url("img/livro/olho.webp"); mask-image: url("img/livro/olho.webp"); }
+.cartao-agora h2 { margin: 2px 0 0; font-size: 23px; line-height: 1.2; }
+.cartao-agora > p { margin: 0; color: var(--areia-2); font-size: 15px; line-height: 1.55; }
+.ca-estagio { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; margin-top: 2px; padding: 12px 0 0; border: 0; border-top: 1px solid var(--ceu-3); background: none; color: var(--areia-2); font-size: 12.5px; text-align: left; }
+.ca-estagio .ver { color: var(--cristal); font-size: 12px; }
+.ca-barras { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.ca-barras i { height: 3px; border-radius: 3px; background: var(--ceu-3); overflow: hidden; }
+.ca-barras b { display: block; height: 100%; background: var(--cristal); }
+.ferramentas h3 { margin: 0 0 10px; }
+.ferr-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ferr { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px; border: 1px solid var(--ceu-3); border-radius: 18px; background: var(--ceu-2); color: var(--areia); text-align: left; min-height: 132px; }
+.ferr img { width: 52px; height: 52px; object-fit: contain; margin-bottom: 6px; }
+.ferr b { font-weight: 600; font-size: 14.5px; }
+.ferr span { font-size: 12px; color: var(--areia-2); }
+.rito-todo { border: 1px solid var(--ceu-3); border-radius: 18px; padding: 4px 14px; }
+.rito-todo > summary { list-style: none; cursor: pointer; padding: 10px 0; }
+.rito-todo > summary::-webkit-details-marker { display: none; }
+.rito-todo > summary > span { display: flex; flex-direction: column; }
+.rito-todo > summary span span { font-size: 12px; color: var(--areia-2); }
+.rito-todo[open] { padding-bottom: 14px; }
+.rito-todo .momento-cab { display: none; }
 .agora { display: flex; flex-direction: column; gap: 8px; padding: 18px 18px 16px; border: 1px solid color-mix(in srgb, var(--nevoeiro) 30%, var(--ceu-3)); border-radius: 22px; background: linear-gradient(180deg, color-mix(in srgb, var(--nevoeiro) 9%, var(--ceu-2)), var(--ceu-2)); }
 .agora h2 { margin: 2px 0 0; font-size: 24px; }
 .agora p { margin: 0 0 6px; }
@@ -1456,14 +1497,61 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <button class="btn largo" data-fechar>Seguir</button></div></div>`);
   }
 
+  // A aba Agora: as últimas 7 noites numa linha, UMA coisa para fazer agora (conforme a hora), as ferramentas
+  // à mão e, fechado, o rito completo do dia.
   function telaHoje() {
-    // O andamento das noites, o estágio com o seu objetivo e o rito do dia, numa ordem só.
     return `<div class="tela">${topo()}
-      ${ceuDoInicio()}
-      ${cartaoEstagio()}
+      ${noites7()}
+      ${cartaoAgora()}
       ${sinalDeSonho()}
-      ${ritoDoDia()}
+      ${ferramentas()}
+      <details class="rito-todo"><summary><span><b>Tudo de hoje</b><span>o rito completo do dia</span></span></summary>${ritoDoDia()}</details>
     </div>`;
+  }
+  function noites7() {
+    const porDia = {};
+    todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
+    const c = chama();
+    const dias = Array.from({ length: 7 }, (_, k) => isoMais(hojeIso, k - 6)).map(iso => { const t = porDia[iso], dt = deIso(iso);
+      return `<button class="n7 ${iso === hojeIso ? "hoje" : ""}" data-ver-dia="${iso}" aria-label="${esc(dt.toLocaleDateString("pt-BR", { day: "numeric", month: "long" }))}">
+        <span class="bola">${t !== undefined ? iconeNoite(t, "cel") : ""}</span><small>${"DSTQQSS"[dt.getDay()]}</small><b>${dt.getDate()}</b></button>`; }).join("");
+    return `<section class="noites7"><div class="n7-cab"><span class="rotulo">Últimas 7 noites</span><span class="seq">${c.seq ? `${c.seq} ${c.seq === 1 ? "dia" : "dias"} seguidos` : "comece hoje"}</span>
+      <button class="ver-cal" data-ver-dia="${hojeIso}" aria-label="Ver o calendário todo"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button></div>
+      <div class="n7-linha">${dias}</div></section>`;
+  }
+  // O cartão principal: de manhã, anotar o sonho; de dia, o ensinamento ou a meditação; à noite, a técnica e o "Vou dormir".
+  function cartaoAgora() {
+    const k = estagioAtual(), E = ESTAGIOS[k], pr = progressoEstagio(k), hr = new Date().getHours(), noite = hr >= 19 || hr < 4;
+    const anotou = est.diario.some(d => isoNoite(d) === hojeIso);
+    let c;
+    if (hr >= 4 && hr < 12 && !anotou) c = { rot: "Ao acordar", tit: "Anotar o sonho", arte: `<span class="moeda-antiga mini"><span class="relevo"><i class="olho-g"></i></span></span>`,
+      txt: "Não levante. Não abra os olhos. Onde eu estava? O que eu estava sentindo?", bt: `<button class="btn largo" data-acao="anotar-agora">Anotar agora</button>` };
+    else if (noite) { const { t, dia } = tecnicaAtual();
+      c = est.tecnicaEscolhida ? { rot: `Esta noite · dia ${Math.min(dia, 7)} de 7`, tit: t.nome, arte: `<img src="${ILUS(t.ilus)}" alt="">`, txt: (t.afirm && t.afirm[0]) ? `“${t.afirm[0]}”` : t.de,
+        bt: `<button class="btn largo" data-acao="dormir">Vou dormir</button><button class="btn fantasma largo" data-acao="tecnica">Ver a técnica</button>` }
+        : { rot: "Esta noite", tit: "Escolher a técnica da semana", arte: `<img src="${ILUS("espiral-figura")}" alt="">`, txt: "Uma técnica antes de dormir, por sete noites. Você escolhe com qual começar.", bt: `<button class="btn largo" data-acao="escolher-tecnica">Escolher a técnica</button>` }; }
+    else { const n = proximoEnsinamento(k), med = praticaDoAto(E.ato, E.meditacao);
+      if (n) { const cp = CAPS[n - 1]; c = { rot: `Ensinamento de hoje · ${cp.minutos} min`, tit: cp.titulo, arte: `<img src="${ILUS(cp.ilus)}" alt="">`, txt: cp.cartas[0].sub || "", bt: `<button class="btn largo" data-capsula="${n}">Abrir o ensinamento</button>` }; }
+      else if (med && !feitoHoje(med.p.k)) c = { rot: "Meditação do dia", tit: med.p.nome, arte: `<img src="${ILUS(med.p.ilus || "estrela-sol")}" alt="">`, txt: med.p.det, bt: `<button class="btn largo" data-pratica="${med.p.k}">Começar</button>` };
+      else c = { rot: "Durante o dia", tit: "Será que estou sonhando?", arte: `<img src="${ILUS("maos-chama")}" alt="">`, txt: `${testesHoje()} de ${metaTestes()} testes de realidade hoje.`, bt: `<button class="btn largo" data-acao="teste">Fazer um teste</button>` }; }
+    const barra = (a, b) => `<i><b style="width:${Math.min(1, a / b) * 100}%"></b></i>`;
+    return `<section class="cartao-agora">
+      <div class="ca-topo"><span class="ca-arte">${c.arte}</span><span><span class="rotulo">${c.rot}</span><h2>${esc(c.tit)}</h2></span></div>
+      ${c.txt ? `<p>${esc(c.txt)}</p>` : ""}
+      ${c.bt}
+      <button class="ca-estagio" data-aba="capsulas"><span>Estágio ${k + 1} · ${esc(E.nome)}</span><span class="ca-barras">${barra(pr.lidos, pr.total)}${barra(pr.med, pr.medMeta)}${barra(pr.noites, pr.noiteMeta)}</span><span class="ver">ver o caminho</span></button>
+    </section>`;
+  }
+  // As ferramentas à mão, com os desenhos do livro.
+  function ferramentas() {
+    const k = estagioAtual(), E = ESTAGIOS[k], med = praticaDoAto(E.ato, E.meditacao);
+    const f = [
+      { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
+      med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : "meditação do dia" } : null,
+      { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "O alvo da noite", det: alvoDe(est.alvo) ? alvoDe(est.alvo).nome : "sortear" },
+      CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
+    ].filter(Boolean);
+    return `<section class="ferramentas"><h3>Ferramentas</h3><div class="ferr-grade">${f.map(x => `<button class="ferr" ${x.attr}><img src="${ILUS(x.ilus)}" alt=""><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></button>`).join("")}</div></section>`;
   }
 
   function desenharPonto(ctx, x, y, tipo, cor, escala) {
@@ -1696,6 +1784,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const todas = todasEntradas(), termo = busca.trim();
     const achadas = termo ? todas.filter(d => chave(d.texto || "").includes(chave(termo))) : todas;
     return `<div class="lista-cab"><h1>Meus sonhos</h1><span class="lista-botoes"><button class="btn-cal" data-aba="ceu"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/></svg>Céu</button><button class="btn-cal" data-modo="calendario"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Calendário</button></span></div>
+      ${todas.length ? (() => { const cont = [0, 0, 0, 0, 0]; todas.forEach(d => cont[Math.min(4, d.tipo || 0)]++);
+        return `<div class="placar placar-diario">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>`; })() : ""}
       ${todas.length ? `<input class="busca" id="busca-lista" type="search" placeholder="Buscar nos sonhos: água, avó, Egito…" value="${esc(busca)}" aria-label="Buscar nos sonhos">` : ""}
       ${(() => { const ps = palavrasQueSeRepetem(); return ps.length ? `<div class="palavras-lista"><span class="rotulo">Palavras que se repetem nos seus sonhos</span>
         <div class="alvos">${ps.map(([w, n]) => `<button class="alvo" data-palavra="${esc(w)}" aria-pressed="${chave(busca.trim()) === chave(w)}">${esc(w)} <span class="suave" style="font-size:12px">${n}</span></button>`).join("")}</div></div>` : ""; })()}
