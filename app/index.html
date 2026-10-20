@@ -1060,7 +1060,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Sem a configuração (firebase-config.js), o app funciona como antes, guardando tudo só neste aparelho.
   const CFG = window.FIREBASE_CONFIG || null;
   const FB = "https://www.gstatic.com/firebasejs/10.12.2/";
-  const nuvem = { pronta: false, usuario: null, carregando: null };
+  const nuvem = { pronta: false, usuario: null, carregando: null, sincronizado: false, pendente: false };
   let envio = null;
   function carregarScript(src) { return new Promise((ok, erro) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = erro; document.head.appendChild(s); }); }
   function iniciarNuvem() {
@@ -1086,30 +1086,62 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const docDe = u => firebase.firestore().collection("jornadas").doc(u.uid);
   function enviarNuvem() {
     if (!nuvem.usuario) return;
+    // antes de conferir a nuvem, não sobe nada: uma cópia antiga deste aparelho não pode apagar o que outro guardou
+    if (!nuvem.sincronizado) { nuvem.pendente = true; return; }
     clearTimeout(envio);
     envio = setTimeout(() => { const u = nuvem.usuario; if (u) docDe(u).set({ estado: JSON.stringify(est), atualizado: est.atualizado || Date.now(), email: u.email || "" }).catch(() => {}); }, 1500);
   }
-  // Se a nuvem tem uma jornada mais nova (ou a pessoa acabou de entrar na conta), ela vale neste aparelho; senão, sobe a daqui.
+  // Junta duas jornadas (a deste aparelho e a da nuvem) sem perder nada: a mais nova vale para as escolhas,
+  // e os sonhos, os dias praticados, os ensinamentos lidos e as conquistas das duas ficam somados.
+  function juntar(a, b) {
+    if (Array.isArray(a) && Array.isArray(b)) { const v = new Set(a.map(x => JSON.stringify(x))); return a.concat(b.filter(x => !v.has(JSON.stringify(x)))); }
+    if (a && b && typeof a === "object" && typeof b === "object") { const r = Object.assign({}, b, a); Object.keys(b).forEach(k => { if (k in a) r[k] = juntar(a[k], b[k]); }); return r; }
+    if (typeof a === "number" && typeof b === "number") return Math.max(a, b);
+    return a === undefined || a === null ? b : a;
+  }
+  const chaveSonho = d => `${d.iso || ""}|${d.h || ""}|${(d.texto || "").slice(0, 80)}`;
+  function mesclar(nova, velha) {
+    const r = Object.assign(estPadrao(), velha);
+    Object.keys(nova).forEach(k => { if (nova[k] !== null && nova[k] !== undefined) r[k] = nova[k]; });
+    ["hist", "vistas", "selos", "marcos", "album", "semanas", "liberados", "feitos"].forEach(k => { r[k] = juntar(nova[k] || {}, velha[k] || {}); });
+    const tem = new Set((nova.diario || []).map(chaveSonho));
+    r.diario = (nova.diario || []).concat((velha.diario || []).filter(d => !tem.has(chaveSonho(d)))).sort((x, y) => (x.iso || "").localeCompare(y.iso || "") || (x.h || 0) - (y.h || 0));
+    const dj = new Set((nova.dejavus || []).map(d => d.iso + d.texto));
+    r.dejavus = (nova.dejavus || []).concat((velha.dejavus || []).filter(d => !dj.has(d.iso + d.texto)));
+    r.estagio = Math.max(nova.estagio || 0, velha.estagio || 0);
+    if (r.estagio !== (nova.estagio || 0)) r.estagioDesde = velha.estagioDesde;
+    r.atualizado = Math.max(nova.atualizado || 0, velha.atualizado || 0);
+    return r;
+  }
+  // Confere a nuvem: junta a jornada de lá com a deste aparelho e, se mudou algo, guarda dos dois lados.
+  // "trazer" (ao entrar numa conta que já existe): a da nuvem vale para as escolhas, e o que este aparelho tinha se soma.
   function sincronizar(trazer) {
     const u = nuvem.usuario; if (!u) return Promise.resolve(false);
     return docDe(u).get().then(snap => {
       const r = snap.exists ? snap.data() : null;
-      if (r && r.estado && (trazer || (r.atualizado || 0) > (est.atualizado || 0))) {
-        const novo = JSON.parse(r.estado);
-        Object.keys(est).forEach(k => delete est[k]); Object.assign(est, estPadrao(), novo);
+      nuvem.sincronizado = true;
+      if (!r || !r.estado) { nuvem.pendente = false; enviarNuvem(); return false; }
+      const la = JSON.parse(r.estado), aqui = JSON.parse(JSON.stringify(est));
+      const daNuvem = trazer || (r.atualizado || 0) > (est.atualizado || 0);
+      const junto = daNuvem ? mesclar(la, aqui) : mesclar(aqui, la);
+      const mudouAqui = JSON.stringify(junto) !== JSON.stringify(aqui);
+      if (mudouAqui) {
+        Object.keys(est).forEach(k => delete est[k]); Object.assign(est, junto);
+        if (!est.estagioDesde) est.estagioDesde = hojeIso;
+        if (ESTAGIOS.length) est.ato = ESTAGIOS[estagioAtual()].ato;
         try { localStorage.setItem("arhat", JSON.stringify(est)); } catch (e) {}
         if (!document.getElementById("caverna") && !document.querySelector(".abertura-app") && !document.getElementById("sobre")) render();
-        return true;
       }
-      enviarNuvem(); return false;
-    }).catch(() => false);
+      if (nuvem.pendente || JSON.stringify(junto) !== r.estado) { nuvem.pendente = false; enviarNuvem(); }
+      return daNuvem;
+    }).catch(() => { nuvem.sincronizado = true; if (nuvem.pendente) { nuvem.pendente = false; enviarNuvem(); } return false; });
   }
   function entrarConta(email, senha, criar) {
     return iniciarNuvem().then(() => {
       if (!nuvem.pronta) throw { code: "auth/network-request-failed" };
       const a = firebase.auth();
       return criar ? a.createUserWithEmailAndPassword(email, senha) : a.signInWithEmailAndPassword(email, senha);
-    }).then(c => { nuvem.usuario = c.user; if (criar) { enviarNuvem(); return false; } return sincronizar(true); });
+    }).then(c => { nuvem.usuario = c.user; if (criar) { nuvem.sincronizado = true; enviarNuvem(); return false; } return sincronizar(true); });
   }
   function erroConta(e) {
     const c = (e && e.code) || "";
@@ -1155,7 +1187,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const instalado = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
   const pushPossivel = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
   const avisosLigados = () => !!est.avisos && pushPossivel() && Notification.permission === "granted";
-  const prefsAvisos = () => { const pf = est.perfil || {}; return { tz: Intl.DateTimeFormat().resolvedOptions().timeZone, acorda: pf.acorda || "07:00", dorme: pf.dorme || "23:00", despertar: despertar(), testes: 4 }; };
+  const prefsAvisos = () => { const pf = est.perfil || {}; return { tz: Intl.DateTimeFormat().resolvedOptions().timeZone, acorda: pf.acorda || "07:00", dorme: pf.dorme || "23:00", despertar: livre("despertar") ? despertar() : null, testes: 4 }; };
   function b64u8(s) { const b = atob((s + "=".repeat((4 - s.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
   // Devolve "" quando ativou, "conta" quando falta entrar na conta, ou a frase que explica o que fazer.
   async function ativarAvisos() {
@@ -1169,7 +1201,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const reg = await navigator.serviceWorker.ready;
       const { publicKey } = await fetch(AVISAR).then(r => r.json());
       const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u8(publicKey) });
-      await firebase.firestore().collection("avisos").doc(nuvem.usuario.uid).set(Object.assign({ sub: JSON.parse(JSON.stringify(sub)), ts: Date.now() }, prefsAvisos()));
+      await firebase.firestore().collection("avisos").doc(nuvem.usuario.uid).set(Object.assign({ sub: JSON.parse(JSON.stringify(sub)), ts: Date.now() }, prefsAvisos()), { merge: true });
       est.avisos = true; salvar();
       // um lembrete de teste, para a pessoa ver que chegou
       nuvem.usuario.getIdToken().then(t => fetch(AVISAR, { method: "POST", headers: { Authorization: "Bearer " + t } })).catch(() => {});
@@ -1177,8 +1209,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     } catch (e) { return "Não deu certo agora. Tente de novo em instantes."; }
   }
   // Toda vez que o app abre, mantém o fuso e os horários de sono atualizados para os lembretes.
+  // Se a inscrição do celular venceu (o servidor apaga a vencida), a tela volta a mostrar o botão para ligar os lembretes.
   function atualizarAvisos() {
-    if (avisosLigados() && nuvem.usuario) firebase.firestore().collection("avisos").doc(nuvem.usuario.uid).set(prefsAvisos(), { merge: true }).catch(() => {});
+    if (!avisosLigados() || !nuvem.usuario) return;
+    const uid = nuvem.usuario.uid;
+    navigator.serviceWorker.ready.then(reg => reg.pushManager.getSubscription()).then(sub => {
+      if (!sub) { est.avisos = false; salvar(); return; }
+      return firebase.firestore().collection("avisos").doc(uid).set(Object.assign({ sub: JSON.parse(JSON.stringify(sub)) }, prefsAvisos()), { merge: true });
+    }).catch(() => {});
   }
   function botaoAvisos() {
     if (!CFG) return "";
@@ -1508,7 +1546,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     ctx.strokeStyle = "rgba(245,199,91,.28)"; ctx.lineWidth = 1.2; ctx.beginPath();
     estrelas.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.stroke();
     pos.forEach(p => desenharPonto(ctx, p.x, p.y, p.t, cor, 1.6));
-    const nEx = 56;
+    const nEx = noitesExemplo().length;
     for (let i = nEx; i < pos.length; i++) { ctx.strokeStyle = cor; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(pos[i].x, pos[i].y, 16, 0, 7); ctx.stroke(); }
     document.querySelectorAll("canvas[data-ponto]").forEach(cv => {
       const x = cv.getContext("2d"); x.clearRect(0, 0, 28, 28); desenharPonto(x, 14, 14, +cv.dataset.ponto, cor, 1.1);
@@ -1518,7 +1556,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // ---------- Diário: gravar e calendário ----------
   const isoDe = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   const deIso = s => { const [a, m, d] = s.split("-").map(Number); return new Date(a, m - 1, d); };
-  const hojeIso = isoDe(new Date());
+  let hojeIso = isoDe(new Date());
+  // O app pode ficar aberto a noite inteira (modo noite) ou dias em segundo plano: o "hoje" acompanha o relógio.
+  function atualizarDia() {
+    const n = isoDe(new Date()); if (n === hojeIso) return false;
+    if (diaSel === hojeIso) diaSel = n;
+    hojeIso = n; return true;
+  }
 
   // Noites de exemplo nas últimas semanas, para o calendário abrir com vida.
   // Cada uma: dias atrás, tipo, texto, cor, horas de sono, práticas do dia anterior e testes daquele dia.
@@ -1577,7 +1621,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function cartao(d) {
     const quando = deIso(d.iso).toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
     return `<div class="cartao"><div class="data"><span>${esc(quando)}</span>${d.exemplo ? '<span class="selo-ex">exemplo</span>' : ""}</div>
-      <div style="display:flex;align-items:center;gap:8px">${iconeNoite(d.tipo, "peq")}<b style="font-size:14px">${esc(TIPOS[Math.min(3, d.tipo)].nome)}</b></div>
+      <div style="display:flex;align-items:center;gap:8px">${iconeNoite(d.tipo, "peq")}<b style="font-size:14px">${esc(TIPOS[Math.min(4, d.tipo)].nome)}</b></div>
       ${d.cor ? `<span class="suave">Nevoeiro ${esc(d.cor)}</span>` : ""}
       <p>${d.texto ? realcar(d.texto, busca.trim()) : '<span class="suave">Nada ficou. Continue praticando com convicção.</span>'}</p></div>`;
   }
@@ -1674,7 +1718,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${a ? `<div class="cheguei"><span class="rotulo">O alvo desta noite</span><b>${esc(a.nome)}</b><span class="suave">Você chegou lá?</span>
         <div class="seg seg3">${[["sim", "Cheguei"], ["quase", "Quase"], ["nao", "Não"]].map(([k, n]) => `<button data-chegou="${k}" aria-pressed="${chegou === k}">${n}</button>`).join("")}</div></div>` : ""}
       <span class="rotulo">O sono</span>
-      <div class="sono-log"><label>Dormi às<input type="time" id="dormi" value="${esc(est.dormiuAs || (est.perfil || {}).dorme || "23:00")}"></label><label>Acordei às<input type="time" id="acordei" value="${hora}"></label></div>
+      <div class="sono-log"><label>Dormi às<input type="time" id="dormi" value="${esc(est.dormiuAs || (est.perfil || {}).dorme || "23:00")}"></label><label>Acordei às<input type="time" id="acordei" value="${new Date().getHours() < 12 ? hora : esc((est.perfil || {}).acorda || "07:00")}"></label></div>
       </details>
       <button class="btn largo" data-acao="salvar-sonho">Guardar a noite</button>
     </div>`;
@@ -2163,7 +2207,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const segura = r.segura ? 3000 : 0;
         let n = 0;
         const ciclo = () => {
-          if (n >= r.n) { fase.textContent = r.fim; marcar(p.k); return; }
+          if (n >= r.n) { fase.textContent = r.fim; marcar(p.k, a.id); return; }
           n++; cont.textContent = n + " / " + r.n;
           circ.classList.add("grande"); fase.textContent = r.inspire;
           if (segura) timers.push(setTimeout(() => { fase.textContent = r.segurar; }, 4000));
@@ -2254,6 +2298,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         } else if (k.t === "leva") carta.innerHTML = `${c.ilus ? `<img class="ilus pequena" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">Para levar hoje</span><p class="grande">“${esc(k.texto)}”</p>${de}`;
         else if (k.t === "alvo") {
           carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Sorteie o alvo desta noite</span>${cartaoSorteio()}`;
+          // sortear sai da cápsula: ela já conta como lida
+          carta.querySelector('[data-acao="sortear"]')?.addEventListener("click", () => { if (!est.vistas[c.dia]) registrar("capsula"); est.vistas[c.dia] = true; salvar(); });
         }
       };
       d.querySelector("#ant").onclick = () => { if (i > 0) { i--; desenha(); } };
@@ -2463,6 +2509,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (sem.completa && !est.semanas[sem.chave]) est.semanas[sem.chave] = hojeIso;
     const abertos = Object.keys(LIBERA).filter(k => !est.liberados[k] && livre(k));
     abertos.forEach(k => { est.liberados[k] = hojeIso; });
+    if (abertos.includes("despertar")) atualizarAvisos();
     const novos = SELOS.filter(s => !est.selos[s.id] && s.ok());
     novos.forEach(s => { est.selos[s.id] = hojeIso; });
     const nv = nivel();
@@ -2664,7 +2711,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="kpis">
         <div><b>${pct}%</b><span>noites lembradas</span><i class="trilho-m"><i style="width:${Math.min(100, pct)}%"></i></i></div>
         <div><b>${(testes / corridos).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}</b><span>testes por dia, em média</span></div>
-        <div><b>${sono ? `${Math.floor(sono)}h${String(Math.round(sono % 1 * 60)).padStart(2, "0")}` : "–"}</b><span>de sono por noite</span></div>
+        <div><b>${sono ? `${Math.floor(Math.round(sono * 60) / 60)}h${String(Math.round(sono * 60) % 60).padStart(2, "0")}` : "–"}</b><span>de sono por noite</span></div>
         <div><b>${chama().seq}</b><span>dias seguidos · recorde ${Math.max(seguidas(), chama().seq)}</span></div>
       </div>
       <div class="lucidez-sem"><span class="rotulo">Lucidez por semana</span><div class="cols">${semanas.map((v, i) => `<div class="${i === semHoje ? "agora" : ""}"><i style="height:${v / maxS * 100}%"></i><b>${v}</b><span>${i + 1}ª</span></div>`).join("")}</div></div>
@@ -2836,6 +2883,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   // ---------- Navegação ----------
   function render() {
+    atualizarDia();
     aplicarCor();
     telas.innerHTML = { hoje: telaHoje, diario: telaDiario, ceu: telaCeu, capsulas: telaCaminho, atos: telaJornada }[aba]();
     telas.scrollTop = 0;
@@ -2853,6 +2901,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 
   app.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
+    atualizarDia();
     if (b.dataset.aba) { fecharSobre(); aba = b.dataset.aba; render(); return; }
     if (b.hasAttribute("data-fechar")) { fecharSobre(); render(); return; }
     if (b.dataset.acao === "abrir-conta") { abrirConta(); return; }
@@ -2865,7 +2914,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       });
       return;
     }
-    if (b.dataset.acao === "sair-conta") { if (nuvem.pronta) firebase.auth().signOut().then(() => { nuvem.usuario = null; render(); }); return; }
+    if (b.dataset.acao === "sair-conta") {
+      // ao sair, os lembretes deste usuário param de chegar
+      if (nuvem.pronta) { const u = nuvem.usuario; (est.avisos && u ? firebase.firestore().collection("avisos").doc(u.uid).delete().catch(() => {}) : Promise.resolve())
+        .then(() => firebase.auth().signOut()).then(() => { nuvem.usuario = null; nuvem.sincronizado = false; est.avisos = false; salvar(); render(); }); }
+      return;
+    }
     if (b.dataset.cor) { est.nevoeiro = b.dataset.cor; aplicarCor(); document.querySelectorAll(".cor").forEach(c => c.setAttribute("aria-pressed", c === b)); const cl = document.getElementById("cor-livre"); if (cl) cl.value = b.dataset.cor; return; }
     if (b.dataset.pratica) { abrirPratica(b.dataset.pratica, b.dataset.ato !== undefined ? +b.dataset.ato : undefined); return; }
     if (b.dataset.capsula) { abrirCapsula(+b.dataset.capsula); return; }
@@ -2910,7 +2964,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "teste") abrirTeste();
     else if (acao === "proximo-estagio") {
       const k = estagioAtual(); if (!progressoEstagio(k).pronto || !ESTAGIOS[k + 1] || !estagioLivre(k + 1)) return;
-      est.estagio = k + 1; est.estagioDesde = hojeIso; est.ato = ESTAGIOS[k + 1].ato; salvar(); render();
+      est.estagio = k + 1; est.estagioDesde = hojeIso; est.ato = ESTAGIOS[k + 1].ato; salvar(); render(); atualizarAvisos();
       celebrar("Novo estágio", ESTAGIOS[k + 1].nome, `Objetivo: ${ESTAGIOS[k + 1].objetivo}. ${ATOS[ESTAGIOS[k + 1].ato].frase}`, ATOS[ESTAGIOS[k + 1].ato].ilus);
     }
     else if (acao === "anotar-agora") { aba = "diario"; modoDiario = "gravar"; manha = true; render(); }
@@ -2969,6 +3023,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   if (!est.estagioDesde) est.estagioDesde = hojeIso;
   if (ESTAGIOS.length) est.ato = ESTAGIOS[estagioAtual()].ato;
   iniciarNuvem();
+  // Ao voltar para o app (o celular guarda ele aberto): confere o dia e a nuvem, que pode ter coisa nova de outro aparelho.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible") return;
+    const virou = atualizarDia();
+    if (nuvem.usuario) { nuvem.sincronizado = false; sincronizar(false); }
+    if (virou && !document.getElementById("caverna") && !document.querySelector(".abertura-app") && !document.getElementById("sobre") && !document.querySelector(".modo-noite")) render();
+  });
   // O service worker guarda o app para abrir sem internet e mostra os lembretes. Tocar num lembrete abre a aba certa.
   if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && !DEMO) {
     navigator.serviceWorker.register("sw.js").catch(() => {});

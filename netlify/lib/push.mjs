@@ -17,9 +17,9 @@ export const auth = () => { db(); return admin.auth(); };
 export async function chaves(d) {
   const ref = d.doc("segredos/vapid"), s = await ref.get();
   if (s.exists) return s.data();
+  // create() falha se outra execução criou as chaves ao mesmo tempo: aí vale a que ficou guardada
   const k = webpush.generateVAPIDKeys();
-  await ref.set(k);
-  return k;
+  try { await ref.create(k); return k; } catch (e) { return (await ref.get()).data(); }
 }
 // manda uma ou mais notificações para o celular de uma pessoa (documento em "avisos"); apaga inscrições vencidas
 export async function enviarDoc(k, s, cargas, ttl) {

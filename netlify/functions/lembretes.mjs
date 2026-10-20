@@ -51,7 +51,8 @@ export default async () => {
     if (a.despertar && naHora(minutos(a.despertar)) && !ja.includes("despertar")) vai.push(["despertar", { title: "A hora do despertar", body: "Relembre o último sonho, diga a sua frase e volte a dormir com a mente acesa.", tag: "despertar", url: "./?aba=hoje", requireInteraction: true }]);
     if (!vai.length) return;
     const n = await enviarDoc(k, s, vai.map(v => v[1]), 1800);
-    if (n < 0) return;
+    // nada chegou (erro de envio): não marca como enviado, tenta de novo na próxima volta
+    if (n <= 0) return;
     total += n;
     await s.ref.set({ enviados: { dia: t.dia, lista: ja.concat(vai.map(v => v[0])) } }, { merge: true });
   }));
