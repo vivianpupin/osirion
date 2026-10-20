@@ -771,6 +771,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .dormir-topo .suave { font-size: 12px; color: #c27b7c; }
 .chama-topo { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin: -12px 4px 0 0; padding: 0; background: none; border: 0; cursor: pointer; }
 .chama-topo .chama-templo { width: 30px; height: 48px; overflow: visible; }
+.reserva { transition: opacity .5s ease; }
+.reserva.oculto { visibility: hidden; opacity: 0; }
 .ct-faisca { animation: ct-sobe 2.2s ease-out infinite; }
 .chama-topo { position: relative; }
 .chama-topo .chama-templo { position: relative; }
@@ -1917,7 +1919,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       if (t.tipo === "nome") meio = `<input class="campo-trav" id="trav-nome" type="text" placeholder="Seu nome" value="${esc(pf.nome || "")}" autocomplete="given-name">`;
       if (t.tipo === "escolha" || t.tipo === "multi") {
         const marcado = o => t.tipo === "multi" ? (pf[t.campo] || []).includes(o) : pf[t.campo] === o;
-        meio = `<div class="opcoes-trav">${t.opcoes.map(o => `<button class="op-trav" type="button" data-op="${esc(o)}" aria-pressed="${marcado(o)}">${esc(o)}</button>`).join("")}</div><p class="nota-c" id="ensina" ${t.ensina && pf[t.campo] ? "" : "hidden"}>${t.ensina || ""}</p>`;
+        meio = `<div class="opcoes-trav">${t.opcoes.map(o => `<button class="op-trav" type="button" data-op="${esc(o)}" aria-pressed="${marcado(o)}">${esc(o)}</button>`).join("")}</div><p class="nota-c reserva ${t.ensina && pf[t.campo] ? "" : "oculto"}" id="ensina">${t.ensina || ""}</p>`;
       }
       if (t.tipo === "conta") meio = '<div class="conta-lugar"></div>';
       if (t.tipo === "sono") meio = `<div class="sono"><label>Hora de dormir<input type="time" id="dorme" value="${pf.dorme || "23:00"}"></label><label>Acordar<input type="time" id="acorda" value="${pf.acorda || "07:00"}"></label></div><p class="nota-c" id="sono-conta"></p>`;
@@ -1985,12 +1987,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         return;
       }
       if (t.tipo === "escolha") {
-        prox.hidden = !pf[t.campo]; prox.textContent = "Atravessar";
+        // o botão e o ensinamento já ocupam o lugar deles (invisíveis): a tela não pula quando aparecem
+        prox.classList.add("reserva"); prox.classList.toggle("oculto", !pf[t.campo]); prox.textContent = "Atravessar";
         d.querySelectorAll(".op-trav").forEach(b => b.onclick = () => {
           pf[t.campo] = b.dataset.op; salvar();
           d.querySelectorAll(".op-trav").forEach(o => o.setAttribute("aria-pressed", o === b));
-          const en = d.querySelector("#ensina"); if (en && t.ensina) en.hidden = false;
-          prox.hidden = false;
+          const en = d.querySelector("#ensina"); if (en && t.ensina) en.classList.remove("oculto");
+          prox.classList.remove("oculto");
         });
       }
       if (t.tipo === "multi") {
