@@ -1550,7 +1550,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const f = [
       { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
       med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : "meditação do dia" } : null,
-      { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "O alvo da noite", det: alvoDe(est.alvo) ? alvoDe(est.alvo).nome : "sortear" },
+      { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDe(est.alvo) ? "esta noite: " + alvoDe(est.alvo).nome : "sortear o alvo da noite" },
       CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
     ].filter(Boolean);
     return `<section class="ferramentas"><h3>Ferramentas</h3><div class="ferr-grade">${f.map(x => `<button class="ferr" ${x.attr}><img src="${ILUS(x.ilus)}" alt=""><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></button>`).join("")}</div></section>`;
@@ -2591,7 +2591,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Como num mapa de videogame: tudo aparece desde o começo, mas fechado, com o aviso de quando abre.
   const noitesAnotadas = () => est.diario.length;
   const LIBERA = {
-    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Abre depois da sua primeira noite anotada no diário.", ok: () => noitesAnotadas() >= 1 },
+    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Aberto desde o início.", ok: () => true },
     selos: { nome: "O livro de selos", ilus: "estrela-dourada", quando: "Abre depois da sua primeira noite anotada no diário.", ok: () => noitesAnotadas() >= 1 },
     missoes: { nome: "As missões da semana", ilus: "fita-estrela-2", quando: "Abre quando você tiver 3 noites anotadas.", ok: () => noitesAnotadas() >= 3 },
     album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
