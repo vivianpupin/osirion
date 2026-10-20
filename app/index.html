@@ -1429,22 +1429,22 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function cartaoEstilos(fechavel) {
     if (!ofereceEstilos()) return "";
     const atual = est.estilo || "arhat";
-    return `<section class="estilos"><div class="momento-cab"><h3>${est.estiloVisto ? "O seu estilo de prática" : "Escolha o seu estilo"}</h3>${fechavel && !est.estiloVisto ? '<button class="link" data-acao="estilo-depois">depois</button>' : ""}</div>
-      ${est.estiloVisto ? "" : '<p class="suave">Você já tem uma semana de jornada. Pode seguir no caminho do Arhat ou escolher outro estilo: cada um já vem com a prática do dia, as técnicas da noite e os ensinamentos.</p>'}
+    return `<section class="estilos"><div class="momento-cab"><h3>${est.estiloVisto ? "O seu caminho" : "Escolha o seu caminho"}</h3>${fechavel && !est.estiloVisto ? '<button class="link" data-acao="estilo-depois">depois</button>' : ""}</div>
+      ${est.estiloVisto ? "" : '<p class="suave">Você já tem uma semana de jornada. Pode seguir no caminho do Arhat ou escolher outro caminho: cada um já vem com a prática do dia, as técnicas da noite e os ensinamentos.</p>'}
       <div class="baloes">${ESTILOS.map(x => `<button class="balao" data-estilo="${x.id}" aria-pressed="${x.id === atual}">${esc(x.nome)}</button>`).join("")}</div></section>`;
   }
   function abrirEstilo(id) {
     const x = ESTILOS.find(e => e.id === id); if (!x) return;
     const tecs = (x.tecnicas || []).map(i => NOITE[i]).filter(Boolean), caps = (x.ensinamentos || []).map(n => CAPS[n - 1]).filter(Boolean);
     const dia = !x.dia ? null : x.dia.k === "teste" ? { p: { nome: "Teste de realidade", det: "Será que estou sonhando? Várias vezes ao dia" } } : acharPratica(x.dia.k, x.dia.ato);
-    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">Estilo de prática</span><h1>${esc(x.nome)}</h1>
+    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">Caminho</span><h1>${esc(x.nome)}</h1>
       <img class="ilus" src="${ILUS(x.ilus)}" alt=""><p class="suave">${esc(x.sub)}.</p>
       ${x.id === "arhat" ? `<p>Os seis estágios do livro, com os seus ensinamentos, a meditação de cada ato e a técnica da noite. Você avança praticando.</p>` : `
       ${dia ? `<section><span class="rotulo">De dia</span><p><b>${esc(dia.p.nome)}</b> · ${esc(dia.p.det || "")}</p></section>` : ""}
       <section><span class="rotulo">À noite · uma técnica por semana</span><ol class="roteiro">${tecs.map(t => `<li><b>${esc(t.nome)}</b> · ${esc(t.de)}</li>`).join("")}</ol></section>
       <section><span class="rotulo">Os ensinamentos · ${caps.length}</span><ol class="roteiro">${caps.map(c => `<li>${esc(c.titulo)}</li>`).join("")}</ol></section>`}
-      <button class="btn largo" data-seguir-estilo="${x.id}">${(est.estilo || "arhat") === x.id ? "Este é o seu estilo" : "Seguir este estilo"}</button>
-      <p class="suave miuda">Você pode trocar de estilo quando quiser. O que já fez fica guardado.</p></div>`);
+      <button class="btn largo" data-seguir-estilo="${x.id}">${(est.estilo || "arhat") === x.id ? "Este é o seu caminho" : "Seguir este caminho"}</button>
+      <p class="suave miuda">Você pode trocar de caminho quando quiser. O que já fez fica guardado.</p></div>`);
   }
   // Venda da jornada completa: desligada por enquanto (só a Vivian usa o app). Desligada, tudo fica aberto e a oferta não aparece.
   const VENDA = false;
@@ -1605,7 +1605,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="ca-topo"><span class="ca-arte">${c.arte}</span><span><span class="rotulo">${c.rot}</span><h2>${esc(c.tit)}</h2></span></div>
       ${c.txt ? `<p>${esc(c.txt)}</p>` : ""}
       ${c.bt}
-      ${estiloAtual() ? `<button class="ca-estagio" data-estilo="${estiloAtual().id}"><span>Estilo · ${esc(estiloAtual().nome)}</span><span class="ca-barras" style="grid-template-columns:1fr">${barra(estiloAtual().ensinamentos.filter(n => est.vistas[n]).length, estiloAtual().ensinamentos.length)}</span><span class="ver">ver o estilo</span></button>`
+      ${estiloAtual() ? `<button class="ca-estagio" data-estilo="${estiloAtual().id}"><span>Caminho · ${esc(estiloAtual().nome)}</span><span class="ca-barras" style="grid-template-columns:1fr">${barra(estiloAtual().ensinamentos.filter(n => est.vistas[n]).length, estiloAtual().ensinamentos.length)}</span><span class="ver">ver este caminho</span></button>`
         : `<button class="ca-estagio" data-aba="capsulas"><span>Estágio ${k + 1} · ${esc(E.nome)}</span><span class="ca-barras">${barra(pr.lidos, pr.total)}${barra(pr.med, pr.medMeta)}${barra(pr.noites, pr.noiteMeta)}</span><span class="ver">ver o caminho</span></button>`}
     </section>`;
   }

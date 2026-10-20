@@ -25,8 +25,8 @@ window.ESTAGIOS = [
     ensinamentos: [25, 26, 27, 29, 43, 44, 45, 46, 21] }
 ];
 
-// Os estilos de prática: depois da primeira semana, a pessoa pode seguir outro caminho além do Arhat.
-// Cada estilo é um pacote pronto: a prática do dia, as técnicas da noite (uma por semana, nesta ordem)
+// Os caminhos de prática: depois da primeira semana, a pessoa pode seguir outro caminho além do Arhat.
+// Cada caminho é um pacote pronto: a prática do dia, as técnicas da noite (uma por semana, nesta ordem)
 // e os ensinamentos (em sequência). O Arhat continua sendo o caminho padrão (os estágios).
 window.ESTILOS = [
   { id: "arhat", nome: "O caminho do Arhat", sub: "As lições do livro, ato por ato, até a viagem astral", ilus: "figura-dourada" },
