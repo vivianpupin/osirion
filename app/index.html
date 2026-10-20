@@ -305,9 +305,14 @@ ol.roteiro li::marker { color: var(--nevoeiro); font-family: var(--display); }
 
 /* Diário */
 .diario { background: #0b0c18; }
-.gravar { width: 150px; height: 150px; border-radius: 50%; border: 0; align-self: center; background: radial-gradient(circle, color-mix(in srgb, var(--nevoeiro) 50%, #0b0c18) 0%, #0b0c18 70%); box-shadow: 0 0 0 1px var(--ceu-3), 0 0 40px -6px var(--nevoeiro); color: var(--areia); font-family: var(--display); font-size: 17px; display: grid; place-items: center; }
-.gravar.ativo { animation: pulsar 1.6s ease-in-out infinite; }
-@keyframes pulsar { 50% { box-shadow: 0 0 0 1px var(--nevoeiro), 0 0 70px 0 var(--nevoeiro); } }
+/* Gravar sonho: uma moeda antiga com um microfone gravado. Ao gravar, ela só brilha por dentro: não cresce nem cobre o que está em volta. */
+.gravar { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 10px 0 2px; background: none; border: 0; color: var(--areia); font-family: var(--display); font-size: 16px; }
+.gravar .moeda-antiga { --tam: 116px; box-shadow: 0 0 14px 1px rgba(214,170,90,.25), 0 10px 22px -8px rgba(0,0,0,.65), inset 0 0 0 2px #6b4a1c; transition: box-shadow .4s ease; }
+.gravar .moeda-antiga svg { position: relative; z-index: 1; width: 46px; height: 46px; fill: none; stroke: #5c3f15; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 0 rgba(255,236,190,.55)); }
+.gravar .gravar-t { min-height: 1.4em; white-space: nowrap; }
+.gravar.ativo .moeda-antiga { animation: gravando 1.6s ease-in-out infinite; }
+.gravar.ativo .gravar-t { color: var(--cristal); }
+@keyframes gravando { 50% { box-shadow: 0 0 18px 3px rgba(240,200,110,.55), 0 10px 22px -8px rgba(0,0,0,.65), inset 0 0 0 2px #6b4a1c, inset 0 0 22px 4px rgba(255,226,150,.45); } }
 .perguntas { display: flex; flex-direction: column; gap: 4px; text-align: center; font-family: var(--display); font-size: 19px; color: var(--areia-2); }
 textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--ceu-2); border: 1px solid var(--ceu-3); border-radius: 14px; color: var(--areia); font: inherit; padding: 12px; }
 .tipos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -633,19 +638,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .toast-selo { position: absolute; inset: 0; z-index: 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; pointer-events: none; text-align: center;
   background: radial-gradient(70% 50% at 50% 50%, rgba(7,8,15,.86), rgba(7,8,15,.62)); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); animation: selo-vem 4.2s ease forwards; }
 /* Uma moeda antiga: ouro gasto, borda serrilhada, pátina nos cantos e a pessoa voando de lado em relevo, dentro do disco. */
-.toast-selo .moeda { position: relative; width: 112px; height: 112px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 10px;
+.moeda-antiga { position: relative; flex: none; width: var(--tam, 112px); height: var(--tam, 112px); border-radius: 50%; display: grid; place-items: center;
   background: repeating-conic-gradient(from 0deg, #8a6229 0deg 3deg, #a97e3c 3deg 6deg);
-  box-shadow: 0 0 22px 2px rgba(214,170,90,.35), 0 14px 30px -6px rgba(0,0,0,.65), inset 0 0 0 2px #6b4a1c;
-  animation: moeda-gira 1.1s cubic-bezier(.2,.9,.3,1.2) both; }
-.toast-selo .moeda::before { content: ""; position: absolute; inset: 7px; border-radius: 50%;
+  box-shadow: 0 0 22px 2px rgba(214,170,90,.35), 0 14px 30px -6px rgba(0,0,0,.65), inset 0 0 0 2px #6b4a1c; }
+.toast-selo .moeda-antiga { margin-bottom: 10px; animation: moeda-gira 1.1s cubic-bezier(.2,.9,.3,1.2) both; }
+.moeda-antiga::before { content: ""; position: absolute; inset: 7px; border-radius: 50%;
   background: radial-gradient(circle at 38% 32%, #e2c47f, #c09550 45%, #8f6528 78%, #6a4719);
   box-shadow: inset 0 0 0 2px #7a5622, inset 0 0 0 4px #d7b56e88, inset 0 -6px 14px rgba(60,35,8,.55), inset 0 4px 8px rgba(255,236,190,.35); }
 /* a pátina: manchas e granulado do tempo por cima de tudo */
-.toast-selo .moeda::after { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: 2; pointer-events: none; opacity: .55; mix-blend-mode: multiply;
+.moeda-antiga::after { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: 2; pointer-events: none; opacity: .55; mix-blend-mode: multiply;
   background: radial-gradient(circle at 78% 80%, rgba(70,45,15,.55), transparent 45%), radial-gradient(circle at 15% 70%, rgba(70,45,15,.35), transparent 35%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E"); }
-.toast-selo .moeda .relevo { position: relative; z-index: 1; display: grid; filter: drop-shadow(0 1.2px 0 rgba(70,42,10,.85)) drop-shadow(0 -1px 0 rgba(255,238,195,.55)); }
-.toast-selo .moeda i { width: 60px; height: 60px; background: linear-gradient(160deg, #f1dc9e, #d6b064 55%, #b88a3e);
+.moeda-antiga .relevo { position: relative; z-index: 1; display: grid; filter: drop-shadow(0 1.2px 0 rgba(70,42,10,.85)) drop-shadow(0 -1px 0 rgba(255,238,195,.55)); }
+.moeda-antiga i { width: 60px; height: 60px; background: linear-gradient(160deg, #f1dc9e, #d6b064 55%, #b88a3e);
   -webkit-mask: url("img/livro/voo-figura.webp") center / contain no-repeat; mask: url("img/livro/voo-figura.webp") center / contain no-repeat; }
 .toast-selo small { font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--cristal); }
 .toast-selo b { font-family: var(--display); font-weight: 400; font-size: 21px; color: var(--areia); text-shadow: 0 2px 12px rgba(0,0,0,.6); max-width: 80%; }
@@ -1654,7 +1659,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="topo"><span class="rotulo">Os primeiros 5 minutos</span><span class="hora">${hora}</span></div>
       <div class="perguntas"><span>Não levante. Não abra os olhos.</span><span style="color:var(--areia)">Onde eu estava?</span><span style="color:var(--areia)">O que eu estava sentindo?</span></div>
       <div class="seg" role="group" aria-label="Como anotar"><button data-anota="gravar" aria-pressed="${modoAnota === "gravar"}">Falar</button><button data-anota="escrever" aria-pressed="${modoAnota === "escrever"}">Escrever</button></div>
-      ${modoAnota === "gravar" ? `<button class="gravar" id="gravar" data-acao="gravar">Gravar sonho</button>
+      ${modoAnota === "gravar" ? `<button class="gravar" id="gravar" data-acao="gravar"><span class="moeda-antiga"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></svg></span><span class="gravar-t">Gravar sonho</span></button>
       <p class="suave" id="gravar-tx" style="text-align:center">Toque e fale de olhos fechados. A sua voz vira texto aqui embaixo.</p>` : ""}
       <p class="dica-pessoa">Conte em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga, a luz é laranja…”. Até lembranças pequenas contam.</p>
       <label for="sonho" class="rotulo">Diário</label>
@@ -2470,7 +2475,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function avisoSelo(novos, titulo) {
     const s = novos[0], t = document.createElement("div"); t.className = "toast-selo"; t.setAttribute("role", "status");
-    t.innerHTML = `<div class="moeda"><span class="relevo"><i></i></span></div><small>${titulo || "Nova descoberta"}${novos.length > 1 ? ` · e mais ${novos.length - 1}` : ""}</small><b>${esc(s.nome)}</b>`;
+    t.innerHTML = `<div class="moeda-antiga"><span class="relevo"><i></i></span></div><small>${titulo || "Nova descoberta"}${novos.length > 1 ? ` · e mais ${novos.length - 1}` : ""}</small><b>${esc(s.nome)}</b>`;
     app.appendChild(t); setTimeout(() => t.remove(), 4200);
   }
   function abrirCerimonia(i) {
@@ -2822,9 +2827,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       area.value = base + final + prov; acompanhar(area);
     };
     rec.onerror = e => { tx.textContent = e.error === "not-allowed" || e.error === "service-not-allowed" ? "O Osirion precisa da permissão do microfone. Ou use o microfone do teclado." : "Não consegui ouvir. Tente de novo ou use o microfone do teclado."; };
-    rec.onend = () => { rec = null; b.classList.remove("ativo"); b.textContent = "Gravar sonho"; };
+    rec.onend = () => { rec = null; b.classList.remove("ativo"); b.querySelector(".gravar-t").textContent = "Gravar sonho"; };
     try { rec.start(); } catch (e) { rec = null; return; }
-    b.classList.add("ativo"); b.textContent = "Ouvindo… toque para parar"; tx.textContent = "Fale de olhos fechados. As palavras aparecem na caixa abaixo.";
+    b.classList.add("ativo"); b.querySelector(".gravar-t").textContent = "Ouvindo… toque para parar"; tx.textContent = "Fale de olhos fechados. As palavras aparecem na caixa abaixo.";
   }
 
   // ---------- Navegação ----------
