@@ -1566,7 +1566,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const f = [
       { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
       med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : "meditação do dia" } : null,
-      { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDe(est.alvo) ? "esta noite: " + alvoDe(est.alvo).nome : "sortear o alvo da noite" },
+      livre("sorteio") && { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDe(est.alvo) ? "esta noite: " + alvoDe(est.alvo).nome : "sortear o alvo da noite" },
       CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
     ].filter(Boolean);
     return `<section class="ferramentas"><h3>Ferramentas</h3><div class="ferr-grade">${f.map(x => `<button class="ferr" ${x.attr}><img src="${ILUS(x.ilus)}" alt=""><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></button>`).join("")}</div></section>`;
@@ -1915,8 +1915,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return false;
   }
   const posRoda = (graus, r) => { const a = (graus - 90) * Math.PI / 180; return { x: 50 + r * Math.cos(a), y: 50 + r * Math.sin(a) }; };
-  function cartaoSorteio() {
-    if (!livre("sorteio")) return trancado("sorteio");
+  // O oráculo abre com o ensinamento do alvo (cápsula 20); dentro dele, o cartão já aparece aberto.
+  function cartaoSorteio(noEnsinamento) {
+    if (!noEnsinamento && !livre("sorteio")) return trancado("sorteio");
     const a = alvoDe(est.alvo);
     const mini = REINOS.map((x, k) => { const p = posRoda(k * 40, 40); return `<img src="${ILUS(x.ilus)}" alt="" style="left:${p.x}%;top:${p.y}%">`; }).join("");
     return `<button class="sorteio-card" data-acao="sortear"><span class="roda-mini" aria-hidden="true">${mini}<img class="centro" src="${IMG.marca}" alt="" style="left:50%;top:50%"></span>
@@ -2414,7 +2415,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           };
         } else if (k.t === "leva") carta.innerHTML = `${c.ilus ? `<img class="ilus pequena" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">Para levar hoje</span><p class="grande">“${esc(k.texto)}”</p>${de}`;
         else if (k.t === "alvo") {
-          carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Sorteie o alvo desta noite</span>${cartaoSorteio()}`;
+          carta.innerHTML = `<span class="rotulo" style="color:var(--tema)">Sorteie o alvo desta noite</span>${cartaoSorteio(true)}`;
           // sortear sai da cápsula: ela já conta como lida
           carta.querySelector('[data-acao="sortear"]')?.addEventListener("click", () => { if (!est.vistas[c.dia]) registrar("capsula"); est.vistas[c.dia] = true; salvar(); });
         }
@@ -2607,7 +2608,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Como num mapa de videogame: tudo aparece desde o começo, mas fechado, com o aviso de quando abre.
   const noitesAnotadas = () => est.diario.length;
   const LIBERA = {
-    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Aberto desde o início.", ok: () => true },
+    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Abre com o ensinamento “Os guias e os alvos”, no estágio 2: primeiro você aprende a ter um alvo.", ok: () => !!est.vistas[20] },
     selos: { nome: "O livro de selos", ilus: "estrela-dourada", quando: "Abre depois da sua primeira noite anotada no diário.", ok: () => noitesAnotadas() >= 1 },
     missoes: { nome: "As missões da semana", ilus: "fita-estrela-2", quando: "Abre quando você tiver 3 noites anotadas.", ok: () => noitesAnotadas() >= 3 },
     album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
