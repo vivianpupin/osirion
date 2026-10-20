@@ -1380,7 +1380,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <ol class="roteiro">${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
       ${completa ? `<div class="cartao"><b>Você completou a semana com esta técnica.</b><span class="suave">Se ela já está funcionando, pode continuar. Ou siga para a próxima: ${esc(prox.nome)}.</span>
         <button class="btn" data-tecnica="${iProx}">Começar ${esc(prox.nome)}</button></div>` : ""}
-      ${t.som === "binaural" ? '<button class="btn largo" data-acao="dormir-binaural">Praticar com o som binaural</button><p class="suave miuda" style="text-align:center">Com fone de ouvido.</p>' : ""}
+      ${t.som === "binaural" ? '<button class="btn largo" data-acao="dormir-binaural">Praticar com o som do Foco 10</button><p class="suave miuda" style="text-align:center">Com fone de ouvido.</p>' : ""}
       <button class="btn ${t.som ? "fantasma " : ""}largo" data-acao="dormir">Vou dormir</button>
       <button class="btn fantasma largo" data-acao="escolher-tecnica">Escolher outra técnica</button></div>`);
   }
@@ -2940,6 +2940,24 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     for (let i = 0; i < n; i++) { const w = Math.random() * 2 - 1; if (marrom) { ult = (ult + .02 * w) / 1.02; x[i] = ult * 3.5; } else x[i] = w; }
     return b;
   }
+  // ruído rosado (o chiado macio da chuva e do "surf"), pelo filtro de Paul Kellet
+  function rosa(ctx, seg) {
+    const n = ctx.sampleRate * seg, b = ctx.createBuffer(1, n, ctx.sampleRate), x = b.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < n; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = .99886 * b0 + w * .0555179; b1 = .99332 * b1 + w * .0750759; b2 = .969 * b2 + w * .153852; b3 = .8665 * b3 + w * .3104856;
+      b4 = .55 * b4 + w * .5329522; b5 = -.7616 * b5 - w * .016898; x[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * .5362) * .11; b6 = w * .115926;
+    }
+    return b;
+  }
+  // Os Focos, no estilo dos áudios de Robert Monroe: vários pares de tons em camadas (um tom em cada ouvido),
+  // todos na mesma pulsação, sobre o "surf", um ruído rosado que sobe e desce como ondas longe. Precisa de fone.
+  const FOCOS = {
+    foco10: [[100, 7, 4, .2], [200, 7, 4, .14], [300, 7, 4, .07]],   // corpo dormindo, mente acordada (teta)
+    foco12: [[150, 10, 7, .17], [250, 4, 4, .11], [400, 10, 7, .06]], // consciência expandida (alfa e teta)
+    foco21: [[90, 3, 1.5, .22], [180, 3, 1.5, .14], [480, 40, 40, .02]] // a ponte para o outro lado (delta)
+  };
   function tocarSom(nome) {
     const ctx = audio(); if (!ctx) return null; if (ctx.state === "suspended") ctx.resume();
     const t = ctx.currentTime, out = ctx.createGain(), nos = [];
@@ -2948,53 +2966,61 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const ganho = v => { const g = ctx.createGain(); g.gain.value = v; return g; };
     const filtro = (tipo, f) => { const q = ctx.createBiquadFilter(); q.type = tipo; q.frequency.value = f; return q; };
     const osc = (f, tipo) => { const o = ctx.createOscillator(); o.type = tipo || "sine"; o.frequency.value = f; o.start(); nos.push(o); return o; };
-    if (nome === "binaural") {
-      // Som binaural: um tom em cada ouvido, um pouco diferentes; a diferença (a pulsação) desce devagar,
-      // do relaxamento acordado (10 por segundo) até a beira do sono (4 por segundo), em 20 minutos. Precisa de fone.
-      const base = 200, junta = ctx.createChannelMerger(2), gt = ganho(.16);
-      const esq = osc(base), dir = osc(base + 10);
-      dir.frequency.setValueAtTime(base + 10, t); dir.frequency.linearRampToValueAtTime(base + 4, t + 1200);
-      esq.connect(junta, 0, 0); dir.connect(junta, 0, 1); junta.connect(gt); gt.connect(out);
-      const lp = filtro("lowpass", 500), gf = ganho(.12); fonte(true).connect(lp); lp.connect(gf); gf.connect(out); // um mar bem baixo por baixo
-      out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 20);
-    } else if (nome === "tempo") {
-      // Atravessar o tempo: o tom grave do om, um binaural mais fundo (de 6 a 2 por segundo, em 40 minutos),
-      // um vento suave e, de tempos em tempos, o toque de uma taça tibetana que se apaga devagar.
-      const base = 136.1, junta = ctx.createChannelMerger(2), gt = ganho(.12);
-      const esq = osc(base), dir = osc(base + 6);
-      dir.frequency.setValueAtTime(base + 6, t); dir.frequency.linearRampToValueAtTime(base + 2, t + 2400);
-      esq.connect(junta, 0, 0); dir.connect(junta, 0, 1); junta.connect(gt); gt.connect(out);
-      const gd = ganho(.09), resp = osc(1 / 17), rg = ganho(.015); osc(68.05).connect(gd); osc(204.15).connect(ganho(.2)).connect(gd); resp.connect(rg); rg.connect(gd.gain); gd.connect(out);
-      const lp = filtro("lowpass", 380), gv = ganho(.1); fonte(true).connect(lp); lp.connect(gv); gv.connect(out);
-      const taca = quando => {
-        const f = [392, 329.6, 293.7, 261.6][Math.floor(Math.random() * 4)], g = ctx.createGain(); g.connect(out);
-        g.gain.setValueAtTime(0, quando); g.gain.linearRampToValueAtTime(.06, quando + .02); g.gain.exponentialRampToValueAtTime(.0005, quando + 18);
-        [[1, 1], [2.76, .45], [5.4, .2]].forEach(([m, v]) => { const o = ctx.createOscillator(), gv2 = ctx.createGain(); o.frequency.value = f * m; gv2.gain.value = v; o.connect(gv2); gv2.connect(g); o.start(quando); o.stop(quando + 19); });
-      };
-      let prox = t + 8; const agenda = () => { while (prox < ctx.currentTime + 120) { taca(prox); prox += 70 + Math.random() * 80; } };
-      agenda(); const intTaca = setInterval(agenda, 60000); nos.push({ stop() { clearInterval(intTaca); } });
+    if (FOCOS[nome]) {
+      const junta = ctx.createChannelMerger(2), gt = ganho(1); junta.connect(gt); gt.connect(out);
+      FOCOS[nome].forEach(([base, b0, b1, v]) => {
+        const esq = osc(base), dir = osc(base + b0), ge = ganho(v), gd = ganho(v);
+        dir.frequency.setValueAtTime(base + b0, t); dir.frequency.linearRampToValueAtTime(base + b1, t + 1200);
+        esq.connect(ge); ge.connect(junta, 0, 0); dir.connect(gd); gd.connect(junta, 0, 1);
+      });
+      const surf = (lado) => { const s = ctx.createBufferSource(); s.buffer = rosa(ctx, 9); s.loop = true; s.start(); nos.push(s);
+        const lp = filtro("lowpass", 4000), hp = filtro("highpass", 60), g = ganho(.32); s.connect(hp); hp.connect(lp); lp.connect(g); g.connect(junta, 0, lado); return g; };
+      const sL = surf(0), sR = surf(1), onda = osc(1 / 14), prof = ganho(.2); onda.connect(prof); prof.connect(sL.gain); prof.connect(sR.gain);
       out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 20);
     } else if (nome === "chuva") {
-      const hp = filtro("highpass", 500), lp = filtro("lowpass", 6000), g = ganho(.1); fonte(false).connect(hp); hp.connect(lp); lp.connect(g); g.connect(out);
-      const g2 = ganho(.3); fonte(true).connect(g2); g2.connect(out);
+      // a chuva: um chiado rosado e macio dos dois lados, um rumor grave e gotinhas de água (estalos curtos de ruído, sem tom)
+      const junta = ctx.createChannelMerger(2); junta.connect(out);
+      [0, 1].forEach(lado => { const s = ctx.createBufferSource(); s.buffer = rosa(ctx, 7 + lado); s.loop = true; s.start(); nos.push(s);
+        const hp = filtro("highpass", 250), lp = filtro("lowpass", 4200), g = ganho(.55); s.connect(hp); hp.connect(lp); lp.connect(g); g.connect(junta, 0, lado); });
+      const lr = filtro("lowpass", 400), gr = ganho(.25); fonte(true).connect(lr); lr.connect(gr); gr.connect(out);
+      const estalo = ruido(ctx, .03, false);
+      const gota = quando => { const s = ctx.createBufferSource(); s.buffer = estalo; s.playbackRate.value = .6 + Math.random() * .8;
+        const bp = filtro("bandpass", 900 + Math.random() * 2100), g = ctx.createGain(), p = ctx.createStereoPanner ? ctx.createStereoPanner() : null, v = .04 + Math.random() * .12;
+        bp.Q.value = 1.2; g.gain.setValueAtTime(v, quando); g.gain.exponentialRampToValueAtTime(.0005, quando + .012 + Math.random() * .02);
+        s.connect(bp); bp.connect(g); if (p) { p.pan.value = Math.random() * 2 - 1; g.connect(p); p.connect(out); } else g.connect(out); s.start(quando); s.stop(quando + .05); };
+      let prox = t + 1; const agenda = () => { while (prox < ctx.currentTime + 3) { gota(prox); prox += Math.random() * .11; } };
+      agenda(); const intG = setInterval(agenda, 1000); nos.push({ stop() { clearInterval(intG); } });
     } else if (nome === "mar") {
       const lp = filtro("lowpass", 700), g = ganho(.35), onda = osc(.08), prof = ganho(.3), prof2 = ganho(450);
       onda.connect(prof); prof.connect(g.gain); onda.connect(prof2); prof2.connect(lp.frequency);
       fonte(true).connect(lp); lp.connect(g); g.connect(out);
-    } else { // a noite na mata: grilos e cigarras sobre um fundo baixo
-      const gb = ganho(.07); fonte(true).connect(gb); gb.connect(out);
-      [[4300, 1.7, .025], [5100, 2.3, .018], [3700, .6, .012]].forEach(([f, ritmo, v]) => {
-        const am = ganho(0), trem = osc(42, "square"), tg = ganho(.5), porta = ganho(.5), pulso = osc(ritmo, "square"), pg = ganho(.5), g = ganho(v);
-        trem.connect(tg); tg.connect(am.gain); pulso.connect(pg); pg.connect(porta.gain);
-        osc(f).connect(am); am.connect(porta); porta.connect(g); g.connect(out);
+    } else { // a noite na mata: grilos de verdade (cri-cri em rajadas curtas, cada um no seu ritmo e lugar), folhas ao vento e um sapo longe
+      const folha = ctx.createBufferSource(); folha.buffer = rosa(ctx, 8); folha.loop = true; folha.start(); nos.push(folha);
+      const hpF = filtro("highpass", 150), lpF = filtro("lowpass", 2500), gF = ganho(.12), vento = osc(1 / 13), pv = ganho(.05);
+      folha.connect(hpF); hpF.connect(lpF); lpF.connect(gF); gF.connect(out); vento.connect(pv); pv.connect(gF.gain);
+      const grilos = [[4400, 32, 3, .55, .05, -.5], [4750, 28, 4, .9, .035, .5], [4100, 35, 3, .7, .022, 0], [5000, 30, 2, 1.3, .015, .8], [3900, 26, 5, 1.6, .012, -.8]].map(([f, rh, pulsos, iv, v, pan]) => {
+        const o = osc(f), g = ctx.createGain(), p = ctx.createStereoPanner ? ctx.createStereoPanner() : null; g.gain.value = 0; o.connect(g);
+        if (p) { p.pan.value = pan; g.connect(p); p.connect(out); } else g.connect(out);
+        return { g, rh, pulsos, iv, v, prox: t + 1 + Math.random() * iv };
       });
+      const sapoO = osc(380), sapoLfo = osc(12), sapoP = ganho(60), sapoG = ctx.createGain(), sapoLp = filtro("lowpass", 900);
+      sapoLfo.connect(sapoP); sapoP.connect(sapoO.frequency); sapoG.gain.value = 0; sapoO.connect(sapoG); sapoG.connect(sapoLp); sapoLp.connect(out);
+      let sapoProx = t + 3;
+      const agenda = () => {
+        const ate = ctx.currentTime + 4;
+        grilos.forEach(c => { while (c.prox < ate) { for (let k = 0; k < c.pulsos; k++) { const a = c.prox + k / c.rh, d = .55 / c.rh;
+          c.g.gain.setValueAtTime(0, a); c.g.gain.linearRampToValueAtTime(c.v, a + d / 2); c.g.gain.linearRampToValueAtTime(0, a + d); }
+          c.prox += c.iv * (.85 + Math.random() * .3); } });
+        while (sapoProx < ate) { for (let k = 0; k < 3; k++) { const a = sapoProx + k * .18; sapoG.gain.setValueAtTime(0, a); sapoG.gain.linearRampToValueAtTime(.03, a + .045); sapoG.gain.linearRampToValueAtTime(0, a + .09); } sapoProx += 4.3 + Math.random() * 2; }
+      };
+      agenda(); const intM = setInterval(agenda, 2000); nos.push({ stop() { clearInterval(intM); } });
     }
     return { parar() { const a = ctx.currentTime; out.gain.cancelScheduledValues(a); out.gain.setValueAtTime(out.gain.value, a); out.gain.linearRampToValueAtTime(0, a + 2); setTimeout(() => { nos.forEach(n => { try { n.stop(); } catch (e) {} }); out.disconnect(); }, 2300); } };
   }
 
   // ---------- Modo noite ----------
   const PURIF = ["Uma chuva imaginária limpa o quarto", "Celular em modo avião, longe da cama", "Diário e caneta ao lado", "Deitado de barriga para cima", "A mente no seu nevoeiro"];
-  const SONS = [["chuva", "Chuva"], ["mar", "Mar"], ["mata", "Noite na mata"], ["binaural", "Som binaural · fone"], ["tempo", "Atravessar o tempo · fone"]];
+  const SONS = [["chuva", "Chuva"], ["mar", "Mar"], ["mata", "Noite na mata"], ["foco10", "Foco 10 · fone"], ["foco12", "Foco 12 · fone"], ["foco21", "Foco 21 · fone"], ["tempo", "Atravessar o tempo · fone"]];
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
   function abrirModoNoite(somInicial) {
     registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); salvar();
@@ -3047,7 +3073,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         else if (b.dataset.som) {
           const k = b.dataset.som; const era = nomeSom; pararSom(); if (era === k) return;
           som = tocarSom(k); nomeSom = k; b.setAttribute("aria-pressed", "true"); fimSom = setTimeout(pararSom, minutos * 6e4);
-          const av = d.querySelector("#aviso-fone"); if (av) av.hidden = k !== "binaural" && k !== "tempo";
+          const av = d.querySelector("#aviso-fone"); if (av) av.hidden = !FOCOS[k] && k !== "tempo";
         } else if (b.dataset.tempo) {
           minutos = +b.dataset.tempo; d.querySelectorAll("[data-tempo]").forEach(x => x.setAttribute("aria-pressed", x === b));
           if (som) { clearTimeout(fimSom); fimSom = setTimeout(pararSom, minutos * 6e4); }
@@ -3171,7 +3197,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "sem-nevoeiro") { est.nevoeiro = null; salvar(); fecharSobre(); aba = "hoje"; render(); }
     else if (acao === "gravar") gravarVoz(b);
     else if (acao === "dormir") abrirModoNoite();
-    else if (acao === "dormir-binaural") { abrirModoNoite("binaural"); const s = document.querySelector('.modo-noite [data-som="binaural"]'); if (s) s.click(); }
+    else if (acao === "dormir-binaural") { abrirModoNoite("binaural"); const s = document.querySelector('.modo-noite [data-som="foco10"]'); if (s) s.click(); }
     else if (acao === "tecnica") abrirTecnica();
     else if (acao === "escolher-tecnica") abrirEscolhaTecnica();
     else if (acao === "teste") abrirTeste();
