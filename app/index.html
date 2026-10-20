@@ -988,6 +988,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons button { padding: 10px 6px; border-radius: 12px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; font-size: 13px; }
 .sons button[aria-pressed="true"] { background: #4a1316; border-color: #c24a4e; color: #f2b8b9; }
 .sons.viagens, .sons.quatro { grid-template-columns: 1fr 1fr; }
+.como-sons summary { font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; list-style: none; }
+.como-sons summary::-webkit-details-marker { display: none; }
+.como-sons p { margin-top: 10px !important; }
 .grupo-som { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-top: 6px; }
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo button { padding: 6px; font-size: 12px; }
@@ -1381,7 +1384,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <ol class="roteiro">${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
       ${completa ? `<div class="cartao"><b>Você completou a semana com esta técnica.</b><span class="suave">Se ela já está funcionando, pode continuar. Ou siga para a próxima: ${esc(prox.nome)}.</span>
         <button class="btn" data-tecnica="${iProx}">Começar ${esc(prox.nome)}</button></div>` : ""}
-      ${t.som === "binaural" ? '<button class="btn largo" data-acao="dormir-binaural">Praticar com o som do Foco 10</button><p class="suave miuda" style="text-align:center">Com fone de ouvido.</p>' : ""}
+      ${t.som === "binaural" ? '<button class="btn largo" data-acao="dormir-binaural">Praticar com o som Mente desperta</button><p class="suave miuda" style="text-align:center">Com fone de ouvido.</p>' : ""}
       <button class="btn ${t.som ? "fantasma " : ""}largo" data-acao="dormir">Vou dormir</button>
       <button class="btn fantasma largo" data-acao="escolher-tecnica">Escolher outra técnica</button></div>`);
   }
@@ -3061,8 +3064,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const SONS_GRUPOS = [
     ["Natureza", [["chuva", "Chuva", "Chuva macia caindo, com gotinhas de água."], ["mar", "Mar", "Ondas lentas indo e vindo."], ["mata", "Noite na mata", "Grilos, folhas ao vento e um sapo longe."]]],
     ["Para adormecer · com fone", [["tacas", "Taças tibetanas", "Taças que se apagam devagar sobre tons suaves e o surf."], ["chuvabin", "Chuva e binaural", "Tons em camadas descendo devagar, com a chuva por baixo."], ["sono", "Sono profundo", "Tons bem lentos, a pulsação do sono profundo."]]],
-    ["Para sair do corpo · com fone", [["foco10", "Foco 10", "Corpo dormindo, mente acordada."], ["foco12", "Foco 12", "Consciência expandida."], ["foco21", "Foco 21", "A ponte para o outro lado."],
-      ["limiar", "O limiar", "Mais fundo que o Foco 10: ficar no ponto em que o corpo dorme e a mente não."], ["vibracoes", "As vibrações", "Uma vibração grave que cresce e pulsa, como no estado vibracional."],
+    ["Para sair do corpo · com fone", [["foco10", "Mente desperta", "Corpo dormindo, mente acordada."], ["foco12", "O céu interior", "A consciência se expande."], ["foco21", "A margem do outro lado", "A ponte para o outro lado."],
+      ["limiar", "O limiar", "Mais fundo que Mente desperta: ficar no ponto em que o corpo dorme e a mente não."], ["vibracoes", "As vibrações", "Uma vibração grave que cresce e pulsa, como no estado vibracional."],
       ["zumbido", "O zumbido do outro lado", "O chiado e a vibração que vêm antes da saída."], ["desprendimento", "O desprendimento", "O som gira devagar em volta da cabeça: para rolar para fora."],
       ["elevar", "Elevar-se", "Os tons sobem bem devagar: a sensação de subir."], ["alem", "Além do tempo", "A pulsação mais lenta de todas, quase silêncio."]]],
     ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo por 40 minutos, o surf e as taças."]]]
@@ -3083,6 +3086,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <section><span class="rotulo">Sons da noite</span>
           ${SONS_GRUPOS.map(([g, lista]) => `<span class="grupo-som">${g}</span><div class="sons quatro">${lista.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>`).join("")}
           <p class="suave miuda" id="aviso-fone" hidden></p>
+          <details class="como-sons"><summary>Como funcionam os sons</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone. O som de ondas ao fundo acalma e ajuda a não se distrair. É só deitar, fechar os olhos e deixar tocar.</p></details>
           <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
         <section><span class="rotulo">Viagem guiada</span>${livre("viagens") ? `<div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div>` : trancado("viagens")}</section>
         <section><span class="rotulo">Despertar de madrugada</span>${!livre("despertar") ? trancado("despertar") : `
