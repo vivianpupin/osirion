@@ -399,6 +399,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .story .carta { padding: 8px 6px; }
 .desenho { display: block; width: 100%; max-height: 52vh; margin: 0 auto; overflow: visible; }
 .desenho .poeira { fill: #fff; }
+.desenho .aurora { fill: none; stroke-width: 22; filter: blur(7px); animation: aurora 4s ease-in-out infinite; }
+.desenho .campo { fill: none; stroke: #f5d78b; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 2 10; filter: drop-shadow(0 0 3px #f5c75b); animation: flui 3s linear infinite; }
+@keyframes aurora { 50% { opacity: .55; } }
 .desenho .liga { stroke: #a9b2f0; stroke-width: .8; opacity: .6; }
 .desenho .astro { fill: #fff8e6; filter: drop-shadow(0 0 4px #fff); }
 .desenho .halo-cab { fill: none; stroke: #a9b2f0; stroke-width: .6; opacity: .5; }
@@ -2118,18 +2121,30 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const CONSTELACAO = LIGA.map(([a, b]) => `<line class="liga" x1="${PONTOS[a][0]}" y1="${PONTOS[a][1]}" x2="${PONTOS[b][0]}" y2="${PONTOS[b][1]}"/>`).join("")
     + Object.values(PONTOS).map(([x, y], i) => `<circle class="astro" cx="${x}" cy="${y}" r="${i % 3 ? 1.9 : 2.8}"/>`).join("")
     + '<circle class="halo-cab" cx="150" cy="95" r="19"/>';
+  // O corpo de pé, de braços abertos (C2), para os centros.
+  const PONTOS_PE = { cab: [150, 70], pes: [150, 100], omE: [120, 110], omD: [180, 110], cotE: [85, 80], cotD: [215, 80], maoE: [62, 48], maoD: [238, 48], c1: [150, 140], c2: [150, 175], qua: [150, 200], quE: [132, 205], quD: [168, 205], joE: [125, 255], joD: [175, 255], peE: [120, 305], peD: [180, 305] };
+  const LIGA_PE = [["cab", "pes"], ["pes", "omE"], ["pes", "omD"], ["omE", "cotE"], ["omD", "cotD"], ["cotE", "maoE"], ["cotD", "maoD"], ["pes", "c1"], ["c1", "c2"], ["c2", "qua"], ["qua", "quE"], ["qua", "quD"], ["quE", "joE"], ["quD", "joD"], ["joE", "peE"], ["joD", "peD"]];
+  const constelacao = (P, L, cab) => L.map(([a, b]) => `<line class="liga" x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}"/>`).join("")
+    + Object.values(P).map(([x, y], i) => `<circle class="astro" cx="${x}" cy="${y}" r="${i % 3 ? 1.9 : 2.8}"/>`).join("") + `<circle class="halo-cab" cx="150" cy="${cab}" r="18"/>`;
   const DESENHOS = {
+    // C1: sentado, o circuito pontilhado por dentro
     circulacao: `<svg viewBox="0 0 300 330" class="desenho">${ESTRELAS}${CONSTELACAO}
       <path class="flui" d="M152 231c14-40 14-100 2-140"/><path class="flui" d="M148 91c-12 40-12 100 2 140"/>
       <path class="raio" d="M150 30v34M134 38l7 18M166 38l-7 18"/>
       <path class="raio" d="M70 276c-12 8-26 10-40 6M230 276c12 8 26 10 40 6"/>
       <text x="196" y="120" class="leg">sobe pelas costas</text><text x="30" y="300" class="leg">entra pela terra</text></svg>`,
-    centros: `<svg viewBox="0 0 300 330" class="desenho">${ESTRELAS}${CONSTELACAO}
-      ${[[231, "#e8807a", "Base"], [214, "#f3a86b", "Sacro"], [196, "#f5d78b", "Plexo solar"], [172, "#9fe0b0", "Coração"], [130, "#8fd0f0", "Garganta"], [98, "#a9b2f0", "Terceiro olho"], [74, "#d9c6ff", "Coroa"]].map(([y, c, n], i) => `
-        <circle class="aura" cx="150" cy="${y}" r="9" fill="${c}" style="animation-delay:${i * .3}s"/><circle cx="150" cy="${y}" r="4" fill="${c}" style="filter:drop-shadow(0 0 5px ${c})"/>
-        <path class="guia" d="M${i % 2 ? 140 : 160} ${y}h${i % 2 ? -50 : 50}"/><text x="${i % 2 ? 86 : 214}" y="${y + 3}" class="leg" text-anchor="${i % 2 ? "end" : "start"}">${n}</text>`).join("")}</svg>`,
-    vibracao: `<svg viewBox="0 0 300 330" class="desenho">${ESTRELAS}
+    // C2: de pé, braços abertos, a aurora subindo e os centros na coluna
+    centros: `<svg viewBox="0 0 300 330" class="desenho"><defs><linearGradient id="aurora" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e8807a" stop-opacity="0"/><stop offset=".3" stop-color="#9fe0b0" stop-opacity=".35"/><stop offset=".7" stop-color="#a9b2f0" stop-opacity=".45"/><stop offset="1" stop-color="#d9c6ff" stop-opacity="0"/></linearGradient></defs>${ESTRELAS}
+      <path class="aurora" d="M150 300C122 232 180 170 150 112S150 42 150 12" stroke="url(#aurora)"/>
+      ${constelacao(PONTOS_PE, LIGA_PE, 70)}
+      ${[[200, "#e8807a", "Base"], [185, "#f3a86b", "Sacro"], [165, "#f5d78b", "Plexo solar"], [138, "#9fe0b0", "Coração"], [100, "#8fd0f0", "Garganta"], [72, "#a9b2f0", "Terceiro olho"], [50, "#d9c6ff", "Coroa"]].map(([y, c, n], i) => `
+        <circle class="aura" cx="150" cy="${y}" r="9" fill="${c}" style="animation-delay:${i * .3}s"/><circle cx="150" cy="${y}" r="3.6" fill="${c}" style="filter:drop-shadow(0 0 5px ${c})"/>
+        <path class="guia" d="M${i % 2 ? 140 : 160} ${y}h${i % 2 ? -40 : 40}"/><text x="${i % 2 ? 96 : 204}" y="${y + 3}" class="leg" text-anchor="${i % 2 ? "end" : "start"}">${n}</text>`).join("")}</svg>`,
+    // C3: dentro da nebulosa, com as ondas e o campo dourado em volta
+    vibracao: `<svg viewBox="0 0 300 330" class="desenho"><defs><radialGradient id="nebulosa" cx="50%" cy="55%" r="50%"><stop offset="0" stop-color="#7d6bd6" stop-opacity=".45"/><stop offset=".5" stop-color="#3b3f9a" stop-opacity=".22"/><stop offset="1" stop-color="#121427" stop-opacity="0"/></radialGradient></defs>
+      <ellipse cx="150" cy="185" rx="150" ry="155" fill="url(#nebulosa)"/>${ESTRELAS}
       <ellipse class="onda" cx="150" cy="185" rx="100" ry="120"/><ellipse class="onda o2" cx="150" cy="185" rx="100" ry="120"/><ellipse class="onda o3" cx="150" cy="185" rx="100" ry="120"/>
+      <ellipse class="campo" cx="112" cy="180" rx="42" ry="100"/><ellipse class="campo" cx="188" cy="180" rx="42" ry="100"/>
       <g class="treme">${CONSTELACAO}</g></svg>`
   };
   function abrirCapsula(dia) {
