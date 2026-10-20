@@ -308,7 +308,9 @@ ol.roteiro li::marker { color: var(--nevoeiro); font-family: var(--display); }
 /* Gravar sonho: uma moeda antiga com o olho do Osirion gravado. Ao gravar, ela só brilha por dentro: não cresce nem cobre o que está em volta. */
 .gravar { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 10px 0 2px; background: none; border: 0; color: var(--areia); font-family: var(--display); font-size: 16px; }
 .gravar .moeda-antiga { --tam: 116px; box-shadow: 0 0 14px 1px rgba(214,170,90,.25), 0 10px 22px -8px rgba(0,0,0,.65), inset 0 0 0 2px #6b4a1c; transition: box-shadow .4s ease; }
-.gravar .moeda-antiga i.olho-g { width: 66px; -webkit-mask-image: url("img/livro/olho.webp"); mask-image: url("img/livro/olho.webp"); }
+/* o olho entalhado no metal: escuro, com a luz batendo na borda de baixo */
+.gravar .moeda-antiga .relevo { filter: drop-shadow(0 1px 0 rgba(255,236,190,.6)) drop-shadow(0 -0.6px 0 rgba(50,28,5,.8)); }
+.gravar .moeda-antiga i.olho-g { width: 66px; background: linear-gradient(160deg, #4a3010, #5e3e14 55%, #6e4a1a); -webkit-mask-image: url("img/livro/olho.webp"); mask-image: url("img/livro/olho.webp"); }
 .gravar .gravar-t { min-height: 1.4em; white-space: nowrap; }
 .gravar.ativo .moeda-antiga { animation: gravando 1.6s ease-in-out infinite; }
 .gravar.ativo .gravar-t { color: var(--cristal); }
