@@ -24,6 +24,33 @@ window.ARHAT = (function () {
   };
 
   const TESTE = { k: "teste", ilus: "olho", ico: "mao", nome: "Teste de realidade", det: "“Será que estou sonhando?” 7 a 10 vezes" };
+  // Textos escritos para o app (a Vivian revisa): a atenção inteira (olhos, mente e coração) e as três forças.
+  const ATENCAO = {
+    k: "atencao", ilus: "olho", traco: "mente-coracao", ico: "luz", nome: "Olhos, mente e coração", det: "A atenção inteira num ponto só",
+    texto: [
+      { p: "Os olhos, a mente e o coração, juntos, formam a atenção inteira. Quando os três olham para o mesmo ponto, a consciência fica firme, e é essa firmeza que você leva para dentro do sonho." },
+      { p: "Sente-se confortável e feche os olhos. Leve o olhar para dentro, para o ponto entre as sobrancelhas, sem forçar." },
+      { p: "Sinta a mente se acalmar ali, como uma espiral que vai se fechando até um ponto de luz." },
+      { p: "Agora traga um leve sorriso para o coração e sinta o calor dele." },
+      { p: "Ligue o coração ao ponto entre as sobrancelhas, como um fio de luz que sobe. Olhos, mente e coração no mesmo lugar." },
+      { p: "Fique assim por alguns minutos. Quando um pensamento puxar, volte ao ponto." }
+    ]
+  };
+  const FORCAS = {
+    k: "forcas", ilus: "estrela-terra", traco: "tres-forcas", ico: "espiral", nome: "As três forças", det: "Do alto, da frente e da Terra",
+    texto: [
+      { p: "Três forças sustentam a vida: a do universo, que vem do alto; a cósmica, que chega pela frente, no ar que respiramos; e a da Terra, que sobe do chão." },
+      { p: "Sente-se numa cadeira, com a coluna ereta e os pés inteiros no chão. Mãos sobre os joelhos. Feche os olhos e respire devagar." },
+      { sub: "Do alto" },
+      { p: "Sinta a força do universo descendo em espiral até o topo da cabeça e entrando pela coroa." },
+      { sub: "Pela frente" },
+      { p: "A cada inspiração, a força cósmica entra pelo rosto, entre as sobrancelhas, e enche a cabeça de luz." },
+      { sub: "De baixo" },
+      { p: "A força da Terra sobe em espiral pela planta dos pés, pelas pernas, até abaixo do umbigo." },
+      { p: "As três se encontram abaixo do umbigo. Dali, deixe a energia subir pelas costas até o alto da cabeça e descer pela frente do corpo, de volta ao umbigo. Faça esse círculo algumas vezes." },
+      { p: "Para terminar, junte a energia abaixo do umbigo e descanse as mãos ali por alguns instantes." }
+    ]
+  };
 
   const ATOS = [
     {
@@ -42,7 +69,7 @@ window.ARHAT = (function () {
             { p: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!" }
           ] } ] },
         { quando: "Dia", hora: "quando quiser", praticas: [
-          { k: "raizes", ilus: "fitas", traco: "tres-forcas", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
+          { k: "raizes", ilus: "fitas", traco: "raizes", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
             { p: "Temos raízes, linhas invisíveis, tentáculos tremeluzentes pouco opacos que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
             { p: "Esses filamentos sutis, parte importante de nosso corpo invisível, são usados por curandeiros para penetrar em outros corpos, curar e manipular energia." },
             { p: "Quando as raízes estão ativas, sente-se uma leve vibração ou sensação de amortecimento na região: é um sinal de que aquele centro de energia está em funcionamento!" },
@@ -73,7 +100,7 @@ window.ARHAT = (function () {
       momentos: [
         { quando: "Ao acordar", hora: "primeiros 5 min", praticas: [
           { k: "diario", ico: "pena", nome: "Diário dos 5 minutos", det: "Onde eu estava? O que eu sentia?", irDiario: true } ] },
-        { quando: "Dia", hora: "ao amanhecer e no pôr do sol", praticas: [ RESP_DOURADA, TESTE ] },
+        { quando: "Dia", hora: "ao amanhecer e no pôr do sol", praticas: [ RESP_DOURADA, ATENCAO, TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
           { k: "noite", ilus: "fita-estrela", ico: "lua", nome: "Preparando o ambiente", det: "A chuva no quarto e a afirmação", audio: true, texto: [
             { afirm: "Eu sou consciência além deste corpo.\nPor isso, posso perceber o que existe além do mundo dos sentidos.\nAbro-me para expandir, explorar e compreender as forças sutis que me atravessam,\ne para usá-las com sabedoria, para o meu bem e o de quem eu amo.\nChamo para perto de mim os guias e conselheiros de jornada\ncuja luz e sabedoria me conduzem com amor.\nQue nada menor do que a minha verdade me alcance nesta noite.\nEu sou consciência além deste corpo.", fonte: "Afirmação" },
@@ -100,7 +127,7 @@ window.ARHAT = (function () {
             { afirm: "Eu sou desprovido de dualidade\nMinha forma é sem forma\nEu existo em todos os lugares\nImpregnando todos os sentidos\nEu não sou nem apegado, nem livre, nem cativo,\nEu sou a fôrma da consciência\nEu sou o Espírito Livre.", fonte: "Nirvana Shatakam" }
           ].concat(OUTRO_COMODO) } ] },
         { quando: "Dia", hora: "ao longo do dia", praticas: [
-          Object.assign({}, RESP_DOURADA, { det: "7 vezes" }), TESTE ] },
+          Object.assign({}, RESP_DOURADA, { det: "7 vezes" }), FORCAS, TESTE ] },
         { quando: "Noite", hora: "ao deitar", praticas: [
           { k: "noite", ilus: "figura-fio", ico: "lua", nome: "Estou consciente", det: "Afirmação em voz alta e o nevoeiro", audio: true, texto: [
             { p: "Deitado, afirme em voz alta e em seguida mentalmente:" },
@@ -193,7 +220,7 @@ window.ARHAT = (function () {
       frase: "Agora eu me separo facilmente do meu corpo e estou consciente.",
       momentos: [
         { quando: "04:00", hora: "despertar no meio da noite", praticas: [
-          { k: "madrugada", ilus: "figura-voo", ico: "espiral", nome: "Hermes Trismegisto", det: "Espiral da coroa e os comandos", audio: true, texto: [
+          { k: "madrugada", ilus: "figura-voo", traco: "corpo-de-luz", ico: "espiral", nome: "Hermes Trismegisto", det: "Espiral da coroa e os comandos", audio: true, texto: [
             { afirm: "Sai para fora do corpo,\nAtravessa o tempo,\nTorna-te eternidade;\nReconhece-te por imortal,\nCapaz de tudo conceber\nE tudo fazer;\nSê mais alto do que toda altura,\nMais profundo do que toda profundeza;\nSê ao mesmo tempo\nTodas as partes do mundo;\nReúne num abraço todos os ciclos,\nTodas as medidas e todas\nAs extensões e, então,\nPoderás compreender a verdadeira eternidade: Deus", fonte: "Hermes Trismegisto" },
             { p: "Sente-se em um local confortável e concentre-se no seu chakra coronário, no topo da cabeça. Enquanto expira e inspira suavemente, visualize a energia nesse chakra movimentando-se em espiral, começando a partir do topo da sua cabeça." },
             { p: "A energia da sua coroa segue essa espiral ascendente, subindo em direção ao infinito e se perdendo na vastidão do universo. Conforme você continua a respirar de forma consciente, sinta essa energia expandindo-se e conectando-se com as energias mais elevadas." },
@@ -206,7 +233,7 @@ window.ARHAT = (function () {
             { p: "Anote os resultados." }
           ] } ] },
         { quando: "Dia", hora: "ao acordar e no pôr do sol", praticas: [
-          { k: "pilar", ilus: "figura-estrela", ico: "luz", nome: "Pilar de luz", det: "Azul claro e pulsante, várias vezes ao dia", texto: [
+          { k: "pilar", ilus: "figura-estrela", traco: "corpo-eletrico", ico: "luz", nome: "Pilar de luz", det: "Azul claro e pulsante, várias vezes ao dia", texto: [
             { p: "Em pé ao ar livre, visualize um pilar de luz descendo dos céus e penetrando todos os seus corpos, preenchendo-os com uma luz pulsante de cor azul clara. Sinta essa luz fluindo e expandindo-se por todo o seu ser." },
             { p: "Respire profundamente e aguarde a ativação dos seus chakras (sensações de formigamento) enquanto permanece conectado com essa luz pulsante. Permita que a energia circule livremente, ativando e equilibrando cada um dos seus centros energéticos ao longo do corpo. Essa prática pode trazer uma sensação de clareza, harmonia e vitalidade para o seu ser." },
             { p: "(Pode ser feita várias vezes ao dia.)" }
@@ -260,7 +287,7 @@ window.ARHAT = (function () {
       ]
     },
     {
-      k: "sair", ilus: "salto-figura", traco: "corpo-de-luz", ico: "espiral", nome: "Sentir o corpo sair", det: "Respirar, relaxar e se soltar", audio: true,
+      k: "sair", ilus: "salto-figura", ico: "espiral", nome: "Sentir o corpo sair", det: "Respirar, relaxar e se soltar", audio: true,
       texto: [
         { p: "Esta prática reúne o que os grandes viajantes ensinam, como William Buhlman e Robert Monroe: o corpo dorme, a consciência fica, e a intenção firme leva para fora." },
         { sub: "Respirar e relaxar" }, { passos: [

@@ -7,6 +7,7 @@ self.IMAGENS = [
   "img/traco/espiral-galaxia.svg",
   "img/traco/mente-coracao.svg",
   "img/traco/olho-galaxia.svg",
+  "img/traco/raizes.svg",
   "img/traco/orbita-estrelas.svg",
   "img/traco/tensoes.svg",
   "img/traco/terra-lua.svg",

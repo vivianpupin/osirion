@@ -1908,7 +1908,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function leituraAlvo(l) {
     const a = alvoDe(l); if (!a) return "";
-    return `<div class="leitura-alvo">
+    return `<div class="leitura-alvo">${l.r === LUA ? '<img class="traco" src="img/traco/terra-lua.svg" alt="">' : ""}
       <div class="topo-l"><img src="${ILUS(a.ilus)}" alt=""><div><span class="eye">${esc(a.reino)}</span><h2>${esc(a.nome)}</h2></div></div>
       <div class="player audio-reino"><button class="play" disabled aria-label="Áudio em gravação">▶</button><div><b>Viagem guiada · ${esc(a.reino)}</b><div class="suave">na voz da Vivian · em gravação</div></div></div>
       <span class="eye">Como chegar</span>

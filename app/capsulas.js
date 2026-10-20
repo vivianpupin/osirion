@@ -49,7 +49,7 @@ window.CAPSULAS = [
   ] },
   { dia: 6, ilus: "fitas", tema: "livro", titulo: "As raízes de cura", minutos: 2, cartas: [
     { t: "abre", titulo: "As raízes de cura", sub: "O corpo invisível" },
-    { t: "traco", img: "tres-forcas", texto: "As três forças: a do universo entra pelo alto da cabeça, a cósmica pela frente e a da Terra sobe pelos pés." },
+    { t: "traco", img: "raizes", texto: "As raízes saem das mãos, da cabeça, da garganta, do coração, do umbigo e do centro sexual." },
     { t: "fala", texto: "Temos raízes: linhas invisíveis, tentáculos tremeluzentes que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
     { t: "revela", pergunta: "Como saber que uma raiz está ativa?", resposta: "Sente-se uma leve vibração ou um amortecimento na região. É o sinal de que aquele centro de energia está funcionando." },
     { t: "faca", titulo: "Agora", texto: "Aproxime as mãos, sem encostar. Sinta as raízes dançando entre si como línguas de fogo que se entrelaçam.", segundos: 30 },
@@ -155,7 +155,6 @@ window.CAPSULAS = [
   ] },
   { dia: 20, ilus: "estrela-fita", tema: "livro", titulo: "Os guias e os alvos", minutos: 2, cartas: [
     { t: "abre", titulo: "Os guias e os alvos", sub: "Para onde você vai esta noite?" },
-    { t: "traco", img: "terra-lua", texto: "A Terra e a Lua recebem a luz de todas as estrelas. Na lua cheia, essa luz fica mais forte." },
     { t: "fala", texto: "Você pode pedir auxílio para sair do corpo. Os guias estão atentos do outro lado, e podemos nos conectar com eles ao pedir sinceramente." },
     { t: "fala", texto: "Faça uma lista de alvos para direcionar suas viagens. Dê o comando antes de dormir e visualize como se já estivesse lá." },
     { t: "alvo" },
