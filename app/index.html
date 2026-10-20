@@ -69,11 +69,15 @@ html, body { margin: 0; }
   .aviso-prot { display: none; }
   /* A tela inteira, até atrás da barra de status e da barra de baixo, sem faixas de outra cor. */
   html, body { background: #101222; } /* a cor da barra de baixo (abas) */
-  /* Preso nas quatro bordas da tela, e não com 100dvh: no app instalado no iPhone, 100dvh desconta a barra de status
-     e deixava uma faixa embaixo, da cor do fundo da página. */
-  .celular { position: fixed; top: 0; left: 0; right: 0; bottom: calc(-1 * var(--falta, 0px)); height: auto; min-height: 0; max-width: none; border-radius: 0; border: 0; box-shadow: none;
-    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
-  .sobre, .caverna, .abertura-app { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  /* No app instalado no iPhone, a área da página às vezes termina antes do fim da tela (falta a altura da barra de status):
+     o que fica "preso" no fim dessa área não é desenhado na faixa que sobra. Então a página e o app ganham a altura
+     da tela inteira (--altura, medida no script do <head>) e o app fica no alto, sem depender dessa área. */
+  html, body { height: var(--altura, 100%); }
+  .celular { position: absolute; top: 0; left: 0; right: 0; height: var(--altura, 100%); min-height: 0; max-width: none; border-radius: 0; border: 0; box-shadow: none;
+    /* embaixo: as abas descem até perto da barrinha do iPhone, sem uma faixa vazia sobrando */
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: 0; }
+  .nav { padding-bottom: max(6px, calc(env(safe-area-inset-bottom, 0px) - 12px)); }
+  .sobre, .caverna, .abertura-app, .modo-noite { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 }
 .nevoa {
   position: absolute; inset: 0; pointer-events: none; z-index: 0;
@@ -625,7 +629,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .cartao.pessoal .btn { align-self: flex-start; padding: 8px 14px; font-size: 13px; margin-top: 4px; }
 .tira { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--ceu-3); background: none; color: var(--areia-2); }
 .cena-p { min-height: 70px; }
-.toast-selo { position: absolute; left: 50%; top: 16px; transform: translateX(-50%); z-index: 9; display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border-radius: 999px; background: #241f12; border: 1px solid var(--cristal); box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 20px rgba(245,199,91,.3); animation: toast 4.5s ease forwards; white-space: nowrap; }
+.toast-selo { position: absolute; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 12px); transform: translateX(-50%); z-index: 9; display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border-radius: 999px; background: #241f12; border: 1px solid var(--cristal); box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 20px rgba(245,199,91,.3); animation: toast 4.5s ease forwards; white-space: nowrap; }
 .toast-selo img { width: 36px; height: 36px; object-fit: contain; }
 .toast-selo small { display: block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--cristal); }
 .toast-selo b { font-family: var(--display); font-weight: 400; font-size: 16px; }
@@ -906,13 +910,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .breu.acorda h2 { color: #e8a2a3; }
 </style>
 <script>
-  // iPhone com o app instalado: às vezes a área de desenho termina antes do fim da tela (falta a altura da barra de status).
-  // Mede a diferença e estica o app até embaixo (variável --falta, usada no .celular).
+  // iPhone com o app instalado: às vezes a área da página termina antes do fim da tela (falta a altura da barra de status).
+  // O app passa a ter a altura da tela inteira (variável --altura, usada no html, no body e no .celular).
   (function () {
     function medir() {
       var inst = navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
-      var falta = inst && /iPhone|iPod/.test(navigator.userAgent) && innerHeight > innerWidth ? screen.height - innerHeight : 0;
-      document.documentElement.style.setProperty("--falta", falta > 15 && falta < 90 ? falta + "px" : "0px");
+      var r = document.documentElement.style;
+      if (inst && /iPhone|iPod/.test(navigator.userAgent) && innerHeight > innerWidth) r.setProperty("--altura", Math.max(innerHeight, screen.height) + "px");
+      else r.removeProperty("--altura");
     }
     medir(); addEventListener("resize", medir);
     // Sem zoom de pinça (o iPhone não respeita o user-scalable=no); o toque duplo já é travado pelo touch-action no CSS.
