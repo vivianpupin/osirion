@@ -429,6 +429,9 @@ window.ARHAT = (function () {
     {"nome": "Deitar em pureza", "afirm": ["Ó Deus, eu me entrego a Ti."], "de": "um hadith de Sahih al-Bukhari (247)", "ilus": "estrela-lilas", "texto": "Segundo al-Bara' ibn 'Azib, o Profeta ensinou: quando fores para a cama, faz a ablução como para a oração, deita-te sobre o lado direito e diz a súplica de entrega, “Ó Deus, eu me entrego a Ti…”.", "passos": ["Antes de deitar, faça a ablução como para a oração.", "Deite-se sobre o lado direito.", "Diga a súplica de entrega. Quem não é muçulmano pode dizer uma frase de entrega no mesmo espírito."]},
     {"nome": "A proteção da noite", "afirm": ["Eu durmo guardado até o amanhecer."], "de": "hadiths de Sahih al-Bukhari (2311 e 5017)", "ilus": "lua", "texto": "Segundo os hadiths, quem recita o Versículo do Trono (Alcorão 2:255) antes de dormir tem um guardião da parte de Deus até o amanhecer. Aisha conta que toda noite, ao deitar, o Profeta juntava as mãos, soprava nelas, recitava as três últimas suratas do Alcorão e passava as mãos pelo corpo, três vezes.", "passos": ["Recite o Versículo do Trono (Alcorão 2:255).", "Junte as mãos, recite as suratas Al-Ikhlas, Al-Falaq e An-Nas e sopre nas mãos.", "Passe as mãos pela cabeça, pelo rosto e pelo corpo, três vezes."]},
     {"nome": "Ao acordar de um sonho", "afirm": ["Eu agradeço o sonho bom e deixo ir o ruim."], "de": "hadiths de Sahih al-Bukhari (6985) e Sahih Muslim (2261, 2262)", "ilus": "estrela-cadente", "texto": "Os hadiths ensinam: do sonho bom, agradeça a Deus e conte a quem você ama; do sonho ruim, busque refúgio em Deus, vire para o outro lado e não o conte a ninguém, que ele não fará mal. No Osirion, o que você anota fica só com você.", "passos": ["Ao acordar de um sonho bom, agradeça.", "Ao acordar de um sonho ruim, busque refúgio em Deus três vezes e vire para o outro lado.", "Não conte o sonho ruim a ninguém. Se quiser guardá-lo, ele fica só no seu diário."]},
+    // Mais do caminho de Castaneda: só o que os livros confirmam
+    {"nome": "O terceiro portão", "afirm": ["Eu me vejo dormindo e permaneço desperto."], "de": "nos livros de Castaneda (A arte de sonhar, 1993)", "ilus": "figura-deitada", "texto": "Em A arte de sonhar, o terceiro portão é alcançado quando, no sonho, a pessoa se vê dormindo na própria cama. Ver o próprio corpo assim pode assustar: é só um sinal de que a consciência está desperta dentro do sono.", "passos": ["Ao deitar, decida com calma: se eu me vir dormindo, eu fico sereno.", "Se acontecer, não lute: respire devagar e observe.", "Se quiser acordar, mexa devagar um dedo do corpo físico.", "De manhã, anote como foi."]},
+    {"nome": "O ovo de luz", "afirm": ["Eu sou um ovo de luz."], "de": "nos livros de Castaneda (O fogo interior, 1984)", "ilus": "estrela-dourada", "texto": "Em O fogo interior, Don Juan diz que quem “vê” percebe o ser humano como um ovo de luz, e que há nele um ponto de brilho intenso, a cerca de um braço de distância atrás das omoplatas, onde a percepção se monta. Mover esse ponto seria ver de outro jeito. Aqui é uma imagem de concentração, não uma promessa de enxergar luz.", "passos": ["Deitado, imagine o seu corpo dentro de um grande ovo de luz, do tamanho dos braços abertos.", "Imagine um ponto mais brilhante atrás das costas, a um braço de distância.", "Respire e imagine esse ponto deslizando devagar, como uma luz que muda de lugar.", "Adormeça com a imagem do ovo inteiro brilhando."]},
 
   ];
 
@@ -516,6 +519,44 @@ window.ARHAT = (function () {
       { p: "Antes de dormir, lembre o hadith: a fala verdadeira prepara o sonho verdadeiro." }
     ]
   };
-  const DIAS = [DESPERTA, PUREZA, FLORESTA, ESCUTA, VERDADE];
+  // O homem pássaro: uma prática do dia diferente a cada técnica (os capítulos de Viagem a Ixtlan, 1972)
+  const HISTORIA = {
+    k: "historia", ilus: "maos-chama", ico: "pena", nome: "Apagar a história pessoal", det: "Não repetir hoje uma história sobre si mesmo",
+    texto: [
+      { p: "Em Viagem a Ixtlan, no capítulo “Apagar a história pessoal”, Don Juan ensina a deixar o passado de lado e a não alimentar a imagem que os outros fazem de nós: assim se fica mais livre e menos previsível." },
+      { p: "Hoje, repare numa história sobre você que você costuma contar: “eu sou assim”, “comigo sempre acontece isso”." },
+      { p: "Durante o dia, não a repita, nem em voz alta, nem por dentro." },
+      { p: "À noite, antes de dormir, repare como ficou mais leve." }
+    ]
+  };
+  const MORTE = {
+    k: "conselheira", ilus: "maos-chama", ico: "pena", nome: "A conselheira à esquerda", det: "Dar peso a cada gesto do dia",
+    texto: [
+      { p: "Em Viagem a Ixtlan, no capítulo “A morte é uma conselheira”, Don Juan diz que a morte está sempre à nossa esquerda, a um braço de distância, e que lembrar dela tira a mesquinharia e dá peso a cada ato." },
+      { p: "Aqui não se trata de pensar em morrer: é lembrar que este dia é precioso e não volta." },
+      { p: "Quando se irritar com algo pequeno hoje, sinta o espaço à sua esquerda e pergunte: isto importa mesmo?" },
+      { p: "À noite, lembre um gesto do dia que você fez inteiro, com atenção." }
+    ]
+  };
+  const SOMBRAS = {
+    k: "sombras", ilus: "fitas", ico: "luz", nome: "Olhar as sombras", det: "O não-fazer: reparar no que sempre se ignora",
+    texto: [
+      { p: "Em Viagem a Ixtlan, no capítulo “Não-fazer”, Don Juan ensina a prestar atenção ao que normalmente ignoramos: por exemplo, olhar as sombras das folhas, e não as folhas." },
+      { p: "Escolha uma planta ou uma árvore com luz batendo nela." },
+      { p: "Por três minutos, com os olhos relaxados, olhe só as sombras: as formas, os buracos de luz, como elas se mexem." },
+      { p: "Quando os olhos quiserem voltar às folhas, volte às sombras." }
+    ]
+  };
+  const MARCHA = {
+    k: "marcha", ilus: "maos-chama", ico: "pena", nome: "O passo atento", det: "Caminhar confiando no corpo",
+    texto: [
+      { p: "Em Viagem a Ixtlan, no capítulo “A marcha de poder”, Don Juan ensina a correr no escuro, em terreno difícil, com os olhos fixos no chão logo à frente, confiando no corpo e não na vista." },
+      { p: "O app não indica correr no escuro: esta é uma adaptação segura. Caminhe devagar num lugar plano e iluminado." },
+      { p: "Deixe o olhar suave, um pouco à frente dos pés, sem fixar em nada." },
+      { p: "Sinta cada passo tocando o chão e deixe o corpo encontrar o caminho." },
+      { p: "Faça por cinco a dez minutos." }
+    ]
+  };
+  const DIAS = [DESPERTA, PUREZA, FLORESTA, ESCUTA, VERDADE, HISTORIA, MORTE, SOMBRAS, MARCHA];
   return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES, EXTRAS, DIAS };
 })();

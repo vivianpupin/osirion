@@ -1553,7 +1553,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const ofereceEstilos = () => ESTILOS.length > 1;
   // o próximo ensinamento e a prática do dia: do estilo escolhido, ou do estágio do Arhat
   const proximoAgora = k => { const s = estiloAtual(); return s ? s.ensinamentos.find(n => !est.vistas[n]) : proximoEnsinamento(k); };
-  const praticaDoDia = E => { const s = estiloAtual(); if (s && s.dia) { const a = acharPratica(s.dia.k, s.dia.ato); return a ? { m: a.m, p: a.p, ato: s.dia.ato } : null; } return praticaDoAto(E.ato, E.meditacao); };
+  // a prática do dia da tradição (quando é uma lista, muda junto com a técnica da semana)
+  const diaDe = (s, k) => Array.isArray(s.dia) ? s.dia[(k ?? 0) % s.dia.length] : s.dia;
+  const praticaDoDia = E => { const s = estiloAtual(); if (s && s.dia) { const d = diaDe(s, passoAtual()), a = acharPratica(d.k, d.ato); return a ? { m: a.m, p: a.p, ato: d.ato } : null; } return praticaDoAto(E.ato, E.meditacao); };
   function escolherEstilo(id) {
     est.estilo = id; est.estiloVisto = true;
     const s = estiloAtual();
@@ -1577,7 +1579,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function abrirEstilo(id) {
     const x = ESTILOS.find(e => e.id === id); if (!x) return;
     const tecs = (x.tecnicas || []).map(i => NOITE[i]).filter(Boolean), caps = (x.ensinamentos || []).map(n => CAPS[n - 1]).filter(Boolean);
-    const dia = !x.dia ? null : x.dia.k === "teste" ? { p: { nome: "Teste de realidade", det: "Será que estou sonhando? Várias vezes ao dia" } } : acharPratica(x.dia.k, x.dia.ato);
+    const d0 = x.dia ? diaDe(x, 0) : null, dia = !d0 ? null : d0.k === "teste" ? { p: { nome: "Teste de realidade", det: "Será que estou sonhando? Várias vezes ao dia" } } : acharPratica(d0.k, d0.ato);
     abrirSobre(`<div class="tela">${voltar}<span class="rotulo">Tradição</span><h1>${esc(x.nome)}</h1>
       <img class="ilus" src="${ILUS(x.ilus)}" alt=""><p class="suave">${esc(x.sub)}.</p>${x.origem ? `<p class="origem-trad"><span class="rotulo">De onde vem</span>${esc(x.origem)}</p>` : ""}
       ${x.id === "arhat" ? `<p>Os seis atos do livro, com os seus ensinamentos, a meditação de cada ato e as técnicas da noite. Você avança praticando.</p>` : `

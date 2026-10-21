@@ -28,12 +28,13 @@ window.ESTAGIOS = [
 
 // As tradições: a pessoa escolhe uma no começo e segue tudo dela (a variável continua ESTILOS, e est.estilo guarda a escolha).
 // O Arhat é o livro: os atos acima (ESTAGIOS). Nas outras, `tecnicas` (índices de conteudo.js → NOITE) vêm em ordem,
-// uma por semana: depois de 7 noites dormidas com o Osirion, a próxima se revela. `dia`: a prática do dia.
+// uma por semana: depois de 7 noites dormidas com o Osirion, a próxima se revela. `dia`: a prática do dia (ou uma lista:
+// a prática do dia muda junto com a técnica da semana).
 // `origem`: a legenda de onde vem a tradição. `ensinamentos`: as cápsulas, em sequência. `sons`: a ordem em que os sons aparecem (os que faltam vêm na última técnica).
 window.ESTILOS = [
   { id: "arhat", nome: "O caminho do Arhat", sub: "O livro da Vivian: do sonho lembrado à viagem astral, em seis atos", origem: "Do livro Arhat, de Vivian Pupin.", ilus: "figura-dourada" },
   { id: "guerreiro", nome: "O homem pássaro", sub: "Os xamãs: a arte de sonhar de Dom Juan, nos livros de Castaneda", origem: "Dos livros de Carlos Castaneda (1968–1998), que contam os ensinamentos de Dom Juan Matus, xamã yaqui do México. Estudiosos discutem se Dom Juan existiu.", ilus: "maos-chama",
-    dia: { k: "dialogo" }, tecnicas: [1, 3, 12, 13], ensinamentos: [30, 34, 33, 32, 31],
+    dia: [{ k: "dialogo" }, { k: "historia" }, { k: "sombras" }, { k: "conselheira" }, { k: "marcha" }, { k: "ver" }], tecnicas: [1, 3, 12, 13, 39, 40], ensinamentos: [30, 67, 34, 33, 32, 31, 68],
     sons: ["mata", "chuva", "mar", "foco10", "limiar", "zumbido"] },
   { id: "yoga", nome: "A yoga dos sonhos", sub: "Tibete e Índia: o sankalpa, os mantras, a luz na garganta e o Yoga Nidra", origem: "Do Tibete, a yoga dos sonhos, uma das Seis Yogas de Naropa. Da Índia, os Upanishads e o Yoga Nidra, organizado por Swami Satyananda Saraswati nos anos 1960.", ilus: "meditacao-figura",
     dia: { k: "atencao" }, tecnicas: [2, 5, 6, 8, 14], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31],
