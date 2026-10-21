@@ -810,6 +810,31 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .balao { padding: 10px 14px; border-radius: 999px; border: 1px solid var(--ceu-3); background: var(--ceu-2); color: var(--areia); font-size: 13.5px; }
 .balao[aria-pressed="true"] { border-color: var(--cristal); color: var(--cristal); box-shadow: 0 0 12px -4px var(--cristal); }
 .ferramentas { display: flex; flex-direction: column; gap: 8px; }
+/* o botão dividido: de um lado o mundo do dia, do outro o da noite */
+.mundos { display: grid; grid-template-columns: 1fr 1px 1fr; border-radius: 22px; overflow: hidden; border: 1px solid rgba(201,163,95,.35); box-shadow: 0 0 30px -18px rgba(245,199,91,.6); }
+.mundos > i { background: linear-gradient(180deg, transparent, rgba(201,163,95,.55), transparent); }
+.mundo-bt { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 20px 10px 18px; border: 0; color: var(--areia); text-align: center; cursor: pointer; }
+.mundo-bt.dia { background: radial-gradient(120% 90% at 50% 0%, rgba(240,190,110,.2), transparent 60%), linear-gradient(180deg, #2c2f5e, #1d1f42); }
+.mundo-bt.noite { background: radial-gradient(120% 90% at 50% 0%, rgba(169,178,240,.16), transparent 60%), linear-gradient(180deg, #0c0d22, #05050f); }
+.mundo-bt b { font-family: var(--display); font-weight: 400; font-size: 18px; color: #f0d79b; }
+.mundo-bt small { font-size: 11.5px; color: var(--areia-2); line-height: 1.35; }
+.mundo-bt.agora { box-shadow: inset 0 0 0 1px rgba(240,205,130,.55); }
+.mundo-ic { display: block; width: 34px; height: 34px; border-radius: 50%; }
+.mundo-ic.sol { background: radial-gradient(circle, #ffe7ad 0 40%, #f2b85f 70%); box-shadow: 0 0 22px rgba(245,199,91,.7); }
+.mundo-ic.lua { box-shadow: inset -9px -2px 0 0 #dcd6ff; transform: rotate(-20deg); filter: drop-shadow(0 0 8px rgba(169,178,240,.6)); }
+/* a área de trabalho de cada mundo */
+.mundo-tela { position: absolute; inset: 0; overflow-y: auto; }
+.mundo-tela.dia { background: radial-gradient(110% 55% at 80% 0%, rgba(240,190,110,.22), transparent 60%), linear-gradient(180deg, #2b2e5c 0%, #1c1d40 45%, #0f1024 100%); }
+.mundo-tela.noite { background: radial-gradient(90% 60% at 50% 10%, #17183a 0%, #0a0a18 55%, #030308 100%); }
+.mundo-tela .ceu-fundo { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .9; }
+.mundo-tela .tela { position: relative; padding-top: calc(env(safe-area-inset-top, 0px) + 14px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px); }
+.mundo-cab { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-top: 6px; }
+.mundo-cab .mundo-ic { width: 46px; height: 46px; margin-bottom: 6px; }
+.mundo-cab h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 25px; line-height: 1.25; color: #f0d79b; text-wrap: balance; }
+.mundo-cab .suave { margin: 0; max-width: 290px; text-wrap: balance; }
+.mundo-sec { display: flex; flex-direction: column; gap: 10px; }
+.mundo-dormir { background: #7a1f23; color: #f2b8b9; }
+.sinal-vazio { display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 18px; border: 1px dashed rgba(201,163,95,.35); }
 .instr { display: flex; flex-direction: column; border-radius: 20px; background: var(--ceu-2); box-shadow: inset 0 0 0 1px rgba(201,163,95,.18); overflow: hidden; }
 .ferr { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 0; background: none; color: var(--areia); text-align: left; }
 .ferr + .ferr { border-top: 1px solid rgba(201,163,95,.14); }
@@ -1813,8 +1838,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${noites7()}
       ${cartaoAgora()}
       ${est.estiloVisto ? "" : '<button class="btn largo" data-acao="escolher-tradicao">Escolher a minha tradição</button>'}
-      ${sinalDeSonho()}
-      ${ferramentas()}
+      ${mundosBotao()}
       <details class="rito-todo"><summary><span><b>Tudo de hoje</b><span>o rito completo do dia</span></span></summary>${ritoDoDia()}</details>
     </div>`;
   }
@@ -1854,17 +1878,64 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         : `<button class="ca-estagio" data-aba="capsulas"><span>${esc(ATOS[E.ato].nome)} · ${esc(E.nome)}</span><span class="ca-barras">${barra(pr.lidos, pr.total)}${barra(pr.med, pr.medMeta)}${barra(pr.noites, pr.noiteMeta)}</span><span class="ver">ver o caminho</span></button>`}
     </section>`;
   }
-  // As ferramentas à mão, com os desenhos do livro.
-  function ferramentas() {
+  // ---------- Os dois mundos: o do dia e o da noite ----------
+  // No Agora, um botão dividido ao meio abre a área de trabalho de cada um: as práticas daquele momento e os ensinamentos dele.
+  // Dia: o que treina a consciência acordado (sinal de sonho, teste de realidade, prática do dia, lembretes).
+  // Noite: o que se faz antes e durante o sono (a técnica da semana, a sala dos sons, o oráculo dos alvos, as viagens, dormir).
+  const CAPS_DIA = new Set([1, 4, 6, 10, 13, 32, 33, 34, 37, 54, 55, 56, 62, 67]);
+  const deNoite = () => { const h = new Date().getHours(); return h >= 18 || h < 5; };
+  let deMundo = null; // o mundo de onde a pessoa abriu alguma coisa: ao voltar, volta para ele
+  const listaFerr = f => `<div class="instr">${f.filter(Boolean).map(x => `<button class="ferr" ${x.attr}><span class="selo-img"><img src="${ILUS(x.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`).join("")}</div>`;
+  function ferrDia() {
     const k = estagioAtual(), E = ESTAGIOS[k], med0 = praticaDoDia(E), med = med0 && med0.p.k !== "teste" ? med0 : praticaDoAto(E.ato, E.meditacao);
-    const f = [
+    return listaFerr([
+      med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : med === med0 && estiloAtual() ? "a prática do dia" : "a meditação do dia" } : null,
       { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
-      med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : med === med0 && estiloAtual() ? "prática do dia" : "meditação do dia" } : null,
-      livre("sorteio") && { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" },
-      { attr: 'data-acao="sala-sons"', ilus: "fitas", nome: "A sala dos sons", det: "para ouvir quando quiser" },
       CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
-    ].filter(Boolean);
-    return `<section class="ferramentas"><span class="rotulo">Instrumentos</span><div class="instr">${f.map(x => `<button class="ferr" ${x.attr}><span class="selo-img"><img src="${ILUS(x.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`).join("")}</div></section>`;
+    ]);
+  }
+  function ferrNoite() {
+    return listaFerr([
+      { attr: 'data-acao="sala-sons"', ilus: "fitas", nome: "A sala dos sons", det: "jornadas gravadas, tambor, sons para dormir e sair do corpo" },
+      livre("sorteio") ? { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "O oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" } : null,
+      ...(livre("viagens") ? VIAGENS.map(v => ({ attr: `data-pratica="${v.k}"`, ilus: "estrela-cadente", nome: v.nome, det: "viagem guiada" })) : [])
+    ]) + (livre("sorteio") ? "" : trancado("sorteio"));
+  }
+  // os ensinamentos de cada mundo: os do caminho que já chegaram (para reler) e o de hoje, se for deste momento
+  function ensinamentosDoMundo(dia) {
+    const s = estiloAtual(), seq = s ? (s.ensinamentos || []) : ESTAGIOS.slice(0, estagioAtual() + 1).flatMap(E => E.ensinamentos || []);
+    const prox = proximoAgora(estagioAtual()), vistas = est.vistas || {};
+    const daqui = n => CAPS[n - 1] && CAPS_DIA.has(n) === dia;
+    const lista = [...new Set([...seq, ...Object.keys(vistas).map(Number)])].filter(n => daqui(n) && (vistas[n] || n === prox));
+    const faltam = seq.filter(n => daqui(n) && !vistas[n] && n !== prox).length;
+    const item = n => { const c = CAPS[n - 1]; return `<button class="ferr" data-capsula="${n}"><span class="selo-img"><img src="${ILUS(c.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(c.titulo)}</b><span>${n === prox ? "o ensinamento de hoje" : esc((c.cartas[0] || {}).sub || "") + " · para reler"}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`; };
+    return `<section class="mundo-sec"><span class="rotulo">Ensinamentos ${dia ? "para o dia" : "para a noite"}</span>
+      ${lista.length ? `<div class="instr">${lista.map(item).join("")}</div>` : `<p class="suave">Os ensinamentos deste momento vão chegando com o seu caminho, um de cada vez.</p>`}
+      ${faltam ? `<p class="suave miuda">E mais ${faltam} ${faltam === 1 ? "chega" : "chegam"} no seu tempo.</p>` : ""}</section>`;
+  }
+  function mundosBotao() {
+    const n = deNoite(), t = NOITE.length ? tecnicaDaNoite() : null;
+    return `<div class="mundos">
+      <button class="mundo-bt dia ${n ? "" : "agora"}" data-mundo="dia"><span class="mundo-ic sol" aria-hidden="true"></span><b>Mundo do dia</b><small>${testesHoje()} de ${metaTestes()} testes hoje</small></button>
+      <i aria-hidden="true"></i>
+      <button class="mundo-bt noite ${n ? "agora" : ""}" data-mundo="noite"><span class="mundo-ic lua" aria-hidden="true"></span><b>Mundo da noite</b><small>${t ? esc(t.nome) : "a técnica da semana"}</small></button>
+    </div>`;
+  }
+  function abrirMundo(q) {
+    const dia = q === "dia";
+    deMundo = null;
+    abrirSobre(`<div class="mundo-tela ${q}" data-mundo-tela="${q}"><canvas class="ceu-fundo" aria-hidden="true"></canvas><div class="tela">
+      <div style="align-self:stretch">${voltar}</div>
+      <div class="mundo-cab"><span class="mundo-ic ${dia ? "sol" : "lua"}" aria-hidden="true"></span><span class="rotulo">${dia ? "O mundo do dia" : "O mundo da noite"}</span>
+        <h1>${dia ? "O que se faz acordado" : "O que se faz antes e durante o sono"}</h1>
+        <p class="suave">${dia ? "O que você treina durante o dia é o que desperta à noite." : "A preparação, os sons, o alvo e a técnica: o caminho até o outro lado."}</p></div>
+      ${dia ? `<section class="mundo-sec">${sinalDeSonho() || '<div class="sinal-vazio"><span class="rotulo">Sinal de sonho</span><span class="suave">Quando uma mesma coisa aparecer em três sonhos anotados, ela vira o seu sinal: ao encontrá-la acordado, você pergunta se está sonhando.</span></div>'}</section>
+        <section class="mundo-sec"><span class="rotulo">Instrumentos do dia</span>${ferrDia()}</section>`
+      : `<section class="mundo-sec">${cartaoTecnica()}</section>
+        <section class="mundo-sec"><span class="rotulo">Instrumentos da noite</span>${ferrNoite()}</section>
+        <button class="btn largo mundo-dormir" data-acao="dormir">Vou dormir</button>`}
+      ${ensinamentosDoMundo(dia)}
+    </div></div>`, d => { if (!dia) ceuFundo(d.querySelector(".ceu-fundo"), d.querySelector(".mundo-tela"), true); });
   }
 
   function desenharPonto(ctx, x, y, tipo, cor, escala) {
@@ -3732,8 +3803,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (aberto && !e.target.closest("button, summary, a")) { aberto.open = false; return; }
     const b = e.target.closest("button"); if (!b) return;
     atualizarDia();
-    if (b.dataset.aba) { fecharSobre(); aba = b.dataset.aba; render(); return; }
-    if (b.hasAttribute("data-fechar")) { fecharSobre(); render(); return; }
+    if (b.dataset.aba) { deMundo = null; fecharSobre(); aba = b.dataset.aba; render(); return; }
+    if (b.hasAttribute("data-fechar")) { const m = b.closest("[data-mundo-tela]") ? null : deMundo; deMundo = null; fecharSobre(); render(); if (m) abrirMundo(m); return; }
+    if (b.dataset.mundo) { abrirMundo(b.dataset.mundo); return; }
+    { const m = b.closest("[data-mundo-tela]"); if (m) deMundo = m.dataset.mundoTela; else if (!b.closest("#sobre")) deMundo = null; }
     if (b.dataset.acao === "abrir-conta") { abrirConta(); return; }
     if (b.dataset.acao === "ativar-avisos") {
       b.disabled = true;
