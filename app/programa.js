@@ -46,7 +46,7 @@ window.ESTILOS = [
   // As tradições do sonho: técnicas e ensinamentos só com o que as fontes documentam (a Vivian revisa antes de publicar)
   { id: "egito", nome: "Códigos do antigo Egito", sub: "Os templos de Saqqara, o papiro dos sonhos, Bes e a Esfinge", ilus: "olho",
     tecnicas: [27, 25, 26, 7], ensinamentos: [58, 59, 60, 44, 5], sons: ["vazio", "tacas", "mar", "vialactea", "tempo"] },
-  { id: "grecia", nome: "A Grécia antiga", sub: "O sono nos templos de Asclépio, em Epidauro e Pérgamo", ilus: "rio",
+  { id: "grecia", nome: "O oráculo grego dos sonhos", sub: "O sono nos templos de Asclépio, em Epidauro e Pérgamo", ilus: "rio",
     tecnicas: [28, 29, 30], ensinamentos: [61, 62, 5, 43], sons: ["mar", "tacas", "chuva", "esferas"] },
   { id: "indigenas", nome: "A arte de sonhar", sub: "O sonho entre os Yanomami e os Guarani", ilus: "morro-figuras",
     tecnicas: [31, 32, 33], ensinamentos: [63, 64, 17, 13], sons: ["mata", "chuva", "mar"] },
