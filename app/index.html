@@ -837,6 +837,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .mundo-partes button[aria-pressed="true"] { background: rgba(245,199,91,.16); color: #f0d79b; box-shadow: inset 0 0 0 1px rgba(240,205,130,.5); }
 .origem-trad { margin: 0; font-size: 14px; line-height: 1.6; color: var(--areia-2); }
 .origem-trad .rotulo { display: block; margin-bottom: 4px; }
+.lua-item.futura .lua-ic { display: grid; place-items: center; }
+.lua-item.futura .lua-ic svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; opacity: .7; }
 .sinal-diario { margin: 0; font-size: 13px; line-height: 1.55; }
 .sinal-diario b { font-weight: 600; color: var(--areia); }
 .instr { display: flex; flex-direction: column; border-radius: 20px; background: var(--ceu-2); box-shadow: inset 0 0 0 1px rgba(201,163,95,.18); overflow: hidden; }
@@ -1583,8 +1585,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const k = passoAtual(), c = passoDe(s);
     return `<section class="luas"><span class="rotulo">A sua tradição</span><h1>${esc(s.nome)}</h1><p class="suave">${esc(s.sub)}.</p>${s.origem ? `<p class="origem-trad"><span class="rotulo">De onde vem</span>${esc(s.origem)}</p>` : ""}<div class="trilha-luas">${s.tecnicas.map((t, i) => {
       const T = NOITE[t]; if (!T) return "";
-      return `<button class="lua-item ${i < k ? "feita" : i === k ? "atual" : "futura"}" ${i <= k ? `data-tecnica="${t}"` : "disabled"}><span class="lua-ic" aria-hidden="true"></span>
-        <span><b>${i <= k ? esc(T.nome) : "Uma técnica ainda escondida"}</b><span class="suave">${i < k ? "já recebida · toque para repetir" : i === k ? `a técnica de agora · ${Math.min(7, c.noites || 0)} de 7 noites` : "chega com as noites"}</span></span></button>`; }).join("")}</div></section>`;
+      return `<button class="lua-item ${i < k ? "feita" : i === k ? "atual" : "futura"}" ${i <= k ? `data-tecnica="${t}"` : "disabled"}><span class="lua-ic" aria-hidden="true">${i > k ? CADEADO : ""}</span>
+        <span><b>${esc(T.nome)}</b><span class="suave">${i < k ? "já recebida · toque para repetir" : i === k ? `a técnica de agora · ${Math.min(7, c.noites || 0)} de 7 noites` : "chega com as noites"}</span></span></button>`; }).join("")}</div></section>`;
   }
   // ---------- O que já passou: o que a pessoa já viu fica guardado aqui, para repetir quando quiser ----------
   function jaPassou() {
