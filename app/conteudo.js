@@ -91,7 +91,7 @@ window.ARHAT = (function () {
             { p: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!" }
           ] } ] },
         { quando: "Dia", hora: "quando quiser", praticas: [
-          { k: "raizes", ilus: "fitas", traco: "raizes", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
+          { k: "raizes", ilus: "fitas", traco: "raizes", ilusFim: "maos-chama", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
             { p: "Temos raízes, linhas invisíveis, tentáculos tremeluzentes pouco opacos que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
             { p: "Esses filamentos sutis, parte importante de nosso corpo invisível, são usados por curandeiros para penetrar em outros corpos, curar e manipular energia." },
             { p: "Quando as raízes estão ativas, sente-se uma leve vibração ou sensação de amortecimento na região: é um sinal de que aquele centro de energia está em funcionamento!" },

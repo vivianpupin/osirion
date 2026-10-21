@@ -47,14 +47,16 @@ window.CAPSULAS = [
     { t: "faca", titulo: "Hoje", texto: "Prepare o seu quarto como um templo: arrume, limpe, desligue as telas antes de deitar. Imagine a chuva caindo e limpando o ambiente." },
     { t: "leva", texto: "O Osirion devolve esse templo para dentro do seu quarto." }
   ] },
-  { dia: 6, ilus: "fitas", tema: "livro", titulo: "As raízes de cura", minutos: 2, cartas: [
+  { dia: 6, ilus: "fitas", tema: "livro", titulo: "As raízes de cura", minutos: 3, cartas: [
     { t: "abre", titulo: "As raízes de cura", sub: "O corpo invisível" },
     { t: "traco", img: "raizes", texto: "As raízes saem das mãos, da cabeça, da garganta, do coração, do umbigo e do centro sexual." },
-    { t: "fala", texto: "Temos raízes: linhas invisíveis, tentáculos tremeluzentes que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
-    { t: "revela", pergunta: "Como saber que uma raiz está ativa?", resposta: "Sente-se uma leve vibração ou um amortecimento na região. É o sinal de que aquele centro de energia está funcionando." },
-    { t: "faca", titulo: "Agora", texto: "Aproxime as mãos, sem encostar. Sinta as raízes dançando entre si como línguas de fogo que se entrelaçam.", segundos: 30 },
-    { t: "fala", texto: "Saber recarregar-se de energia vital faz com que não precisemos absorver a energia do meio e das pessoas ao redor. É comum tentar preencher esse vazio com compulsões ou apegos." },
-    { t: "leva", texto: "Ative o seu poder sutil." }
+    { t: "fala", texto: "Temos raízes, linhas invisíveis, tentáculos tremeluzentes pouco opacos que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
+    { t: "fala", texto: "Esses filamentos sutis, parte importante de nosso corpo invisível, são usados por curandeiros para penetrar em outros corpos, curar e manipular energia." },
+    { t: "fala", texto: "Quando as raízes estão ativas, sente-se uma leve vibração ou sensação de amortecimento na região: é um sinal de que aquele centro de energia está em funcionamento!" },
+    { t: "fala", texto: "O meio em que vivemos nos doa energia todo o tempo e preenche buracos e vazios do nosso corpo. Nós absorvemos continuamente a energia luminosa da natureza e do meio." },
+    { t: "fala", texto: "Saber recarregar-se intencionalmente de energia vital faz com que não precisemos absorver a energia do meio e de pessoas ao nosso redor! É comum tentarmos preencher esse esgotamento com compulsões físicas e mentais, ou apegos emocionais." },
+    { t: "faca", titulo: "Ative suas raízes agora!", texto: "Aproxime suas mãos, sinta suas raízes dançando entre si como línguas de fogo que se entrelaçam!", segundos: 30 },
+    { t: "foto", ilus: "maos-chama", texto: "Brinque e dance com elas, ative o seu poder sutil." }
   ] },
   { dia: 7, ilus: "fita-estrela", tema: "ciencia", titulo: "A porta entre os mundos", minutos: 3, cartas: [
     { t: "abre", titulo: "A porta entre os mundos", sub: "O estado hipnagógico" },

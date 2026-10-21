@@ -440,6 +440,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .desenho .treme { animation: treme .18s linear infinite; }
 /* os desenhos no traço dos livros (dourado, linha fina, energia pontilhada) */
 .traco { display: block; width: 100%; max-width: 290px; max-height: 50vh; aspect-ratio: 300 / 430; object-fit: contain; margin: 0 auto; }
+.foto-carta { display: block; width: 100%; max-width: 300px; max-height: 52vh; object-fit: contain; margin: 0 auto; border-radius: 18px; }
 .legenda-d { font-family: var(--display); font-size: 19px; line-height: 1.4; text-align: center; margin: 0; }
 @keyframes flui { to { stroke-dashoffset: -32; } }
 @keyframes aura { 50% { transform: scale(1.8); opacity: .05; } }
@@ -775,18 +776,20 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .ic-noite.mini { width: 24px; height: 24px; }
 .ceu-frase { font-family: var(--display); font-size: 16px; line-height: 1.4; color: var(--areia); padding: 2px 4px 0; }
 /* A aba Agora (nova) */
-.noites7 { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 14px 14px 12px; border: 1px solid var(--ceu-3); border-radius: 20px; background: linear-gradient(180deg, #171a3a, #0d0f22); }
+.noites7 { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 14px 14px 10px; border-radius: 20px; background: radial-gradient(120% 90% at 50% 100%, #24204a 0%, #12142b 60%, #0b0c1c 100%); box-shadow: inset 0 0 0 1px rgba(201,163,95,.18); }
 .n7-cab { display: flex; align-items: center; gap: 10px; padding-right: 34px; }
 .n7-cab .seq { margin-left: auto; font-size: 12px; color: var(--cristal); }
 .noites7 .ver-cal { top: 8px; right: 8px; }
-.n7-linha { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.n7 { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 0; background: none; border: 0; color: var(--areia-2); font-size: 11px; }
-.n7 .bola { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ceu-2); border: 1px solid var(--ceu-3); }
-.n7 .bola svg { width: 22px; height: 22px; }
-.n7 small { font-size: 10px; opacity: .6; letter-spacing: .06em; }
-.n7 b { font-weight: 400; font-size: 12px; }
-.n7.hoje .bola { border-color: var(--nevoeiro); box-shadow: 0 0 10px -2px var(--nevoeiro); }
-.n7.hoje b { color: var(--areia); }
+.n7-linha { position: relative; display: grid; grid-template-columns: repeat(7, 1fr); height: 92px; }
+.n7-arco { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 92px; fill: none; stroke: rgba(201,163,95,.35); stroke-width: 1; stroke-dasharray: 2 4; vector-effect: non-scaling-stroke; }
+.n7 { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0; background: none; border: 0; color: var(--areia-2); font-size: 11px; }
+.n7:nth-child(2), .n7:nth-child(8) { margin-top: 40px; } .n7:nth-child(3), .n7:nth-child(7) { margin-top: 20px; } .n7:nth-child(4), .n7:nth-child(6) { margin-top: 7px; } .n7:nth-child(5) { margin-top: 2px; }
+.n7 .astro { width: 28px; height: 28px; display: grid; place-items: center; }
+.n7 .astro i { width: 5px; height: 5px; border-radius: 50%; background: rgba(238,229,212,.25); }
+.n7 .astro svg { width: 24px; height: 24px; filter: drop-shadow(0 0 6px rgba(245,199,91,.35)); }
+.n7 b { font-weight: 400; font-size: 11px; opacity: .7; }
+.n7.hoje .astro { border-radius: 50%; box-shadow: 0 0 0 1px var(--nevoeiro), 0 0 14px -2px var(--nevoeiro); }
+.n7.hoje b { color: var(--areia); opacity: 1; }
 .cartao-agora { display: flex; flex-direction: column; gap: 12px; padding: 18px; border: 1px solid color-mix(in srgb, var(--cristal) 35%, var(--ceu-3)); border-radius: 22px; background: radial-gradient(120% 90% at 85% 0%, rgba(233,201,122,.10), transparent 60%), linear-gradient(180deg, #1c1f45, #12142c); }
 .ca-topo { display: flex; align-items: center; gap: 14px; }
 .ca-arte { flex: none; width: 64px; height: 64px; display: grid; place-items: center; }
@@ -806,12 +809,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .baloes { display: flex; flex-wrap: wrap; gap: 8px; }
 .balao { padding: 10px 14px; border-radius: 999px; border: 1px solid var(--ceu-3); background: var(--ceu-2); color: var(--areia); font-size: 13.5px; }
 .balao[aria-pressed="true"] { border-color: var(--cristal); color: var(--cristal); box-shadow: 0 0 12px -4px var(--cristal); }
-.ferramentas h3 { margin: 0 0 10px; }
-.ferr-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.ferr { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px; border: 1px solid var(--ceu-3); border-radius: 18px; background: var(--ceu-2); color: var(--areia); text-align: left; min-height: 132px; }
-.ferr img { width: 52px; height: 52px; object-fit: contain; margin-bottom: 6px; }
-.ferr b { font-weight: 600; font-size: 14.5px; }
-.ferr span { font-size: 12px; color: var(--areia-2); }
+.ferramentas { display: flex; flex-direction: column; gap: 8px; }
+.instr { display: flex; flex-direction: column; border-radius: 20px; background: var(--ceu-2); box-shadow: inset 0 0 0 1px rgba(201,163,95,.18); overflow: hidden; }
+.ferr { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 0; background: none; color: var(--areia); text-align: left; }
+.ferr + .ferr { border-top: 1px solid rgba(201,163,95,.14); }
+.ferr .selo-img { flex: none; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, #232650, #0f1126); box-shadow: inset 0 0 0 1.5px #b8914f, inset 0 0 0 4px #14162e, inset 0 0 0 5px rgba(184,145,79,.45); }
+.ferr .selo-img img { width: 34px; height: 34px; object-fit: contain; }
+.ferr-t { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.ferr b { font-weight: 600; font-size: 15px; }
+.ferr-t span { font-size: 12.5px; color: var(--areia-2); }
+.ferr .seta-d { flex: none; width: 18px; height: 18px; fill: none; stroke: rgba(201,163,95,.7); stroke-width: 1.6; }
 .rito-todo { border: 1px solid var(--ceu-3); border-radius: 18px; padding: 4px 14px; }
 .rito-todo > summary { list-style: none; cursor: pointer; padding: 10px 0; }
 .rito-todo > summary::-webkit-details-marker { display: none; }
@@ -927,6 +934,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .item-sonho[open] .comeco { display: none; }
 .palavras-lista { display: flex; flex-direction: column; gap: 8px; }
 .item-sonho mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: inherit; border-radius: 3px; padding: 0 2px; }
+.item-sonho[open] p { cursor: pointer; }
 .item-sonho p { margin: 0; padding: 0 14px 14px 48px; font-size: 15px; line-height: 1.55; white-space: pre-wrap; }
 .item-sonho .editar-sonho { display: block; margin: -4px 14px 12px 48px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--ceu-3); background: none; color: var(--nevoeiro); font: inherit; font-size: 13px; cursor: pointer; }
 .editar-tela textarea { min-height: 40vh; }
@@ -1605,11 +1613,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
     const c = chama();
     const dias = Array.from({ length: 7 }, (_, k) => isoMais(hojeIso, k - 6)).map(iso => { const t = porDia[iso], dt = deIso(iso);
-      return `<button class="n7 ${iso === hojeIso ? "hoje" : ""}" data-ver-dia="${iso}" aria-label="${esc(dt.toLocaleDateString("pt-BR", { day: "numeric", month: "long" }))}">
-        <span class="bola">${t !== undefined ? iconeNoite(t, "cel") : ""}</span><small>${"DSTQQSS"[dt.getDay()]}</small><b>${dt.getDate()}</b></button>`; }).join("");
-    return `<section class="noites7"><div class="n7-cab"><span class="rotulo">Últimas 7 noites</span><span class="seq">${c.seq ? `${c.seq} ${c.seq === 1 ? "dia" : "dias"} seguidos` : "comece hoje"}</span>
+      return `<button class="n7 ${iso === hojeIso ? "hoje" : ""} ${t !== undefined ? "anotada" : ""}" data-ver-dia="${iso}" aria-label="${esc(dt.toLocaleDateString("pt-BR", { day: "numeric", month: "long" }))}">
+        <span class="astro">${t !== undefined ? iconeNoite(t, "cel") : "<i></i>"}</span><b>${dt.getDate()}</b></button>`; }).join("");
+    // a semana desenhada como o caminho da lua no céu: um arco de sete noites, e o dia de hoje no fim dele
+    return `<section class="noites7"><div class="n7-cab"><span class="rotulo">A semana no céu</span><span class="seq">${c.seq ? `${c.seq} ${c.seq === 1 ? "dia" : "dias"} seguidos` : "comece hoje"}</span>
       <button class="ver-cal" data-ver-dia="${hojeIso}" aria-label="Ver o calendário todo"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button></div>
-      <div class="n7-linha">${dias}</div></section>`;
+      <div class="n7-linha"><svg class="n7-arco" viewBox="0 0 300 92" preserveAspectRatio="none" aria-hidden="true"><path d="M21.4 54 Q150 -22 278.6 54"/></svg>${dias}</div></section>`;
   }
   // O cartão principal: de manhã, anotar o sonho; de dia, o ensinamento ou a meditação; à noite, a técnica e o "Vou dormir".
   function cartaoAgora() {
@@ -1644,7 +1653,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       livre("sorteio") && { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" },
       CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
     ].filter(Boolean);
-    return `<section class="ferramentas"><h3>Ferramentas</h3><div class="ferr-grade">${f.map(x => `<button class="ferr" ${x.attr}><img src="${ILUS(x.ilus)}" alt=""><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></button>`).join("")}</div></section>`;
+    return `<section class="ferramentas"><span class="rotulo">Instrumentos</span><div class="instr">${f.map(x => `<button class="ferr" ${x.attr}><span class="selo-img"><img src="${ILUS(x.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`).join("")}</div></section>`;
   }
 
   function desenharPonto(ctx, x, y, tipo, cor, escala) {
@@ -1900,7 +1909,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <p class="suave" id="gravar-tx" style="text-align:center">Toque e fale de olhos fechados. A sua voz vira texto aqui embaixo.</p>` : ""}
       <p class="dica-pessoa">Conte em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga, a luz é laranja…”. Até lembranças pequenas contam.</p>
       <label for="sonho" class="rotulo">Diário</label>
-      <textarea id="sonho" placeholder="Estou numa casa antiga, a luz é laranja…"></textarea>
+      <textarea id="sonho" placeholder="Estou numa casa antiga, a luz é laranja…">${esc((lerRascunho("sonho") || {}).texto || "")}</textarea>
       <span class="rotulo">Como foi a noite</span>
       <div class="tipos">${TIPOS.map(t => `<button class="tipo" data-tipo="${t.k}" aria-pressed="${t.k === tipoEscolhido}">${iconeNoite(t.k)}${t.nome}</button>`).join("")}</div>
       <details class="mais"><summary><span><b>Mais detalhes</b><span>o que aconteceu, o alvo, o sono</span></span></summary>
@@ -2324,6 +2333,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function seguir() {
     vozPronta();
     if (!est.travessia) return abrirTravessia();
+    if (voltarAoRascunho()) return;
     const h = new Date(), hoje = diaLocal(), hr = h.getHours();
     const perguntar = !est.nevoeiro && est.travessia !== hoje && est.perguntou !== hoje;
     // De manhã, na primeira vez que abre o app, ele vai direto para o diário escuro dos primeiros 5 minutos.
@@ -2376,7 +2386,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const mostra = () => {
         const bl = passos[i] || [];
         const alvo = k === "noite" && est.alvo && i === passos.length - 1 ? `<div class="cartao"><span class="rotulo">Alvo desta noite</span><p>${esc(alvoTexto(est.alvo))}</p></div>` : "";
-        d.querySelector("#passo").innerHTML = (i === 0 && p.traco ? `<img class="traco" src="img/traco/${p.traco}.svg" alt="">` : i === 0 && p.ilus ? `<img class="ilus" src="${ILUS(p.ilus)}" alt="">` : "") + blocos(bl.map(b => b.p && b.p.length < 400 ? Object.assign({}, b, { grande: true }) : b)) + alvo;
+        d.querySelector("#passo").innerHTML = (i === 0 && p.traco ? `<img class="traco" src="img/traco/${p.traco}.svg" alt="">` : i === 0 && p.ilus ? `<img class="ilus" src="${ILUS(p.ilus)}" alt="">`
+          : i > 0 && i === passos.length - 1 && p.ilusFim ? `<img class="ilus" src="${ILUS(p.ilusFim)}" alt="">` : "") + blocos(bl.map(b => b.p && b.p.length < 400 ? Object.assign({}, b, { grande: true }) : b)) + alvo;
         d.querySelector("#pontos").innerHTML = passos.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("");
         d.querySelector("#ant").disabled = i === 0;
         d.querySelector("#prox").textContent = i < passos.length - 1 ? "Próximo" : fim;
@@ -2473,6 +2484,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         if (k.t === "abre") carta.innerHTML = `${c.ilus ? `<img class="ilus grande" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">${c.minutos} min</span><h1 class="capa-t">${esc(k.titulo)}</h1><p class="suave" style="font-size:17px">${esc(k.sub)}</p>`;
         else if (k.t === "fala") carta.innerHTML = `<p class="grande ${k.texto.length > 170 ? "media" : ""}">${esc(k.texto)}</p>${de}`;
         else if (k.t === "desenho") carta.innerHTML = `${DESENHOS[k.d] || ""}<p class="legenda-d">${esc(k.texto || "")}</p>`;
+        else if (k.t === "foto") carta.innerHTML = `<img class="foto-carta" src="${ILUS(k.ilus)}" alt=""><p class="legenda-d">${esc(k.texto || "")}</p>`;
         else if (k.t === "traco") carta.innerHTML = `<img class="traco" src="img/traco/${k.img}.svg" alt=""><p class="legenda-d">${esc(k.texto || "")}</p>`;
         else if (k.t === "revela") {
           carta.innerHTML = `<p class="grande media">${esc(k.pergunta)}</p><div class="mesmo-lugar"><button class="btn fantasma reserva" id="rev">Revelar</button><p class="resposta reserva oculto" id="resp">${esc(k.resposta)}</p></div>`;
@@ -3233,6 +3245,35 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     });
   }
 
+  // ---------- A tela não apaga enquanto a pessoa escreve ou grava o sonho, e o texto fica guardado a cada letra ----------
+  let trava = null;
+  function telaAcesa() {
+    const precisa = document.visibilityState === "visible" && (!!document.getElementById("sonho-ed") || (aba === "diario" && !!document.getElementById("sonho")) || !!rec);
+    if (precisa && !trava && navigator.wakeLock) navigator.wakeLock.request("screen").then(t => { trava = t; t.addEventListener("release", () => { trava = null; }); }).catch(() => {});
+    if (!precisa && trava) { trava.release().catch(() => {}); trava = null; }
+  }
+  document.addEventListener("visibilitychange", telaAcesa);
+  setInterval(telaAcesa, 2000);
+  // o rascunho: o texto da caixa do diário (ou da edição) fica salvo no aparelho até ser guardado
+  function guardarRascunho(area) {
+    const d = area.dataset.i ? est.diario[+area.dataset.i] : null;
+    try { localStorage.setItem("osirion-rascunho", JSON.stringify({ onde: area.id, k: d ? chaveSonho(d) : "", texto: area.value })); } catch (e) {}
+  }
+  function lerRascunho(onde, i) {
+    let r = null; try { r = JSON.parse(localStorage.getItem("osirion-rascunho") || "null"); } catch (e) {}
+    if (!r || r.onde !== onde) return null;
+    if (onde === "sonho-ed") { const d = est.diario[i]; return d && chaveSonho(d) === r.k ? r : null; }
+    return r;
+  }
+  // se o celular apagou ou fechou o app no meio do texto, ele volta exatamente para onde a pessoa estava
+  function voltarAoRascunho() {
+    let r = null; try { r = JSON.parse(localStorage.getItem("osirion-rascunho") || "null"); } catch (e) {}
+    if (!r || !(r.texto || "").trim()) return false;
+    if (r.onde === "sonho-ed") { const i = est.diario.findIndex(d => chaveSonho(d) === r.k); if (i < 0) return false; aba = "diario"; modoDiario = "lista"; render(); abrirEdicao(i); return true; }
+    aba = "diario"; modoDiario = "gravar"; render(); return true;
+  }
+  const apagarRascunho = () => { try { localStorage.removeItem("osirion-rascunho"); } catch (e) {} };
+
   // ---------- Editar um sonho já guardado (o texto, o que ditou a mais e como foi a noite) ----------
   let tipoEd = 1;
   function abrirEdicao(i) {
@@ -3240,7 +3281,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     tipoEd = d.tipo || 0;
     const q = deIso(d.iso || hojeIso).toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
     abrirSobre(`<div class="tela diario editar-tela">${voltar}<span class="rotulo">Editar o sonho · ${esc(q)}</span>
-      <textarea id="sonho-ed">${esc(d.texto || "")}</textarea>
+      <textarea id="sonho-ed" data-i="${i}">${esc((lerRascunho("sonho-ed", i) || {}).texto ?? (d.texto || ""))}</textarea>
       <button class="btn fantasma largo" id="gravar-ed" data-acao="gravar-ed"><span class="gravar-t">Falar mais</span></button>
       <p class="suave" id="gravar-tx-ed" style="text-align:center;margin:0"></p>
       <span class="rotulo">Como foi a noite</span>
@@ -3276,7 +3317,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const usarServidor = vozServidor && nuvem.usuario && window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
     (usarServidor ? gravarServidor : gravarAparelho)(b, area, tx, rotulo);
   }
-  const anexar = (area, t) => { t = (t || "").trim(); if (!t) return; area.value = (area.value ? area.value.replace(/\s*$/, " ") : "") + t; acompanhar(area); };
+  const anexar = (area, t) => { t = (t || "").trim(); if (!t) return; area.value = (area.value ? area.value.replace(/\s*$/, " ") : "") + t; acompanhar(area); guardarRascunho(area); };
   function transcreverTrecho(blob) {
     return nuvem.usuario.getIdToken().then(tok => fetch(TRANSCREVER, { method: "POST", headers: { Authorization: "Bearer " + tok, "Content-Type": blob.type || "audio/webm" }, body: blob }))
       .then(r => r.ok ? r.json() : Promise.reject(r.status)).then(j => j.texto || "");
@@ -3331,7 +3372,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       r.onresult = e => {
         let final = "", prov = "";
         for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; if (x.isFinal) final += x[0].transcript.trim() + " "; else prov += x[0].transcript; }
-        area.value = base + final + prov; acompanhar(area);
+        area.value = base + final + prov; acompanhar(area); guardarRascunho(area);
       };
       r.onerror = e => { if (e.error === "not-allowed" || e.error === "service-not-allowed") { quer = false; tx.textContent = "O Osirion precisa da permissão do microfone. Ou use o microfone do teclado."; } };
       // o aparelho para sozinho depois de um tempo ou de um silêncio: recomeça e continua o texto, até a pessoa parar
@@ -3363,6 +3404,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   app.addEventListener("click", e => {
+    // o sonho aberto na lista: tocar no texto fecha o balão de novo
+    const aberto = e.target.closest(".item-sonho[open]");
+    if (aberto && !e.target.closest("button, summary, a")) { aberto.open = false; return; }
     const b = e.target.closest("button"); if (!b) return;
     atualizarDia();
     if (b.dataset.aba) { fecharSobre(); aba = b.dataset.aba; render(); return; }
@@ -3443,13 +3487,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       if (rec || vozPendente) { if (rec) rec.parar(); b.disabled = true; b.textContent = "Escrevendo o que você falou…"; depoisDaVoz(() => { b.disabled = false; b.click(); }); return; }
       const d = est.diario[+b.dataset.i]; if (!d) return;
       if (!d.id) { d.chave0 = chaveSonho(d); d.id = novoId(); }
-      d.texto = document.getElementById("sonho-ed").value.trim(); d.tipo = tipoEd;
+      d.texto = document.getElementById("sonho-ed").value.trim(); d.tipo = tipoEd; apagarRascunho();
       if (tipoEd > 0 && !d.cor) d.cor = nomeCor().toLowerCase();
       salvar(); fecharSobre(); render();
     }
     else if (acao === "apagar-sonho") {
       if (!b.dataset.certeza) { b.dataset.certeza = "1"; b.textContent = "Toque de novo para apagar de vez"; return; }
-      est.diario.splice(+b.dataset.i, 1); salvar(); fecharSobre(); render();
+      est.diario.splice(+b.dataset.i, 1); apagarRascunho(); salvar(); fecharSobre(); render();
     }
     else if (acao === "dormir") abrirModoNoite();
     else if (acao === "dormir-binaural") { abrirModoNoite("binaural"); const s = document.querySelector('.modo-noite [data-som="foco10"]'); if (s) s.click(); }
@@ -3483,7 +3527,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         noite.alvo = { nome: a.nome, chegou };
         const k = `${l.r}-${l.a}`; if (chegou === "sim") est.album[k] = "sim"; else if (chegou === "quase" && est.album[k] !== "sim") est.album[k] = "quase";
       }
-      est.diario.push(noite);
+      est.diario.push(noite); apagarRascunho();
       const ato = ATOS[est.ato].id; est.feitos[ato] = est.feitos[ato] || {}; est.feitos[ato].diario = true;
       salvar(); expSel = new Set(); chegou = null; manha = false;
       modoDiario = "lista"; diaSel = hojeIso; busca = ""; filtro = null;
@@ -3497,6 +3541,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "feito") { const k = b.dataset.k; marcar(k); fecharSobre(); if (k === "diario") { aba = "diario"; modoDiario = "gravar"; } render(); }
   });
   app.addEventListener("input", e => {
+    if (e.target.id === "sonho" || e.target.id === "sonho-ed") guardarRascunho(e.target);
     if (e.target.id === "sonho") { acompanhar(e.target); return; }
     if (e.target.id === "busca-lista") {
       busca = e.target.value;
