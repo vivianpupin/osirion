@@ -51,11 +51,11 @@ window.ESTILOS = [
     dia: { k: "pureza" }, tecnicas: [28, 29, 30], ensinamentos: [61, 62, 5, 43], sons: ["mar", "tacas", "chuva", "esferas"] },
   { id: "indigenas", nome: "A arte de sonhar", chamada: "O mundo encantado da Amazônia.", sub: "O sonho entre os Yanomami e os Guarani", origem: "Dos Yanomami, da Amazônia, na voz de Davi Kopenawa, e dos Guarani do Sul e do Sudeste, em estudos de antropólogos.", ilus: "morro-figuras",
     dia: { k: "floresta" }, tecnicas: [31, 32, 33], ensinamentos: [63, 64, 17, 13], sons: ["mata", "chuva", "mar"] },
-  { id: "aborigenes", nome: "Os aborígenes da Austrália", chamada: "O tempo que foi e ainda é, entre os povos da Austrália.", sub: "O Dreaming, a terra e as canções que chegam em sonho", origem: "Dos povos aborígenes da Austrália, como os Anangu, os Warlpiri e os cantores wangga do norte, em registros de antropólogos.", ilus: "estrela-terra",
+  { id: "aborigenes", nome: "Os aborígenes da Austrália", chamada: "O tempo que foi e ainda é, entre os povos da antiga Sahul.", sub: "O Dreaming, a terra e as canções que chegam em sonho", origem: "Dos povos aborígenes da Austrália, como os Anangu, os Warlpiri e os cantores wangga do norte, em registros de antropólogos.", ilus: "estrela-terra",
     dia: { k: "escuta" }, tecnicas: [34, 35], ensinamentos: [65], sons: ["mata", "vazio", "cosmos"] },
   { id: "sufis", nome: "Entre dois mundos", chamada: "Onde o sonho encontra o espírito, no Islã dos sufis.", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", origem: "Do Islã: os hadiths do Profeta reunidos por al-Bukhari e Muslim no século IX, e o mestre sufi andaluz Ibn Arabi (1165–1240).", ilus: "ondas",
     dia: { k: "verdade" }, tecnicas: [36, 37, 38], ensinamentos: [66, 19], sons: ["vazio", "tacas", "esferas"] },
-  { id: "japao", nome: "Os templos japoneses de Kannon", chamada: "Os sonhos que se pediam a Kannon, a deusa da compaixão.", sub: "O diário de Myōe, os templos de Kannon, o Baku e o primeiro sonho do ano",
+  { id: "japao", nome: "Os templos japoneses de Kannon", chamada: "Os sonhos que se pediam à deusa da compaixão.", sub: "O diário de Myōe, os templos de Kannon, o Baku e o primeiro sonho do ano",
     origem: "Do Japão budista: o monge Myōe (1173–1232), os retiros nos templos de Kannon na época Heian e o folclore do Baku.", ilus: "lua",
     dia: { k: "meditar-sonho" }, tecnicas: [42, 43, 44, 45], ensinamentos: [71, 72, 73, 45], sons: ["chuva", "tacas", "mar", "vazio"] }
 ];
