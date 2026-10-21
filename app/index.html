@@ -1014,6 +1014,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .grupo-som { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-top: 6px; }
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo3 { grid-template-columns: repeat(3, 1fr); }
+.som-noite { display: flex; flex-direction: column; gap: 10px; }
+.som-unico { display: flex; flex-direction: column; gap: 4px; padding: 16px; border-radius: 18px; border: 1px solid #5a1c1f; background: radial-gradient(120% 120% at 0% 0%, #2a0b0d, #140405); color: #f2b8b9; text-align: left; }
+.som-unico b { font-family: var(--display); font-weight: 400; font-size: 20px; }
+.som-unico span { font-size: 13px; color: #c97a7c; line-height: 1.45; }
+.som-unico[aria-pressed="true"] { border-color: #c24a4e; box-shadow: 0 0 22px -6px #c24a4e; }
 .sons button small { display: block; font-size: 11px; opacity: .7; margin-top: 2px; }
 .sons.tempo button { padding: 6px; font-size: 12px; }
 .desp { display: flex; align-items: center; gap: 14px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid #3a1214; background: #160506; color: #c97a7c; }
@@ -1391,7 +1396,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return lista[Math.floor(Date.UTC(h.getFullYear(), h.getMonth(), h.getDate()) / 864e5) % lista.length];
   }
   function tecnicaAtual() {
-    if (!est.tecnica) est.tecnica = { i: 0, desde: hojeIso };
+    if (!est.tecnica) est.tecnica = { i: tecnicasDaPagina()[0] || 0, desde: hojeIso };
     const t = NOITE[est.tecnica.i] || NOITE[0];
     const dia = Math.max(1, Math.round((deIso(hojeIso) - deIso(est.tecnica.desde)) / 864e5) + 1);
     return { t, i: est.tecnica.i, dia, completa: dia > 7 };
@@ -1404,7 +1409,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <span class="suave">${esc(t.de)}</span><span class="trilho-m"><i style="width:${Math.min(7, dia) / 7 * 100}%"></i></span></span></button>`;
   }
   function abrirTecnica() {
-    const { t, i, dia, completa } = tecnicaAtual(), lista = estiloAtual() ? estiloAtual().tecnicas : NOITE.map((_, k) => k);
+    const { t, i, dia, completa } = tecnicaAtual(), lista = tecnicasDaPagina();
     const iProx = lista[(lista.indexOf(i) + 1) % lista.length] ?? (i + 1) % NOITE.length, prox = NOITE[iProx];
     abrirSobre(`<div class="tela">${voltar}<span class="rotulo">A técnica da semana · ${completa ? "semana completa" : `dia ${dia} de 7`}</span><h1>${esc(t.nome)}</h1>
       <span class="suave">${esc(t.de)}</span>
@@ -1414,14 +1419,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <button class="btn" data-tecnica="${iProx}">Começar ${esc(prox.nome)}</button></div>` : ""}
       ${t.som === "binaural" ? '<button class="btn largo" data-acao="dormir-binaural">Praticar com o som Mente desperta</button><p class="suave miuda" style="text-align:center">Com fone de ouvido.</p>' : ""}
       <button class="btn ${t.som ? "fantasma " : ""}largo" data-acao="dormir">Vou dormir</button>
-      <button class="btn fantasma largo" data-acao="escolher-tecnica">Escolher outra técnica</button></div>`);
+      ${tecnicasDaPagina().length > 1 ? '<button class="btn fantasma largo" data-acao="escolher-tecnica">As outras técnicas desta página</button>' : ""}</div>`);
   }
   function abrirEscolhaTecnica() {
     const { i } = tecnicaAtual();
-    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">As técnicas antes de dormir</span><h1>Escolha a sua técnica</h1>
-      <p class="suave">O ideal é ficar uma semana com cada técnica: é o tempo para a mente aprender o gesto e os resultados começarem a aparecer. Você escolhe com qual começar. Elas estão em ordem, das mais simples às mais avançadas.</p>
-      <div class="lista-tec">${NOITE.map((t, k) => `<button class="tec-op ${k === i ? "atual" : ""}" data-tecnica="${k}"><img src="${ILUS(t.ilus)}" alt="">
-        <span><b>${k + 1}. ${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span><span class="tx">${esc(t.texto)}</span></span>${k === i ? '<em>agora</em>' : ""}</button>`).join("")}</div></div>`);
+    const pag = tecnicasDaPagina(), E = ESTAGIOS[estagioAtual()], s = estiloAtual();
+    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">${s ? esc(s.nome) : E ? `Página ${estagioAtual() + 1} · ${esc(E.nome)}` : "As técnicas antes de dormir"}</span><h1>As técnicas desta página</h1>
+      <p class="suave">Cada página do livro guarda algumas técnicas. Fique uma semana com cada uma: é o tempo para a mente aprender o gesto. As próximas aparecem quando você virar a página.</p>
+      <div class="lista-tec">${pag.map(k => [NOITE[k], k]).filter(([t]) => t).map(([t, k]) => `<button class="tec-op ${k === i ? "atual" : ""}" data-tecnica="${k}"><img src="${ILUS(t.ilus)}" alt="">
+        <span><b>${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span><span class="tx">${esc(t.texto)}</span></span>${k === i ? '<em>agora</em>' : ""}</button>`).join("")}</div>
+      <button class="btn fantasma largo" data-acao="tecnica-sorte">Deixar o livro escolher</button></div>`);
   }
   // ---------- Os estágios (programa.js): ensinamentos, meditação do dia, técnica da noite e um marco ----------
   // O estágio avança pela prática (ler os ensinamentos, meditar alguns dias, dormir com a técnica 7 noites).
@@ -1448,6 +1455,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // ---------- Os estilos de prática (programa.js): depois da primeira semana, a pessoa pode escolher outro caminho ----------
   const ESTILOS = window.ESTILOS || [];
   const estiloAtual = () => ESTILOS.find(x => x.id === est.estilo && x.id !== "arhat") || null;
+  // As técnicas da noite desta página do livro: as do caminho escolhido ou as do estágio do Arhat (nunca todas de uma vez).
+  const tecnicasDaPagina = () => { const s = estiloAtual(); if (s && s.tecnicas) return s.tecnicas; const E = ESTAGIOS[estagioAtual()]; return (E && E.tecnicas) || NOITE.map((_, k) => k); };
   const diasDeJornada = () => est.travessia ? Math.round((deIso(hojeIso) - deIso(est.travessia)) / 864e5) : 0;
   const ofereceEstilos = () => ESTILOS.length > 1 && diasDeJornada() >= 7;
   // o próximo ensinamento e a prática do dia: do estilo escolhido, ou do estágio do Arhat
@@ -2734,6 +2743,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
     lugares: { nome: "Os seus lugares", ilus: "olho", quando: DEPOIS, ok: atosConcluidos },
     painel: { nome: "O painel do mês", ilus: "estrela-lilas", quando: "Abre quando você tiver 7 noites anotadas.", ok: () => noitesAnotadas() >= 7 },
+    tambor: { nome: "A jornada do tambor", ilus: "maos-chama", quando: "Abre na página Cair no sono consciente.", ok: () => estagioAtual() >= 2 || ["astral", "guerreiro"].includes(est.estilo) },
     viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: DEPOIS, ok: () => atosConcluidos() || est.estilo === "astral" },
     despertar: { nome: "O despertar de madrugada", ilus: "lua", quando: "Abre no Segundo Ato, quando começam as práticas das 4 da manhã.", ok: () => est.ato >= 2 }
   };
@@ -3187,9 +3197,44 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo por 40 minutos, o surf e as taças."]]]
   ];
   const SONS = SONS_GRUPOS.flatMap(g => g[1]);
+  // ---------- Os sons do livro: não aparecem todos de uma vez ----------
+  // Cada página (estágio) guarda os seus sons (programa.js → sons). A cada noite dormida um som novo é descoberto,
+  // em ordem sorteada; às vezes o livro mostra uma página escondida: um som da página seguinte, antes da hora.
+  // Na tela da noite fica só o som que o livro escolheu para esta noite; os já descobertos ficam guardados embaixo.
+  const somExiste = k => SONS.some(x => x[0] === k);
+  const sonsDescobertos = () => SONS.filter(([k]) => (est.sons || {})[k]);
+  function descobrirSom() {
+    est.sons = est.sons || {};
+    if (est.somDescoberto === hojeIso) return null;
+    const k = estagioAtual(), daqui = ((ESTAGIOS[k] || {}).sons || []).filter(x => !est.sons[x] && somExiste(x)),
+      adiante = ((ESTAGIOS[k + 1] || {}).sons || []).filter(x => !est.sons[x] && somExiste(x)), sorte = l => l[Math.floor(Math.random() * l.length)];
+    const novo = adiante.length && Math.random() < (daqui.length ? .15 : .3) ? sorte(adiante) : daqui.length ? sorte(daqui) : null;
+    est.somDescoberto = hojeIso;
+    if (novo) { est.sons[novo] = hojeIso; est.somDaNoite = { iso: hojeIso, k: novo }; }
+    salvar(); return novo;
+  }
+  function somDaNoite() {
+    est.sons = est.sons || {};
+    const t = NOITE.length ? tecnicaDaNoite() : null;
+    if (t && t.som === "binaural") { est.sons.foco10 = est.sons.foco10 || hojeIso; return "foco10"; }
+    if (est.somDaNoite && est.somDaNoite.iso === hojeIso && est.sons[est.somDaNoite.k]) return est.somDaNoite.k;
+    const d = sonsDescobertos(); if (!d.length) return null;
+    const k = d[Math.floor(Math.random() * d.length)][0]; est.somDaNoite = { iso: hojeIso, k }; salvar(); return k;
+  }
+  function secaoSons() {
+    const k0 = somDaNoite(); if (!k0) return "";
+    const s0 = SONS.find(x => x[0] === k0), outros = sonsDescobertos().filter(x => x[0] !== k0), fone = sonsDescobertos().some(x => SOM[x[0]]) || SOM[k0];
+    return `<section class="som-noite"><span class="rotulo">O som desta noite</span>
+      <button class="som-unico" data-som="${k0}" aria-pressed="false"><b>${esc(s0[1])}</b><span>${esc(s0[2])}${SOM[k0] ? " Com fone de ouvido." : ""}</span></button>
+      <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div>
+      <p class="suave miuda" id="aviso-fone" hidden></p>
+      ${outros.length ? `<details class="como-sons"><summary>Os sons que você já descobriu · ${outros.length + 1} de ${SONS.length}</summary><div class="sons quatro">${outros.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${esc(n)}</button>`).join("")}</div></details>` : ""}
+      ${fone ? '<details class="como-sons"><summary>Como funcionam os sons com fone</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone. O som de ondas ao fundo acalma e ajuda a não se distrair. É só deitar, fechar os olhos e deixar tocar.</p></details>' : ""}</section>`;
+  }
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
   function abrirModoNoite(somInicial) {
     registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); salvar();
+    const somNovo = descobrirSom();
     const a = est.alvoNoite === hojeIso ? alvoDe(est.alvo) : null, temMadrugada = !!acharPratica("madrugada");
     abrirSobre(`<div class="modo-noite"><div class="tela">
         <div class="topo">${voltar}<span class="rotulo">Modo noite</span></div>
@@ -3199,18 +3244,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
         ${a ? `<section><span class="rotulo">Alvo desta noite</span><p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p></section>`
           : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite · se quiser</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
-        <section><span class="rotulo">Sons da noite</span>
-          ${SONS_GRUPOS.map(([g, lista]) => `<span class="grupo-som">${g}</span><div class="sons quatro">${lista.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${n}</button>`).join("")}</div>`).join("")}
-          <p class="suave miuda" id="aviso-fone" hidden></p>
-          <details class="como-sons"><summary>Como funcionam os sons</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone. O som de ondas ao fundo acalma e ajuda a não se distrair. É só deitar, fechar os olhos e deixar tocar.</p></details>
-          <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div></section>
-        <section class="tambor"><span class="rotulo">Jornada do tambor</span>
+        ${secaoSons()}
+        ${livre("tambor") ? `<section class="tambor"><span class="rotulo">Jornada do tambor</span>
           <p class="suave">O tambor bate firme e constante, como nas jornadas xamânicas. Deite, feche os olhos e deixe a batida levar. Quando o tambor parar, volte devagar.</p>
-          <div class="sons tempo3">${TAMBORES.map(([k, n, m]) => `<button data-tambor="${k}" aria-pressed="false">${n}<small>${m} min</small></button>`).join("")}</div></section>
-        <section><span class="rotulo">Viagem guiada</span>${livre("viagens") ? `<div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div>` : trancado("viagens")}</section>
-        <section><span class="rotulo">Despertar de madrugada</span>${!livre("despertar") ? trancado("despertar") : `
+          <div class="sons tempo3">${TAMBORES.map(([k, n, m]) => `<button data-tambor="${k}" aria-pressed="false">${n}<small>${m} min</small></button>`).join("")}</div></section>` : ""}
+        ${livre("viagens") ? `<section><span class="rotulo">Viagem guiada</span><div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div></section>` : ""}
+        ${!livre("despertar") ? "" : `<section><span class="rotulo">Despertar de madrugada</span>
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>
-          <p class="suave miuda">Funciona com o Osirion aberto nesta tela, o celular carregando e o som ligado. A tela fica escura, mas acordada. <button class="link" id="ouvir-sino">Ouvir o sino</button></p>`}</section>
+          <p class="suave miuda">Funciona com o Osirion aberto nesta tela, o celular carregando e o som ligado. A tela fica escura, mas acordada. <button class="link" id="ouvir-sino">Ouvir o sino</button></p></section>`}
         <button class="btn largo apagar" id="apagar">Apagar a luz</button>
       </div>
       <div class="breu" id="breu" hidden><div class="relogio" id="relogio2"></div><span id="breu-desp"></span><span class="miuda">toque para acender</span></div>
@@ -3220,6 +3261,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <button class="btn fantasma largo" id="volta-dormir">Voltar a dormir</button></div>
     </div>`, d => {
       let som = null, nomeSom = null, minutos = 30, fimSom = 0, alarme = 0, tocando = 0, lock = null;
+      // um som novo encontrado nesta noite: o livro mostra a descoberta
+      if (somNovo) setTimeout(() => { if (d.isConnected) avisoSelo([{ nome: (SONS.find(x => x[0] === somNovo) || [, "Um som novo"])[1] }], "Nova descoberta · um som"); }, 700);
       const $ = s => d.querySelector(s), caixa = d.querySelector(".modo-noite");
       // A tela escura cobre tudo: a página volta ao topo e para de rolar enquanto ela estiver aberta.
       const cobre = (s, on) => { $(s).hidden = !on; if (on) caixa.scrollTop = 0; caixa.style.overflow = $("#breu").hidden && $("#acorda").hidden ? "" : "hidden"; };
@@ -3478,6 +3521,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
     if (b.dataset.modo) { modoDiario = b.dataset.modo; render(); return; }
     if (b.dataset.anota) { if (rec) rec.stop(); const t = document.getElementById("sonho").value; modoAnota = b.dataset.anota; render(); const a = document.getElementById("sonho"); a.value = t; if (modoAnota === "escrever") a.focus(); return; }
+    if (b.dataset.acao === "tecnica-sorte") {
+      // o livro escolhe: uma técnica desta página que ainda não é a de agora
+      const pag = tecnicasDaPagina().filter(k => k !== tecnicaAtual().i && NOITE[k]); if (!pag.length) return;
+      b.dataset.tecnica = pag[Math.floor(Math.random() * pag.length)];
+    }
     if (b.dataset.tecnica) { est.tecnica = { i: +b.dataset.tecnica, desde: hojeIso }; est.tecnicaEscolhida = true; salvar(); fecharSobre(); render(); abrirTecnica(); return; }
     if (b.dataset.jornada) { modoJornada = b.dataset.jornada; render(); return; }
     if (b.dataset.exp) { const k = b.dataset.exp; expSel.has(k) ? expSel.delete(k) : expSel.add(k); b.setAttribute("aria-pressed", expSel.has(k)); return; }
