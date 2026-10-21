@@ -46,7 +46,7 @@ window.ESTILOS = [
     sons: ["chuva", "mar", "tacas", "chuvabin", "sono", "tempo", "foco10", "foco12", "limiar", "vibracoes", "zumbido", "desprendimento", "elevar", "foco21", "alem"] },
   // As tradições do sonho: técnicas e ensinamentos só com o que as fontes documentam (a Vivian revisa antes de publicar)
   { id: "egito", nome: "Códigos do antigo Egito", sub: "Os templos de Saqqara, o papiro dos sonhos, Bes e a Esfinge", origem: "Do Egito antigo, dos faraós ao período greco-romano: papiros, estelas e os santuários de Saqqara, de cerca de 1400 a.C. ao século V.", ilus: "olho",
-    dia: { k: "desperta" }, tecnicas: [27, 25, 26, 7], ensinamentos: [58, 59, 60, 44, 5], sons: ["vazio", "tacas", "mar", "vialactea", "tempo"] },
+    dia: { k: "desperta" }, tecnicas: [27, 25, 26, 41, 7], ensinamentos: [58, 59, 60, 44, 69, 70, 5], sons: ["vazio", "tacas", "mar", "vialactea", "tempo"] },
   { id: "grecia", nome: "O oráculo grego dos sonhos", sub: "O sono nos templos de Asclépio, em Epidauro e Pérgamo", origem: "Do culto de Asclépio, deus grego da cura, praticado por cerca de mil anos em Epidauro, Pérgamo e outros santuários.", ilus: "rio",
     dia: { k: "pureza" }, tecnicas: [28, 29, 30], ensinamentos: [61, 62, 5, 43], sons: ["mar", "tacas", "chuva", "esferas"] },
   { id: "indigenas", nome: "A arte de sonhar", sub: "O sonho entre os Yanomami e os Guarani", origem: "Dos Yanomami, da Amazônia, na voz de Davi Kopenawa, e dos Guarani do Sul e do Sudeste, em estudos de antropólogos.", ilus: "morro-figuras",
