@@ -52,6 +52,6 @@ window.ESTILOS = [
     tecnicas: [31, 32, 33], ensinamentos: [63, 64, 17, 13], sons: ["mata", "chuva", "mar"] },
   { id: "aborigenes", nome: "O homem pássaro", sub: "O Dreaming, a terra e as canções que chegam em sonho", origem: "Dos povos aborígenes da Austrália, como os Anangu, os Warlpiri e os cantores wangga do norte, em registros de antropólogos.", ilus: "estrela-terra",
     tecnicas: [34, 35], ensinamentos: [65], sons: ["mata", "vazio", "cosmos"] },
-  { id: "sufis", nome: "Os sufis e o Islã", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", origem: "Do Islã: os hadiths do Profeta reunidos por al-Bukhari e Muslim no século IX, e o mestre sufi andaluz Ibn Arabi (1165–1240).", ilus: "estrela-lilas",
+  { id: "sufis", nome: "Entre dois mundos", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", origem: "Do Islã: os hadiths do Profeta reunidos por al-Bukhari e Muslim no século IX, e o mestre sufi andaluz Ibn Arabi (1165–1240).", ilus: "estrela-lilas",
     tecnicas: [36, 37, 38], ensinamentos: [66, 19], sons: ["vazio", "tacas", "esferas"] }
 ];
