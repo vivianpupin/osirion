@@ -36,7 +36,7 @@ window.ESTILOS = [
   { id: "guerreiro", nome: "O homem pássaro", chamada: "O voo dos feiticeiros do deserto.", sub: "Os xamãs: a arte de sonhar de Dom Juan, nos livros de Castaneda", origem: "Dos livros de Carlos Castaneda (1968–1998), que contam os ensinamentos de Dom Juan Matus, xamã yaqui do México.", ilus: "maos-chama",
     dia: [{ k: "dialogo" }, { k: "historia" }, { k: "sombras" }, { k: "conselheira" }, { k: "marcha" }, { k: "ver" }], tecnicas: [1, 3, 12, 13, 39, 40], ensinamentos: [30, 67, 34, 33, 32, 31, 68],
     sons: ["mata", "chuva", "mar", "foco10", "limiar", "zumbido"] },
-  { id: "yoga", nome: "A yoga dos sonhos", chamada: "O sono desperto dos iogues do Tibete e da Índia.", sub: "Tibete e Índia: o sankalpa, os mantras, a luz na garganta e o Yoga Nidra", origem: "Do Tibete, a yoga dos sonhos, uma das Seis Yogas de Naropa. Da Índia, os Upanishads e o Yoga Nidra, organizado por Swami Satyananda Saraswati nos anos 1960.", ilus: "meditacao-figura",
+  { id: "yoga", nome: "A yoga dos sonhos", chamada: "O sono desperto dos iogues do Tibete e da Índia.", sub: "Tibete e Índia: o sankalpa, os mantras, a luz em Vishuddha e o Yoga Nidra", origem: "Do Tibete, a yoga dos sonhos, uma das Seis Yogas de Naropa. Da Índia, os Upanishads e o Yoga Nidra, organizado por Swami Satyananda Saraswati nos anos 1960.", ilus: "meditacao-figura",
     dia: { k: "atencao" }, tecnicas: [2, 5, 6, 8, 14], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31],
     sons: ["tacas", "chuva", "sono", "esferas", "vazio", "cosmos"] },
   // O sonho lúcido (LaBerge) e a projeção astral (Monroe e Buhlman) juntos: primeiro despertar no sonho, depois sair do corpo
