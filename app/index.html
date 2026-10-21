@@ -2494,6 +2494,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function acharPratica(k, at) {
     const a = ATOS[at ?? est.ato];
     for (const m of a.momentos) for (const p of m.praticas) if (p.k === k) return { a, m, p };
+    // as práticas do dia das tradições (conteudo.js → DIAS)
+    const td = (window.ARHAT.DIAS || []).find(e => e.k === k);
+    if (td) return { a: { nome: "A prática do dia" }, m: { quando: "Dia", hora: "quando quiser" }, p: td };
     const x = (window.ARHAT.EXTRAS || []).find(e => e.k === k);
     if (x) return { a: { nome: "Além dos atos" }, m: { quando: "Dia", hora: "quando quiser" }, p: x };
     const v = VIAGENS.find(x => x.k === k);
