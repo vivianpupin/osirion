@@ -55,7 +55,7 @@ window.ESTILOS = [
     dia: { k: "escuta" }, tecnicas: [34, 35], ensinamentos: [65], sons: ["mata", "vazio", "cosmos"] },
   { id: "sufis", nome: "Entre dois mundos", chamada: "Onde o sonho encontra o espírito, no Islã dos sufis.", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", origem: "Do Islã: os hadiths do Profeta reunidos por al-Bukhari e Muslim no século IX, e o mestre sufi andaluz Ibn Arabi (1165–1240).", ilus: "ondas",
     dia: { k: "verdade" }, tecnicas: [36, 37, 38], ensinamentos: [66, 19], sons: ["vazio", "tacas", "esferas"] },
-  { id: "japao", nome: "Os templos japoneses de Kannon", chamada: "Os sonhos guardados nos templos e cadernos do Japão.", sub: "O diário de Myōe, os templos de Kannon, o Baku e o primeiro sonho do ano",
+  { id: "japao", nome: "Os templos japoneses de Kannon", chamada: "Os sonhos que se pediam a Kannon, a deusa da compaixão.", sub: "O diário de Myōe, os templos de Kannon, o Baku e o primeiro sonho do ano",
     origem: "Do Japão budista: o monge Myōe (1173–1232), os retiros nos templos de Kannon na época Heian e o folclore do Baku.", ilus: "lua",
     dia: { k: "meditar-sonho" }, tecnicas: [42, 43, 44, 45], ensinamentos: [71, 72, 73, 45], sons: ["chuva", "tacas", "mar", "vazio"] }
 ];
