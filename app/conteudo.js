@@ -473,6 +473,49 @@ window.ARHAT = (function () {
     ]
   };
 
-  const DIAS = [DESPERTA];
+  const PUREZA = {
+    k: "pureza", ilus: "rio", ico: "agua", nome: "Pensamentos puros", det: "Preparar-se para a noite como no santuário de Asclépio",
+    texto: [
+      { p: "Segundo Porfírio (Da Abstinência 2.19), sobre a entrada do santuário de Asclépio em Epidauro havia uma inscrição: puro deve ser quem entra no templo perfumado, e pureza é pensar coisas santas. A data dessa inscrição é discutida pelos estudiosos." },
+      { p: "Antes de dormir no santuário, quem vinha pedir um sonho se purificava com um banho e fazia uma oferenda e uma prece (Emma e Ludwig Edelstein, Asclepius, 1945)." },
+      { p: "Esta prática é uma adaptação inspirada nisso. No fim da tarde, lave o rosto e as mãos com água fresca, como um banho simbólico." },
+      { p: "Leia devagar a frase da inscrição: “Puro deve ser quem entra; pureza é pensar coisas santas.”" },
+      { p: "Por três minutos, deixe passar as preocupações do dia e troque cada uma por um pensamento bom." },
+      { p: "Diga numa frase o que você pede ao sonho desta noite. E não leve discussões nem telas para a hora de dormir." }
+    ]
+  };
+  const FLORESTA = {
+    k: "floresta", ilus: "morro-figuras", ico: "raiz", nome: "Sonhar a floresta", det: "Escutar os seres vivos e levar um deles para a noite",
+    texto: [
+      { p: "Em A queda do céu, com Bruce Albert, o xamã yanomami Davi Kopenawa diz que os brancos dormem muito, mas sonham só com eles mesmos, enquanto os Yanomami sonham longe; e que quem não sabe sonhar a floresta não a defende." },
+      { p: "Na etnografia de Hanna Limulja, o sonho yanomami tem consequência durante o dia: quem sonha presta atenção ao que está em volta." },
+      { p: "Não é um rito yanomami: é um gesto inspirado no que eles contam. Fique cinco minutos ao ar livre, ou junto a uma árvore ou uma planta." },
+      { p: "Escute os sons e repare em três seres vivos que não são gente: um pássaro, um inseto, uma árvore." },
+      { p: "Escolha um deles e guarde a imagem. À noite, ao deitar, lembre dele e deseje sonhar mais longe que você mesmo." }
+    ]
+  };
+  const ESCUTA = {
+    k: "escuta", ilus: "estrela-terra", ico: "lua", nome: "Escuta profunda", det: "Inspirada em dadirri, como Miriam-Rose Ungunmerr-Baumann a ofereceu",
+    texto: [
+      { p: "Dadirri é uma palavra dos povos Ngan'gikurungkurr e Ngen'giwumirri, da região do rio Daly, no norte da Austrália. A educadora Miriam-Rose Ungunmerr-Baumann a descreve como escuta interior e profunda e consciência quieta, e a ofereceu aos australianos como um presente." },
+      { p: "Ela fala de aprender observando e escutando, esperando, e só então agindo. Dadirri não é uma técnica de sonho: é uma escuta que acalma por dentro." },
+      { p: "Esta prática é inspirada nas palavras dela, e não um rito aborígene. Sente-se ao ar livre ou junto a uma janela, sem o celular." },
+      { p: "Escute os sons de perto e de longe, sem dar nome e sem julgar." },
+      { p: "Espere. Não faça nada: só repare na quietude por dentro." },
+      { p: "Leve essa mesma escuta para a hora de dormir." }
+    ]
+  };
+  const VERDADE = {
+    k: "verdade", ilus: "estrela-lilas", ico: "luz", nome: "A fala verdadeira", det: "Durante o dia, falar só a verdade",
+    texto: [
+      { p: "Um hadith de Sahih Muslim (2263) liga o dia ao sonho: os sonhos mais verdadeiros vêm aos que são mais verdadeiros na fala." },
+      { p: "A tradição registra também que o Profeta e os seus companheiros faziam uma sesta breve ao meio-dia (Sahih al-Bukhari 939 e 6281)." },
+      { p: "Esta prática é uma adaptação inspirada nesse hadith. De manhã, proponha a si mesmo: hoje não digo nada que não seja verdade, nem exagero." },
+      { p: "Ao meio-dia, repare onde a fala quis escapar da verdade." },
+      { p: "No fim da tarde, por cinco minutos, reveja o dia. Se disse algo errado a alguém, corrija quando for possível." },
+      { p: "Antes de dormir, lembre o hadith: a fala verdadeira prepara o sonho verdadeiro." }
+    ]
+  };
+  const DIAS = [DESPERTA, PUREZA, FLORESTA, ESCUTA, VERDADE];
   return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES, EXTRAS, DIAS };
 })();
