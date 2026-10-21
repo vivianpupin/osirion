@@ -3299,7 +3299,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // ---------- A jornada do tambor: gravações de tambor (em sons/), tocadas direto, sem guardar no celular ----------
   const TAMBORES = [["tambor-1", "Tambor 1", 30], ["tambor-2", "Tambor 2", 15], ["tambor-3", "Tambor 3", 15]];
   // Os sons em destaque: gravações que a Vivian escolheu, sempre à mão no topo dos sons da noite (tocam como os tambores)
-  const DESTAQUES = [["destaque-cosmico", "Som cósmico", 11], ["destaque-caverna", "Dentro da caverna", 27]];
+  const DESTAQUES = [["destaque-cosmico.mp3", "Som cósmico", 11], ["destaque-caverna.mp3", "Dentro da caverna", 27], ["destaque-abismo.m4a", "Observando o abismo", 31],
+    ["destaque-xama.m4a", "O xamã", 49], ["destaque-espirito.m4a", "A jornada do espírito", 53], ["destaque-templo.m4a", "O templo fora do tempo", 59], ["destaque-terra.m4a", "Dentro da Terra", 71]];
 
   // ---------- Modo noite ----------
   const PURIF = ["Uma chuva imaginária limpa o quarto", "Celular em modo avião, longe da cama", "Diário e caneta ao lado", "Deitado de barriga para cima", "A mente no seu nevoeiro"];
@@ -3430,7 +3431,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         else if (b.dataset.tambor) {
           // tocar de novo no mesmo tambor pausa e continua
           if (tambor && tambor.dataset.k === b.dataset.tambor) { tambor.paused ? continuarTambor() : pausarTambor(); return; }
-          pararTambor(); pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + ".mp3"); tambor.dataset.k = b.dataset.tambor; tambor.setAttribute("playsinline", "");
+          pararTambor(); pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + (/\.(mp3|m4a)$/.test(b.dataset.tambor) ? "" : ".mp3")); tambor.dataset.k = b.dataset.tambor; tambor.setAttribute("playsinline", "");
           tambor.onended = pararTambor; tambor.play().catch(() => {}); b.setAttribute("aria-pressed", "true"); b.dataset.estado = "tocando";
           sessaoMidia(b.textContent.replace(/\d+ min$/, "").trim() + (b.dataset.tambor.startsWith("tambor") ? " · jornada do tambor" : ""), pausarTambor, continuarTambor, pararTambor);
         }
