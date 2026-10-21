@@ -902,6 +902,21 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .marco.on img { opacity: 1; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--cristal) 50%, transparent)); }
 .marco small { font-size: 9.5px; line-height: 1.2; color: var(--areia-2); opacity: .7; }
 .marco.on small { color: var(--cristal); opacity: 1; }
+.ja-passou { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 20px; background: var(--ceu-2); box-shadow: inset 0 0 0 1px rgba(201,163,95,.18); }
+.ja-passou h2 { margin: 0; }
+.ja-passou .suave { margin: 0; font-size: 14px; }
+.ja-grupo { display: flex; flex-direction: column; gap: 8px; }
+.luas { display: flex; flex-direction: column; gap: 10px; }
+.luas h1 { margin: 0; }
+.trilha-luas { display: flex; flex-direction: column; gap: 10px; }
+.lua-item { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 18px; border: 1px solid var(--ceu-3); background: var(--ceu-2); color: var(--areia); text-align: left; }
+.lua-item b { display: block; font-family: var(--display); font-weight: 400; font-size: 18px; }
+.lua-item .suave { font-size: 13px; }
+.lua-ic { flex: none; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff6dc, #d9bc7c 60%, #8a6a32); box-shadow: 0 0 14px -2px rgba(245,199,91,.6); }
+.lua-item.atual { border-color: rgba(201,163,95,.6); }
+.lua-item.atual .lua-ic { background: radial-gradient(circle at 70% 50%, #121427 45%, transparent 46%), radial-gradient(circle at 35% 35%, #fff6dc, #d9bc7c 60%, #8a6a32); }
+.lua-item.futura { opacity: .55; }
+.lua-item.futura .lua-ic { background: none; box-shadow: inset 0 0 0 1px rgba(238,229,212,.35); }
 .trilha-est { display: flex; flex-direction: column; align-items: stretch; }
 .elo { align-self: center; width: 2px; height: 18px; background: linear-gradient(var(--ceu-3), var(--ceu-3)); }
 .estagio { position: relative; display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px; border-radius: 18px; border: 1px solid var(--ceu-3); background: var(--ceu-2); color: inherit; font: inherit; text-align: left; cursor: pointer; }
@@ -1015,6 +1030,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo3 { grid-template-columns: repeat(3, 1fr); }
 .som-noite { display: flex; flex-direction: column; gap: 10px; }
+.destaques { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.som-destaque { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px 14px 14px; border-radius: 18px; border: 1px solid #b8914f; background: radial-gradient(130% 120% at 0% 0%, #3a1a0e, #170606); color: #f5d79b; text-align: left; box-shadow: 0 0 24px -10px rgba(245,199,91,.6); }
+.som-destaque b { font-family: var(--display); font-weight: 400; font-size: 18px; line-height: 1.2; }
+.som-destaque small { font-size: 12px; color: #c9a36a; }
+.som-destaque .pp { margin: 0 0 6px; }
+.som-destaque[aria-pressed="true"] { border-color: #f5c75b; box-shadow: 0 0 28px -6px rgba(245,199,91,.8); }
 /* play e pause nos botões dos sons e dos tambores */
 .pp { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid currentColor; font-size: 10px; line-height: 1; margin-right: 8px; vertical-align: middle; flex: none; }
 .pp::before { content: "\25B6\FE0E"; padding-left: 2px; }
@@ -1405,7 +1426,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return lista[Math.floor(Date.UTC(h.getFullYear(), h.getMonth(), h.getDate()) / 864e5) % lista.length];
   }
   function tecnicaAtual() {
-    if (!est.tecnica) est.tecnica = { i: tecnicasDaPagina()[0] || 0, desde: hojeIso };
+    if (!est.tecnica) est.tecnica = { i: tecnicasReveladas()[0] || 0, desde: hojeIso };
     const t = NOITE[est.tecnica.i] || NOITE[0];
     const dia = Math.max(1, Math.round((deIso(hojeIso) - deIso(est.tecnica.desde)) / 864e5) + 1);
     return { t, i: est.tecnica.i, dia, completa: dia > 7 };
@@ -1418,27 +1439,78 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <span class="suave">${esc(t.de)}</span><span class="trilho-m"><i style="width:${Math.min(7, dia) / 7 * 100}%"></i></span></span></button>`;
   }
   function abrirTecnica() {
-    const { t, i, dia, completa } = tecnicaAtual(), lista = tecnicasDaPagina();
+    const { t, i, dia, completa } = tecnicaAtual(), lista = tecnicasReveladas(), trad = estiloAtual();
     const iProx = lista[(lista.indexOf(i) + 1) % lista.length] ?? (i + 1) % NOITE.length, prox = NOITE[iProx];
     abrirSobre(`<div class="tela">${voltar}<span class="rotulo">A técnica da semana · ${completa ? "semana completa" : `dia ${dia} de 7`}</span><h1>${esc(t.nome)}</h1>
       <span class="suave">${esc(t.de)}</span>
       <img class="ilus" src="${ILUS(t.ilus)}" alt=""><p class="grande-p" style="font-size:17px;line-height:1.6">${esc(t.texto)}</p>
       <ol class="roteiro">${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
-      ${completa ? `<div class="cartao"><b>Você completou a semana com esta técnica.</b><span class="suave">Se ela já está funcionando, pode continuar. Ou siga para a próxima: ${esc(prox.nome)}.</span>
+      ${completa && !trad ? `<div class="cartao"><b>Você completou a semana com esta técnica.</b><span class="suave">Se ela já está funcionando, pode continuar. Ou siga para a próxima: ${esc(prox.nome)}.</span>
         <button class="btn" data-tecnica="${iProx}">Começar ${esc(prox.nome)}</button></div>` : ""}
       ${t.som === "binaural" ? '<button class="btn largo" data-acao="dormir-binaural">Praticar com o som Mente desperta</button><p class="suave miuda" style="text-align:center">Com fone de ouvido.</p>' : ""}
       <button class="btn ${t.som ? "fantasma " : ""}largo" data-acao="dormir">Vou dormir</button>
-      ${tecnicasDaPagina().length > 1 ? '<button class="btn fantasma largo" data-acao="escolher-tecnica">As outras técnicas desta página</button>' : ""}</div>`);
+      ${lista.length > 1 ? `<button class="btn fantasma largo" data-acao="escolher-tecnica">${trad ? "As técnicas que você já recebeu" : "As outras técnicas deste ato"}</button>` : ""}</div>`);
   }
+  // As técnicas que a pessoa pode escolher agora: no Arhat, as do ato em que está; numa tradição, as que já foram reveladas
   function abrirEscolhaTecnica() {
-    const { i } = tecnicaAtual();
-    const pag = tecnicasDaPagina(), E = ESTAGIOS[estagioAtual()], s = estiloAtual();
-    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">${s ? esc(s.nome) : E ? `Página ${estagioAtual() + 1} · ${esc(E.nome)}` : "As técnicas antes de dormir"}</span><h1>As técnicas desta página</h1>
-      <p class="suave">Cada página do livro guarda algumas técnicas. Fique uma semana com cada uma: é o tempo para a mente aprender o gesto. As próximas aparecem quando você virar a página.</p>
-      <div class="lista-tec">${pag.map(k => [NOITE[k], k]).filter(([t]) => t).map(([t, k]) => `<button class="tec-op ${k === i ? "atual" : ""}" data-tecnica="${k}"><img src="${ILUS(t.ilus)}" alt="">
+    const { i } = tecnicaAtual(), trad = estiloAtual(), E = ESTAGIOS[estagioAtual()], lista = tecnicasReveladas();
+    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">${trad ? esc(trad.nome) : E ? `${esc(ATOS[E.ato].nome)} · ${esc(E.nome)}` : ""}</span><h1>${trad ? "As técnicas que você já recebeu" : "As técnicas deste ato"}</h1>
+      <p class="suave">${trad ? "Uma técnica nova chega a cada semana de prática. As que já chegaram ficam aqui: você pode voltar a qualquer uma." : "Cada ato do livro guarda algumas técnicas. Fique uma semana com cada uma: é o tempo para a mente aprender o gesto. As próximas aparecem no próximo ato."}</p>
+      <div class="lista-tec">${lista.map(k => [NOITE[k], k]).filter(([t]) => t).map(([t, k]) => `<button class="tec-op ${k === i ? "atual" : ""}" data-tecnica="${k}"><img src="${ILUS(t.ilus)}" alt="">
         <span><b>${esc(t.nome)}</b><span class="suave">${esc(t.de)}</span><span class="tx">${esc(t.texto)}</span></span>${k === i ? '<em>agora</em>' : ""}</button>`).join("")}</div>
-      <button class="btn fantasma largo" data-acao="tecnica-sorte">Deixar o livro escolher</button></div>`);
+      ${!trad && lista.length > 1 ? '<button class="btn fantasma largo" data-acao="tecnica-sorte">Deixar o livro escolher</button>' : ""}</div>`);
   }
+  // ---------- As tradições (programa.js → ESTILOS): a pessoa escolhe uma e segue tudo dela ----------
+  // No Arhat, o livro: os atos (ESTAGIOS), cada um com as suas técnicas. Nas outras tradições, as técnicas vêm em ordem,
+  // uma por semana: depois de 7 noites dormidas com o Osirion, a próxima se revela e passa a ser a técnica da noite.
+  const passoDe = s => { est.passos = est.passos || {}; return (est.passos[s.id] = est.passos[s.id] || { k: 0, noites: 0, desde: hojeIso }); };
+  function passoAtual() { const s = estiloAtual(); return s ? Math.min(passoDe(s).k, s.tecnicas.length - 1) : estagioAtual(); }
+  function tecnicasReveladas() {
+    const s = estiloAtual(); if (s) return s.tecnicas.slice(0, passoAtual() + 1);
+    const E = ESTAGIOS[estagioAtual()]; return E && E.tecnicas ? E.tecnicas : NOITE.map((_, k) => k);
+  }
+  // os sons de cada passo: no Arhat, os do ato; numa tradição, a ordem dela repartida pelas técnicas (o resto na última)
+  function sonsDoPasso(i) {
+    const s = estiloAtual(); if (!s) return (ESTAGIOS[i] || {}).sons || [];
+    const n = s.tecnicas.length; if (i >= n) return [];
+    const ordem = [...new Set([...(s.sons || []), ...SONS.map(x => x[0])])], por = Math.max(1, Math.ceil((s.sons || []).length / n));
+    return i === n - 1 ? ordem.slice(por * i) : ordem.slice(por * i, por * (i + 1));
+  }
+  function contarNoiteDaTradicao() {
+    const s = estiloAtual(); if (!s) return;
+    const c = passoDe(s); if (c.ultima === hojeIso) return; c.ultima = hojeIso; c.noites = (c.noites || 0) + 1;
+    if (c.noites >= 7 && c.k < s.tecnicas.length - 1) {
+      c.k++; c.noites = 0; c.desde = hojeIso; const i = s.tecnicas[c.k];
+      est.tecnica = { i, desde: hojeIso }; est.tecnicaEscolhida = true; est.tecNova = NOITE[i] ? NOITE[i].nome : null;
+    }
+  }
+  // a trilha da tradição (aba Caminho): as técnicas que já vieram, a de agora e as que ainda estão escondidas
+  function trilhaTradicao() {
+    const s = estiloAtual(); if (!s) return "";
+    const k = passoAtual(), c = passoDe(s);
+    return `<section class="luas"><span class="rotulo">A sua tradição</span><h1>${esc(s.nome)}</h1><p class="suave">${esc(s.sub)}.</p><div class="trilha-luas">${s.tecnicas.map((t, i) => {
+      const T = NOITE[t]; if (!T) return "";
+      return `<button class="lua-item ${i < k ? "feita" : i === k ? "atual" : "futura"}" ${i <= k ? `data-tecnica="${t}"` : "disabled"}><span class="lua-ic" aria-hidden="true"></span>
+        <span><b>${i <= k ? esc(T.nome) : "Uma técnica ainda escondida"}</b><span class="suave">${i < k ? "já recebida · toque para repetir" : i === k ? `a técnica de agora · ${Math.min(7, c.noites || 0)} de 7 noites` : "chega com as noites"}</span></span></button>`; }).join("")}</div></section>`;
+  }
+  // ---------- O que já passou: o que a pessoa já viu fica guardado aqui, para repetir quando quiser ----------
+  function jaPassou() {
+    const chip = (attr, nome) => `<button class="alvo" ${attr}>${esc(nome)}</button>`;
+    const caps = Object.keys(est.vistas || {}).map(Number).filter(n => CAPS[n - 1]).sort((a, b) => a - b);
+    const tecs = Object.keys(Object.assign({}, est.tecFeitas, est.tecnica && est.tecnicaEscolhida ? { [est.tecnica.i]: 1 } : {})).map(Number).filter(i => NOITE[i]);
+    const prats = [], visto = new Set();
+    Object.entries(est.feitos || {}).forEach(([id, o]) => { const at = ATOS.findIndex(a => String(a.id) === String(id)); if (at < 0) return;
+      Object.keys(o).forEach(k => { if (visto.has(k)) return; const x = acharPratica(k, at); if (x && x.p && x.p.nome) { visto.add(k); prats.push([k, at, x.p.nome]); } }); });
+    const sons = sonsDescobertos();
+    const grupo = (titulo, itens) => itens.length ? `<div class="ja-grupo"><span class="rotulo">${titulo} · ${itens.length}</span><div class="alvos">${itens.join("")}</div></div>` : "";
+    const corpo = grupo("Os ensinamentos", caps.map(n => chip(`data-capsula="${n}"`, CAPS[n - 1].titulo)))
+      + grupo("As técnicas da noite", tecs.map(i => chip(`data-tecnica="${i}"`, NOITE[i].nome)))
+      + grupo("As práticas", prats.map(([k, at, n]) => chip(`data-pratica="${k}" data-ato="${at}"`, n)))
+      + grupo("Os sons", sons.map(([k, n]) => chip(`data-ouvir-som="${k}"`, n)));
+    return `<section class="ja-passou"><div class="momento-cab"><h2>O que já passou</h2></div>
+      <p class="suave">${corpo ? "Tudo o que você já viu fica guardado aqui. Toque para repetir." : "Aqui vão ficar guardados os ensinamentos, as técnicas, as práticas e os sons que você for encontrando, para repetir quando quiser."}</p>${corpo}</section>`;
+  }
+
   // ---------- Os estágios (programa.js): ensinamentos, meditação do dia, técnica da noite e um marco ----------
   // O estágio avança pela prática (ler os ensinamentos, meditar alguns dias, dormir com a técnica 7 noites).
   // Os marcos (ver o nevoeiro, a primeira lucidez…) são conquistas: podem acontecer em qualquer estágio e não travam nada.
@@ -1465,38 +1537,38 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const ESTILOS = window.ESTILOS || [];
   const estiloAtual = () => ESTILOS.find(x => x.id === est.estilo && x.id !== "arhat") || null;
   // As técnicas da noite desta página do livro: as do caminho escolhido ou as do estágio do Arhat (nunca todas de uma vez).
-  const tecnicasDaPagina = () => { const s = estiloAtual(); if (s && s.tecnicas) return s.tecnicas; const E = ESTAGIOS[estagioAtual()]; return (E && E.tecnicas) || NOITE.map((_, k) => k); };
   const diasDeJornada = () => est.travessia ? Math.round((deIso(hojeIso) - deIso(est.travessia)) / 864e5) : 0;
-  const ofereceEstilos = () => ESTILOS.length > 1 && diasDeJornada() >= 7;
+  const ofereceEstilos = () => ESTILOS.length > 1;
   // o próximo ensinamento e a prática do dia: do estilo escolhido, ou do estágio do Arhat
   const proximoAgora = k => { const s = estiloAtual(); return s ? s.ensinamentos.find(n => !est.vistas[n]) : proximoEnsinamento(k); };
-  const praticaDoDia = E => { const s = estiloAtual(); if (s) { const a = acharPratica(s.dia.k, s.dia.ato); return a ? { m: a.m, p: a.p, ato: s.dia.ato } : null; } return praticaDoAto(E.ato, E.meditacao); };
+  const praticaDoDia = E => { const s = estiloAtual(); if (s && s.dia) { const a = acharPratica(s.dia.k, s.dia.ato); return a ? { m: a.m, p: a.p, ato: s.dia.ato } : null; } return praticaDoAto(E.ato, E.meditacao); };
   function escolherEstilo(id) {
     est.estilo = id; est.estiloVisto = true;
     const s = estiloAtual();
-    if (s) { est.tecnica = { i: s.tecnicas[0], desde: hojeIso }; est.tecnicaEscolhida = true; }
+    if (s) { const c = passoDe(s); est.tecnica = { i: s.tecnicas[Math.min(c.k, s.tecnicas.length - 1)], desde: hojeIso }; est.tecnicaEscolhida = true; }
     salvar();
   }
   // os balõezinhos dos estilos
   function cartaoEstilos(fechavel) {
     if (!ofereceEstilos()) return "";
     const atual = est.estilo || "arhat";
-    return `<section class="estilos"><div class="momento-cab"><h3>${est.estiloVisto ? "O seu caminho" : "Escolha o seu caminho"}</h3>${fechavel && !est.estiloVisto ? '<button class="link" data-acao="estilo-depois">depois</button>' : ""}</div>
-      ${est.estiloVisto ? "" : '<p class="suave">Você já tem uma semana de jornada. Pode seguir no caminho do Arhat ou escolher outro caminho: cada um já vem com a prática do dia, as técnicas da noite e os ensinamentos.</p>'}
+    return `<section class="estilos"><div class="momento-cab"><h3>${est.estiloVisto ? "A sua tradição" : "Qual tradição você quer seguir?"}</h3>${fechavel && !est.estiloVisto ? '<button class="link" data-acao="estilo-depois">depois</button>' : ""}</div>
+      ${est.estiloVisto ? "" : '<p class="suave">Cada tradição é um mundo do sonhar. Escolha uma e siga tudo dela: a prática do dia, as técnicas da noite e os ensinamentos, que vão se revelando com as noites.</p>'}
       <div class="baloes">${ESTILOS.map(x => `<button class="balao" data-estilo="${x.id}" aria-pressed="${x.id === atual}">${esc(x.nome)}</button>`).join("")}</div></section>`;
   }
   function abrirEstilo(id) {
     const x = ESTILOS.find(e => e.id === id); if (!x) return;
     const tecs = (x.tecnicas || []).map(i => NOITE[i]).filter(Boolean), caps = (x.ensinamentos || []).map(n => CAPS[n - 1]).filter(Boolean);
     const dia = !x.dia ? null : x.dia.k === "teste" ? { p: { nome: "Teste de realidade", det: "Será que estou sonhando? Várias vezes ao dia" } } : acharPratica(x.dia.k, x.dia.ato);
-    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">Caminho</span><h1>${esc(x.nome)}</h1>
+    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">Tradição</span><h1>${esc(x.nome)}</h1>
       <img class="ilus" src="${ILUS(x.ilus)}" alt=""><p class="suave">${esc(x.sub)}.</p>
-      ${x.id === "arhat" ? `<p>Os seis estágios do livro, com os seus ensinamentos, a meditação de cada ato e a técnica da noite. Você avança praticando.</p>` : `
+      ${x.id === "arhat" ? `<p>Os seis atos do livro, com os seus ensinamentos, a meditação de cada ato e as técnicas da noite. Você avança praticando.</p>` : `
       ${dia ? `<section><span class="rotulo">De dia</span><p><b>${esc(dia.p.nome)}</b> · ${esc(dia.p.det || "")}</p></section>` : ""}
-      <section><span class="rotulo">À noite · uma técnica por semana</span><ol class="roteiro">${tecs.map(t => `<li><b>${esc(t.nome)}</b> · ${esc(t.de)}</li>`).join("")}</ol></section>
+      <section><span class="rotulo">À noite · ${tecs.length} técnicas, uma por semana</span><ol class="roteiro">${tecs.map((t, j) => j === 0
+        ? `<li><b>${esc(t.nome)}</b> · ${esc(t.de)}</li>` : `<li class="suave">Uma técnica ainda escondida · chega com as noites</li>`).join("")}</ol></section>
       <section><span class="rotulo">Os ensinamentos · ${caps.length}</span><ol class="roteiro">${caps.map(c => `<li>${esc(c.titulo)}</li>`).join("")}</ol></section>`}
-      <button class="btn largo" data-seguir-estilo="${x.id}">${(est.estilo || "arhat") === x.id ? "Este é o seu caminho" : "Seguir este caminho"}</button>
-      <p class="suave miuda">Você pode trocar de caminho quando quiser. O que já fez fica guardado.</p></div>`);
+      <button class="btn largo" data-seguir-estilo="${x.id}">${(est.estilo || "arhat") === x.id ? "Esta é a sua tradição" : "Seguir esta tradição"}</button>
+      <p class="suave miuda">Você pode trocar de tradição quando quiser. O que já fez fica guardado.</p></div>`);
   }
   // Venda da jornada completa: desligada por enquanto (só a Vivian usa o app). Desligada, tudo fica aberto e a oferta não aparece.
   const VENDA = false;
@@ -1515,11 +1587,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const k = estagioAtual(), E = ESTAGIOS[k], pr = progressoEstagio(k), m = MARCOS[E.marco], feito = !!(est.marcos || {})[E.marco];
     const prox = ESTAGIOS[k + 1];
     return `<section class="agora">
-      <span class="rotulo">Estágio ${k + 1} de ${ESTAGIOS.length} · ${esc(ATOS[E.ato].nome)}</span>
+      <span class="rotulo">${esc(ATOS[E.ato].nome)}</span>
       <h2>${esc(E.nome)}</h2>
       <p class="objetivo ${feito ? "ok" : ""}"><img src="${ILUS(m.ilus)}" alt=""><span>${feito ? `Conquistado: ${esc(m.nome.toLowerCase())}` : `Objetivo: ${esc(E.objetivo)}`}</span></p>
       <div class="tres"><span><b>${pr.lidos}/${pr.total}</b>ensinamentos</span><span><b>${Math.min(pr.med, pr.medMeta)}/${pr.medMeta}</b>dias de meditação</span><span><b>${Math.min(pr.noites, pr.noiteMeta)}/${pr.noiteMeta}</b>noites</span></div>
-      ${pr.pronto && prox ? (estagioLivre(k + 1) ? `<button class="btn largo" data-acao="proximo-estagio">Abrir o estágio ${k + 2}: ${esc(prox.nome)}</button>` : ofertaJornada()) : ""}
+      ${pr.pronto && prox ? (estagioLivre(k + 1) ? `<button class="btn largo" data-acao="proximo-estagio">Abrir o ${esc(ATOS[prox.ato].nome)}: ${esc(prox.nome)}</button>` : ofertaJornada()) : ""}
       ${feito ? "" : `<p class="suave miuda">${esc(E.dica)}</p>`}
       <div class="pe-estagio"><button class="chip-nev" data-acao="nevoeiro"><span class="bolinha"></span>${est.nevoeiro ? "nevoeiro " + esc(nomeCor()).toLowerCase() : "procurando o nevoeiro"}</button>
       <button class="ver-tudo" data-aba="capsulas">Ver o caminho</button></div>
@@ -1552,12 +1624,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const a = ATOS[E.ato], cls = i < k ? "feito" : i === k ? "atual" : "futuro";
       return `<button class="estagio ${cls}" data-estagio="${i}">
         <span class="est-ilus"><img src="${ILUS(a.ilus)}" alt="">${i < k ? '<i class="est-ok">✓</i>' : ""}</span>
-        <span><span class="rot">Estágio ${i + 1} · ${esc(a.nome)}</span><b>${esc(E.nome)}</b><span class="suave">Objetivo: ${esc(E.objetivo)}</span></span>
+        <span><span class="rot">${esc(a.nome)}</span><b>${esc(E.nome)}</b><span class="suave">Objetivo: ${esc(E.objetivo)}</span></span>
         ${i === k ? '<em>você está aqui</em>' : ""}</button>`;
     }).join('<span class="elo" aria-hidden="true"></span>');
+    if (estiloAtual()) return `<div class="tela">${topo()}${trilhaTradicao()}${cartaoEstilos(false)}</div>`;
     return `<div class="tela">${topo()}
-      <div><span class="rotulo">O seu caminho</span><h1>Seis estágios até o Arhat</h1></div>
-      <p class="suave">Cada estágio tem ensinamentos, uma meditação do dia e as técnicas da noite. Você avança praticando. As conquistas podem chegar a qualquer momento.</p>
+      <div><span class="rotulo">O caminho do Arhat</span><h1>Os seis atos do livro</h1></div>
+      <p class="suave">Cada ato tem ensinamentos, uma meditação do dia e as técnicas da noite. Você avança praticando. As conquistas podem chegar a qualquer momento.</p>
       <section class="conquistas-m"><span class="rotulo">Conquistas</span><div class="marcos">${Object.entries(MARCOS).map(([id, m]) => `<span class="marco ${marcos[id] ? "on" : ""}"><img src="${ILUS(m.ilus)}" alt=""><small>${esc(m.nome)}</small></span>`).join("")}</div></section>
       ${cartaoEstilos(false)}
       <div class="trilha-est">${trilha}</div>
@@ -1570,9 +1643,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function abrirEstagio(i) {
     const k = estagioAtual(), E = ESTAGIOS[i], a = ATOS[E.ato], m = MARCOS[E.marco];
     if (i > k) {
-      abrirSobre(`<div class="tela">${voltar}<span class="rotulo">Estágio ${i + 1} · ${esc(a.nome)}</span><h1>${esc(E.nome)}</h1>
+      abrirSobre(`<div class="tela">${voltar}<span class="rotulo">${esc(a.nome)}</span><h1>${esc(E.nome)}</h1>
         <p class="suave">Objetivo: ${esc(E.objetivo)}.</p><blockquote class="cita">“${esc(a.frase)}”</blockquote>
-        <div class="trancado"><span class="cad-ilus"><img src="${ILUS(a.ilus)}" alt="">${CADEADO}</span><span><b>Abre depois do estágio ${i}</b><span>Continue praticando: os estágios se abrem um depois do outro.</span></span></div></div>`);
+        <div class="trancado"><span class="cad-ilus"><img src="${ILUS(a.ilus)}" alt="">${CADEADO}</span><span><b>Abre depois de “${esc(ATOS[ESTAGIOS[i - 1].ato].nome)}”</b><span>Continue praticando: os atos se abrem um depois do outro.</span></span></div></div>`);
       return;
     }
     const pr = progressoEstagio(i), prox = proximoEnsinamento(i);
@@ -1583,7 +1656,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const pr2 = ["noite", "madrugada"].map(x => praticaDoAto(E.ato, x)).filter(Boolean);
     const med = praticaDoAto(E.ato, E.meditacao);
     abrirSobre(`<div class="tela estagio-dentro">${voltar}
-      <span class="rotulo">Estágio ${i + 1} de ${ESTAGIOS.length} · ${esc(a.nome)}</span>
+      <span class="rotulo">${esc(a.nome)} · ${i + 1} de ${ESTAGIOS.length}</span>
       <h1>${esc(E.nome)}</h1>
       <blockquote class="cita">“${esc(a.frase)}”</blockquote>
       ${a.intro ? `<p class="suave">${esc(a.intro)}</p>` : ""}
@@ -1658,8 +1731,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="ca-topo"><span class="ca-arte">${c.arte}</span><span><span class="rotulo">${c.rot}</span><h2>${esc(c.tit)}</h2></span></div>
       ${c.txt ? `<p>${esc(c.txt)}</p>` : ""}
       ${c.bt}
-      ${estiloAtual() ? `<button class="ca-estagio" data-estilo="${estiloAtual().id}"><span>Caminho · ${esc(estiloAtual().nome)}</span><span class="ca-barras" style="grid-template-columns:1fr">${barra(estiloAtual().ensinamentos.filter(n => est.vistas[n]).length, estiloAtual().ensinamentos.length)}</span><span class="ver">ver este caminho</span></button>`
-        : `<button class="ca-estagio" data-aba="capsulas"><span>Estágio ${k + 1} · ${esc(E.nome)}</span><span class="ca-barras">${barra(pr.lidos, pr.total)}${barra(pr.med, pr.medMeta)}${barra(pr.noites, pr.noiteMeta)}</span><span class="ver">ver o caminho</span></button>`}
+      ${estiloAtual() ? `<button class="ca-estagio" data-estilo="${estiloAtual().id}"><span>${esc(estiloAtual().nome)}</span><span class="ca-barras" style="grid-template-columns:1fr">${barra(estiloAtual().ensinamentos.filter(n => est.vistas[n]).length, estiloAtual().ensinamentos.length)}</span><span class="ver">ver a tradição</span></button>`
+        : `<button class="ca-estagio" data-aba="capsulas"><span>${esc(ATOS[E.ato].nome)} · ${esc(E.nome)}</span><span class="ca-barras">${barra(pr.lidos, pr.total)}${barra(pr.med, pr.medMeta)}${barra(pr.noites, pr.noiteMeta)}</span><span class="ver">ver o caminho</span></button>`}
     </section>`;
   }
   // As ferramentas à mão, com os desenhos do livro.
@@ -1948,7 +2021,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function telaJornada() {
     const seg = `<div class="seg" role="group" aria-label="Jornada">${[["caminho", "Mapa"], ["conquistas", "Conquistas"]].map(([k, n]) => `<button data-jornada="${k}" aria-pressed="${modoJornada === k}">${n}</button>`).join("")}</div>`;
     if (modoJornada === "conquistas") return `<div class="tela">${topo()}${seg}${livre("selos") ? livroSelos() : trancado("selos")}${livre("album") ? albumAlvos() : trancado("album")}${livre("lugares") ? seusAlvos() : trancado("lugares")}</div>`;
-    return `<div class="tela">${topo()}${seg}${mapaJornada()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}${cartaoConta()}${cartaoConvite()}</div>`;
+    return `<div class="tela">${topo()}${seg}${jaPassou()}${cartaoNivel()}${cartaoChama()}${livre("missoes") ? cartaoMissoes() : trancado("missoes")}${cartaoConta()}${cartaoConvite()}</div>`;
   }
   function telaAtos(seg) {
     const lista = ATOS.map(a => {
@@ -2780,6 +2853,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (!est.travessia || document.getElementById("sobre") || document.getElementById("abertura-app") || document.getElementById("caverna")) return;
     const sem = semanaAtual();
     if (sem.completa && !est.semanas[sem.chave]) est.semanas[sem.chave] = hojeIso;
+    if (est.tecNova) { const n = est.tecNova; est.tecNova = null; salvar(); setTimeout(() => avisoSelo([{ nome: n }], "Nova descoberta · uma técnica"), 400); }
     const abertos = Object.keys(LIBERA).filter(k => !est.liberados[k] && livre(k));
     abertos.forEach(k => { est.liberados[k] = hojeIso; });
     if (abertos.includes("despertar")) atualizarAvisos();
@@ -3076,7 +3150,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     buraco: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], rumor: [.3, 30], desce: 1800 },
     aurora: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], pad: [[880, 1108.7, 1318.5], .006, 18], estrelas: [6, .045, 1400, 2800], desce: 1800 }
   };
-  // Monta o som num contexto de áudio "offline": o resultado vira uma gravação (ver gravarSom).
+  // O motor dos sons da noite: monta o som num contexto de áudio "offline". As gravações de sons/noite/ saíram daqui
+  // (o mesmo acaso em cada gravação, para o som ser sempre igual). Para mudar um som, mudar aqui e gravar de novo.
   // op.fase "entrada": o começo, com as subidas e descidas (comprimidas por op.fator); "fundo": o estado final, para repetir.
   function montarSom(nome, ctx, saida, op) {
     const t = 0, out = ctx.createGain(), nos = [], fundo = op.fase === "fundo", fator = op.fator || 1, fimAg = op.dur + 5;
@@ -3199,39 +3274,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       agenda();
     }
   }
-  // ---------- Os sons viram gravações: tocam com a tela desligada, com play e pause (também no bloqueio do celular) ----------
-  // A entrada traz a descida dos tons (até 6 min); depois um trecho de fundo de 90 s se repete sem emenda até o fim do tempo.
-  const ENTRADA_SOM = 360, FUNDO_SOM = 90, EMENDA = 4, gravados = {};
-  function wavDe(buf, emenda, someNoFim) {
-    const sr = buf.sampleRate, nc = buf.numberOfChannels, J = Math.round(emenda * sr), n = buf.length - J, F = someNoFim ? Math.round(.3 * sr) : 0;
-    const ch = Array.from({ length: nc }, (_, c) => buf.getChannelData(c)), v = new DataView(new ArrayBuffer(44 + n * nc * 2));
-    const txt = (o, x) => [...x].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)));
-    txt(0, "RIFF"); v.setUint32(4, 36 + n * nc * 2, true); txt(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, nc, true);
-    v.setUint32(24, sr, true); v.setUint32(28, sr * nc * 2, true); v.setUint16(32, nc * 2, true); v.setUint16(34, 16, true); txt(36, "data"); v.setUint32(40, n * nc * 2, true);
-    let o = 44;
-    for (let i = 0; i < n; i++) for (let c = 0; c < nc; c++) {
-      let x = ch[c][i];
-      // a emenda: o começo se mistura com o fim, para o trecho repetir sem estalo
-      if (i < J) { const k = i / J; x = x * Math.sin(k * Math.PI / 2) + ch[c][n + i] * Math.cos(k * Math.PI / 2); }
-      if (i >= n - F) x *= (n - i) / F;
-      v.setInt16(o, Math.max(-1, Math.min(1, x)) * 32767, true); o += 2;
-    }
-    return URL.createObjectURL(new Blob([v], { type: "audio/wav" }));
-  }
-  async function gravarSom(nome) {
-    if (gravados[nome]) return gravados[nome];
-    // guarda só os dois últimos (cada um ocupa memória)
-    Object.keys(gravados).slice(0, -1).forEach(k => { URL.revokeObjectURL(gravados[k].entrada); URL.revokeObjectURL(gravados[k].fundo); delete gravados[k]; });
-    const A = window.OfflineAudioContext || window.webkitOfflineAudioContext, S = SOM[nome], sr = S ? 16000 : 22050;
-    const desce = S ? Math.max(S.desce || 1200, ...(S.vib ? [S.vib[2]] : []), ...(S.zum ? [S.zum[1]] : [])) : 1;
-    const entrada = S ? ENTRADA_SOM : 30, fator = Math.min(1, (entrada - 20) / desce);
-    const fase = async (f, dur) => { const ctx = new A(2, Math.ceil(dur * sr), sr); montarSom(nome, ctx, ctx.destination, { fase: f, dur, fator }); return ctx.startRendering(); };
-    const e = await fase("entrada", entrada), fu = await fase("fundo", FUNDO_SOM + EMENDA);
-    return (gravados[nome] = { entrada: wavDe(e, 0, true), fundo: wavDe(fu, EMENDA, false) });
-  }
+  // ---------- Os sons da noite são gravações fixas (sons/noite/), feitas uma vez a partir do motor acima ----------
+  // Tocam sempre iguais e continuam com a tela desligada. entrada: a descida inteira dos tons, no tempo original;
+  // fundo: 90 s do estado final que se repetem sem emenda; saída: 60 s que somem devagar no fim do tempo escolhido.
+  const arqSom = (k, f) => `sons/noite/${k}-${f}.m4a`;
+
 
   // ---------- A jornada do tambor: gravações de tambor (em sons/), tocadas direto, sem guardar no celular ----------
   const TAMBORES = [["tambor-1", "Tambor 1", 30], ["tambor-2", "Tambor 2", 15], ["tambor-3", "Tambor 3", 15]];
+  // Os sons em destaque: gravações que a Vivian escolheu, sempre à mão no topo dos sons da noite (tocam como os tambores)
+  const DESTAQUES = [["destaque-cosmico", "Som cósmico", 11], ["destaque-caverna", "Dentro da caverna", 27]];
 
   // ---------- Modo noite ----------
   const PURIF = ["Uma chuva imaginária limpa o quarto", "Celular em modo avião, longe da cama", "Diário e caneta ao lado", "Deitado de barriga para cima", "A mente no seu nevoeiro"];
@@ -3248,7 +3300,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ["vazioprofundo", "O vazio profundo", "Ainda mais lento e mais grave, com estrelas raríssimas."], ["poeira", "Poeira estelar", "O vazio com uma poeira de brilhos bem baixinhos, como estrelas muito longe."],
       ["cosmos", "O silêncio do cosmos", "O vazio com um acorde muito grave, que mais se sente do que se ouve."], ["buraco", "O buraco negro", "Um rumor bem grave girando devagar em volta da cabeça."],
       ["aurora", "Aurora", "Um véu agudo e etéreo que aparece e some, como a luz de uma aurora."]]],
-    ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo devagar, o surf e as taças."]]]
+    ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo por 40 minutos, o surf e as taças."]]]
   ];
   const SONS = SONS_GRUPOS.flatMap(g => g[1]);
   // ---------- Os sons do livro: não aparecem todos de uma vez ----------
@@ -3260,8 +3312,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function descobrirSom() {
     est.sons = est.sons || {};
     if (est.somDescoberto === hojeIso) return null;
-    const k = estagioAtual(), daqui = ((ESTAGIOS[k] || {}).sons || []).filter(x => !est.sons[x] && somExiste(x)),
-      adiante = ((ESTAGIOS[k + 1] || {}).sons || []).filter(x => !est.sons[x] && somExiste(x)), sorte = l => l[Math.floor(Math.random() * l.length)];
+    const k = passoAtual(), daqui = sonsDoPasso(k).filter(x => !est.sons[x] && somExiste(x)),
+      adiante = sonsDoPasso(k + 1).filter(x => !est.sons[x] && somExiste(x)), sorte = l => l[Math.floor(Math.random() * l.length)];
     const novo = adiante.length && Math.random() < (daqui.length ? .15 : .3) ? sorte(adiante) : daqui.length ? sorte(daqui) : null;
     est.somDescoberto = hojeIso;
     if (novo) { est.sons[novo] = hojeIso; est.somDaNoite = { iso: hojeIso, k: novo }; }
@@ -3286,9 +3338,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${fone ? '<details class="como-sons"><summary>Como funcionam os sons com fone</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone. O som de ondas ao fundo acalma e ajuda a não se distrair. É só deitar, fechar os olhos e deixar tocar.</p></details>' : ""}</section>`;
   }
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
-  function abrirModoNoite(somInicial) {
-    registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); salvar();
-    const somNovo = descobrirSom();
+  function abrirModoNoite(somInicial, soOuvir) {
+    let somNovo = null;
+    if (!soOuvir) {
+      registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); contarNoiteDaTradicao();
+      if (NOITE.length && est.tecnica) { est.tecFeitas = est.tecFeitas || {}; est.tecFeitas[est.tecnica.i] = hojeIso; }
+      salvar(); somNovo = descobrirSom();
+    }
     const a = est.alvoNoite === hojeIso ? alvoDe(est.alvo) : null, temMadrugada = !!acharPratica("madrugada");
     abrirSobre(`<div class="modo-noite"><div class="tela">
         <div class="topo">${voltar}<span class="rotulo">Modo noite</span></div>
@@ -3298,6 +3354,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
         ${a ? `<section><span class="rotulo">Alvo desta noite</span><p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p></section>`
           : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite · se quiser</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
+        <section class="destaques-noite"><span class="rotulo">Em destaque</span><div class="destaques">${DESTAQUES.map(([k, n, m]) => `<button class="som-destaque" data-tambor="${k}" aria-pressed="false"><span class="pp" aria-hidden="true"></span><b>${n}</b><small>${m} min</small></button>`).join("")}</div></section>
         ${secaoSons()}
         ${livre("tambor") ? `<section class="tambor"><span class="rotulo">Jornada do tambor</span>
           <p class="suave">O tambor bate firme e constante, como nas jornadas xamânicas. Deite, feche os olhos e deixe a batida levar. Quando o tambor parar, volte devagar.</p>
@@ -3329,16 +3386,18 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const pausarTambor = () => { if (tambor && !tambor.paused) { tambor.pause(); estadoTambor("pausado"); } };
       const continuarTambor = () => { if (tambor && tambor.paused) { tambor.play().catch(() => {}); estadoTambor("tocando"); } };
       // o som toca num <audio> (uma gravação feita pelo app): continua com a tela desligada
-      const el1 = new Audio(), el2 = new Audio(); [el1, el2].forEach(x => { x.setAttribute("playsinline", ""); x.preload = "auto"; });
-      let atual = null, pausadoEm = 0, fimEm = 0;
+      const el1 = new Audio(), el2 = new Audio(), el3 = new Audio(), els = [el1, el2, el3]; els.forEach(x => { x.setAttribute("playsinline", ""); x.preload = "auto"; });
+      let atual = null, pausadoEm = 0, fimEm = 0, saindo = false;
       const marca = estado => d.querySelectorAll("[data-som]").forEach(x => { const e = x.dataset.som === nomeSom ? estado : ""; x.dataset.estado = e; x.setAttribute("aria-pressed", e ? "true" : "false"); });
-      const pararSom = () => { [el1, el2].forEach(x => { x.pause(); x.onended = null; }); atual = null; som = null; nomeSom = null; pausadoEm = 0; fimEm = 0; clearInterval(fimSom); marca(""); if (!tambor) sessaoMidia(null); };
-      const confere = () => { if (fimEm && !pausadoEm && Date.now() >= fimEm) pararSom(); };
+      const pararSom = () => { els.forEach(x => { x.pause(); x.onended = null; }); atual = null; som = null; nomeSom = null; pausadoEm = 0; fimEm = 0; saindo = false; clearInterval(fimSom); marca(""); if (!tambor) sessaoMidia(null); };
+      // no fim do tempo, a saída: o som some devagar em um minuto e para
+      const sair = () => { if (saindo || !atual) return; saindo = true; atual.pause(); atual = el3; el3.currentTime = 0; el3.onended = pararSom; el3.play().catch(() => pararSom()); };
+      const confere = () => { if (fimEm && !pausadoEm && Date.now() >= fimEm) sair(); };
       [el1, el2].forEach(x => x.addEventListener("timeupdate", confere));
       const pausar = () => { if (!atual || pausadoEm) return; atual.pause(); pausadoEm = Date.now(); marca("pausado"); };
       const continuar = () => { if (!atual || !pausadoEm) return; fimEm += Date.now() - pausadoEm; pausadoEm = 0; atual.play().catch(() => {}); marca("tocando"); };
       // o iPhone só deixa um player tocar depois de um toque: os dois são destravados no primeiro toque
-      const destrava = () => [el1, el2].forEach(x => { if (!x.dataset.ok) { x.dataset.ok = "1"; x.src = urlMudo(); x.play().catch(() => {}); } });
+      const destrava = () => els.forEach(x => { if (!x.dataset.ok) { x.dataset.ok = "1"; x.src = urlMudo(); x.play().catch(() => {}); } });
       const pararSino = () => { clearInterval(tocando); tocando = 0; };
       const proximo = () => { const [h, m] = despertar().split(":").map(Number), x = new Date(); x.setHours(h, m, 0, 0); if (x <= new Date()) x.setDate(x.getDate() + 1); return x.getTime(); };
       const toca = () => { pararSom(); cobre("#breu", false); cobre("#acorda", true); let n = 0; sino(); vibrar([200, 100, 200]); tocando = setInterval(() => { if (++n > 9) return pararSino(); sino(); }, 7000); };
@@ -3357,7 +3416,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           if (tambor && tambor.dataset.k === b.dataset.tambor) { tambor.paused ? continuarTambor() : pausarTambor(); return; }
           pararTambor(); pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + ".mp3"); tambor.dataset.k = b.dataset.tambor; tambor.setAttribute("playsinline", "");
           tambor.onended = pararTambor; tambor.play().catch(() => {}); b.setAttribute("aria-pressed", "true"); b.dataset.estado = "tocando";
-          sessaoMidia(b.textContent.replace(/\d+ min$/, "").trim() + " · jornada do tambor", pausarTambor, continuarTambor, pararTambor);
+          sessaoMidia(b.textContent.replace(/\d+ min$/, "").trim() + (b.dataset.tambor.startsWith("tambor") ? " · jornada do tambor" : ""), pausarTambor, continuarTambor, pararTambor);
         }
         else if (b.dataset.som) {
           const k = b.dataset.som;
@@ -3366,17 +3425,17 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           pararSom(); pararTambor(); destrava();
           nomeSom = som = k; marca("preparando");
           const nomeBonito = (SONS.find(x => x[0] === k) || [, k])[1];
-          gravarSom(k).then(g => {
-            if (nomeSom !== k) return;
-            el1.loop = false; el1.src = g.entrada; el2.loop = true; el2.src = g.fundo;
-            el1.onended = () => { if (nomeSom === k && atual === el1) { atual = el2; el2.play().catch(() => {}); } };
-            atual = el1; el1.play().catch(() => {});
-            fimEm = Date.now() + minutos * 6e4; clearInterval(fimSom); fimSom = setInterval(confere, 5000);
-            marca("tocando"); sessaoMidia(nomeBonito, pausar, continuar, pararSom); descreve();
-          }).catch(() => { if (nomeSom === k) { pararSom(); const av = d.querySelector("#aviso-fone"); if (av) { av.textContent = "Não consegui preparar este som agora. Tente de novo."; av.hidden = false; } } });
+          el1.loop = false; el1.src = arqSom(k, "entrada"); el2.loop = true; el2.src = arqSom(k, "fundo"); el3.loop = false; el3.src = arqSom(k, "saida");
+          el1.onended = () => { if (nomeSom === k && atual === el1) { atual = el2; el2.play().catch(() => {}); } };
+          // começa a tocar quando o arquivo chega (precisa de internet)
+          el1.onplaying = () => { if (nomeSom === k && !pausadoEm) { marca("tocando"); descreve(); } };
+          el1.onerror = () => { if (nomeSom === k && atual === el1) { pararSom(); const av = d.querySelector("#aviso-fone"); if (av) { av.textContent = "Não consegui carregar este som agora. Confira a internet e tente de novo."; av.hidden = false; } } };
+          atual = el1; el1.play().catch(() => {});
+          fimEm = Date.now() + minutos * 6e4; clearInterval(fimSom); fimSom = setInterval(confere, 5000);
+          sessaoMidia(nomeBonito, pausar, continuar, pararSom);
           const av = d.querySelector("#aviso-fone"), sd = SONS.find(x => x[0] === k);
-          if (av && sd) { av.textContent = "Preparando o som, só alguns segundos…"; av.hidden = false; }
-          const descreve = () => { if (av && sd && nomeSom === k) av.textContent = sd[2] + (SOM[k] ? " Use fone de ouvido: um tom em cada ouvido." : "") + " Toca pelo tempo escolhido, mesmo com a tela desligada. Toque de novo para pausar."; };
+          if (av && sd) { av.textContent = "Carregando o som…"; av.hidden = false; }
+          const descreve = () => { if (av && sd && nomeSom === k) av.textContent = sd[2] + (SOM[k] ? " Use fone de ouvido: um tom em cada ouvido." : "") + " Toca pelo tempo escolhido, mesmo com a tela desligada, e some devagar no fim. Toque de novo para pausar."; };
         } else if (b.dataset.tempo) {
           minutos = +b.dataset.tempo; d.querySelectorAll("[data-tempo]").forEach(x => x.setAttribute("aria-pressed", x === b));
           if (fimEm) fimEm = Date.now() + minutos * 6e4;
@@ -3584,6 +3643,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
     if (b.dataset.cor) { est.nevoeiro = b.dataset.cor; aplicarCor(); document.querySelectorAll(".cor").forEach(c => c.setAttribute("aria-pressed", c === b)); const cl = document.getElementById("cor-livre"); if (cl) cl.value = b.dataset.cor; return; }
     if (b.dataset.estilo) { abrirEstilo(b.dataset.estilo); return; }
+    if (b.dataset.ouvirSom) { const k = b.dataset.ouvirSom; abrirModoNoite(null, true); const x = document.querySelector(`.modo-noite [data-som="${k}"]`); if (x) x.click(); return; }
     if (b.dataset.seguirEstilo) { escolherEstilo(b.dataset.seguirEstilo); fecharSobre(); render(); return; }
     if (b.dataset.pratica) { abrirPratica(b.dataset.pratica, b.dataset.ato !== undefined ? +b.dataset.ato : undefined); return; }
     if (b.dataset.capsula) { abrirCapsula(+b.dataset.capsula); return; }
@@ -3605,7 +3665,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.anota) { if (rec) rec.stop(); const t = document.getElementById("sonho").value; modoAnota = b.dataset.anota; render(); const a = document.getElementById("sonho"); a.value = t; if (modoAnota === "escrever") a.focus(); return; }
     if (b.dataset.acao === "tecnica-sorte") {
       // o livro escolhe: uma técnica desta página que ainda não é a de agora
-      const pag = tecnicasDaPagina().filter(k => k !== tecnicaAtual().i && NOITE[k]); if (!pag.length) return;
+      const pag = tecnicasReveladas().filter(k => k !== tecnicaAtual().i && NOITE[k]); if (!pag.length) return;
       b.dataset.tecnica = pag[Math.floor(Math.random() * pag.length)];
     }
     if (b.dataset.tecnica) { est.tecnica = { i: +b.dataset.tecnica, desde: hojeIso }; est.tecnicaEscolhida = true; salvar(); fecharSobre(); render(); abrirTecnica(); return; }
@@ -3655,7 +3715,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "proximo-estagio") {
       const k = estagioAtual(); if (!progressoEstagio(k).pronto || !ESTAGIOS[k + 1] || !estagioLivre(k + 1)) return;
       est.estagio = k + 1; est.estagioDesde = hojeIso; est.ato = ESTAGIOS[k + 1].ato; salvar(); render(); atualizarAvisos();
-      celebrar("Novo estágio", ESTAGIOS[k + 1].nome, `Objetivo: ${ESTAGIOS[k + 1].objetivo}. ${ATOS[ESTAGIOS[k + 1].ato].frase}`, ATOS[ESTAGIOS[k + 1].ato].ilus);
+      celebrar("Novo ato", ESTAGIOS[k + 1].nome, `Objetivo: ${ESTAGIOS[k + 1].objetivo}. ${ATOS[ESTAGIOS[k + 1].ato].frase}`, ATOS[ESTAGIOS[k + 1].ato].ilus);
     }
     else if (acao === "anotar-agora") { aba = "diario"; modoDiario = "gravar"; manha = true; render(); }
     else if (acao === "dejavu") abrirDejavu();

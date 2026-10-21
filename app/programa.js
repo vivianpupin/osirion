@@ -26,21 +26,33 @@ window.ESTAGIOS = [
     ensinamentos: [25, 26, 27, 29, 43, 44, 45, 46, 21] }
 ];
 
-// Os caminhos de prática: depois da primeira semana, a pessoa pode seguir outro caminho além do Arhat.
-// Cada caminho é um pacote pronto: a prática do dia, as técnicas da noite (uma por semana, nesta ordem)
-// e os ensinamentos (em sequência). O Arhat continua sendo o caminho padrão (os estágios).
+// As tradições: a pessoa escolhe uma no começo e segue tudo dela (a variável continua ESTILOS, e est.estilo guarda a escolha).
+// O Arhat é o livro: os atos acima (ESTAGIOS). Nas outras, `tecnicas` (índices de conteudo.js → NOITE) vêm em ordem,
+// uma por semana: depois de 7 noites dormidas com o Osirion, a próxima se revela. `dia`: a prática do dia.
+// `ensinamentos`: as cápsulas, em sequência. `sons`: a ordem em que os sons aparecem (os que faltam vêm na última técnica).
 window.ESTILOS = [
-  { id: "arhat", nome: "O caminho do Arhat", sub: "As lições do livro, ato por ato, até a viagem astral", ilus: "figura-dourada" },
-  { id: "lucido", nome: "O despertar no sonho", sub: "Perceber, dentro do sonho, que é sonho", ilus: "olho",
-    dia: { k: "teste" }, tecnicas: [0, 9, 15, 16, 1, 10], ensinamentos: [10, 28, 47, 30, 16, 18, 21, 3] },
-  { id: "astral", nome: "O voo da alma", sub: "Sair do corpo com consciência, como Monroe e Buhlman", ilus: "salto-figura",
-    dia: { k: "pilar", ato: 5 }, tecnicas: [4, 20, 21, 17, 19, 22, 23, 24, 18, 11], viagem: "sair", ensinamentos: [22, 57, 23, 27, 25, 26, 11, 29, 12] },
-  { id: "energia", nome: "A luz do corpo", sub: "As raízes, os centros e as três forças", ilus: "estrela-sol",
-    dia: { k: "forcas" }, tecnicas: [8, 5, 2], ensinamentos: [6, 55, 56, 57] },
-  { id: "tradicoes", nome: "O silêncio e o som", sub: "As tradições do Tibete e da Índia", ilus: "meditacao-figura",
-    dia: { k: "atencao" }, tecnicas: [2, 14, 8, 6, 5], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31] },
-  { id: "incubar", nome: "O Oráculo", sub: "Como nos templos de incubação: perguntar e receber a resposta", ilus: "morro-figuras",
-    dia: { k: "teste" }, tecnicas: [7, 3, 0], ensinamentos: [5, 13, 8, 19, 43, 44] },
-  { id: "guerreiro", nome: "O caminho do guerreiro", sub: "A arte de sonhar de Dom Juan, nos livros de Castaneda", ilus: "maos-chama",
-    dia: { k: "dialogo" }, tecnicas: [1, 12, 13, 3], ensinamentos: [30, 34, 33, 32, 31] }
+  { id: "arhat", nome: "O caminho do Arhat", sub: "O livro da Vivian: do sonho lembrado à viagem astral, em seis atos", ilus: "figura-dourada" },
+  { id: "guerreiro", nome: "O caminho do guerreiro", sub: "Os xamãs: a arte de sonhar de Dom Juan, nos livros de Castaneda", ilus: "maos-chama",
+    dia: { k: "dialogo" }, tecnicas: [1, 3, 12, 13], ensinamentos: [30, 34, 33, 32, 31],
+    sons: ["mata", "chuva", "mar", "foco10", "limiar", "zumbido"] },
+  { id: "yoga", nome: "A yoga dos sonhos", sub: "Tibete e Índia: o sankalpa, os mantras, a luz na garganta e o Yoga Nidra", ilus: "meditacao-figura",
+    dia: { k: "atencao" }, tecnicas: [2, 5, 6, 8, 14], ensinamentos: [14, 15, 35, 36, 37, 38, 39, 31],
+    sons: ["tacas", "chuva", "sono", "esferas", "vazio", "cosmos"] },
+  { id: "lucido", nome: "O sonho lúcido da ciência", sub: "Stephen LaBerge e os laboratórios do sono", ilus: "olho",
+    dia: { k: "teste" }, tecnicas: [0, 10, 9, 15, 16], ensinamentos: [10, 28, 47, 30, 16, 18, 21, 3],
+    sons: ["chuva", "mar", "tacas", "chuvabin", "sono", "tempo", "foco10", "foco12", "limiar"] },
+  { id: "astral", nome: "A projeção astral", sub: "Robert Monroe e William Buhlman: sair do corpo com consciência", ilus: "salto-figura",
+    dia: { k: "pilar", ato: 5 }, tecnicas: [4, 20, 21, 17, 19, 22, 23, 24, 18, 11], viagem: "sair", ensinamentos: [22, 57, 23, 27, 25, 26, 11, 29, 12],
+    sons: ["mar", "tacas", "foco10", "foco12", "vibracoes", "zumbido", "limiar", "desprendimento", "elevar", "foco21", "alem"] },
+  // As tradições do sonho: técnicas e ensinamentos só com o que as fontes documentam (a Vivian revisa antes de publicar)
+  { id: "egito", nome: "O Egito antigo", sub: "Os templos de Saqqara, o papiro dos sonhos, Bes e a Esfinge", ilus: "olho",
+    tecnicas: [27, 25, 26, 7], ensinamentos: [58, 59, 60, 44, 5], sons: ["vazio", "tacas", "mar", "vialactea", "tempo"] },
+  { id: "grecia", nome: "A Grécia antiga", sub: "O sono nos templos de Asclépio, em Epidauro e Pérgamo", ilus: "rio",
+    tecnicas: [28, 29, 30], ensinamentos: [61, 62, 5, 43], sons: ["mar", "tacas", "chuva", "esferas"] },
+  { id: "indigenas", nome: "Os povos indígenas do Brasil", sub: "O sonho entre os Yanomami e os Guarani", ilus: "estrela-verde",
+    tecnicas: [31, 32, 33], ensinamentos: [63, 64, 17, 13], sons: ["mata", "chuva", "mar"] },
+  { id: "aborigenes", nome: "Os aborígenes da Austrália", sub: "O Dreaming, a terra e as canções que chegam em sonho", ilus: "estrela-terra",
+    tecnicas: [34, 35], ensinamentos: [65], sons: ["mata", "vazio", "cosmos"] },
+  { id: "sufis", nome: "Os sufis e o Islã", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", ilus: "estrela-lilas",
+    tecnicas: [36, 37, 38], ensinamentos: [66, 19], sons: ["vazio", "tacas", "esferas"] }
 ];
