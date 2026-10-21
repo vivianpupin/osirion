@@ -1036,6 +1036,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .trad-arte { width: 86px; height: 86px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, #2b2e62, #10122b); box-shadow: inset 0 0 0 1.5px #b8914f, inset 0 0 0 5px #14162e, inset 0 0 0 6px rgba(184,145,79,.5), 0 0 18px -6px rgba(245,199,91,.5); }
 .trad-arte img { width: 62px; height: 62px; object-fit: contain; }
 .trad b { font-family: var(--display); font-weight: 400; font-size: 17px; line-height: 1.2; color: #f0d79b; }
+.trad .origem { font-size: 10.5px; line-height: 1.35; color: #b89a64; font-style: italic; border-top: 1px solid rgba(201,163,95,.2); padding-top: 6px; margin-top: 2px; }
+.origem-trad { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 12px 14px; border-radius: 14px; background: rgba(201,163,95,.07); box-shadow: inset 0 0 0 1px rgba(201,163,95,.25); font-size: 14px; line-height: 1.5; color: var(--areia); }
 .trad > span:last-of-type { font-size: 11.5px; line-height: 1.35; color: var(--areia-2); }
 .trad.atual { border-color: #f5c75b; box-shadow: 0 0 26px -8px rgba(245,199,91,.7), inset 0 0 0 4px rgba(13,15,36,.9), inset 0 0 0 5px rgba(245,199,91,.5); }
 .trad em { position: absolute; top: 8px; right: 10px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--cristal); }
@@ -1497,7 +1499,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function trilhaTradicao() {
     const s = estiloAtual(); if (!s) return "";
     const k = passoAtual(), c = passoDe(s);
-    return `<section class="luas"><span class="rotulo">A sua tradição</span><h1>${esc(s.nome)}</h1><p class="suave">${esc(s.sub)}.</p><div class="trilha-luas">${s.tecnicas.map((t, i) => {
+    return `<section class="luas"><span class="rotulo">A sua tradição</span><h1>${esc(s.nome)}</h1><p class="suave">${esc(s.sub)}.</p>${s.origem ? `<p class="origem-trad"><span class="rotulo">De onde vem</span>${esc(s.origem)}</p>` : ""}<div class="trilha-luas">${s.tecnicas.map((t, i) => {
       const T = NOITE[t]; if (!T) return "";
       return `<button class="lua-item ${i < k ? "feita" : i === k ? "atual" : "futura"}" ${i <= k ? `data-tecnica="${t}"` : "disabled"}><span class="lua-ic" aria-hidden="true"></span>
         <span><b>${i <= k ? esc(T.nome) : "Uma técnica ainda escondida"}</b><span class="suave">${i < k ? "já recebida · toque para repetir" : i === k ? `a técnica de agora · ${Math.min(7, c.noites || 0)} de 7 noites` : "chega com as noites"}</span></span></button>`; }).join("")}</div></section>`;
@@ -1568,7 +1570,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <h1>Qual tradição você quer seguir?</h1>
       <p class="suave">Cada tradição é um mundo do sonhar. Escolha uma e siga tudo dela: os ensinamentos, a prática e as técnicas da noite, que vão se revelando com as noites.</p>
       <div class="trads">${ESTILOS.map(x => `<button class="trad ${x.id === atual ? "atual" : ""}" data-escolher-trad="${x.id}">
-        <span class="trad-arte"><img src="${ILUS(x.ilus)}" alt=""></span><b>${esc(x.nome)}</b><span>${esc(x.sub)}</span>${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}</div>
+        <span class="trad-arte"><img src="${ILUS(x.ilus)}" alt=""></span><b>${esc(x.nome)}</b><span>${esc(x.sub)}</span>${x.origem ? `<small class="origem">${esc(x.origem)}</small>` : ""}${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}</div>
       ${est.estiloVisto ? '<p class="suave miuda" style="text-align:center">O que você já fez fica guardado em “O que já passou”.</p>' : ""}</div>`);
   }
 
@@ -1577,7 +1579,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const tecs = (x.tecnicas || []).map(i => NOITE[i]).filter(Boolean), caps = (x.ensinamentos || []).map(n => CAPS[n - 1]).filter(Boolean);
     const dia = !x.dia ? null : x.dia.k === "teste" ? { p: { nome: "Teste de realidade", det: "Será que estou sonhando? Várias vezes ao dia" } } : acharPratica(x.dia.k, x.dia.ato);
     abrirSobre(`<div class="tela">${voltar}<span class="rotulo">Tradição</span><h1>${esc(x.nome)}</h1>
-      <img class="ilus" src="${ILUS(x.ilus)}" alt=""><p class="suave">${esc(x.sub)}.</p>
+      <img class="ilus" src="${ILUS(x.ilus)}" alt=""><p class="suave">${esc(x.sub)}.</p>${x.origem ? `<p class="origem-trad"><span class="rotulo">De onde vem</span>${esc(x.origem)}</p>` : ""}
       ${x.id === "arhat" ? `<p>Os seis atos do livro, com os seus ensinamentos, a meditação de cada ato e as técnicas da noite. Você avança praticando.</p>` : `
       ${dia ? `<section><span class="rotulo">De dia</span><p><b>${esc(dia.p.nome)}</b> · ${esc(dia.p.det || "")}</p></section>` : ""}
       <section><span class="rotulo">À noite · ${tecs.length} técnicas, uma por semana</span><ol class="roteiro">${tecs.map((t, j) => j === 0
