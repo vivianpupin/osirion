@@ -1572,7 +1572,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <h1>Qual tradição você quer seguir?</h1>
       <p class="suave">Cada tradição é um mundo do sonhar. Escolha uma e siga tudo dela: os ensinamentos, a prática e as técnicas da noite, que vão se revelando com as noites.</p>
       <div class="trads">${ESTILOS.map(x => `<button class="trad ${x.id === atual ? "atual" : ""}" data-escolher-trad="${x.id}">
-        <span class="trad-arte"><img src="${ILUS(x.ilus)}" alt=""></span><b>${esc(x.nome)}</b><span>${esc(x.sub)}</span>${x.origem ? `<small class="origem">${esc(x.origem)}</small>` : ""}${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}</div>
+        <span class="trad-arte"><img src="${ILUS(x.ilus)}" alt=""></span><b>${esc(x.nome)}</b><span>${esc(x.chamada || x.sub)}</span>${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}</div>
       ${est.estiloVisto ? '<p class="suave miuda" style="text-align:center">O que você já fez fica guardado em “O que já passou”.</p>' : ""}</div>`);
   }
 
