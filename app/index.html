@@ -1961,12 +1961,34 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // ---------- Sorteio do alvo da noite ----------
   // Mesmo esquema do oráculo dos planetas da Caravana: segurar para concentrar, a luz passa de alvo em alvo com um "tim",
   // desacelera ao soltar e para num alvo com o som de um sino.
-  let AUDIO = null;
-  function audio() { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; return AUDIO || (AUDIO = new A()); }
+  // No iPhone, o modo silencioso cala os sons feitos pelo app (Web Audio), mas não as gravações (como os tambores).
+  // Por isso: a sessão de áudio vira "playback" antes de qualquer som, e no modo noite toca junto um áudio mudo,
+  // que faz o iPhone tratar tudo como música e deixar os sons saírem mesmo com o celular no silencioso.
+  try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+  let AUDIO = null, MUDO = null;
+  function audio() {
+    const A = window.AudioContext || window.webkitAudioContext; if (!A) return null;
+    if (AUDIO && AUDIO.state === "closed") AUDIO = null;
+    return AUDIO || (AUDIO = new A());
+  }
+  function somDeFundo(liga) {
+    try {
+      if (!liga) { if (MUDO) MUDO.pause(); return; }
+      if (!MUDO) {
+        const n = 8000, b = new Uint8Array(44 + n), v = new DataView(b.buffer), txt = (o, t) => [...t].forEach((c, i) => { b[o + i] = c.charCodeAt(0); });
+        txt(0, "RIFF"); v.setUint32(4, 36 + n, true); txt(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+        v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); txt(36, "data"); v.setUint32(40, n, true); b.fill(128, 44);
+        MUDO = new Audio(URL.createObjectURL(new Blob([b], { type: "audio/wav" }))); MUDO.loop = true; MUDO.setAttribute("playsinline", "");
+      }
+      MUDO.play().catch(() => {});
+    } catch (e) {}
+  }
+  // ao voltar para o app (depois de bloquear a tela ou de uma ligação), o som feito pelo app volta a andar
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && AUDIO && AUDIO.state !== "running") AUDIO.resume().catch(() => {}); });
   function destravaSom() {
     try {
       if (navigator.audioSession) navigator.audioSession.type = "playback";
-      const ctx = audio(); if (!ctx) return; if (ctx.state !== "running") ctx.resume();
+      const ctx = audio(); if (!ctx) return; if (ctx.state !== "running") ctx.resume().catch(() => {});
       const b = ctx.createBufferSource(); b.buffer = ctx.createBuffer(1, 1, 22050); b.connect(ctx.destination); b.start(0);
     } catch (e) {}
   }
@@ -3024,7 +3046,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     aurora: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], pad: [[880, 1108.7, 1318.5], .006, 18], estrelas: [6, .045, 1400, 2800], desce: 1800 }
   };
   function tocarSom(nome) {
-    const ctx = audio(); if (!ctx) return null; if (ctx.state === "suspended") ctx.resume();
+    const ctx = audio(); if (!ctx) return null; if (ctx.state !== "running") ctx.resume().catch(() => {});
     const t = ctx.currentTime, out = ctx.createGain(), nos = [];
     out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 3); out.connect(ctx.destination);
     const fonte = marrom => { const s = ctx.createBufferSource(); s.buffer = ruido(ctx, 5, marrom); s.loop = true; s.start(); nos.push(s); return s; };
@@ -3215,10 +3237,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         if (alarme && Date.now() >= alarme) { alarme = 0; $("#desp").setAttribute("aria-pressed", "false"); toca(); }
       }, 10000);
       ["#relogio2", "#relogio3"].forEach(s => { $(s).textContent = agoraHM(); });
-      aoFechar = () => { pararSom(); pararTambor(); pararSino(); clearInterval(relogio); document.removeEventListener("visibilitychange", vis); try { if (lock) lock.release(); } catch (e) {} };
+      aoFechar = () => { somDeFundo(false); pararSom(); pararTambor(); pararSino(); clearInterval(relogio); document.removeEventListener("visibilitychange", vis); try { if (lock) lock.release(); } catch (e) {} };
       d.addEventListener("click", e => {
         const b = e.target.closest("button"); if (!b) return;
-        destravaSom();
+        destravaSom(); somDeFundo(true);
         if (b.dataset.check) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true");
         else if (b.dataset.tambor) {
           const era = tambor && tambor.dataset.k; pararTambor(); if (era === b.dataset.tambor) return;
