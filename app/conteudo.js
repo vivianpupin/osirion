@@ -37,7 +37,7 @@ window.ARHAT = (function () {
     ]
   };
   const DIALOGO = {
-    k: "dialogo", ilus: "olho", ico: "luz", nome: "Parar o diálogo interno", det: "Caminhar em silêncio, sem nomear",
+    k: "dialogo", ilus: "montanha-fita", ico: "luz", nome: "Parar o diálogo interno", det: "Caminhar em silêncio, sem nomear",
     texto: [
       { p: "Dom Juan dizia que o mundo se mantém como o conhecemos porque falamos dele o tempo todo, por dentro. Quando essa conversa para, a percepção se abre, e é nesse silêncio que se aprende a sonhar." },
       { p: "Saia para caminhar devagar, de preferência num lugar com árvores ou céu aberto." },
@@ -48,7 +48,7 @@ window.ARHAT = (function () {
     ]
   };
   const VER = {
-    k: "ver", ilus: "olho", ico: "luz", nome: "Ver, não só olhar", det: "O olhar que abrange tudo em volta",
+    k: "ver", ilus: "fita-estrela-dourada", ico: "luz", nome: "Ver, não só olhar", det: "O olhar que abrange tudo em volta",
     texto: [
       { p: "Olhar é fixar uma coisa e dar nome a ela. Ver é perceber tudo de uma vez, sem escolher. Nos livros de Castaneda, ver é a percepção do guerreiro: direta, sem o filtro das palavras." },
       { p: "Sente-se num lugar tranquilo, com a coluna ereta, e escolha um ponto à sua frente." },
@@ -402,10 +402,10 @@ window.ARHAT = (function () {
     { nome: "Corpo dormindo, mente acordada", som: "binaural", afirm: ["O meu corpo dorme e eu fico acordado.", "Eu sou mais do que o meu corpo físico."], de: "Robert Monroe", ilus: "figura-deitada",
       texto: "Monroe chamou de Foco 10 o estado em que o corpo adormece e a mente continua alerta. É a base de todas as saídas: sem ele, a consciência dorme junto com o corpo.",
       passos: ["Deite de barriga para cima e relaxe parte por parte, dos pés até a cabeça.", "Mantenha um ponto de atenção leve, por exemplo a respiração ou um ponto escuro à frente dos olhos fechados.", "Deixe o corpo ficar pesado e dormente, até não sentir mais onde estão as mãos. Não se mexa.", "Se a mente começar a cochilar, aprofunde a atenção sem abrir os olhos. Fique nesse limiar o máximo que puder."] },
-    { nome: "A ressonância", afirm: ["Eu entro na vibração do som.", "O som solta o meu corpo."], de: "Robert Monroe", ilus: "figura-estrela",
+    { nome: "A ressonância", afirm: ["Eu entro na vibração do som.", "O som solta o meu corpo."], de: "Robert Monroe", ilus: "ondas",
       texto: "Antes de praticar, Monroe usava um canto grave e longo para fazer o corpo vibrar por dentro. A vibração do som prepara o corpo para a vibração da saída.",
       passos: ["Deitado, inspire fundo pelo nariz.", "Solte o ar num som grave e longo, com a boca quase fechada, como um “ommm” baixinho.", "Sinta onde o corpo vibra: o peito, a garganta, a cabeça. Imagine essa vibração se espalhando pelo corpo inteiro.", "Faça de cinco a dez vezes. Depois fique em silêncio, ouvindo o zumbido que continua por dentro."] },
-    { nome: "Rolar para fora", afirm: ["Eu rolo para fora do corpo.", "Agora eu estou fora do corpo."], de: "Robert Monroe", ilus: "salto-figura",
+    { nome: "Rolar para fora", afirm: ["Eu rolo para fora do corpo.", "Agora eu estou fora do corpo."], de: "Robert Monroe", ilus: "mergulho-figura",
       texto: "Quando o corpo já dorme e as vibrações chegam, Monroe ensinava a sair do jeito mais simples: rolar de lado, como quem vira na cama, mas sem mexer nenhum músculo.",
       passos: ["Chegue ao estado de corpo dormindo e mente acordada.", "Quando sentir vibrações ou o corpo muito pesado, não se mexa.", "Imagine e sinta, com toda a atenção, que está virando de lado na cama, devagar.", "Continue o giro até sentir que deslizou para fora, como uma folha que escorrega de dentro de um livro. Se o corpo físico se mexer, relaxe e tente de novo quando a sensação voltar."] },
     { nome: "Elevar-se", afirm: ["Eu sou leve e subo.", "Eu flutuo até o teto."], de: "Robert Monroe", ilus: "figura-voo",
@@ -527,7 +527,7 @@ window.ARHAT = (function () {
   };
   // O homem pássaro: uma prática do dia diferente a cada técnica (os capítulos de Viagem a Ixtlan, 1972)
   const HISTORIA = {
-    k: "historia", ilus: "maos-chama", ico: "pena", nome: "Apagar a história pessoal", det: "Não repetir hoje uma história sobre si mesmo",
+    k: "historia", ilus: "fita-estrela", ico: "pena", nome: "Apagar a história pessoal", det: "Não repetir hoje uma história sobre si mesmo",
     texto: [
       { p: "Em Viagem a Ixtlan, no capítulo “Apagar a história pessoal”, Don Juan ensina a deixar o passado de lado e a não alimentar a imagem que os outros fazem de nós: assim se fica mais livre e menos previsível." },
       { p: "Hoje, repare numa história sobre você que você costuma contar: “eu sou assim”, “comigo sempre acontece isso”." },
@@ -536,7 +536,7 @@ window.ARHAT = (function () {
     ]
   };
   const MORTE = {
-    k: "conselheira", ilus: "maos-chama", ico: "pena", nome: "A conselheira à esquerda", det: "Dar peso a cada gesto do dia",
+    k: "conselheira", ilus: "figura-fio", ico: "pena", nome: "A conselheira à esquerda", det: "Dar peso a cada gesto do dia",
     texto: [
       { p: "Em Viagem a Ixtlan, no capítulo “A morte é uma conselheira”, Don Juan diz que a morte está sempre à nossa esquerda, a um braço de distância, e que lembrar dela tira a mesquinharia e dá peso a cada ato." },
       { p: "Aqui não se trata de pensar em morrer: é lembrar que este dia é precioso e não volta." },
@@ -554,7 +554,7 @@ window.ARHAT = (function () {
     ]
   };
   const MARCHA = {
-    k: "marcha", ilus: "maos-chama", ico: "pena", nome: "O passo atento", det: "Caminhar confiando no corpo",
+    k: "marcha", ilus: "figura-descendo", ico: "pena", nome: "O passo atento", det: "Caminhar confiando no corpo",
     texto: [
       { p: "Em Viagem a Ixtlan, no capítulo “A marcha de poder”, Don Juan ensina a correr no escuro, em terreno difícil, com os olhos fixos no chão logo à frente, confiando no corpo e não na vista." },
       { p: "O app não indica correr no escuro: esta é uma adaptação segura. Caminhe devagar num lugar plano e iluminado." },

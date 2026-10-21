@@ -364,7 +364,7 @@ window.CAPSULAS = [
     { t: "leva", texto: "O que os antigos temiam é a porta que o viajante usa." }
   ] },
   // Os ensinamentos que abriam o app (a travessia antiga) viraram cápsulas: entram na programação, na ordem do Arhat.
-  { dia: 47, ilus: "maos-chama", tema: "viajantes", titulo: "Procure as suas mãos", minutos: 1, cartas: [
+  { dia: 47, ilus: "fita-estrela-2", tema: "viajantes", titulo: "Procure as suas mãos", minutos: 1, cartas: [
     { t: "abre", titulo: "Procure as suas mãos", sub: "O primeiro portão" },
     { t: "fala", texto: "Nos livros de Carlos Castaneda, Don Juan fala de portões do sonhar. O primeiro se abre quando você percebe que está adormecendo." },
     { t: "fala", texto: "E ele dá um conselho que ficou famoso: procurar as próprias mãos dentro do sonho." },
