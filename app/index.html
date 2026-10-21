@@ -1015,6 +1015,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo3 { grid-template-columns: repeat(3, 1fr); }
 .som-noite { display: flex; flex-direction: column; gap: 10px; }
+/* play e pause nos botões dos sons e dos tambores */
+.pp { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid currentColor; font-size: 10px; line-height: 1; margin-right: 8px; vertical-align: middle; flex: none; }
+.pp::before { content: "\25B6\FE0E"; padding-left: 2px; }
+[data-estado="tocando"] .pp::before { content: "❚❚"; padding-left: 0; font-size: 9px; letter-spacing: -1px; }
+[data-estado="preparando"] .pp::before { content: "…"; padding: 0 0 4px; }
+[data-estado="preparando"] .pp { animation: gravando 1.4s ease-in-out infinite; }
+.som-unico { position: relative; padding-left: 62px !important; }
+.som-unico .pp { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; font-size: 12px; margin: 0; }
+.sons.tempo3 [data-tambor] .pp { display: grid; margin: 0 auto 4px; }
 .som-unico { display: flex; flex-direction: column; gap: 4px; padding: 16px; border-radius: 18px; border: 1px solid #5a1c1f; background: radial-gradient(120% 120% at 0% 0%, #2a0b0d, #140405); color: #f2b8b9; text-align: left; }
 .som-unico b { font-family: var(--display); font-weight: 400; font-size: 20px; }
 .som-unico span { font-size: 13px; color: #c97a7c; line-height: 1.45; }
@@ -1980,16 +1989,28 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (AUDIO && AUDIO.state === "closed") AUDIO = null;
     return AUDIO || (AUDIO = new A());
   }
+  let URL_MUDO = null;
+  function urlMudo() {
+    if (URL_MUDO) return URL_MUDO;
+    const n = 8000, b = new Uint8Array(44 + n), v = new DataView(b.buffer), txt = (o, t) => [...t].forEach((c, i) => { b[o + i] = c.charCodeAt(0); });
+    txt(0, "RIFF"); v.setUint32(4, 36 + n, true); txt(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); txt(36, "data"); v.setUint32(40, n, true); b.fill(128, 44);
+    return (URL_MUDO = URL.createObjectURL(new Blob([b], { type: "audio/wav" })));
+  }
   function somDeFundo(liga) {
     try {
       if (!liga) { if (MUDO) MUDO.pause(); return; }
-      if (!MUDO) {
-        const n = 8000, b = new Uint8Array(44 + n), v = new DataView(b.buffer), txt = (o, t) => [...t].forEach((c, i) => { b[o + i] = c.charCodeAt(0); });
-        txt(0, "RIFF"); v.setUint32(4, 36 + n, true); txt(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
-        v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); txt(36, "data"); v.setUint32(40, n, true); b.fill(128, 44);
-        MUDO = new Audio(URL.createObjectURL(new Blob([b], { type: "audio/wav" }))); MUDO.loop = true; MUDO.setAttribute("playsinline", "");
-      }
+      if (!MUDO) { MUDO = new Audio(urlMudo()); MUDO.loop = true; MUDO.setAttribute("playsinline", ""); }
       MUDO.play().catch(() => {});
+    } catch (e) {}
+  }
+  // o que está tocando aparece na tela de bloqueio do celular, com play, pause e parar
+  function sessaoMidia(titulo, pausar, continuar, parar) {
+    const m = navigator.mediaSession; if (!m) return;
+    try {
+      if (!titulo) { m.metadata = null; ["play", "pause", "stop"].forEach(a => m.setActionHandler(a, null)); return; }
+      m.metadata = new MediaMetadata({ title: titulo, artist: "Osirion", album: "A noite", artwork: [{ src: "icone-512.png", sizes: "512x512", type: "image/png" }] });
+      m.setActionHandler("play", continuar); m.setActionHandler("pause", pausar); m.setActionHandler("stop", parar);
     } catch (e) {}
   }
   // ao voltar para o app (depois de bloquear a tela ou de uma ligação), o som feito pelo app volta a andar
@@ -3055,10 +3076,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     buraco: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], rumor: [.3, 30], desce: 1800 },
     aurora: { pares: [[70, .24, 2, 1], [140, .12, 2, 1]], surf: { p: 26, v: .16 }, drone: [[35, .1]], pad: [[880, 1108.7, 1318.5], .006, 18], estrelas: [6, .045, 1400, 2800], desce: 1800 }
   };
-  function tocarSom(nome) {
-    const ctx = audio(); if (!ctx) return null; if (ctx.state !== "running") ctx.resume().catch(() => {});
-    const t = ctx.currentTime, out = ctx.createGain(), nos = [];
-    out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 3); out.connect(ctx.destination);
+  // Monta o som num contexto de áudio "offline": o resultado vira uma gravação (ver gravarSom).
+  // op.fase "entrada": o começo, com as subidas e descidas (comprimidas por op.fator); "fundo": o estado final, para repetir.
+  function montarSom(nome, ctx, saida, op) {
+    const t = 0, out = ctx.createGain(), nos = [], fundo = op.fase === "fundo", fator = op.fator || 1, fimAg = op.dur + 5;
+    // uma subida ou descida lenta; no trecho de fundo ela já chegou ao fim
+    const rampa = (p, a, b, dur) => { if (fundo) p.setValueAtTime(b, t); else { p.setValueAtTime(a, t); p.linearRampToValueAtTime(b, t + dur * fator); } };
+    if (fundo) out.gain.value = 1; else { out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 3); }
+    out.connect(saida);
     const fonte = marrom => { const s = ctx.createBufferSource(); s.buffer = ruido(ctx, 5, marrom); s.loop = true; s.start(); nos.push(s); return s; };
     const ganho = v => { const g = ctx.createGain(); g.gain.value = v; return g; };
     const filtro = (tipo, f) => { const q = ctx.createBiquadFilter(); q.type = tipo; q.frequency.value = f; return q; };
@@ -3067,8 +3092,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const S = SOM[nome], desce = S.desce || 1200, junta = ctx.createChannelMerger(2); junta.connect(out);
       (S.pares || []).forEach(([base, v, b0, b1]) => {
         const esq = osc(base), dir = osc(base + b0), ge = ganho(v), gd = ganho(v), alto = S.sobe || 1;
-        esq.frequency.setValueAtTime(base, t); esq.frequency.linearRampToValueAtTime(base * alto, t + desce);
-        dir.frequency.setValueAtTime(base + b0, t); dir.frequency.linearRampToValueAtTime(base * alto + b1, t + desce);
+        rampa(esq.frequency, base, base * alto, desce); rampa(dir.frequency, base + b0, base * alto + b1, desce);
         esq.connect(ge); ge.connect(junta, 0, 0); dir.connect(gd); gd.connect(junta, 0, 1);
       });
       const rosaFiltrada = (lo, hi, v) => { const s = ctx.createBufferSource(); s.buffer = rosa(ctx, 9); s.loop = true; s.start(); nos.push(s);
@@ -3082,11 +3106,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       (S.drone || []).forEach(([f, v]) => { const g = ganho(v); osc(f).connect(g); g.connect(out); });
       if (S.vib) { // a vibração grave que pulsa no corpo e vai crescendo
         const [f, v, cresce] = S.vib, g = ctx.createGain(), am = ganho(.5), lfo = osc(4), lg = ganho(.5);
-        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + cresce); lfo.connect(lg); lg.connect(am.gain); osc(f).connect(am); am.connect(g); g.connect(out);
+        rampa(g.gain, 0, v, cresce); lfo.connect(lg); lg.connect(am.gain); osc(f).connect(am); am.connect(g); g.connect(out);
       }
-      if (S.zum) { const [v, cresce] = S.zum, g = rosaFiltrada(3000, 9000, 0); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + cresce); g.connect(out); }
-      if (S.ar) { const g = rosaFiltrada(400, 8000, 0); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(S.ar, t + desce); g.connect(out); }
-      if (S.chuva) { const c = tocarSom("chuva"); if (c) nos.push({ stop() { c.parar(); } }); }
+      if (S.zum) { const [v, cresce] = S.zum, g = rosaFiltrada(3000, 9000, 0); rampa(g.gain, 0, v, cresce); g.connect(out); }
+      if (S.ar) { const g = rosaFiltrada(400, 8000, 0); rampa(g.gain, 0, S.ar, desce); g.connect(out); }
+      if (S.chuva) montarSom("chuva", ctx, out, op);
       // um eco longo, como o espaço (para as estrelinhas e o pulsar)
       let eco = null;
       if (S.estrelas || S.pulsar || S.esferas) { const dl = ctx.createDelay(2), fb = ganho(.5), molhado = ganho(.6); dl.delayTime.value = .47; dl.connect(fb); fb.connect(dl); dl.connect(molhado); molhado.connect(out); eco = ganho(1); eco.connect(dl); eco.connect(out); }
@@ -3108,15 +3132,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const estrela = q => { const o = ctx.createOscillator(), g = ctx.createGain(), f = f0 + Math.random() * (f1 - f0); o.frequency.value = f;
           g.gain.setValueAtTime(0, q); g.gain.linearRampToValueAtTime(v, q + .01); g.gain.exponentialRampToValueAtTime(.0003, q + 2.8);
           o.connect(g); g.connect(painel(Math.random() * 2 - 1)); g.connect(eco); o.start(q); o.stop(q + 3); };
-        let prox = t + 3; const agenda = () => { while (prox < ctx.currentTime + 30) { estrela(prox); prox += (60 / porMin) * (.4 + Math.random() * 1.2); } };
-        agenda(); const intE = setInterval(agenda, 10000); nos.push({ stop() { clearInterval(intE); } });
+        let prox = t + 3; const agenda = () => { while (prox < fimAg) { estrela(prox); prox += (60 / porMin) * (.4 + Math.random() * 1.2); } };
+        agenda();
       }
       if (S.pulsar) { // uma estrela que pulsa devagar, como um farol
         const [iv, v] = S.pulsar;
         const pulso = q => [[880, v], [440, v * .6]].forEach(([f, vv]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f;
           g.gain.setValueAtTime(0, q); g.gain.linearRampToValueAtTime(vv, q + .02); g.gain.exponentialRampToValueAtTime(.0003, q + 1.6); o.connect(g); g.connect(eco); o.start(q); o.stop(q + 1.7); });
-        let prox = t + 2; const agenda = () => { while (prox < ctx.currentTime + 20) { pulso(prox); prox += iv; } };
-        agenda(); const intP = setInterval(agenda, 8000); nos.push({ stop() { clearInterval(intP); } });
+        let prox = t + 2; const agenda = () => { while (prox < fimAg) { pulso(prox); prox += iv; } };
+        agenda();
       }
       if (S.esferas) { // a série harmônica dos planetas: notas que entram e saem como órbitas
         const [base, harm, v] = S.esferas;
@@ -3131,23 +3155,24 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           g.gain.setValueAtTime(0, quando); g.gain.linearRampToValueAtTime(v, quando + .02); g.gain.exponentialRampToValueAtTime(.0005, quando + 16);
           [[1, 1], [2.76, .45], [5.4, .2]].forEach(([m, vv]) => { const o = ctx.createOscillator(), go = ctx.createGain(); o.frequency.value = f * m; go.gain.value = vv; o.connect(go); go.connect(g); o.start(quando); o.stop(quando + 17); });
         };
-        let prox = t + 4; const agenda = () => { while (prox < ctx.currentTime + 60) { taca(prox); prox += a + Math.random() * (b - a); } };
-        agenda(); const intT = setInterval(agenda, 20000); nos.push({ stop() { clearInterval(intT); } });
+        let prox = t + 4; const agenda = () => { while (prox < fimAg) { taca(prox); prox += a + Math.random() * (b - a); } };
+        agenda();
       }
-      out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 20);
+      if (!fundo) { out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(1, t + 20); }
     } else if (nome === "chuva") {
       // a chuva: um chiado rosado e macio dos dois lados, um rumor grave e gotinhas de água (estalos curtos de ruído, sem tom)
       const junta = ctx.createChannelMerger(2); junta.connect(out);
       [0, 1].forEach(lado => { const s = ctx.createBufferSource(); s.buffer = rosa(ctx, 7 + lado); s.loop = true; s.start(); nos.push(s);
         const hp = filtro("highpass", 250), lp = filtro("lowpass", 4200), g = ganho(.55); s.connect(hp); hp.connect(lp); lp.connect(g); g.connect(junta, 0, lado); });
       const lr = filtro("lowpass", 400), gr = ganho(.25); fonte(true).connect(lr); lr.connect(gr); gr.connect(out);
-      const estalo = ruido(ctx, .03, false);
-      const gota = quando => { const s = ctx.createBufferSource(); s.buffer = estalo; s.playbackRate.value = .6 + Math.random() * .8;
-        const bp = filtro("bandpass", 900 + Math.random() * 2100), g = ctx.createGain(), p = ctx.createStereoPanner ? ctx.createStereoPanner() : null, v = .04 + Math.random() * .12;
-        bp.Q.value = 1.2; g.gain.setValueAtTime(v, quando); g.gain.exponentialRampToValueAtTime(.0005, quando + .012 + Math.random() * .02);
-        s.connect(bp); bp.connect(g); if (p) { p.pan.value = Math.random() * 2 - 1; g.connect(p); p.connect(out); } else g.connect(out); s.start(quando); s.stop(quando + .05); };
-      let prox = t + 1; const agenda = () => { while (prox < ctx.currentTime + 3) { gota(prox); prox += Math.random() * .11; } };
-      agenda(); const intG = setInterval(agenda, 1000); nos.push({ stop() { clearInterval(intG); } });
+      // as gotinhas já vêm prontas num trecho de 8 s que se repete (cada uma: um estalo curto de ruído filtrado, num lugar do espaço)
+      const dur = 8, nG = ctx.sampleRate * dur, gb = ctx.createBuffer(2, nG, ctx.sampleRate), L = gb.getChannelData(0), Rr = gb.getChannelData(1);
+      for (let q = Math.random() * .1; q < dur - .05; q += Math.random() * .11) {
+        const i0 = Math.floor(q * ctx.sampleRate), len = Math.floor((.012 + Math.random() * .02) * ctx.sampleRate), v = .04 + Math.random() * .12, pan = Math.random();
+        const a1 = Math.exp(-2 * Math.PI * (900 + Math.random() * 2100) / ctx.sampleRate); let y = 0, x0 = 0;
+        for (let i = 0; i < len && i0 + i < nG; i++) { const w = Math.random() * 2 - 1, hp = w - x0; x0 = w; y = a1 * y + (1 - a1) * hp; const z = y * v * 3 * Math.exp(-i / (len / 4)); L[i0 + i] += z * (1 - pan); Rr[i0 + i] += z * pan; }
+      }
+      const gotas = ctx.createBufferSource(); gotas.buffer = gb; gotas.loop = true; gotas.connect(out); gotas.start(); nos.push(gotas);
     } else if (nome === "mar") {
       const lp = filtro("lowpass", 700), g = ganho(.35), onda = osc(.08), prof = ganho(.3), prof2 = ganho(450);
       onda.connect(prof); prof.connect(g.gain); onda.connect(prof2); prof2.connect(lp.frequency);
@@ -3165,15 +3190,44 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       sapoLfo.connect(sapoP); sapoP.connect(sapoO.frequency); sapoG.gain.value = 0; sapoO.connect(sapoG); sapoG.connect(sapoLp); sapoLp.connect(out);
       let sapoProx = t + 3;
       const agenda = () => {
-        const ate = ctx.currentTime + 4;
+        const ate = fimAg;
         grilos.forEach(c => { while (c.prox < ate) { for (let k = 0; k < c.pulsos; k++) { const a = c.prox + k / c.rh, d = .55 / c.rh;
           c.g.gain.setValueAtTime(0, a); c.g.gain.linearRampToValueAtTime(c.v, a + d / 2); c.g.gain.linearRampToValueAtTime(0, a + d); }
           c.prox += c.iv * (.85 + Math.random() * .3); } });
         while (sapoProx < ate) { for (let k = 0; k < 3; k++) { const a = sapoProx + k * .18; sapoG.gain.setValueAtTime(0, a); sapoG.gain.linearRampToValueAtTime(.03, a + .045); sapoG.gain.linearRampToValueAtTime(0, a + .09); } sapoProx += 4.3 + Math.random() * 2; }
       };
-      agenda(); const intM = setInterval(agenda, 2000); nos.push({ stop() { clearInterval(intM); } });
+      agenda();
     }
-    return { parar() { const a = ctx.currentTime; out.gain.cancelScheduledValues(a); out.gain.setValueAtTime(out.gain.value, a); out.gain.linearRampToValueAtTime(0, a + 2); setTimeout(() => { nos.forEach(n => { try { n.stop(); } catch (e) {} }); out.disconnect(); }, 2300); } };
+  }
+  // ---------- Os sons viram gravações: tocam com a tela desligada, com play e pause (também no bloqueio do celular) ----------
+  // A entrada traz a descida dos tons (até 6 min); depois um trecho de fundo de 90 s se repete sem emenda até o fim do tempo.
+  const ENTRADA_SOM = 360, FUNDO_SOM = 90, EMENDA = 4, gravados = {};
+  function wavDe(buf, emenda, someNoFim) {
+    const sr = buf.sampleRate, nc = buf.numberOfChannels, J = Math.round(emenda * sr), n = buf.length - J, F = someNoFim ? Math.round(.3 * sr) : 0;
+    const ch = Array.from({ length: nc }, (_, c) => buf.getChannelData(c)), v = new DataView(new ArrayBuffer(44 + n * nc * 2));
+    const txt = (o, x) => [...x].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)));
+    txt(0, "RIFF"); v.setUint32(4, 36 + n * nc * 2, true); txt(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, nc, true);
+    v.setUint32(24, sr, true); v.setUint32(28, sr * nc * 2, true); v.setUint16(32, nc * 2, true); v.setUint16(34, 16, true); txt(36, "data"); v.setUint32(40, n * nc * 2, true);
+    let o = 44;
+    for (let i = 0; i < n; i++) for (let c = 0; c < nc; c++) {
+      let x = ch[c][i];
+      // a emenda: o começo se mistura com o fim, para o trecho repetir sem estalo
+      if (i < J) { const k = i / J; x = x * Math.sin(k * Math.PI / 2) + ch[c][n + i] * Math.cos(k * Math.PI / 2); }
+      if (i >= n - F) x *= (n - i) / F;
+      v.setInt16(o, Math.max(-1, Math.min(1, x)) * 32767, true); o += 2;
+    }
+    return URL.createObjectURL(new Blob([v], { type: "audio/wav" }));
+  }
+  async function gravarSom(nome) {
+    if (gravados[nome]) return gravados[nome];
+    // guarda só os dois últimos (cada um ocupa memória)
+    Object.keys(gravados).slice(0, -1).forEach(k => { URL.revokeObjectURL(gravados[k].entrada); URL.revokeObjectURL(gravados[k].fundo); delete gravados[k]; });
+    const A = window.OfflineAudioContext || window.webkitOfflineAudioContext, S = SOM[nome], sr = S ? 16000 : 22050;
+    const desce = S ? Math.max(S.desce || 1200, ...(S.vib ? [S.vib[2]] : []), ...(S.zum ? [S.zum[1]] : [])) : 1;
+    const entrada = S ? ENTRADA_SOM : 30, fator = Math.min(1, (entrada - 20) / desce);
+    const fase = async (f, dur) => { const ctx = new A(2, Math.ceil(dur * sr), sr); montarSom(nome, ctx, ctx.destination, { fase: f, dur, fator }); return ctx.startRendering(); };
+    const e = await fase("entrada", entrada), fu = await fase("fundo", FUNDO_SOM + EMENDA);
+    return (gravados[nome] = { entrada: wavDe(e, 0, true), fundo: wavDe(fu, EMENDA, false) });
   }
 
   // ---------- A jornada do tambor: gravações de tambor (em sons/), tocadas direto, sem guardar no celular ----------
@@ -3194,7 +3248,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ["vazioprofundo", "O vazio profundo", "Ainda mais lento e mais grave, com estrelas raríssimas."], ["poeira", "Poeira estelar", "O vazio com uma poeira de brilhos bem baixinhos, como estrelas muito longe."],
       ["cosmos", "O silêncio do cosmos", "O vazio com um acorde muito grave, que mais se sente do que se ouve."], ["buraco", "O buraco negro", "Um rumor bem grave girando devagar em volta da cabeça."],
       ["aurora", "Aurora", "Um véu agudo e etéreo que aparece e some, como a luz de uma aurora."]]],
-    ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo por 40 minutos, o surf e as taças."]]]
+    ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo devagar, o surf e as taças."]]]
   ];
   const SONS = SONS_GRUPOS.flatMap(g => g[1]);
   // ---------- Os sons do livro: não aparecem todos de uma vez ----------
@@ -3225,10 +3279,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const k0 = somDaNoite(); if (!k0) return "";
     const s0 = SONS.find(x => x[0] === k0), outros = sonsDescobertos().filter(x => x[0] !== k0), fone = sonsDescobertos().some(x => SOM[x[0]]) || SOM[k0];
     return `<section class="som-noite"><span class="rotulo">O som desta noite</span>
-      <button class="som-unico" data-som="${k0}" aria-pressed="false"><b>${esc(s0[1])}</b><span>${esc(s0[2])}${SOM[k0] ? " Com fone de ouvido." : ""}</span></button>
+      <button class="som-unico" data-som="${k0}" aria-pressed="false"><span class="pp" aria-hidden="true"></span><b>${esc(s0[1])}</b><span>${esc(s0[2])}${SOM[k0] ? " Com fone de ouvido." : ""}</span></button>
       <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div>
       <p class="suave miuda" id="aviso-fone" hidden></p>
-      ${outros.length ? `<details class="como-sons"><summary>Os sons que você já descobriu · ${outros.length + 1} de ${SONS.length}</summary><div class="sons quatro">${outros.map(([k, n]) => `<button data-som="${k}" aria-pressed="false">${esc(n)}</button>`).join("")}</div></details>` : ""}
+      ${outros.length ? `<details class="como-sons"><summary>Os sons que você já descobriu · ${outros.length + 1} de ${SONS.length}</summary><div class="sons quatro">${outros.map(([k, n]) => `<button data-som="${k}" aria-pressed="false"><span class="pp" aria-hidden="true"></span>${esc(n)}</button>`).join("")}</div></details>` : ""}
       ${fone ? '<details class="como-sons"><summary>Como funcionam os sons com fone</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone. O som de ondas ao fundo acalma e ajuda a não se distrair. É só deitar, fechar os olhos e deixar tocar.</p></details>' : ""}</section>`;
   }
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
@@ -3247,7 +3301,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         ${secaoSons()}
         ${livre("tambor") ? `<section class="tambor"><span class="rotulo">Jornada do tambor</span>
           <p class="suave">O tambor bate firme e constante, como nas jornadas xamânicas. Deite, feche os olhos e deixe a batida levar. Quando o tambor parar, volte devagar.</p>
-          <div class="sons tempo3">${TAMBORES.map(([k, n, m]) => `<button data-tambor="${k}" aria-pressed="false">${n}<small>${m} min</small></button>`).join("")}</div></section>` : ""}
+          <div class="sons tempo3">${TAMBORES.map(([k, n, m]) => `<button data-tambor="${k}" aria-pressed="false"><span class="pp" aria-hidden="true"></span>${n}<small>${m} min</small></button>`).join("")}</div></section>` : ""}
         ${livre("viagens") ? `<section><span class="rotulo">Viagem guiada</span><div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div></section>` : ""}
         ${!livre("despertar") ? "" : `<section><span class="rotulo">Despertar de madrugada</span>
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>
@@ -3270,8 +3324,21 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const vis = () => { if (document.visibilityState === "visible" && d.isConnected) pede(); };
       document.addEventListener("visibilitychange", vis); pede();
       let tambor = null;
-      const pararTambor = () => { if (tambor) { tambor.pause(); tambor.removeAttribute("src"); tambor.load(); } tambor = null; d.querySelectorAll("[data-tambor]").forEach(x => x.setAttribute("aria-pressed", "false")); };
-      const pararSom = () => { if (som) som.parar(); som = null; nomeSom = null; clearTimeout(fimSom); d.querySelectorAll("[data-som]").forEach(b => b.setAttribute("aria-pressed", "false")); };
+      const pararTambor = () => { if (tambor) { tambor.pause(); tambor.removeAttribute("src"); tambor.load(); } tambor = null; d.querySelectorAll("[data-tambor]").forEach(x => { x.setAttribute("aria-pressed", "false"); x.dataset.estado = ""; }); if (!nomeSom) sessaoMidia(null); };
+      const estadoTambor = e => { const b = d.querySelector(`[data-tambor="${tambor && tambor.dataset.k}"]`); if (b) b.dataset.estado = e; };
+      const pausarTambor = () => { if (tambor && !tambor.paused) { tambor.pause(); estadoTambor("pausado"); } };
+      const continuarTambor = () => { if (tambor && tambor.paused) { tambor.play().catch(() => {}); estadoTambor("tocando"); } };
+      // o som toca num <audio> (uma gravação feita pelo app): continua com a tela desligada
+      const el1 = new Audio(), el2 = new Audio(); [el1, el2].forEach(x => { x.setAttribute("playsinline", ""); x.preload = "auto"; });
+      let atual = null, pausadoEm = 0, fimEm = 0;
+      const marca = estado => d.querySelectorAll("[data-som]").forEach(x => { const e = x.dataset.som === nomeSom ? estado : ""; x.dataset.estado = e; x.setAttribute("aria-pressed", e ? "true" : "false"); });
+      const pararSom = () => { [el1, el2].forEach(x => { x.pause(); x.onended = null; }); atual = null; som = null; nomeSom = null; pausadoEm = 0; fimEm = 0; clearInterval(fimSom); marca(""); if (!tambor) sessaoMidia(null); };
+      const confere = () => { if (fimEm && !pausadoEm && Date.now() >= fimEm) pararSom(); };
+      [el1, el2].forEach(x => x.addEventListener("timeupdate", confere));
+      const pausar = () => { if (!atual || pausadoEm) return; atual.pause(); pausadoEm = Date.now(); marca("pausado"); };
+      const continuar = () => { if (!atual || !pausadoEm) return; fimEm += Date.now() - pausadoEm; pausadoEm = 0; atual.play().catch(() => {}); marca("tocando"); };
+      // o iPhone só deixa um player tocar depois de um toque: os dois são destravados no primeiro toque
+      const destrava = () => [el1, el2].forEach(x => { if (!x.dataset.ok) { x.dataset.ok = "1"; x.src = urlMudo(); x.play().catch(() => {}); } });
       const pararSino = () => { clearInterval(tocando); tocando = 0; };
       const proximo = () => { const [h, m] = despertar().split(":").map(Number), x = new Date(); x.setHours(h, m, 0, 0); if (x <= new Date()) x.setDate(x.getDate() + 1); return x.getTime(); };
       const toca = () => { pararSom(); cobre("#breu", false); cobre("#acorda", true); let n = 0; sino(); vibrar([200, 100, 200]); tocando = setInterval(() => { if (++n > 9) return pararSino(); sino(); }, 7000); };
@@ -3286,18 +3353,33 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         destravaSom(); somDeFundo(true);
         if (b.dataset.check) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true");
         else if (b.dataset.tambor) {
-          const era = tambor && tambor.dataset.k; pararTambor(); if (era === b.dataset.tambor) return;
-          pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + ".mp3"); tambor.dataset.k = b.dataset.tambor;
-          tambor.onended = pararTambor; tambor.play().catch(() => {}); b.setAttribute("aria-pressed", "true");
+          // tocar de novo no mesmo tambor pausa e continua
+          if (tambor && tambor.dataset.k === b.dataset.tambor) { tambor.paused ? continuarTambor() : pausarTambor(); return; }
+          pararTambor(); pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + ".mp3"); tambor.dataset.k = b.dataset.tambor; tambor.setAttribute("playsinline", "");
+          tambor.onended = pararTambor; tambor.play().catch(() => {}); b.setAttribute("aria-pressed", "true"); b.dataset.estado = "tocando";
+          sessaoMidia(b.textContent.replace(/\d+ min$/, "").trim() + " · jornada do tambor", pausarTambor, continuarTambor, pararTambor);
         }
         else if (b.dataset.som) {
-          const k = b.dataset.som; const era = nomeSom; pararSom(); pararTambor(); if (era === k) return;
-          som = tocarSom(k); nomeSom = k; b.setAttribute("aria-pressed", "true"); fimSom = setTimeout(pararSom, minutos * 6e4);
+          const k = b.dataset.som;
+          // o mesmo som: pausa e continua
+          if (k === nomeSom) { if (atual) pausadoEm ? continuar() : pausar(); return; }
+          pararSom(); pararTambor(); destrava();
+          nomeSom = som = k; marca("preparando");
+          const nomeBonito = (SONS.find(x => x[0] === k) || [, k])[1];
+          gravarSom(k).then(g => {
+            if (nomeSom !== k) return;
+            el1.loop = false; el1.src = g.entrada; el2.loop = true; el2.src = g.fundo;
+            el1.onended = () => { if (nomeSom === k && atual === el1) { atual = el2; el2.play().catch(() => {}); } };
+            atual = el1; el1.play().catch(() => {});
+            fimEm = Date.now() + minutos * 6e4; clearInterval(fimSom); fimSom = setInterval(confere, 5000);
+            marca("tocando"); sessaoMidia(nomeBonito, pausar, continuar, pararSom); descreve();
+          }).catch(() => { if (nomeSom === k) { pararSom(); const av = d.querySelector("#aviso-fone"); if (av) { av.textContent = "Não consegui preparar este som agora. Tente de novo."; av.hidden = false; } } });
           const av = d.querySelector("#aviso-fone"), sd = SONS.find(x => x[0] === k);
-          if (av && sd) { av.textContent = sd[2] + (SOM[k] ? " Use fone de ouvido: um tom em cada ouvido." : "") + " Toca pelo tempo escolhido e some devagar."; av.hidden = false; }
+          if (av && sd) { av.textContent = "Preparando o som, só alguns segundos…"; av.hidden = false; }
+          const descreve = () => { if (av && sd && nomeSom === k) av.textContent = sd[2] + (SOM[k] ? " Use fone de ouvido: um tom em cada ouvido." : "") + " Toca pelo tempo escolhido, mesmo com a tela desligada. Toque de novo para pausar."; };
         } else if (b.dataset.tempo) {
           minutos = +b.dataset.tempo; d.querySelectorAll("[data-tempo]").forEach(x => x.setAttribute("aria-pressed", x === b));
-          if (som) { clearTimeout(fimSom); fimSom = setTimeout(pararSom, minutos * 6e4); }
+          if (fimEm) fimEm = Date.now() + minutos * 6e4;
         } else if (b.id === "desp") {
           const liga = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", liga); alarme = liga ? proximo() : 0;
           b.querySelector("span").textContent = liga ? `Ligado. O sino toca às ${despertar()}. Toque para desligar.` : "Toque para ligar.";
