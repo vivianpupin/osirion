@@ -1569,8 +1569,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const atual = est.estiloVisto ? (est.estilo || "arhat") : null;
     abrirSobre(`<div class="tela escolha-trad">${est.estiloVisto ? voltar : ""}
       <span class="rotulo">${est.estiloVisto ? "Trocar de tradição" : "O começo da jornada"}</span>
-      <h1>Qual tradição você quer seguir?</h1>
-      <p class="suave">${["Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez", "Onze", "Doze"][ESTILOS.length - 1] || ESTILOS.length} universos guardam os segredos da noite. Escolha uma porta e atravesse.</p>
+      <h1>Há muitos caminhos para adentrar o outro lado… Escolha por qual.</h1>
+      <p class="suave">${["Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez", "Onze", "Doze"][ESTILOS.length - 1] || ESTILOS.length} universos guardam os segredos da noite.</p>
       <div class="trads">${ESTILOS.map(x => `<button class="trad ${x.id === atual ? "atual" : ""}" data-escolher-trad="${x.id}">
         <span class="trad-arte"><img src="${ILUS(x.ilus)}" alt=""></span><b>${esc(x.nome)}</b><span>${esc(x.chamada || x.sub)}</span>${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}</div>
       ${est.estiloVisto ? '<p class="suave miuda" style="text-align:center">O que você já fez fica guardado em “O que já passou”.</p>' : ""}</div>`);
