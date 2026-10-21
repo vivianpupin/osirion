@@ -1046,11 +1046,11 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .porta { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; padding: 0 2px; background: none; border: 0; color: var(--areia); cursor: pointer; animation: surge 1.6s ease both; }
 .porta:nth-child(1), .porta:nth-child(2) { animation-delay: 2.4s; } .porta:nth-child(3), .porta:nth-child(4) { animation-delay: 2.7s; }
 .porta:nth-child(5), .porta:nth-child(6) { animation-delay: 3s; } .porta:nth-child(n+7) { animation-delay: 3.3s; }
-/* cada porta é uma abertura na rocha: escura, com uma luz fraca lá no fundo */
-.porta-arco { position: relative; width: 80%; height: 0; padding-bottom: 106%; border-radius: 999px 999px 14px 14px; overflow: hidden; border: 1px solid rgba(201,163,95,.55);
+/* cada porta é uma abertura redonda na rocha: escura, com uma luz fraca lá no fundo */
+.porta-arco { position: relative; width: 82%; height: 0; padding-bottom: 82%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(201,163,95,.55);
   background: radial-gradient(ellipse 55% 45% at 50% 62%, rgba(245,199,91,.22), rgba(245,199,91,.05) 55%, transparent 75%), linear-gradient(180deg, #040409 0%, #0b0b1c 60%, #12122a 100%);
   box-shadow: inset 0 0 0 4px rgba(3,3,8,.9), inset 0 0 0 5px rgba(201,163,95,.25), inset 0 18px 30px -6px rgba(0,0,0,.95), 0 0 30px -14px rgba(245,199,91,.5); transition: box-shadow .5s ease, transform .4s ease; }
-.porta-arco img { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); width: 58%; height: 58%; object-fit: contain; opacity: .62; filter: brightness(.8) drop-shadow(0 0 10px rgba(245,199,91,.25)); transition: opacity .5s ease, filter .5s ease; animation: chama-porta 5s ease-in-out infinite; }
+.porta-arco img { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 58%; height: 58%; object-fit: contain; opacity: .62; filter: brightness(.8) drop-shadow(0 0 10px rgba(245,199,91,.25)); transition: opacity .5s ease, filter .5s ease; animation: chama-porta 5s ease-in-out infinite; }
 .porta:nth-child(2n) .porta-arco img { animation-delay: -2.5s; }
 .porta:active .porta-arco, .porta:hover .porta-arco { transform: scale(.98); box-shadow: inset 0 0 0 4px rgba(3,3,8,.9), inset 0 0 0 5px rgba(245,199,91,.55), inset 0 18px 30px -6px rgba(0,0,0,.9), 0 0 46px -8px rgba(245,199,91,.8); }
 .porta:active .porta-arco img, .porta:hover .porta-arco img { opacity: 1; filter: brightness(1.1) drop-shadow(0 0 14px rgba(245,199,91,.5)); }
@@ -1058,7 +1058,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .porta-txt { font-size: 12px; line-height: 1.4; color: var(--areia-2); }
 .porta.atual .porta-arco { border-color: #f5c75b; box-shadow: inset 0 0 0 4px rgba(3,3,8,.9), inset 0 0 0 5px rgba(245,199,91,.6), 0 0 40px -6px rgba(245,199,91,.85); }
 .porta.atual .porta-arco img { opacity: 1; }
-.porta em { position: absolute; bottom: 10px; left: 0; right: 0; font-style: normal; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cristal); }
+.porta em { position: absolute; bottom: 14px; left: 0; right: 0; font-style: normal; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cristal); }
 @keyframes surge { from { opacity: 0; transform: translateY(10px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes respira-olho { 50% { filter: drop-shadow(0 0 26px rgba(169,178,240,.75)); } }
 @keyframes chama-porta { 50% { opacity: .82; } }
