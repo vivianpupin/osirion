@@ -23,7 +23,7 @@ window.ESTAGIOS = [
     ensinamentos: [57, 35, 36, 37, 38, 39, 40, 41, 42] },
   { id: "sair", tecnicas: [20, 17, 22, 23, 24], sons: ["desprendimento", "elevar", "alem", "vazioprofundo", "poeira", "cosmos", "buraco"], ato: 5, nome: "Sair do corpo", objetivo: "a viagem astral", marco: "astral", meditacao: "pilar", dias: 5, noites: 7,
     dica: "Quando vierem as vibrações, não se mexa: imagine que rola para fora do corpo, ou que flutua até o teto.",
-    ensinamentos: [25, 26, 27, 29, 43, 44, 45, 46, 21] }
+    ensinamentos: [25, 26, 27, 43, 44, 45, 46, 21] }
 ];
 
 // As tradições: a pessoa escolhe uma no começo e segue tudo dela (a variável continua ESTILOS, e est.estilo guarda a escolha).
@@ -42,7 +42,7 @@ window.ESTILOS = [
   // O sonho lúcido (LaBerge) e a projeção astral (Monroe e Buhlman) juntos: primeiro despertar no sonho, depois sair do corpo
   { id: "cosmico", nome: "O homem cósmico", chamada: "Despertar no sonho e explorações do universo.", sub: "Stephen LaBerge, Robert Monroe e William Buhlman: o sonho lúcido e a saída do corpo", origem: "Da ciência do sono: Stephen LaBerge comprovou o sonho lúcido em laboratório, em Stanford, nos anos 1980. Da exploração fora do corpo: Robert Monroe (1971) e William Buhlman (1996).", ilus: "salto-figura",
     dia: { k: "teste" }, tecnicas: [0, 10, 9, 15, 16, 4, 20, 21, 17, 19, 22, 23, 24, 18, 11], viagem: "sair",
-    ensinamentos: [10, 28, 47, 30, 16, 18, 21, 3, 22, 57, 23, 27, 25, 26, 11, 29, 12],
+    ensinamentos: [10, 28, 47, 30, 16, 18, 21, 3, 22, 57, 23, 27, 25, 26, 11, 12],
     sons: ["chuva", "mar", "tacas", "chuvabin", "sono", "tempo", "foco10", "foco12", "limiar", "vibracoes", "zumbido", "desprendimento", "elevar", "foco21", "alem"] },
   // As tradições do sonho: técnicas e ensinamentos só com o que as fontes documentam (a Vivian revisa antes de publicar)
   { id: "egito", nome: "Códigos do antigo Egito", chamada: "O que os sacerdotes do Nilo pediam à noite, há três mil anos.", sub: "Os templos do sono, o papiro dos sonhos, Bes e a Esfinge", origem: "Do Egito antigo, dos faraós ao período greco-romano, de cerca de 1400 a.C. ao século V.", ilus: "olho",

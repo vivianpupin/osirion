@@ -1886,16 +1886,46 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const deNoite = () => { const h = new Date().getHours(); return h >= 18 || h < 5; };
   let deMundo = null; // o mundo de onde a pessoa abriu alguma coisa: ao voltar, volta para ele
   const listaFerr = f => `<div class="instr">${f.filter(Boolean).map(x => `<button class="ferr" ${x.attr}><span class="selo-img"><img src="${ILUS(x.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`).join("")}</div>`;
+  // As práticas de um momento do dia (Ao acordar, Dia, Noite, 04:00). No Arhat: as do ato de agora primeiro e,
+  // depois, as dos atos que já passaram, para repetir. Numa tradição: as práticas do dia dela que já chegaram.
+  function praticasDoMomento(quando) {
+    const s = estiloAtual(), vistos = new Set(), out = [];
+    const poe = (p, ato, hora, agora) => { if (!p || vistos.has(p.k)) return; vistos.add(p.k); out.push({ p, ato, hora, agora }); };
+    if (s) {
+      if (quando === "Dia" && s.dia) { const n = Array.isArray(s.dia) ? Math.min(passoAtual() + 1, s.dia.length) : 1;
+        for (let i = n - 1; i >= 0; i--) { const d = diaDe(s, i), x = acharPratica(d.k, d.ato); if (x) poe(x.p, d.ato, x.m.hora, i === n - 1); } }
+      return out;
+    }
+    const at = ESTAGIOS[estagioAtual()].ato;
+    for (let i = at; i >= 0; i--) ATOS[i].momentos.filter(m => m.quando === quando).forEach(m => m.praticas.forEach(p => poe(p, i, m.hora, i === at)));
+    return out;
+  }
+  const itemPratica = ({ p, ato, hora, agora }) => p.k === "teste"
+    ? { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje · ${hora}` }
+    : { attr: `data-pratica="${p.k}"${ato !== undefined ? ` data-ato="${ato}"` : ""}`, ilus: p.ilus || "estrela-sol", nome: p.nome, det: feitoHoje(p.k) ? "feita hoje" : `${agora ? hora : "para repetir"} · ${p.det}` };
   function ferrDia() {
-    const k = estagioAtual(), E = ESTAGIOS[k], med0 = praticaDoDia(E), med = med0 && med0.p.k !== "teste" ? med0 : praticaDoAto(E.ato, E.meditacao);
-    return listaFerr([
-      med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : med === med0 && estiloAtual() ? "a prática do dia" : "a meditação do dia" } : null,
-      { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
-      CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
-    ]);
+    const acordar = { attr: 'data-acao="anotar-agora"', ilus: "fita-estrela", nome: "Diário dos 5 minutos", det: est.diario.some(d => isoNoite(d) === hojeIso) ? "anotado hoje" : "ao acordar, sem levantar: onde você estava? o que sentia?" };
+    const dia = praticasDoMomento("Dia"), temTeste = dia.some(x => x.p.k === "teste");
+    return `<span class="rotulo">Ao acordar</span>${listaFerr([acordar])}
+      <span class="rotulo">Práticas do dia</span>${listaFerr([...dia.map(itemPratica), temTeste ? null : itemPratica({ p: { k: "teste" }, hora: "ao longo do dia" })])}
+      ${livre("extras") ? `<span class="rotulo">Além dos atos</span>${listaFerr((window.ARHAT.EXTRAS || []).map(p => itemPratica({ p, hora: "quando quiser", agora: true })))}` : ""}
+      ${CFG ? listaFerr([{ attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "os avisos do teste de realidade no celular" }]) : ""}`;
+  }
+  // as técnicas da noite: a da semana e as que já chegaram (tocar numa delas volta para ela); as outras chegam com as noites
+  function tecnicasDaNoite() {
+    if (!NOITE.length) return "";
+    const s = estiloAtual(), atual = tecnicaAtual().i, ate = estagioAtual();
+    const todas = s ? s.tecnicas : [...new Set(ESTAGIOS.flatMap(E => E.tecnicas || []))];
+    const veio = (s ? tecnicasReveladas() : [...new Set(ESTAGIOS.slice(0, ate + 1).flatMap(E => E.tecnicas || []))]).filter(i => NOITE[i] && i !== atual);
+    const faltam = todas.filter(i => NOITE[i] && i !== atual && !veio.includes(i)).length;
+    return veio.length || faltam ? `<span class="rotulo">As técnicas da noite</span>${veio.length ? listaFerr(veio.map(i => ({ attr: `data-tecnica="${i}"`, ilus: NOITE[i].ilus, nome: NOITE[i].nome, det: "já chegou · tocar para praticar esta" }))) : ""}
+      ${faltam ? `<p class="suave miuda">E mais ${faltam} ${faltam === 1 ? "técnica chega" : "técnicas chegam"} com as noites.</p>` : ""}` : "";
   }
   function ferrNoite() {
-    return listaFerr([
+    const noite = praticasDoMomento("Noite"), madr = praticasDoMomento("04:00");
+    return tecnicasDaNoite() + (noite.length ? `<span class="rotulo">Ao deitar</span>${listaFerr(noite.map(itemPratica))}` : "")
+      + (madr.length ? `<span class="rotulo">De madrugada · 4 da manhã</span>${listaFerr(madr.map(itemPratica))}` : "")
+      + `<span class="rotulo">Instrumentos da noite</span>` + listaFerr([
       { attr: 'data-acao="sala-sons"', ilus: "fitas", nome: "A sala dos sons", det: "jornadas gravadas, tambor, sons para dormir e sair do corpo" },
       livre("sorteio") ? { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "O oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" } : null,
       ...(livre("viagens") ? VIAGENS.map(v => ({ attr: `data-pratica="${v.k}"`, ilus: "estrela-cadente", nome: v.nome, det: "viagem guiada" })) : [])
@@ -1930,9 +1960,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <h1>${dia ? "O que se faz acordado" : "O que se faz antes e durante o sono"}</h1>
         <p class="suave">${dia ? "O que você treina durante o dia é o que desperta à noite." : "A preparação, os sons, o alvo e a técnica: o caminho até o outro lado."}</p></div>
       ${dia ? `<section class="mundo-sec">${sinalDeSonho() || '<div class="sinal-vazio"><span class="rotulo">Sinal de sonho</span><span class="suave">Quando uma mesma coisa aparecer em três sonhos anotados, ela vira o seu sinal: ao encontrá-la acordado, você pergunta se está sonhando.</span></div>'}</section>
-        <section class="mundo-sec"><span class="rotulo">Instrumentos do dia</span>${ferrDia()}</section>`
+        <section class="mundo-sec">${ferrDia()}</section>`
       : `<section class="mundo-sec">${cartaoTecnica()}</section>
-        <section class="mundo-sec"><span class="rotulo">Instrumentos da noite</span>${ferrNoite()}</section>
+        <section class="mundo-sec">${ferrNoite()}</section>
         <button class="btn largo mundo-dormir" data-acao="dormir">Vou dormir</button>`}
       ${ensinamentosDoMundo(dia)}
     </div></div>`, d => { if (!dia) ceuFundo(d.querySelector(".ceu-fundo"), d.querySelector(".mundo-tela"), true); });
@@ -3905,7 +3935,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       est.diario.splice(+b.dataset.i, 1); apagarRascunho(); salvar(); fecharSobre(); render();
     }
     else if (acao === "dormir") abrirModoNoite();
-    else if (acao === "dormir-binaural") { abrirModoNoite("binaural"); const s = document.querySelector('.modo-noite [data-som="foco10"]'); if (s) s.click(); }
+    // dormir com o som Mente desperta: conta a noite e abre a sala dos sons já tocando ele
+    else if (acao === "dormir-binaural") { abrirModoNoite(); abrirModoNoite(null, "sala"); const s = document.querySelector('.sala-sons [data-som="foco10"]'); if (s) s.click(); }
     else if (acao === "tecnica") abrirTecnica();
     else if (acao === "escolher-tecnica") abrirEscolhaTecnica();
     else if (acao === "escolher-tradicao") abrirEscolhaTradicao();
