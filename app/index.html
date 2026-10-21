@@ -683,8 +683,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .dormir-card .ico svg { width: 30px; height: 30px; stroke: #e0565b; fill: none; stroke-width: 1.6; }
 .dormir-card b { display: block; font-family: var(--display); font-weight: 400; font-size: 19px; }
 .dormir-card .suave { font-size: 13px; }
-.sinal-sonho { display: flex; flex-direction: column; gap: 4px; width: 100%; text-align: left; padding: 14px; border-radius: 18px; border: 1px dashed color-mix(in srgb, var(--nevoeiro) 60%, var(--ceu-3)); background: color-mix(in srgb, var(--nevoeiro) 8%, var(--ceu-2)); }
-.sinal-sonho b { font-family: var(--display); font-weight: 400; font-size: 18px; }
 .vezes { display: flex; gap: 8px; margin: -4px 0 4px 56px; }
 .vez { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--ceu-3); background: none; color: var(--areia-2); }
 .vez i { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--ceu-3); display: grid; place-items: center; font-style: normal; }
@@ -837,7 +835,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .mundo-partes { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 99px; border: 1px solid rgba(201,163,95,.35); background: rgba(5,5,14,.35); }
 .mundo-partes button { padding: 10px; border: 0; border-radius: 99px; background: none; color: var(--areia-2); font-family: var(--display); font-size: 15px; cursor: pointer; }
 .mundo-partes button[aria-pressed="true"] { background: rgba(245,199,91,.16); color: #f0d79b; box-shadow: inset 0 0 0 1px rgba(240,205,130,.5); }
-.sinal-vazio { display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 18px; border: 1px dashed rgba(201,163,95,.35); }
+.origem-trad { margin: 0; font-size: 14px; line-height: 1.6; color: var(--areia-2); }
+.origem-trad .rotulo { display: block; margin-bottom: 4px; }
+.sinal-diario { margin: 0; font-size: 13px; line-height: 1.55; }
+.sinal-diario b { font-weight: 600; color: var(--areia); }
 .instr { display: flex; flex-direction: column; border-radius: 20px; background: var(--ceu-2); box-shadow: inset 0 0 0 1px rgba(201,163,95,.18); overflow: hidden; }
 .ferr { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 0; background: none; color: var(--areia); text-align: left; }
 .ferr + .ferr { border-top: 1px solid rgba(201,163,95,.14); }
@@ -1921,8 +1922,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (dia) {
       const pr = praticasDoMomento("Dia").filter(x => x.agora || x.p.k === "teste"), temTeste = pr.some(x => x.p.k === "teste");
       const acordar = { attr: 'data-acao="anotar-agora"', ilus: "fita-estrela", nome: "Diário dos 5 minutos", det: est.diario.some(d => isoNoite(d) === hojeIso) ? "anotado hoje" : "ao acordar, sem levantar: onde você estava? o que sentia?" };
-      return `<section class="mundo-sec">${sinalDeSonho() || '<div class="sinal-vazio"><span class="rotulo">Sinal de sonho</span><span class="suave">Quando uma mesma coisa aparecer em três sonhos anotados, ela vira o seu sinal: ao encontrá-la acordado, você pergunta se está sonhando.</span></div>'}</section>
-        <section class="mundo-sec">${secMundo("Ao acordar", [acordar])}
+      return `<section class="mundo-sec">${secMundo("Ao acordar", [acordar])}
         ${secMundo("A prática de agora", [...pr.map(itemPratica), temTeste ? null : itemPratica({ p: { k: "teste" }, hora: "ao longo do dia" })])}
         ${c.prox ? secMundo("O ensinamento de hoje", [capItem(c.prox, c.prox)]) : ""}
         ${CFG ? listaFerr([{ attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "os avisos do teste de realidade no celular" }]) : ""}</section>`;
@@ -2206,7 +2206,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${todas.length ? (() => { const cont = [0, 0, 0, 0, 0]; todas.forEach(d => cont[Math.min(4, d.tipo || 0)]++);
         return `<div class="placar placar-diario">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>`; })() : ""}
       ${todas.length ? `<input class="busca" id="busca-lista" type="search" placeholder="Buscar nos sonhos: água, avó, Egito…" value="${esc(busca)}" aria-label="Buscar nos sonhos">` : ""}
-      ${(() => { const ps = palavrasQueSeRepetem(); return ps.length ? `<div class="palavras-lista"><span class="rotulo">Palavras que se repetem nos seus sonhos</span>
+      ${(() => { const ps = palavrasQueSeRepetem(), si = ps.find(([, n]) => n >= 3); return ps.length ? `<div class="palavras-lista"><span class="rotulo">Palavras que se repetem nos seus sonhos</span>
+        ${si ? `<p class="suave sinal-diario"><b>Sinal de sonho: “${esc(si[0])}”.</b> Toda vez que encontrar ${esc(si[0])} acordado, pare e pergunte: será que estou sonhando? Quando aparecer de novo no sonho, você vai perceber.</p>` : ""}
         <div class="alvos">${ps.map(([w, n]) => `<button class="alvo" data-palavra="${esc(w)}" aria-pressed="${chave(busca.trim()) === chave(w)}">${esc(w)} <span class="suave" style="font-size:12px">${n}</span></button>`).join("")}</div></div>` : ""; })()}
       ${busca.trim() ? `<span class="suave" style="font-size:13px">${achadas.length} ${achadas.length === 1 ? "sonho com" : "sonhos com"} “${esc(busca.trim())}”</span>` : ""}
       <div class="lista-sonhos" id="lista-sonhos">${achadas.length ? achadas.map(itemSonho).join("") : todas.length ? '<p class="suave" style="text-align:center">Nenhum sonho com essa palavra.</p>'
@@ -3308,11 +3309,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   // ---------- Sinais de sonho ----------
-  function sinalDeSonho() {
-    const p = palavrasQueSeRepetem().find(([, n]) => n >= 3); if (!p) return "";
-    return `<button class="sinal-sonho" data-acao="teste"><span class="rotulo">Sinal de sonho</span><b>“${esc(p[0])}” apareceu em ${p[1]} sonhos</b>
-      <span class="suave">Toda vez que encontrar ${esc(p[0])} acordado, pare e pergunte: será que estou sonhando? Quando aparecer de novo no sonho, você vai perceber.</span></button>`;
-  }
+
 
   // ---------- Pontes entre os mundos: sonhos que aconteceram e déjà vus ----------
   function pontes() {
