@@ -459,5 +459,20 @@ window.ARHAT = (function () {
   // Depois dos cinco atos do Arhat: as práticas que não são do livro
   const EXTRAS = [ATENCAO, FORCAS, DIALOGO, VER];
 
-  return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES, EXTRAS };
+  // As práticas do dia das tradições (programa.js → ESTILOS[].dia). Só o que as fontes documentam; o resto é adaptação declarada.
+  const DESPERTA = {
+    k: "desperta", ilus: "olho", ico: "sol", nome: "Desperta em paz", det: "Saudar a luz da manhã, como no templo de Dendera",
+    texto: [
+      { p: "No templo de Hathor, em Dendera, um hino gravado na fachada do santuário pede que a deusa e as outras deusas despertem em paz, e diz que os deuses madrugam todos os dias para adorá-la. Nos templos egípcios, o ritual do dia começava logo depois da primeira luz." },
+      { p: "No Ano Novo, os sacerdotes subiam com a estátua de Hathor até um pequeno quiosque no telhado do templo, para que ela recebesse os primeiros raios do sol: a união da deusa com o disco solar." },
+      { p: "Esta prática é uma adaptação inspirada nisso, e não o rito do templo. Logo ao acordar, vá até uma janela ou um lugar aberto com a luz da manhã." },
+      { p: "Fique de pé, de frente para a luz, sem olhar direto para o sol." },
+      { p: "Diga em voz baixa: “Desperta em paz.” É uma frase inspirada no hino, não a tradução dele." },
+      { p: "Respire devagar por dois ou três minutos, sentindo a luz no rosto e nas mãos." },
+      { p: "Pergunte a si mesmo: “Estou acordado?” E lembre o sonho da noite." }
+    ]
+  };
+
+  const DIAS = [DESPERTA];
+  return { ATOS, ALVOS, VIAGENS, NOITE, AFIRMACOES, EXTRAS, DIAS };
 })();
