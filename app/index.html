@@ -1030,17 +1030,39 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo3 { grid-template-columns: repeat(3, 1fr); }
 .som-noite { display: flex; flex-direction: column; gap: 10px; }
-.escolha-trad h1 { margin: 2px 0 0; }
-.trads { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 12px; }
-.trad { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 14px 10px 14px; border-radius: 20px; border: 1px solid rgba(201,163,95,.45); background: radial-gradient(120% 90% at 50% 0%, #2a2c5a 0%, #15173a 55%, #0d0f24 100%); color: var(--areia); text-align: center; box-shadow: 0 10px 24px -14px rgba(0,0,0,.8), inset 0 0 0 4px rgba(13,15,36,.9), inset 0 0 0 5px rgba(201,163,95,.25); }
-.trad-arte { width: 86px; height: 86px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, #2b2e62, #10122b); box-shadow: inset 0 0 0 1.5px #b8914f, inset 0 0 0 5px #14162e, inset 0 0 0 6px rgba(184,145,79,.5), 0 0 18px -6px rgba(245,199,91,.5); }
-.trad-arte img { width: 62px; height: 62px; object-fit: contain; }
-.trad b { font-family: var(--display); font-weight: 400; font-size: 17px; line-height: 1.2; color: #f0d79b; }
-.trad .origem { font-size: 10.5px; line-height: 1.35; color: #b89a64; font-style: italic; border-top: 1px solid rgba(201,163,95,.2); padding-top: 6px; margin-top: 2px; }
-.origem-trad { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 12px 14px; border-radius: 14px; background: rgba(201,163,95,.07); box-shadow: inset 0 0 0 1px rgba(201,163,95,.25); font-size: 14px; line-height: 1.5; color: var(--areia); }
-.trad > span:last-of-type { font-size: 11.5px; line-height: 1.35; color: var(--areia-2); }
-.trad.atual { border-color: #f5c75b; box-shadow: 0 0 26px -8px rgba(245,199,91,.7), inset 0 0 0 4px rgba(13,15,36,.9), inset 0 0 0 5px rgba(245,199,91,.5); }
-.trad em { position: absolute; top: 8px; right: 10px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--cristal); }
+.portais { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(90% 60% at 50% 18%, #17183a 0%, #0a0a18 55%, #030308 100%); }
+/* a boca da caverna: as bordas escurecem e a luz fica no centro */
+.portais::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 85% at 50% 40%, transparent 45%, rgba(0,0,0,.75) 100%); }
+.portais .ceu-fundo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; }
+.portais-rolo { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; z-index: 1; }
+.portais-tela { position: relative; align-items: center; text-align: center; padding-bottom: calc(48px + env(safe-area-inset-bottom)); }
+.portais-olho { width: 70px; margin: 10px auto 0; filter: drop-shadow(0 0 16px rgba(169,178,240,.5)); animation: surge 2.2s ease both, respira-olho 6s ease-in-out 2.2s infinite; }
+.portais-tit { font-family: var(--display); font-weight: 400; font-size: 27px; line-height: 1.25; margin: 10px 4px 0; color: var(--areia); animation: surge 2s ease .5s both; }
+.portais-conv { font-family: var(--display); font-size: 20px; color: #f0cd82; margin: 4px 0 0; text-shadow: 0 0 18px rgba(245,199,91,.4); animation: surge 2s ease 1.3s both; }
+.portais-orn { display: flex; align-items: center; gap: 10px; width: 70%; margin: 8px auto 0; color: #c9a35f; animation: surge 2s ease 1.8s both; }
+.portais-orn i { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,163,95,.7), transparent); }
+.portais-sub { margin: 0; color: var(--areia-2); font-size: 14px; font-style: italic; animation: surge 2s ease 2.1s both; }
+.portas { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 16px; width: 100%; margin-top: 14px; }
+.porta { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; padding: 0 2px; background: none; border: 0; color: var(--areia); cursor: pointer; animation: surge 1.6s ease both; }
+.porta:nth-child(1), .porta:nth-child(2) { animation-delay: 2.4s; } .porta:nth-child(3), .porta:nth-child(4) { animation-delay: 2.7s; }
+.porta:nth-child(5), .porta:nth-child(6) { animation-delay: 3s; } .porta:nth-child(n+7) { animation-delay: 3.3s; }
+/* cada porta é uma abertura na rocha: escura, com uma luz fraca lá no fundo */
+.porta-arco { position: relative; width: 80%; height: 0; padding-bottom: 106%; border-radius: 999px 999px 14px 14px; overflow: hidden; border: 1px solid rgba(201,163,95,.55);
+  background: radial-gradient(ellipse 55% 45% at 50% 62%, rgba(245,199,91,.22), rgba(245,199,91,.05) 55%, transparent 75%), linear-gradient(180deg, #040409 0%, #0b0b1c 60%, #12122a 100%);
+  box-shadow: inset 0 0 0 4px rgba(3,3,8,.9), inset 0 0 0 5px rgba(201,163,95,.25), inset 0 18px 30px -6px rgba(0,0,0,.95), 0 0 30px -14px rgba(245,199,91,.5); transition: box-shadow .5s ease, transform .4s ease; }
+.porta-arco img { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); width: 58%; height: 58%; object-fit: contain; opacity: .62; filter: brightness(.8) drop-shadow(0 0 10px rgba(245,199,91,.25)); transition: opacity .5s ease, filter .5s ease; animation: chama-porta 5s ease-in-out infinite; }
+.porta:nth-child(2n) .porta-arco img { animation-delay: -2.5s; }
+.porta:active .porta-arco, .porta:hover .porta-arco { transform: scale(.98); box-shadow: inset 0 0 0 4px rgba(3,3,8,.9), inset 0 0 0 5px rgba(245,199,91,.55), inset 0 18px 30px -6px rgba(0,0,0,.9), 0 0 46px -8px rgba(245,199,91,.8); }
+.porta:active .porta-arco img, .porta:hover .porta-arco img { opacity: 1; filter: brightness(1.1) drop-shadow(0 0 14px rgba(245,199,91,.5)); }
+.porta b { font-family: var(--display); font-weight: 400; font-size: 17px; line-height: 1.2; color: #f0d79b; margin-top: 6px; }
+.porta-txt { font-size: 12px; line-height: 1.4; color: var(--areia-2); }
+.porta.atual .porta-arco { border-color: #f5c75b; box-shadow: inset 0 0 0 4px rgba(3,3,8,.9), inset 0 0 0 5px rgba(245,199,91,.6), 0 0 40px -6px rgba(245,199,91,.85); }
+.porta.atual .porta-arco img { opacity: 1; }
+.porta em { position: absolute; bottom: 10px; left: 0; right: 0; font-style: normal; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cristal); }
+@keyframes surge { from { opacity: 0; transform: translateY(10px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes respira-olho { 50% { filter: drop-shadow(0 0 26px rgba(169,178,240,.75)); } }
+@keyframes chama-porta { 50% { opacity: .82; } }
+@media (prefers-reduced-motion: reduce) { .portais *, .portais-olho { animation: none !important; } }
 .destaques { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .som-destaque { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px 14px 14px; border-radius: 18px; border: 1px solid #b8914f; background: radial-gradient(130% 120% at 0% 0%, #3a1a0e, #170606); color: #f5d79b; text-align: left; box-shadow: 0 0 24px -10px rgba(245,199,91,.6); }
 .som-destaque b { font-family: var(--display); font-weight: 400; font-size: 18px; line-height: 1.2; }
@@ -1567,14 +1589,21 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Aparece logo depois da travessia (e quando a pessoa quer trocar). Ao tocar, a jornada daquela tradição já abre no Agora.
   function abrirEscolhaTradicao() {
     const atual = est.estiloVisto ? (est.estilo || "arhat") : null;
-    abrirSobre(`<div class="tela escolha-trad">${est.estiloVisto ? voltar : ""}
-      <span class="rotulo">${est.estiloVisto ? "Trocar de tradição" : "O começo da jornada"}</span>
-      <h1>Há muitos caminhos para adentrar o outro lado. Escolha por qual você vai atravessar.</h1>
-      <p class="suave">${["Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez", "Onze", "Doze"][ESTILOS.length - 1] || ESTILOS.length} universos guardam os segredos da noite.</p>
-      <div class="trads">${ESTILOS.map(x => `<button class="trad ${x.id === atual ? "atual" : ""}" data-escolher-trad="${x.id}">
-        <span class="trad-arte"><img src="${ILUS(x.ilus)}" alt=""></span><b>${esc(x.nome)}</b><span>${esc(x.chamada || x.sub)}</span>${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}</div>
-      ${est.estiloVisto ? '<p class="suave miuda" style="text-align:center">O que você já fez fica guardado em “O que já passou”.</p>' : ""}</div>`);
+    const num = ["Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez", "Onze", "Doze"][ESTILOS.length - 1] || ESTILOS.length;
+    // o céu da noite ao fundo (o mesmo do oráculo), e cada universo como uma porta em arco
+    abrirSobre(`<div class="portais"><canvas class="ceu-fundo" aria-hidden="true"></canvas><div class="portais-rolo"><div class="tela portais-tela">
+      ${est.estiloVisto ? `<div style="align-self:stretch">${voltar}</div>` : ""}
+      <img class="portais-olho" src="${IMG.marca}" alt="">
+      <h1 class="portais-tit">Há muitos caminhos para adentrar o outro lado.</h1>
+      <p class="portais-conv">Escolha por qual você vai atravessar.</p>
+      <div class="portais-orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+      <p class="portais-sub">${num} universos guardam os segredos da noite.</p>
+      <div class="portas">${ESTILOS.map(x => `<button class="porta ${x.id === atual ? "atual" : ""}" data-escolher-trad="${x.id}">
+        <span class="porta-arco"><img src="${ILUS(x.ilus)}" alt="">${x.id === atual ? "<em>a sua</em>" : ""}</span><b>${esc(x.nome)}</b><span class="porta-txt">${esc(x.chamada || x.sub)}</span></button>`).join("")}</div>
+      ${est.estiloVisto ? '<p class="portais-sub" style="font-size:12.5px">O que você já fez fica guardado em “O que já passou”.</p>' : ""}
+    </div></div></div>`, d => { const box = d.querySelector(".portais"); ceuFundo(d.querySelector(".ceu-fundo"), box); });
   }
+
 
   function abrirEstilo(id) {
     const x = ESTILOS.find(e => e.id === id); if (!x) return;
