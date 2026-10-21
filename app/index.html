@@ -1606,7 +1606,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <h1 class="portais-tit">Há muitos caminhos para adentrar o outro lado.</h1>
       <p class="portais-conv">Escolha por qual você vai iniciar.</p>
       <div class="portais-orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
-      <div class="carro" style="--tam:${Math.round(Math.min(230, innerWidth * .59, innerHeight * .3))}px">
+      <div class="carro" style="--tam:${Math.round(Math.min(230, innerWidth * .59, innerHeight * .28))}px">
         ${ESTILOS.map((x, i) => `<button class="porta-arco" data-ir="${i}" aria-label="${esc(x.nome)}"><img src="${ILUS(x.ilus)}" alt="">${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}
         <button class="carro-seta esq" data-passo="-1" aria-label="Porta anterior">‹</button><button class="carro-seta dir" data-passo="1" aria-label="Próxima porta">›</button>
       </div>
