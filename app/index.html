@@ -563,8 +563,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .xp.mini { flex: 1; margin: 0; height: 4px; }
 .chama-svg { width: 64px; height: auto; flex: none; overflow: visible; }
 .chama-svg.mini { width: 16px; }
-.chama-svg .fogo { transform-box: view-box; transform-origin: 30px 72px; filter: drop-shadow(0 0 calc(var(--f) * 12px) rgba(245,199,91,.85)) brightness(calc(.75 + var(--f) * .3)); animation: tremula 2.6s ease-in-out infinite; }
-@keyframes tremula { 50% { transform: scale(1.03, .97); } }
+.chama-svg .fogo { transform-box: view-box; transform-origin: 30px 72px; transform: scale(calc(.55 + var(--f) * .45)); filter: drop-shadow(0 0 calc(var(--f) * 12px) rgba(245,199,91,.85)) brightness(calc(.75 + var(--f) * .3)); animation: tremula 2.6s ease-in-out infinite; }
+@keyframes tremula { 50% { transform: scale(calc((.55 + var(--f) * .45) * 1.03), calc((.55 + var(--f) * .45) * .97)); } }
 .nivel-card, .chama-card, .missoes, .mapa, .selos, .album, .painel, .pontes { background: var(--ceu-2); border: 1px solid var(--ceu-3); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
 .nivel-card { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: center; background: linear-gradient(160deg, color-mix(in srgb, var(--nevoeiro) 16%, var(--ceu-2)), var(--ceu-2)); }
 .nivel-card > img { width: 76px; height: 76px; object-fit: contain; filter: drop-shadow(0 0 12px color-mix(in srgb, var(--nevoeiro) 60%, transparent)); }
@@ -857,13 +857,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .dormir-topo b { font-family: var(--display); font-weight: 400; font-size: 19px; flex: 1; }
 .dormir-topo .suave { font-size: 12px; color: #c27b7c; }
 .chama-topo { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin: -12px 4px 0 0; padding: 0; background: none; border: 0; cursor: pointer; }
-.chama-topo .chama-templo { width: 30px; height: 48px; overflow: visible; }
+.chama-topo .chama-templo { width: 40px; height: 64px; overflow: visible; }
 .reserva { transition: opacity .5s ease; }
 .reserva.oculto { visibility: hidden; opacity: 0; }
 .mesmo-lugar { display: grid; align-items: center; }
 .mesmo-lugar > * { grid-area: 1 / 1; }
 .mesmo-lugar .resposta { justify-self: stretch; text-align: left; }
 .ct-faisca { animation: ct-sobe 2.2s ease-out infinite; }
+.ct-halo { transform-box: fill-box; transform-origin: center; animation: ct-respira 3.4s ease-in-out infinite; }
+@keyframes ct-respira { 50% { opacity: .7; transform: scale(.92); } }
+@media (prefers-reduced-motion: reduce) { .ct-halo { animation: none; } }
 .chama-topo { position: relative; }
 .chama-topo .chama-templo { position: relative; }
 .nevoa-chama { position: absolute; left: 50%; top: 50%; width: calc(80px + 60px * var(--n)); height: calc(64px + 44px * var(--n)); transform: translate(-50%, -50%); pointer-events: none; opacity: calc(.55 + .45 * var(--n)); }
@@ -2545,7 +2548,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function marcaIcone() {
     try { if (!chama().hoje && navigator.setAppBadge) navigator.setAppBadge(1); else if (navigator.clearAppBadge) navigator.clearAppBadge(); } catch (e) {}
   }
-  // ---------- A chama do templo (no alto, à direita): nunca apaga; a intensidade acompanha a constância ----------
+  // ---------- A chama do templo (no alto, à direita): nunca apaga; cresce, ganha corpo e intensidade com a constância ----------
   // Cinco níveis pelos dias de prática nos últimos 7: brasa, chama baixa, chama, chama alta, fogo do templo.
   const NIVEIS_CHAMA = ["Brasa", "Chama baixa", "Chama", "Chama alta", "Fogo do templo"];
   const nivelChama = n => n <= 1 ? 0 : n <= 3 ? 1 : n === 4 ? 2 : n === 5 ? 3 : 4;
@@ -2559,17 +2562,17 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   };
   let idTemplo = 0;
     function chamaTemplo(nivel, cor) {
-    const P = CORES_CHAMA[cor] || CORES_CHAMA.ouro, id = "ct" + (idTemplo++), k = .85, g = [.3, .48, .66, .84, 1][nivel];
-    // o tamanho é sempre o mesmo; o que cresce com a constância é a intensidade: o miolo branco, o brilho e o halo
-    const i = [.2, .4, .62, .82, 1][nivel], cx = 30, H = 76 * k, W = 9 + 4 * k, base = 48 + H * .5;
+    const P = CORES_CHAMA[cor] || CORES_CHAMA.ouro, id = "ct" + (idTemplo++), k = [.62, .72, .82, .91, 1][nivel], g = [.3, .48, .66, .84, 1][nivel];
+    // já nasce visível; com a constância fica mais alta, mais larga (ganha corpo) e mais intensa (miolo branco, brilho, halo)
+    const i = [.2, .4, .62, .82, 1][nivel], cx = 30, H = 76 * k, W = 8 + 10 * k, base = 48 + H * .5;
     // lingua de fogo: altura, largura, para onde a ponta pende (s) e qual lado estufa (b)
     const f = n => n.toFixed(2);
     const lingua = (h, w, s = 0, b = 0) => `M${f(cx - w)} ${f(base)}C${f(cx - w * (1.15 + b))} ${f(base - h * .38)} ${f(cx - w * .35 + s * .5)} ${f(base - h * .72)} ${f(cx + s)} ${f(base - h)}C${f(cx + w * .3 + s * .5)} ${f(base - h * .7)} ${f(cx + w * (1.15 - b))} ${f(base - h * .38)} ${f(cx + w)} ${f(base)}Q${f(cx)} ${f(base + w * .9)} ${f(cx - w)} ${f(base)}Z`;
     // viva sem tremeluzir: o corpo do fogo só pende devagar de um lado para o outro; as camadas de dentro seguem com um leve atraso
-    const GESTO = [[1, 0, 0], [1, -.7, .07], [1, 0, 0], [1, .7, -.07]];
+    const GESTO = [[1, 0, 0], [.95, -.85, .09], [1.04, 0, 0], [.96, .85, -.09]];
     const vivo = (h, w, amp, atraso) => {
       const formas = GESTO.map(([dh, ds, db]) => lingua(h * (1 + (dh - 1) * (1.4 - amp)), w * (1.5 - dh * .5), ds * w * amp * 1.3, db * amp)), todas = [...formas, formas[0]];
-      return `d="${formas[0]}"><animate attributeName="d" dur="4.2s" begin="-${atraso}s" repeatCount="indefinite" calcMode="spline" keySplines="${todas.slice(1).map(() => ".42 0 .58 1").join(";")}" values="${todas.join(";")}"/>`;
+      return `d="${formas[0]}"><animate attributeName="d" dur="3.4s" begin="-${atraso}s" repeatCount="indefinite" calcMode="spline" keySplines="${todas.slice(1).map(() => ".42 0 .58 1").join(";")}" values="${todas.join(";")}"/>`;
     };
     const fagulhas = nivel >= 3 ? [[-7, 6], [6, 12], [-2, 20], [9, 2]].slice(0, nivel === 4 ? 4 : 2).map(([dx, dy], i) => `<circle class="ct-faisca" style="animation-delay:${i * .7}s" cx="${cx + dx}" cy="${base - H - dy}" r="${.7 + (i % 2) * .4}" fill="${P.mid}"/>`).join("") : "";
     return `<svg class="chama-templo" viewBox="0 0 60 96" style="filter:brightness(${(.85 + .2 * i).toFixed(2)})" aria-hidden="true"><defs>
