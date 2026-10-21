@@ -1544,7 +1544,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const proximoEnsinamento = k => ESTAGIOS[k].ensinamentos.find(n => !est.vistas[n]);
   // ---------- Os estilos de prática (programa.js): depois da primeira semana, a pessoa pode escolher outro caminho ----------
   const ESTILOS = window.ESTILOS || [];
-  const estiloAtual = () => ESTILOS.find(x => x.id === est.estilo && x.id !== "arhat") || null;
+  // quem tinha escolhido o sonho lúcido ou a projeção astral (hoje juntos em "O homem cósmico") continua no lugar certo
+  const estiloAtual = () => { if (est.estilo === "lucido" || est.estilo === "astral") est.estilo = "cosmico"; return ESTILOS.find(x => x.id === est.estilo && x.id !== "arhat") || null; };
   // As técnicas da noite desta página do livro: as do caminho escolhido ou as do estágio do Arhat (nunca todas de uma vez).
   const diasDeJornada = () => est.travessia ? Math.round((deIso(hojeIso) - deIso(est.travessia)) / 864e5) : 0;
   const ofereceEstilos = () => ESTILOS.length > 1;
@@ -2853,8 +2854,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
     lugares: { nome: "Os seus lugares", ilus: "olho", quando: DEPOIS, ok: atosConcluidos },
     painel: { nome: "O painel do mês", ilus: "estrela-lilas", quando: "Abre quando você tiver 7 noites anotadas.", ok: () => noitesAnotadas() >= 7 },
-    tambor: { nome: "A jornada do tambor", ilus: "maos-chama", quando: "Abre na página Cair no sono consciente.", ok: () => estagioAtual() >= 2 || ["astral", "guerreiro"].includes(est.estilo) },
-    viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: DEPOIS, ok: () => atosConcluidos() || est.estilo === "astral" },
+    tambor: { nome: "A jornada do tambor", ilus: "maos-chama", quando: "Abre na página Cair no sono consciente.", ok: () => estagioAtual() >= 2 || ["cosmico", "guerreiro"].includes(est.estilo) },
+    viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: DEPOIS, ok: () => atosConcluidos() || est.estilo === "cosmico" },
     despertar: { nome: "O despertar de madrugada", ilus: "lua", quando: "Abre no Segundo Ato, quando começam as práticas das 4 da manhã.", ok: () => est.ato >= 2 }
   };
   const livre = k => LIBERA[k].ok();
