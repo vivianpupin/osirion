@@ -563,8 +563,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .xp.mini { flex: 1; margin: 0; height: 4px; }
 .chama-svg { width: 64px; height: auto; flex: none; overflow: visible; }
 .chama-svg.mini { width: 16px; }
-.chama-svg .fogo { transform-box: view-box; transform-origin: 30px 72px; transform: scale(var(--f)); filter: drop-shadow(0 0 calc(var(--f) * 10px) rgba(245,199,91,.8)); animation: tremula 2.6s ease-in-out infinite; }
-@keyframes tremula { 50% { transform: scale(calc(var(--f) * 1.04), calc(var(--f) * .96)); } }
+.chama-svg .fogo { transform-box: view-box; transform-origin: 30px 72px; filter: drop-shadow(0 0 calc(var(--f) * 12px) rgba(245,199,91,.85)) brightness(calc(.75 + var(--f) * .3)); animation: tremula 2.6s ease-in-out infinite; }
+@keyframes tremula { 50% { transform: scale(1.03, .97); } }
 .nivel-card, .chama-card, .missoes, .mapa, .selos, .album, .painel, .pontes { background: var(--ceu-2); border: 1px solid var(--ceu-3); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
 .nivel-card { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: center; background: linear-gradient(160deg, color-mix(in srgb, var(--nevoeiro) 16%, var(--ceu-2)), var(--ceu-2)); }
 .nivel-card > img { width: 76px; height: 76px; object-fit: contain; filter: drop-shadow(0 0 12px color-mix(in srgb, var(--nevoeiro) 60%, transparent)); }
@@ -2545,7 +2545,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function marcaIcone() {
     try { if (!chama().hoje && navigator.setAppBadge) navigator.setAppBadge(1); else if (navigator.clearAppBadge) navigator.clearAppBadge(); } catch (e) {}
   }
-  // ---------- A chama do templo (no alto, à direita): nunca apaga; o tamanho acompanha a constância ----------
+  // ---------- A chama do templo (no alto, à direita): nunca apaga; a intensidade acompanha a constância ----------
   // Cinco níveis pelos dias de prática nos últimos 7: brasa, chama baixa, chama, chama alta, fogo do templo.
   const NIVEIS_CHAMA = ["Brasa", "Chama baixa", "Chama", "Chama alta", "Fogo do templo"];
   const nivelChama = n => n <= 1 ? 0 : n <= 3 ? 1 : n === 4 ? 2 : n === 5 ? 3 : 4;
@@ -2559,9 +2559,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   };
   let idTemplo = 0;
     function chamaTemplo(nivel, cor) {
-    const P = CORES_CHAMA[cor] || CORES_CHAMA.ouro, id = "ct" + (idTemplo++), k = [.34, .5, .66, .83, 1][nivel], g = [.3, .48, .66, .84, 1][nivel];
-    // a chama fica centrada na altura (o centro dela no meio do desenho), em qualquer nível
-    const cx = 30, H = 76 * k, W = 9 + 4 * k, base = 48 + H * .5;
+    const P = CORES_CHAMA[cor] || CORES_CHAMA.ouro, id = "ct" + (idTemplo++), k = .85, g = [.3, .48, .66, .84, 1][nivel];
+    // o tamanho é sempre o mesmo; o que cresce com a constância é a intensidade: o miolo branco, o brilho e o halo
+    const i = [.2, .4, .62, .82, 1][nivel], cx = 30, H = 76 * k, W = 9 + 4 * k, base = 48 + H * .5;
     // lingua de fogo: altura, largura, para onde a ponta pende (s) e qual lado estufa (b)
     const f = n => n.toFixed(2);
     const lingua = (h, w, s = 0, b = 0) => `M${f(cx - w)} ${f(base)}C${f(cx - w * (1.15 + b))} ${f(base - h * .38)} ${f(cx - w * .35 + s * .5)} ${f(base - h * .72)} ${f(cx + s)} ${f(base - h)}C${f(cx + w * .3 + s * .5)} ${f(base - h * .7)} ${f(cx + w * (1.15 - b))} ${f(base - h * .38)} ${f(cx + w)} ${f(base)}Q${f(cx)} ${f(base + w * .9)} ${f(cx - w)} ${f(base)}Z`;
@@ -2572,7 +2572,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       return `d="${formas[0]}"><animate attributeName="d" dur="4.2s" begin="-${atraso}s" repeatCount="indefinite" calcMode="spline" keySplines="${todas.slice(1).map(() => ".42 0 .58 1").join(";")}" values="${todas.join(";")}"/>`;
     };
     const fagulhas = nivel >= 3 ? [[-7, 6], [6, 12], [-2, 20], [9, 2]].slice(0, nivel === 4 ? 4 : 2).map(([dx, dy], i) => `<circle class="ct-faisca" style="animation-delay:${i * .7}s" cx="${cx + dx}" cy="${base - H - dy}" r="${.7 + (i % 2) * .4}" fill="${P.mid}"/>`).join("") : "";
-    return `<svg class="chama-templo" viewBox="0 0 60 96" aria-hidden="true"><defs>
+    return `<svg class="chama-templo" viewBox="0 0 60 96" style="filter:brightness(${(.85 + .2 * i).toFixed(2)})" aria-hidden="true"><defs>
       <linearGradient id="${id}g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${P.mid}"/><stop offset=".45" stop-color="${P.edge}"/><stop offset="1" stop-color="${P.tip}" stop-opacity=".2"/></linearGradient>
       <linearGradient id="${id}m" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${P.core}"/><stop offset=".55" stop-color="${P.mid}"/><stop offset="1" stop-color="${P.edge}" stop-opacity=".3"/></linearGradient>
       <radialGradient id="${id}h"><stop offset="0" stop-color="rgb(${P.glow})" stop-opacity="${.6 * g}"/><stop offset="1" stop-color="rgb(${P.glow})" stop-opacity="0"/></radialGradient>
@@ -2580,9 +2580,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 </defs>
       <ellipse class="ct-halo" cx="${cx}" cy="${base - H * .45}" rx="${18 + 10 * k}" ry="${16 + 22 * k}" fill="url(#${id}h)"/>
       <g class="ct-fogo" filter="url(#${id}s)" style="transform-origin:${cx}px ${base}px">
-        <path fill="url(#${id}g)" opacity=".95" ${vivo(H * 1.05, W * .62, 1, 0)}</path>
-        <path fill="url(#${id}m)" ${vivo(H * .76, W * .44, .7, .3)}</path>
-        <path fill="${P.core}" opacity=".95" ${vivo(H * .4, W * .26, .35, .55)}</path></g>${fagulhas}</svg>`;
+        <path fill="url(#${id}g)" opacity="${(.7 + .25 * i).toFixed(2)}" ${vivo(H * 1.05, W * .62, .6 + .4 * i, 0)}</path>
+        <path fill="url(#${id}m)" opacity="${(.55 + .45 * i).toFixed(2)}" ${vivo(H * (.5 + .26 * i), W * (.34 + .1 * i), .7, .3)}</path>
+        <path fill="${P.core}" opacity="${(.35 + .6 * i).toFixed(2)}" ${vivo(H * (.18 + .22 * i), W * (.16 + .1 * i), .35, .55)}</path></g>${fagulhas}</svg>`;
   }
   function chamaTopo() {
     const c = chama(), nv = nivelChama(c.n);
