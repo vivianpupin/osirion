@@ -53,7 +53,7 @@ window.ESTILOS = [
     dia: { k: "floresta" }, tecnicas: [31, 32, 33], ensinamentos: [63, 64, 17, 13], sons: ["mata", "chuva", "mar"] },
   { id: "aborigenes", nome: "Os aborígenes da Austrália", chamada: "O tempo que foi e ainda é, entre os povos da Austrália.", sub: "O Dreaming, a terra e as canções que chegam em sonho", origem: "Dos povos aborígenes da Austrália, como os Anangu, os Warlpiri e os cantores wangga do norte, em registros de antropólogos.", ilus: "estrela-terra",
     dia: { k: "escuta" }, tecnicas: [34, 35], ensinamentos: [65], sons: ["mata", "vazio", "cosmos"] },
-  { id: "sufis", nome: "Entre dois mundos", chamada: "Onde o sonho encontra o espírito, no Islã dos sufis.", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", origem: "Do Islã: os hadiths do Profeta reunidos por al-Bukhari e Muslim no século IX, e o mestre sufi andaluz Ibn Arabi (1165–1240).", ilus: "estrela-lilas",
+  { id: "sufis", nome: "Entre dois mundos", chamada: "Onde o sonho encontra o espírito, no Islã dos sufis.", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", origem: "Do Islã: os hadiths do Profeta reunidos por al-Bukhari e Muslim no século IX, e o mestre sufi andaluz Ibn Arabi (1165–1240).", ilus: "ondas",
     dia: { k: "verdade" }, tecnicas: [36, 37, 38], ensinamentos: [66, 19], sons: ["vazio", "tacas", "esferas"] },
   { id: "japao", nome: "O monge que guardava sonhos", chamada: "Os sonhos guardados nos templos e cadernos do Japão.", sub: "O diário de Myōe, os templos de Kannon, o Baku e o primeiro sonho do ano",
     origem: "Do Japão budista: o monge Myōe (1173–1232), os retiros nos templos de Kannon na época Heian e o folclore do Baku.", ilus: "lua",
