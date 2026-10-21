@@ -1610,7 +1610,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       </div>
       <div class="carro-info" aria-live="polite"><b></b><span></span></div>
       <div class="carro-pontos">${ESTILOS.map((x, i) => `<button data-ponto="${i}" aria-label="${esc(x.nome)}"><i></i></button>`).join("")}</div>
-      <button class="carro-ir" data-escolher-trad="">Atravessar esta porta</button>
+      <button class="carro-ir" data-escolher-trad="">Seguir</button>
       <p class="carro-dica">deslize para ver as outras portas</p>
       ${est.estiloVisto ? '<p class="portais-sub" style="font-size:12.5px;margin-top:10px">O que você já fez fica guardado em “O que já passou”.</p>' : ""}
     </div></div></div>`, d => { const box = d.querySelector(".portais"); ceuFundo(d.querySelector(".ceu-fundo"), box, true); carrossel(d, Math.max(0, ESTILOS.findIndex(x => x.id === atual))); });
