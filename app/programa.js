@@ -32,7 +32,7 @@ window.ESTAGIOS = [
 // a prática do dia muda junto com a técnica da semana).
 // `chamada`: a frase curta do cartão da escolha. `origem`: de onde vem a tradição (na página dela). `ensinamentos`: as cápsulas, em sequência. `sons`: a ordem em que os sons aparecem (os que faltam vêm na última técnica).
 window.ESTILOS = [
-  { id: "arhat", nome: "O caminho do Arhat", chamada: "Seis atos para a consciência contínua: tornar-se um Arhat, o que permanece desperto dia e noite.", sub: "O livro da Vivian: do sonho lembrado à viagem astral, em seis atos", origem: "Do livro Arhat, de Vivian Pupin.", ilus: "figura-dourada" },
+  { id: "arhat", nome: "O caminho do Arhat", chamada: "Seis atos para tornar-se um Arhat: desperto no dia e na noite.", sub: "O livro da Vivian: do sonho lembrado à viagem astral, em seis atos", origem: "Do livro Arhat, de Vivian Pupin.", ilus: "figura-dourada" },
   { id: "guerreiro", nome: "O homem pássaro", chamada: "O voo dos feiticeiros do deserto.", sub: "Os xamãs: a arte de sonhar de Dom Juan, nos livros de Castaneda", origem: "Dos livros de Carlos Castaneda (1968–1998), que contam os ensinamentos de Dom Juan Matus, xamã yaqui do México.", ilus: "maos-chama",
     dia: [{ k: "dialogo" }, { k: "historia" }, { k: "sombras" }, { k: "conselheira" }, { k: "marcha" }, { k: "ver" }], tecnicas: [1, 3, 12, 13, 39, 40], ensinamentos: [30, 67, 34, 33, 32, 31, 68],
     sons: ["mata", "chuva", "mar", "foco10", "limiar", "zumbido"] },
@@ -54,5 +54,8 @@ window.ESTILOS = [
   { id: "aborigenes", nome: "Os aborígenes da Austrália", chamada: "O tempo que foi e ainda é, entre os povos da Austrália.", sub: "O Dreaming, a terra e as canções que chegam em sonho", origem: "Dos povos aborígenes da Austrália, como os Anangu, os Warlpiri e os cantores wangga do norte, em registros de antropólogos.", ilus: "estrela-terra",
     dia: { k: "escuta" }, tecnicas: [34, 35], ensinamentos: [65], sons: ["mata", "vazio", "cosmos"] },
   { id: "sufis", nome: "Entre dois mundos", chamada: "Onde o sonho encontra o espírito, no Islã dos sufis.", sub: "Os hadiths do sono, a istikhara e Ibn Arabi", origem: "Do Islã: os hadiths do Profeta reunidos por al-Bukhari e Muslim no século IX, e o mestre sufi andaluz Ibn Arabi (1165–1240).", ilus: "estrela-lilas",
-    dia: { k: "verdade" }, tecnicas: [36, 37, 38], ensinamentos: [66, 19], sons: ["vazio", "tacas", "esferas"] }
+    dia: { k: "verdade" }, tecnicas: [36, 37, 38], ensinamentos: [66, 19], sons: ["vazio", "tacas", "esferas"] },
+  { id: "japao", nome: "O monge que guardava sonhos", chamada: "Os sonhos guardados nos templos e cadernos do Japão.", sub: "O diário de Myōe, os templos de Kannon, o Baku e o primeiro sonho do ano",
+    origem: "Do Japão budista: o monge Myōe (1173–1232), os retiros nos templos de Kannon na época Heian e o folclore do Baku.", ilus: "lua",
+    dia: { k: "meditar-sonho" }, tecnicas: [42, 43, 44, 45], ensinamentos: [71, 72, 73, 45], sons: ["chuva", "tacas", "mar", "vazio"] }
 ];
