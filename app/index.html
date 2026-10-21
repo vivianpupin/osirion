@@ -1030,6 +1030,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sons.tempo { grid-template-columns: repeat(4, 1fr); }
 .sons.tempo3 { grid-template-columns: repeat(3, 1fr); }
 .som-noite { display: flex; flex-direction: column; gap: 10px; }
+.escolha-trad h1 { margin: 2px 0 0; }
+.trads { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.trad { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px 14px; border-radius: 20px; border: 1px solid rgba(201,163,95,.45); background: radial-gradient(120% 90% at 50% 0%, #2a2c5a 0%, #15173a 55%, #0d0f24 100%); color: var(--areia); text-align: center; box-shadow: 0 10px 24px -14px rgba(0,0,0,.8), inset 0 0 0 4px rgba(13,15,36,.9), inset 0 0 0 5px rgba(201,163,95,.25); }
+.trad-arte { width: 86px; height: 86px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, #2b2e62, #10122b); box-shadow: inset 0 0 0 1.5px #b8914f, inset 0 0 0 5px #14162e, inset 0 0 0 6px rgba(184,145,79,.5), 0 0 18px -6px rgba(245,199,91,.5); }
+.trad-arte img { width: 62px; height: 62px; object-fit: contain; }
+.trad b { font-family: var(--display); font-weight: 400; font-size: 17px; line-height: 1.2; color: #f0d79b; }
+.trad > span:last-of-type { font-size: 11.5px; line-height: 1.35; color: var(--areia-2); }
+.trad.atual { border-color: #f5c75b; box-shadow: 0 0 26px -8px rgba(245,199,91,.7), inset 0 0 0 4px rgba(13,15,36,.9), inset 0 0 0 5px rgba(245,199,91,.5); }
+.trad em { position: absolute; top: 8px; right: 10px; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--cristal); }
 .destaques { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .som-destaque { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px 14px 14px; border-radius: 18px; border: 1px solid #b8914f; background: radial-gradient(130% 120% at 0% 0%, #3a1a0e, #170606); color: #f5d79b; text-align: left; box-shadow: 0 0 24px -10px rgba(245,199,91,.6); }
 .som-destaque b { font-family: var(--display); font-weight: 400; font-size: 18px; line-height: 1.2; }
@@ -1549,13 +1558,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     salvar();
   }
   // os balõezinhos dos estilos
-  function cartaoEstilos(fechavel) {
-    if (!ofereceEstilos()) return "";
-    const atual = est.estilo || "arhat";
-    return `<section class="estilos"><div class="momento-cab"><h3>${est.estiloVisto ? "A sua tradição" : "Qual tradição você quer seguir?"}</h3>${fechavel && !est.estiloVisto ? '<button class="link" data-acao="estilo-depois">depois</button>' : ""}</div>
-      ${est.estiloVisto ? "" : '<p class="suave">Cada tradição é um mundo do sonhar. Escolha uma e siga tudo dela: a prática do dia, as técnicas da noite e os ensinamentos, que vão se revelando com as noites.</p>'}
-      <div class="baloes">${ESTILOS.map(x => `<button class="balao" data-estilo="${x.id}" aria-pressed="${x.id === atual}">${esc(x.nome)}</button>`).join("")}</div></section>`;
+  // ---------- A escolha da tradição: uma página só para isso, com um cartão para cada tradição ----------
+  // Aparece logo depois da travessia (e quando a pessoa quer trocar). Ao tocar, a jornada daquela tradição já abre no Agora.
+  function abrirEscolhaTradicao() {
+    const atual = est.estiloVisto ? (est.estilo || "arhat") : null;
+    abrirSobre(`<div class="tela escolha-trad">${est.estiloVisto ? voltar : ""}
+      <span class="rotulo">${est.estiloVisto ? "Trocar de tradição" : "O começo da jornada"}</span>
+      <h1>Qual tradição você quer seguir?</h1>
+      <p class="suave">Cada tradição é um mundo do sonhar. Escolha uma e siga tudo dela: os ensinamentos, a prática e as técnicas da noite, que vão se revelando com as noites.</p>
+      <div class="trads">${ESTILOS.map(x => `<button class="trad ${x.id === atual ? "atual" : ""}" data-escolher-trad="${x.id}">
+        <span class="trad-arte"><img src="${ILUS(x.ilus)}" alt=""></span><b>${esc(x.nome)}</b><span>${esc(x.sub)}</span>${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}</div>
+      ${est.estiloVisto ? '<p class="suave miuda" style="text-align:center">O que você já fez fica guardado em “O que já passou”.</p>' : ""}</div>`);
   }
+
   function abrirEstilo(id) {
     const x = ESTILOS.find(e => e.id === id); if (!x) return;
     const tecs = (x.tecnicas || []).map(i => NOITE[i]).filter(Boolean), caps = (x.ensinamentos || []).map(n => CAPS[n - 1]).filter(Boolean);
@@ -1627,12 +1642,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <span><span class="rot">${esc(a.nome)}</span><b>${esc(E.nome)}</b><span class="suave">Objetivo: ${esc(E.objetivo)}</span></span>
         ${i === k ? '<em>você está aqui</em>' : ""}</button>`;
     }).join('<span class="elo" aria-hidden="true"></span>');
-    if (estiloAtual()) return `<div class="tela">${topo()}${trilhaTradicao()}${cartaoEstilos(false)}</div>`;
+    if (estiloAtual()) return `<div class="tela">${topo()}${trilhaTradicao()}<button class="btn fantasma largo" data-acao="escolher-tradicao">Trocar de tradição</button></div>`;
     return `<div class="tela">${topo()}
       <div><span class="rotulo">O caminho do Arhat</span><h1>Os seis atos do livro</h1></div>
       <p class="suave">Cada ato tem ensinamentos, uma meditação do dia e as técnicas da noite. Você avança praticando. As conquistas podem chegar a qualquer momento.</p>
       <section class="conquistas-m"><span class="rotulo">Conquistas</span><div class="marcos">${Object.entries(MARCOS).map(([id, m]) => `<span class="marco ${marcos[id] ? "on" : ""}"><img src="${ILUS(m.ilus)}" alt=""><small>${esc(m.nome)}</small></span>`).join("")}</div></section>
-      ${cartaoEstilos(false)}
+      <button class="btn fantasma largo" data-acao="escolher-tradicao">Trocar de tradição</button>
       <div class="trilha-est">${trilha}</div>
       <section class="momento"><div class="momento-cab"><h3>Depois dos cinco atos</h3></div>
         ${livre("extras") ? (window.ARHAT.EXTRAS || []).map(p => linhaRito(`data-pratica="${p.k}"`, p.ico, p.nome, p.det, feitoHoje(p.k))).join("")  : trancado("extras")}
@@ -1693,7 +1708,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return `<div class="tela">${topo()}
       ${noites7()}
       ${cartaoAgora()}
-      ${est.estiloVisto ? "" : cartaoEstilos(true)}
+      ${est.estiloVisto ? "" : '<button class="btn largo" data-acao="escolher-tradicao">Escolher a minha tradição</button>'}
       ${sinalDeSonho()}
       ${ferramentas()}
       <details class="rito-todo"><summary><span><b>Tudo de hoje</b><span>o rito completo do dia</span></span></summary>${ritoDoDia()}</details>
@@ -2368,7 +2383,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const avanca = () => {
         if (i < PASSOS.length - 1) { i++; passo(); return; }
         const h = new Date(); est.travessia = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
-        salvar(); d.remove(); aba = "hoje"; render();
+        salvar(); d.remove(); aba = "hoje"; render(); if (!est.estiloVisto) abrirEscolhaTradicao();
       };
       const volta = d.querySelector("#trav-volta"); if (volta) volta.onclick = () => { i--; passo(); };
       if (t.tipo === "conta") {
@@ -2459,6 +2474,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     vozPronta();
     if (!est.travessia) return abrirTravessia();
     if (voltarAoRascunho()) return;
+    if (!est.estiloVisto) { abrirEscolhaTradicao(); return; }
     const h = new Date(), hoje = diaLocal(), hr = h.getHours();
     const perguntar = !est.nevoeiro && est.travessia !== hoje && est.perguntou !== hoje;
     // De manhã, na primeira vez que abre o app, ele vai direto para o diário escuro dos primeiros 5 minutos.
@@ -3644,6 +3660,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.cor) { est.nevoeiro = b.dataset.cor; aplicarCor(); document.querySelectorAll(".cor").forEach(c => c.setAttribute("aria-pressed", c === b)); const cl = document.getElementById("cor-livre"); if (cl) cl.value = b.dataset.cor; return; }
     if (b.dataset.estilo) { abrirEstilo(b.dataset.estilo); return; }
     if (b.dataset.ouvirSom) { const k = b.dataset.ouvirSom; abrirModoNoite(null, true); const x = document.querySelector(`.modo-noite [data-som="${k}"]`); if (x) x.click(); return; }
+    if (b.dataset.escolherTrad) {
+      const id = b.dataset.escolherTrad, x = ESTILOS.find(e => e.id === id);
+      escolherEstilo(id); fecharSobre(); aba = "hoje"; render();
+      if (x) setTimeout(() => avisoSelo([{ nome: x.nome }], "A sua tradição"), 300);
+      return;
+    }
     if (b.dataset.seguirEstilo) { escolherEstilo(b.dataset.seguirEstilo); fecharSobre(); render(); return; }
     if (b.dataset.pratica) { abrirPratica(b.dataset.pratica, b.dataset.ato !== undefined ? +b.dataset.ato : undefined); return; }
     if (b.dataset.capsula) { abrirCapsula(+b.dataset.capsula); return; }
@@ -3711,6 +3733,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "dormir-binaural") { abrirModoNoite("binaural"); const s = document.querySelector('.modo-noite [data-som="foco10"]'); if (s) s.click(); }
     else if (acao === "tecnica") abrirTecnica();
     else if (acao === "escolher-tecnica") abrirEscolhaTecnica();
+    else if (acao === "escolher-tradicao") abrirEscolhaTradicao();
     else if (acao === "teste") abrirTeste();
     else if (acao === "proximo-estagio") {
       const k = estagioAtual(); if (!progressoEstagio(k).pronto || !ESTAGIOS[k + 1] || !estagioLivre(k + 1)) return;
