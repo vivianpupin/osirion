@@ -1073,6 +1073,38 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 @keyframes chama-porta { 50% { opacity: .82; } }
 @keyframes troca-porta { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .portais *, .portais-olho { animation: none !important; } }
+/* A sala dos sons: o céu fino da escolha dos universos, cada estilo de som com o seu título e as faixas numa lista */
+.sala-sons { position: absolute; inset: 0; overflow-y: auto; background: radial-gradient(90% 60% at 50% 12%, #17183a 0%, #0a0a18 55%, #030308 100%); }
+.sala-sons .ceu-fundo { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .9; }
+.sala-sons .tela { position: relative; gap: 0; padding-top: calc(env(safe-area-inset-top, 0px) + 14px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 90px); }
+.sala-topo { align-self: stretch; }
+.sala-tit { font-family: var(--display); font-weight: 400; font-size: 26px; letter-spacing: .03em; text-align: center; margin: 18px 0 0; color: #f0d79b; }
+.sala-sub { text-align: center; margin: 8px auto 0; max-width: 280px; font-size: 13.5px; line-height: 1.55; color: rgba(214,208,226,.8); text-wrap: balance; }
+.sala-orn { display: flex; align-items: center; gap: 10px; width: 46%; margin: 16px auto 4px; color: #c9a35f; font-size: 9px; }
+.sala-orn i { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,163,95,.7), transparent); }
+.sala-grupo { margin-top: 30px; }
+.sala-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(201,163,95,.25); }
+.sala-cab h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: #d9b873; }
+.sala-fone { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(169,178,240,.75); }
+.sala-grupo > p { margin: 10px 0 0; font-size: 13px; line-height: 1.55; color: rgba(214,208,226,.7); }
+.faixas { display: flex; flex-direction: column; margin-top: 4px; }
+.faixa { display: flex; align-items: center; gap: 14px; width: 100%; padding: 13px 2px; background: none; border: 0; border-bottom: 1px solid rgba(255,255,255,.06); color: var(--areia); text-align: left; cursor: pointer; }
+.faixa .pp { flex: none; width: 34px; height: 34px; margin: 0; color: #d9b873; border-color: rgba(201,163,95,.55); font-size: 11px; }
+.faixa-t { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.faixa-t b { font-family: var(--display); font-weight: 400; font-size: 17px; line-height: 1.25; color: #eee5d4; }
+.faixa-t small { font-size: 12.5px; line-height: 1.45; color: rgba(214,208,226,.65); }
+.faixa[aria-pressed="true"] .pp { background: rgba(245,199,91,.14); border-color: #f0cd82; color: #f0cd82; box-shadow: 0 0 18px -4px rgba(245,199,91,.6); }
+.faixa[aria-pressed="true"] .faixa-t b { color: #f0d79b; }
+.sala-tempo { margin-top: 30px; padding: 16px; border-radius: 16px; border: 1px solid rgba(201,163,95,.25); background: rgba(10,10,24,.55); display: flex; flex-direction: column; gap: 10px; text-align: center; }
+.sala-tempo > span { font-size: 13px; color: rgba(214,208,226,.8); }
+.sala-tempo small { font-size: 11.5px; color: rgba(214,208,226,.55); }
+.sala-sons .sons button { border-color: rgba(201,163,95,.3); background: rgba(10,10,24,.5); color: rgba(238,229,212,.8); }
+.sala-sons .sons button[aria-pressed="true"] { border-color: #f0cd82; background: rgba(245,199,91,.12); color: #f0d79b; }
+.sala-sons .como-sons { margin-top: 26px; color: rgba(214,208,226,.7); font-size: 13px; }
+.sala-sons .como-sons p { line-height: 1.6; }
+.sala-sons .apagar { margin-top: 34px; background: rgba(245,199,91,.12); color: #f0d79b; border: 1px solid rgba(201,163,95,.5); }
+.sala-aviso { position: fixed; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); z-index: 2; margin: 0; padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(201,163,95,.4); background: rgba(8,8,20,.92); color: #eee5d4; font-size: 13px; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.sala-aviso[hidden] { display: none; }
 .destaques { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .som-destaque { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px 14px 14px; border-radius: 18px; border: 1px solid #b8914f; background: radial-gradient(130% 120% at 0% 0%, #3a1a0e, #170606); color: #f5d79b; text-align: left; box-shadow: 0 0 24px -10px rgba(245,199,91,.6); }
 .som-destaque b { font-family: var(--display); font-weight: 400; font-size: 18px; line-height: 1.2; }
@@ -1512,13 +1544,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const s = estiloAtual(); if (s) return s.tecnicas.slice(0, passoAtual() + 1);
     const E = ESTAGIOS[estagioAtual()]; return E && E.tecnicas ? E.tecnicas : NOITE.map((_, k) => k);
   }
-  // os sons de cada passo: no Arhat, os do ato; numa tradição, a ordem dela repartida pelas técnicas (o resto na última)
-  function sonsDoPasso(i) {
-    const s = estiloAtual(); if (!s) return (ESTAGIOS[i] || {}).sons || [];
-    const n = s.tecnicas.length; if (i >= n) return [];
-    const ordem = [...new Set([...(s.sons || []), ...SONS.map(x => x[0])])], por = Math.max(1, Math.ceil((s.sons || []).length / n));
-    return i === n - 1 ? ordem.slice(por * i) : ordem.slice(por * i, por * (i + 1));
-  }
   function contarNoiteDaTradicao() {
     const s = estiloAtual(); if (!s) return;
     const c = passoDe(s); if (c.ultima === hojeIso) return; c.ultima = hojeIso; c.noites = (c.noites || 0) + 1;
@@ -1544,14 +1569,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const prats = [], visto = new Set();
     Object.entries(est.feitos || {}).forEach(([id, o]) => { const at = ATOS.findIndex(a => String(a.id) === String(id)); if (at < 0) return;
       Object.keys(o).forEach(k => { if (visto.has(k)) return; const x = acharPratica(k, at); if (x && x.p && x.p.nome) { visto.add(k); prats.push([k, at, x.p.nome]); } }); });
-    const sons = sonsDescobertos();
     const grupo = (titulo, itens) => itens.length ? `<div class="ja-grupo"><span class="rotulo">${titulo} · ${itens.length}</span><div class="alvos">${itens.join("")}</div></div>` : "";
     const corpo = grupo("Os ensinamentos", caps.map(n => chip(`data-capsula="${n}"`, CAPS[n - 1].titulo)))
       + grupo("As técnicas da noite", tecs.map(i => chip(`data-tecnica="${i}"`, NOITE[i].nome)))
-      + grupo("As práticas", prats.map(([k, at, n]) => chip(`data-pratica="${k}" data-ato="${at}"`, n)))
-      + grupo("Os sons", sons.map(([k, n]) => chip(`data-ouvir-som="${k}"`, n)));
+      + grupo("As práticas", prats.map(([k, at, n]) => chip(`data-pratica="${k}" data-ato="${at}"`, n)));
     return `<section class="ja-passou"><div class="momento-cab"><h2>O que já passou</h2></div>
-      <p class="suave">${corpo ? "Tudo o que você já viu fica guardado aqui. Toque para repetir." : "Aqui vão ficar guardados os ensinamentos, as técnicas, as práticas e os sons que você for encontrando, para repetir quando quiser."}</p>${corpo}</section>`;
+      <p class="suave">${corpo ? "Tudo o que você já viu fica guardado aqui. Toque para repetir." : "Aqui vão ficar guardados os ensinamentos, as técnicas e as práticas que você for encontrando, para repetir quando quiser."}</p>${corpo}</section>`;
   }
 
   // ---------- Os estágios (programa.js): ensinamentos, meditação do dia, técnica da noite e um marco ----------
@@ -1838,6 +1861,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje` },
       med ? { attr: `data-pratica="${med.p.k}"`, ilus: med.p.ilus || "estrela-sol", nome: med.p.nome, det: feitoHoje(med.p.k) ? "feita hoje" : med === med0 && estiloAtual() ? "prática do dia" : "meditação do dia" } : null,
       livre("sorteio") && { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "Oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" },
+      { attr: 'data-acao="sala-sons"', ilus: "fitas", nome: "A sala dos sons", det: "para ouvir quando quiser" },
       CFG ? { attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "ligar no celular" } : null
     ].filter(Boolean);
     return `<section class="ferramentas"><span class="rotulo">Instrumentos</span><div class="instr">${f.map(x => `<button class="ferr" ${x.attr}><span class="selo-img"><img src="${ILUS(x.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`).join("")}</div></section>`;
@@ -2940,15 +2964,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // abre depois dos cinco atos: quando o último estágio estiver completo.
   const atosConcluidos = () => estagioAtual() === ESTAGIOS.length - 1 && progressoEstagio(ESTAGIOS.length - 1).pronto;
   const DEPOIS = "Abre depois dos cinco atos do Arhat: primeiro as lições, ato por ato.";
+  const temTemplos = () => { const s = estiloAtual(); return !s || (s.ensinamentos || []).includes(5); };
   const LIBERA = {
-    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Abre depois de uma semana anotando sonhos e do ensinamento sobre a incubação dos sonhos (“Os templos do sonho”).", ok: () => noitesAnotadas() >= 7 && !!est.vistas[5] },
+    // o oráculo é de todos os caminhos: uma semana de sonhos anotados (e, no caminho que tem o ensinamento dos templos do sonho, depois dele)
+    sorteio: { nome: "O oráculo dos alvos", ilus: "estrela-sol", quando: "Abre depois de uma semana anotando sonhos.", ok: () => noitesAnotadas() >= 7 && (!!est.vistas[5] || !temTemplos()) },
     extras: { nome: "Práticas além dos atos", ilus: "estrela-terra", quando: DEPOIS, ok: atosConcluidos },
     selos: { nome: "O livro de selos", ilus: "estrela-dourada", quando: "Abre depois da sua primeira noite anotada no diário.", ok: () => noitesAnotadas() >= 1 },
     missoes: { nome: "As missões da semana", ilus: "fita-estrela-2", quando: "Abre quando você tiver 3 noites anotadas.", ok: () => noitesAnotadas() >= 3 },
     album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
     lugares: { nome: "Os seus lugares", ilus: "olho", quando: DEPOIS, ok: atosConcluidos },
     painel: { nome: "O painel do mês", ilus: "estrela-lilas", quando: "Abre quando você tiver 7 noites anotadas.", ok: () => noitesAnotadas() >= 7 },
-    tambor: { nome: "A jornada do tambor", ilus: "maos-chama", quando: "Abre na página Cair no sono consciente.", ok: () => estagioAtual() >= 2 || ["cosmico", "guerreiro"].includes(est.estilo) },
     viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: DEPOIS, ok: () => atosConcluidos() || est.estilo === "cosmico" },
     despertar: { nome: "O despertar de madrugada", ilus: "lua", quando: "Abre no Segundo Ato, quando começam as práticas das 4 da manhã.", ok: () => est.ato >= 2 }
   };
@@ -3415,50 +3440,36 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     ["Atravessar o tempo · com fone", [["tempo", "Atravessar o tempo", "O tom do om, os tons em camadas descendo por 40 minutos, o surf e as taças."]]]
   ];
   const SONS = SONS_GRUPOS.flatMap(g => g[1]);
-  // ---------- Os sons do livro: não aparecem todos de uma vez ----------
-  // Cada página (estágio) guarda os seus sons (programa.js → sons). A cada noite dormida um som novo é descoberto,
-  // em ordem sorteada; às vezes o livro mostra uma página escondida: um som da página seguinte, antes da hora.
-  // Na tela da noite fica só o som que o livro escolheu para esta noite; os já descobertos ficam guardados embaixo.
-  const somExiste = k => SONS.some(x => x[0] === k);
-  const sonsDescobertos = () => SONS.filter(([k]) => (est.sons || {})[k]);
-  function descobrirSom() {
-    est.sons = est.sons || {};
-    if (est.somDescoberto === hojeIso) return null;
-    const k = passoAtual(), daqui = sonsDoPasso(k).filter(x => !est.sons[x] && somExiste(x)),
-      adiante = sonsDoPasso(k + 1).filter(x => !est.sons[x] && somExiste(x)), sorte = l => l[Math.floor(Math.random() * l.length)];
-    const novo = adiante.length && Math.random() < (daqui.length ? .15 : .3) ? sorte(adiante) : daqui.length ? sorte(daqui) : null;
-    est.somDescoberto = hojeIso;
-    if (novo) { est.sons[novo] = hojeIso; est.somDaNoite = { iso: hojeIso, k: novo }; }
-    salvar(); return novo;
-  }
-  function somDaNoite() {
-    est.sons = est.sons || {};
-    const t = NOITE.length ? tecnicaDaNoite() : null;
-    if (t && t.som === "binaural") { est.sons.foco10 = est.sons.foco10 || hojeIso; return "foco10"; }
-    if (est.somDaNoite && est.somDaNoite.iso === hojeIso && est.sons[est.somDaNoite.k]) return est.somDaNoite.k;
-    const d = sonsDescobertos(); if (!d.length) return null;
-    const k = d[Math.floor(Math.random() * d.length)][0]; est.somDaNoite = { iso: hojeIso, k }; salvar(); return k;
-  }
-  function secaoSons() {
-    const k0 = somDaNoite(); if (!k0) return "";
-    const s0 = SONS.find(x => x[0] === k0), outros = sonsDescobertos().filter(x => x[0] !== k0), fone = sonsDescobertos().some(x => SOM[x[0]]) || SOM[k0];
-    return `<section class="som-noite"><span class="rotulo">O som desta noite</span>
-      <button class="som-unico" data-som="${k0}" aria-pressed="false"><span class="pp" aria-hidden="true"></span><b>${esc(s0[1])}</b><span>${esc(s0[2])}${SOM[k0] ? " Com fone de ouvido." : ""}</span></button>
-      <div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div>
-      <p class="suave miuda" id="aviso-fone" hidden></p>
-      ${outros.length ? `<details class="como-sons"><summary>Os sons que você já descobriu · ${outros.length + 1} de ${SONS.length}</summary><div class="sons quatro">${outros.map(([k, n]) => `<button data-som="${k}" aria-pressed="false"><span class="pp" aria-hidden="true"></span>${esc(n)}</button>`).join("")}</div></details>` : ""}
-      ${fone ? '<details class="como-sons"><summary>Como funcionam os sons com fone</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone. O som de ondas ao fundo acalma e ajuda a não se distrair. É só deitar, fechar os olhos e deixar tocar.</p></details>' : ""}</section>`;
-  }
   const agoraHM = () => new Date().toTimeString().slice(0, 5);
+  // ---------- A sala dos sons: todos os sons, de qualquer caminho, agrupados por estilo ----------
+  function salaDosSons() {
+    const faixa = (attr, nome, det) => `<button class="faixa" ${attr} aria-pressed="false"><span class="pp" aria-hidden="true"></span><span class="faixa-t"><b>${esc(nome)}</b><small>${esc(det)}</small></span></button>`;
+    const grupo = (tit, sub, itens, fone) => `<section class="sala-grupo"><div class="sala-cab"><h2>${esc(tit)}</h2>${fone ? '<span class="sala-fone">com fone</span>' : ""}</div>${sub ? `<p>${esc(sub)}</p>` : ""}<div class="faixas">${itens.join("")}</div></section>`;
+    const fundo = SONS_GRUPOS.map(([g, l]) => { const [tit, fone] = g.split(" · "); return grupo(tit, "", l.map(([k, n, det]) => faixa(`data-som="${k}"`, n, det)), !!fone); }).join("");
+    return `<div class="sala-sons"><canvas class="ceu-fundo" aria-hidden="true"></canvas><div class="tela">
+      <div class="sala-topo">${voltar}</div>
+      <h1 class="sala-tit">A sala dos sons</h1>
+      <p class="sala-sub">Deite, feche os olhos e escolha um som. Todos estão abertos, em qualquer caminho.</p>
+      <div class="sala-orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+      ${grupo("Jornadas gravadas", "Gravações longas, para atravessar a noite.", DESTAQUES.map(([k, n, m]) => faixa(`data-tambor="${k}"`, n, `${m} min`)))}
+      ${grupo("O tambor", "A batida firme e constante das jornadas xamânicas. Quando o tambor parar, volte devagar.", TAMBORES.map(([k, n, m]) => faixa(`data-tambor="${k}"`, n, `${m} min`)))}
+      <div class="sala-tempo"><span>Os sons abaixo tocam por</span><div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div><small>e somem devagar no fim, mesmo com a tela desligada.</small></div>
+      ${fundo}
+      ${livre("viagens") ? grupo("Viagens guiadas", "", VIAGENS.map(v => faixa(`data-pratica="${v.k}"`, v.nome, "viagem guiada"))) : ""}
+      <details class="como-sons"><summary>Como funcionam os sons com fone</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone.</p></details>
+      <button class="btn largo apagar" id="apagar">Apagar a luz</button>
+    </div><p class="sala-aviso" id="aviso-fone" hidden></p>
+    <div class="breu" id="breu" hidden><div class="relogio" id="relogio2"></div><span id="breu-desp"></span><span class="miuda">toque para acender</span></div></div>`;
+  }
   function abrirModoNoite(somInicial, soOuvir) {
-    let somNovo = null;
+    const sala = soOuvir === "sala";
     if (!soOuvir) {
       registrar("dormir"); est.ultimaNoite = hojeIso; est.dormiuAs = agoraHM(); contarNoiteDaTradicao();
       if (NOITE.length && est.tecnica) { est.tecFeitas = est.tecFeitas || {}; est.tecFeitas[est.tecnica.i] = hojeIso; }
-      salvar(); somNovo = descobrirSom();
+      salvar();
     }
     const a = est.alvoNoite === hojeIso ? alvoDe(est.alvo) : null, temMadrugada = !!acharPratica("madrugada");
-    abrirSobre(`<div class="modo-noite"><div class="tela">
+    abrirSobre(sala ? salaDosSons() : `<div class="modo-noite"><div class="tela">
         <div class="topo">${voltar}<span class="rotulo">Modo noite</span></div>
         <div class="relogio" id="relogio">${agoraHM()}</div>
         <div class="afirm-bloco"><span class="rotulo">A afirmação desta noite</span><p class="afirm-noite">“${esc(afirmacaoDaNoite() || ATOS[est.ato].frase)}”</p><p class="suave miuda">Deitado, olhos fechados: repita devagar, com convicção, até adormecer.</p></div>
@@ -3466,12 +3477,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
         ${a ? `<section><span class="rotulo">Alvo desta noite</span><p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p></section>`
           : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite · se quiser</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
-        <section class="destaques-noite"><span class="rotulo">Em destaque</span><div class="destaques">${DESTAQUES.map(([k, n, m]) => `<button class="som-destaque" data-tambor="${k}" aria-pressed="false"><span class="pp" aria-hidden="true"></span><b>${n}</b><small>${m} min</small></button>`).join("")}</div></section>
-        ${secaoSons()}
-        ${livre("tambor") ? `<section class="tambor"><span class="rotulo">Jornada do tambor</span>
-          <p class="suave">O tambor bate firme e constante, como nas jornadas xamânicas. Deite, feche os olhos e deixe a batida levar. Quando o tambor parar, volte devagar.</p>
-          <div class="sons tempo3">${TAMBORES.map(([k, n, m]) => `<button data-tambor="${k}" aria-pressed="false"><span class="pp" aria-hidden="true"></span>${n}<small>${m} min</small></button>`).join("")}</div></section>` : ""}
-        ${livre("viagens") ? `<section><span class="rotulo">Viagem guiada</span><div class="sons viagens">${VIAGENS.map(v => `<button data-pratica="${v.k}">${esc(v.nome)}</button>`).join("")}</div></section>` : ""}
+        <section><span class="rotulo">Sons para dormir</span><button class="btn fantasma largo" data-acao="sala-sons">Abrir a sala dos sons</button></section>
         ${!livre("despertar") ? "" : `<section><span class="rotulo">Despertar de madrugada</span>
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>
           <p class="suave miuda">Funciona com o Osirion aberto nesta tela, o celular carregando e o som ligado. A tela fica escura, mas acordada. <button class="link" id="ouvir-sino">Ouvir o sino</button></p></section>`}
@@ -3484,11 +3490,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <button class="btn fantasma largo" id="volta-dormir">Voltar a dormir</button></div>
     </div>`, d => {
       let som = null, nomeSom = null, minutos = 30, fimSom = 0, alarme = 0, tocando = 0, lock = null;
-      // um som novo encontrado nesta noite: o livro mostra a descoberta
-      if (somNovo) setTimeout(() => { if (d.isConnected) avisoSelo([{ nome: (SONS.find(x => x[0] === somNovo) || [, "Um som novo"])[1] }], "Nova descoberta · um som"); }, 700);
-      const $ = s => d.querySelector(s), caixa = d.querySelector(".modo-noite");
+      const $ = s => d.querySelector(s), caixa = d.querySelector(".modo-noite, .sala-sons"), fechado = s => !$(s) || $(s).hidden;
+      if (sala) ceuFundo(d.querySelector(".ceu-fundo"), caixa, true);
       // A tela escura cobre tudo: a página volta ao topo e para de rolar enquanto ela estiver aberta.
-      const cobre = (s, on) => { $(s).hidden = !on; if (on) caixa.scrollTop = 0; caixa.style.overflow = $("#breu").hidden && $("#acorda").hidden ? "" : "hidden"; };
+      const cobre = (s, on) => { if (!$(s)) return; $(s).hidden = !on; if (on) caixa.scrollTop = 0; caixa.style.overflow = fechado("#breu") && fechado("#acorda") ? "" : "hidden"; };
       const pede = async () => { try { if ("wakeLock" in navigator) lock = await navigator.wakeLock.request("screen"); } catch (e) {} };
       const vis = () => { if (document.visibilityState === "visible" && d.isConnected) pede(); };
       document.addEventListener("visibilitychange", vis); pede();
@@ -3514,10 +3519,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const proximo = () => { const [h, m] = despertar().split(":").map(Number), x = new Date(); x.setHours(h, m, 0, 0); if (x <= new Date()) x.setDate(x.getDate() + 1); return x.getTime(); };
       const toca = () => { pararSom(); cobre("#breu", false); cobre("#acorda", true); let n = 0; sino(); vibrar([200, 100, 200]); tocando = setInterval(() => { if (++n > 9) return pararSino(); sino(); }, 7000); };
       const relogio = setInterval(() => {
-        ["#relogio", "#relogio2", "#relogio3"].forEach(s => { $(s).textContent = agoraHM(); });
+        ["#relogio", "#relogio2", "#relogio3"].forEach(s => { if ($(s)) $(s).textContent = agoraHM(); });
         if (alarme && Date.now() >= alarme) { alarme = 0; $("#desp").setAttribute("aria-pressed", "false"); toca(); }
       }, 10000);
-      ["#relogio2", "#relogio3"].forEach(s => { $(s).textContent = agoraHM(); });
+      ["#relogio2", "#relogio3"].forEach(s => { if ($(s)) $(s).textContent = agoraHM(); });
       aoFechar = () => { somDeFundo(false); pararSom(); pararTambor(); pararSino(); clearInterval(relogio); document.removeEventListener("visibilitychange", vis); try { if (lock) lock.release(); } catch (e) {} };
       d.addEventListener("click", e => {
         const b = e.target.closest("button"); if (!b) return;
@@ -3528,7 +3533,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           if (tambor && tambor.dataset.k === b.dataset.tambor) { tambor.paused ? continuarTambor() : pausarTambor(); return; }
           pararTambor(); pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + (/\.(mp3|m4a)$/.test(b.dataset.tambor) ? "" : ".mp3")); tambor.dataset.k = b.dataset.tambor; tambor.setAttribute("playsinline", "");
           tambor.onended = pararTambor; tambor.play().catch(() => {}); b.setAttribute("aria-pressed", "true"); b.dataset.estado = "tocando";
-          sessaoMidia(b.textContent.replace(/\d+ min$/, "").trim() + (b.dataset.tambor.startsWith("tambor") ? " · jornada do tambor" : ""), pausarTambor, continuarTambor, pararTambor);
+          sessaoMidia((b.querySelector("b") || b).textContent.replace(/\d+ min$/, "").trim() + (b.dataset.tambor.startsWith("tambor") ? " · jornada do tambor" : ""), pausarTambor, continuarTambor, pararTambor);
         }
         else if (b.dataset.som) {
           const k = b.dataset.som;
@@ -3547,7 +3552,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           sessaoMidia(nomeBonito, pausar, continuar, pararSom);
           const av = d.querySelector("#aviso-fone"), sd = SONS.find(x => x[0] === k);
           if (av && sd) { av.textContent = "Carregando o som…"; av.hidden = false; }
-          const descreve = () => { if (av && sd && nomeSom === k) av.textContent = sd[2] + (SOM[k] ? " Use fone de ouvido: um tom em cada ouvido." : "") + " Toca pelo tempo escolhido, mesmo com a tela desligada, e some devagar no fim. Toque de novo para pausar."; };
+          const descreve = () => { if (av && sd && nomeSom === k) av.textContent = (sala ? "Tocando · " + sd[1] + "." : sd[2]) + (SOM[k] ? " Use fone de ouvido: um tom em cada ouvido." : "") + (sala ? ` Por ${minutos} min. Toque de novo para pausar.` : " Toca pelo tempo escolhido, mesmo com a tela desligada, e some devagar no fim. Toque de novo para pausar."); };
         } else if (b.dataset.tempo) {
           minutos = +b.dataset.tempo; d.querySelectorAll("[data-tempo]").forEach(x => x.setAttribute("aria-pressed", x === b));
           if (fimEm) fimEm = Date.now() + minutos * 6e4;
@@ -3559,7 +3564,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         else if (b.id === "volta-dormir") { pararSino(); cobre("#acorda", false); cobre("#breu", true); $("#breu-desp").textContent = ""; }
         else if (b.id === "fazer-madrugada") { pararSino(); fecharSobre(); render(); abrirPratica("madrugada"); }
       });
-      $("#breu").addEventListener("click", () => cobre("#breu", false));
+      if ($("#breu")) $("#breu").addEventListener("click", () => cobre("#breu", false));
     });
   }
 
@@ -3755,7 +3760,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     }
     if (b.dataset.cor) { est.nevoeiro = b.dataset.cor; aplicarCor(); document.querySelectorAll(".cor").forEach(c => c.setAttribute("aria-pressed", c === b)); const cl = document.getElementById("cor-livre"); if (cl) cl.value = b.dataset.cor; return; }
     if (b.dataset.estilo) { abrirEstilo(b.dataset.estilo); return; }
-    if (b.dataset.ouvirSom) { const k = b.dataset.ouvirSom; abrirModoNoite(null, true); const x = document.querySelector(`.modo-noite [data-som="${k}"]`); if (x) x.click(); return; }
+    if (b.dataset.ouvirSom) { const k = b.dataset.ouvirSom; abrirModoNoite(null, "sala"); const x = document.querySelector(`.sala-sons [data-som="${k}"]`); if (x) x.click(); return; }
     if (b.dataset.escolherTrad) {
       const id = b.dataset.escolherTrad, x = ESTILOS.find(e => e.id === id);
       escolherEstilo(id); fecharSobre(); aba = "hoje"; render();
@@ -3803,6 +3808,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (acao === "nevoeiro") abrirNevoeiro();
     else if (acao === "entrar") { est.nevoeiro = est.nevoeiro || CORES[0].v; salvar(); fecharSobre(); aba = "hoje"; render(); }
     else if (acao === "sortear") abrirSorteio();
+    else if (acao === "sala-sons") abrirModoNoite(null, "sala");
     else if (acao === "estilo-depois") { est.estiloVisto = true; salvar(); render(); }
     else if (acao === "levar-abaton") { fecharSobre(); aba = "hoje"; render(); abrirPratica("noite"); }
     else if (acao === "sem-nevoeiro") { est.nevoeiro = null; salvar(); fecharSobre(); aba = "hoje"; render(); }
