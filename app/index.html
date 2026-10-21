@@ -1033,7 +1033,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .portais { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(90% 60% at 50% 18%, #17183a 0%, #0a0a18 55%, #030308 100%); }
 /* a boca da caverna: as bordas escurecem e a luz fica no centro */
 .portais::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 85% at 50% 40%, transparent 45%, rgba(0,0,0,.75) 100%); }
-.portais .ceu-fundo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; }
+.portais .ceu-fundo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .9; }
 .portais-rolo { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; z-index: 1; }
 .portais-tela { position: relative; align-items: center; text-align: center; padding-bottom: calc(48px + env(safe-area-inset-bottom)); }
 .portais-olho { width: 70px; margin: 10px auto 0; filter: drop-shadow(0 0 16px rgba(169,178,240,.5)); animation: surge 2.2s ease both, respira-olho 6s ease-in-out 2.2s infinite; }
@@ -1613,7 +1613,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <button class="carro-ir" data-escolher-trad="">Atravessar esta porta</button>
       <p class="carro-dica">deslize para ver as outras portas</p>
       ${est.estiloVisto ? '<p class="portais-sub" style="font-size:12.5px;margin-top:10px">O que você já fez fica guardado em “O que já passou”.</p>' : ""}
-    </div></div></div>`, d => { const box = d.querySelector(".portais"); ceuFundo(d.querySelector(".ceu-fundo"), box); carrossel(d, Math.max(0, ESTILOS.findIndex(x => x.id === atual))); });
+    </div></div></div>`, d => { const box = d.querySelector(".portais"); ceuFundo(d.querySelector(".ceu-fundo"), box, true); carrossel(d, Math.max(0, ESTILOS.findIndex(x => x.id === atual))); });
   }
   // gira as portas: arrastar com o dedo, tocar numa porta do lado, nas setas ou nos pontinhos. A do meio é a que se atravessa.
   function carrossel(d, ini) {
@@ -2238,16 +2238,27 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <span class="eye">Amanhã cedo, no diário</span>
       <p>${esc(a.pergunta)}</p></div>`;
   }
-  function ceuFundo(cv, box) {
+  // fino: só estrelas pequenas que cintilam devagar e um pó dourado quase parado, sem estrelas cadentes (a escolha do universo)
+  function ceuFundo(cv, box, fino) {
     const x = cv.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1), quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let W = 0, H = 0, est2 = [], voando = [], prox = 1.2, ult = performance.now();
     const ajusta = () => { W = box.clientWidth; H = box.clientHeight; cv.width = W * dpr; cv.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (fino) { est2 = Array.from({ length: 70 }, () => { const b = Math.random(), ouro = Math.random() < .18;
+        return { x: Math.random() * W, y: Math.random() * H, r: ouro ? 1.2 + b : .35 + b * .7, a: ouro ? .12 + b * .14 : .18 + b * .5, ouro, f: .15 + Math.random() * .5, ph: Math.random() * 7, v: ouro ? 1.5 + b * 2 : 0 }; }); return; }
       est2 = Array.from({ length: 34 }, () => { const b = Math.random(), perto = Math.random() < .35; return { x: Math.random() * W, y: Math.random() * H, r: perto ? 3 + b * 7 : .5 + b * 1.1, a: perto ? .06 + b * .1 : .25 + b * .5, perto, f: .3 + Math.random() * 1.2, ph: Math.random() * 7, v: perto ? 4 + b * 4 : 1 + b * 1.5 }; }); };
     const quadro = agora => {
       if (!box.isConnected) return;
       if (!W || box.clientWidth !== W) ajusta();
       const dt = Math.min(.05, (agora - ult) / 1000), t = agora / 1000; ult = agora;
       x.clearRect(0, 0, W, H);
+      if (fino) {
+        for (const e of est2) {
+          if (!quieto && e.v) { e.y -= e.v * dt; if (e.y < -10) { e.y = H + 10; e.x = Math.random() * W; } }
+          const br = e.a * (.55 + .45 * Math.sin(t * e.f + e.ph));
+          x.fillStyle = e.ouro ? `rgba(245,214,150,${br})` : `rgba(255,248,236,${br})`; x.beginPath(); x.arc(e.x, e.y, e.r, 0, 7); x.fill();
+        }
+        requestAnimationFrame(quadro); return;
+      }
       for (const e of est2) {
         if (!quieto) { e.y -= e.v * dt; if (e.y < -20) { e.y = H + 20; e.x = Math.random() * W; } }
         const br = e.a * (.6 + .4 * Math.sin(t * e.f + e.ph)), r = e.perto ? e.r : e.r * 3.5;
