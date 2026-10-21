@@ -834,6 +834,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .mundo-cab .suave { margin: 0; max-width: 290px; text-wrap: balance; }
 .mundo-sec { display: flex; flex-direction: column; gap: 10px; }
 .mundo-dormir { background: #7a1f23; color: #f2b8b9; }
+.mundo-partes { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 99px; border: 1px solid rgba(201,163,95,.35); background: rgba(5,5,14,.35); }
+.mundo-partes button { padding: 10px; border: 0; border-radius: 99px; background: none; color: var(--areia-2); font-family: var(--display); font-size: 15px; cursor: pointer; }
+.mundo-partes button[aria-pressed="true"] { background: rgba(245,199,91,.16); color: #f0d79b; box-shadow: inset 0 0 0 1px rgba(240,205,130,.5); }
 .sinal-vazio { display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 18px; border: 1px dashed rgba(201,163,95,.35); }
 .instr { display: flex; flex-direction: column; border-radius: 20px; background: var(--ceu-2); box-shadow: inset 0 0 0 1px rgba(201,163,95,.18); overflow: hidden; }
 .ferr { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 0; background: none; color: var(--areia); text-align: left; }
@@ -1008,9 +1011,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 /* ---------- Sorteio: lua cheia, reino seu, áudio ---------- */
 .lua-aviso { font-size: 13px; color: #e8e4ff; background: rgba(200,200,255,.1); border: 1px solid rgba(200,200,255,.3); border-radius: 999px; padding: 6px 14px; }
 .altar .item.especial img { opacity: .9; filter: drop-shadow(0 0 8px rgba(220,220,255,.8)); }
-.audio-reino { background: #1d2042; border: 0; color: var(--areia); grid-template-columns: 40px 1fr; padding: 10px; }
-.audio-reino .play { width: 40px; height: 40px; opacity: .5; }
-.audio-reino .suave { color: var(--areia-2); font-size: 12px; }
 /* ---------- Modo noite: vermelho escuro, para não acordar os olhos ---------- */
 .modo-noite { position: absolute; inset: 0; overflow-y: auto; background: #0d0304; color: #d4686a; --nevoeiro: #c24a4e; --areia: #e08a8b; --areia-2: #a65558; --ceu-2: #1a0708; --ceu-3: #3a1214; --cristal: #c24a4e; }
 /* A página da noite com respiro: cada parte separada por uma linha fina e espaço, letras maiores e entrelinha folgada. */
@@ -1903,45 +1903,53 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const itemPratica = ({ p, ato, hora, agora }) => p.k === "teste"
     ? { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje · ${hora}` }
     : { attr: `data-pratica="${p.k}"${ato !== undefined ? ` data-ato="${ato}"` : ""}`, ilus: p.ilus || "estrela-sol", nome: p.nome, det: feitoHoje(p.k) ? "feita hoje" : `${agora ? hora : "para repetir"} · ${p.det}` };
-  function ferrDia() {
-    const acordar = { attr: 'data-acao="anotar-agora"', ilus: "fita-estrela", nome: "Diário dos 5 minutos", det: est.diario.some(d => isoNoite(d) === hojeIso) ? "anotado hoje" : "ao acordar, sem levantar: onde você estava? o que sentia?" };
-    const dia = praticasDoMomento("Dia"), temTeste = dia.some(x => x.p.k === "teste");
-    return `<span class="rotulo">Ao acordar</span>${listaFerr([acordar])}
-      <span class="rotulo">Práticas do dia</span>${listaFerr([...dia.map(itemPratica), temTeste ? null : itemPratica({ p: { k: "teste" }, hora: "ao longo do dia" })])}
-      ${livre("extras") ? `<span class="rotulo">Além dos atos</span>${listaFerr((window.ARHAT.EXTRAS || []).map(p => itemPratica({ p, hora: "quando quiser", agora: true })))}` : ""}
-      ${CFG ? listaFerr([{ attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "os avisos do teste de realidade no celular" }]) : ""}`;
-  }
-  // as técnicas da noite: a da semana e as que já chegaram (tocar numa delas volta para ela); as outras chegam com as noites
-  function tecnicasDaNoite() {
-    if (!NOITE.length) return "";
-    const s = estiloAtual(), atual = tecnicaAtual().i, ate = estagioAtual();
-    const todas = s ? s.tecnicas : [...new Set(ESTAGIOS.flatMap(E => E.tecnicas || []))];
-    const veio = (s ? tecnicasReveladas() : [...new Set(ESTAGIOS.slice(0, ate + 1).flatMap(E => E.tecnicas || []))]).filter(i => NOITE[i] && i !== atual);
-    const faltam = todas.filter(i => NOITE[i] && i !== atual && !veio.includes(i)).length;
-    return veio.length || faltam ? `<span class="rotulo">As técnicas da noite</span>${veio.length ? listaFerr(veio.map(i => ({ attr: `data-tecnica="${i}"`, ilus: NOITE[i].ilus, nome: NOITE[i].nome, det: "já chegou · tocar para praticar esta" }))) : ""}
-      ${faltam ? `<p class="suave miuda">E mais ${faltam} ${faltam === 1 ? "técnica chega" : "técnicas chegam"} com as noites.</p>` : ""}` : "";
-  }
-  function ferrNoite() {
-    const noite = praticasDoMomento("Noite"), madr = praticasDoMomento("04:00");
-    return tecnicasDaNoite() + (noite.length ? `<span class="rotulo">Ao deitar</span>${listaFerr(noite.map(itemPratica))}` : "")
-      + (madr.length ? `<span class="rotulo">De madrugada · 4 da manhã</span>${listaFerr(madr.map(itemPratica))}` : "")
-      + `<span class="rotulo">Instrumentos da noite</span>` + listaFerr([
-      { attr: 'data-acao="sala-sons"', ilus: "fitas", nome: "A sala dos sons", det: "jornadas gravadas, tambor, sons para dormir e sair do corpo" },
-      livre("sorteio") ? { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "O oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" } : null,
-      ...(livre("viagens") ? VIAGENS.map(v => ({ attr: `data-pratica="${v.k}"`, ilus: "estrela-cadente", nome: v.nome, det: "viagem guiada" })) : [])
-    ]) + (livre("sorteio") ? "" : trancado("sorteio"));
-  }
-  // os ensinamentos de cada mundo: os do caminho que já chegaram (para reler) e o de hoje, se for deste momento
-  function ensinamentosDoMundo(dia) {
+  // Cada mundo tem duas partes: "Agora" (só o que é deste momento do caminho, em ordem) e "Já aprendido"
+  // (as práticas, técnicas e ensinamentos que já chegaram, para usar quando quiser), para não acumular tudo na mesma página.
+  const secMundo = (rot, itens) => itens.filter(Boolean).length ? `<span class="rotulo">${rot}</span>${listaFerr(itens)}` : "";
+  const capItem = (n, prox) => { const c = CAPS[n - 1]; return { attr: `data-capsula="${n}"`, ilus: c.ilus, nome: c.titulo, det: n === prox ? `o ensinamento de hoje · ${c.minutos} min` : (c.cartas[0] || {}).sub || "" }; };
+  function capsDoMundo(dia) {
     const s = estiloAtual(), seq = s ? (s.ensinamentos || []) : ESTAGIOS.slice(0, estagioAtual() + 1).flatMap(E => E.ensinamentos || []);
-    const prox = proximoAgora(estagioAtual()), vistas = est.vistas || {};
-    const daqui = n => CAPS[n - 1] && CAPS_DIA.has(n) === dia;
-    const lista = [...new Set([...seq, ...Object.keys(vistas).map(Number)])].filter(n => daqui(n) && (vistas[n] || n === prox));
-    const faltam = seq.filter(n => daqui(n) && !vistas[n] && n !== prox).length;
-    const item = n => { const c = CAPS[n - 1]; return `<button class="ferr" data-capsula="${n}"><span class="selo-img"><img src="${ILUS(c.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(c.titulo)}</b><span>${n === prox ? "o ensinamento de hoje" : esc((c.cartas[0] || {}).sub || "") + " · para reler"}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`; };
-    return `<section class="mundo-sec"><span class="rotulo">Ensinamentos ${dia ? "para o dia" : "para a noite"}</span>
-      ${lista.length ? `<div class="instr">${lista.map(item).join("")}</div>` : `<p class="suave">Os ensinamentos deste momento vão chegando com o seu caminho, um de cada vez.</p>`}
-      ${faltam ? `<p class="suave miuda">E mais ${faltam} ${faltam === 1 ? "chega" : "chegam"} no seu tempo.</p>` : ""}</section>`;
+    const prox = proximoAgora(estagioAtual()), vistas = est.vistas || {}, daqui = n => CAPS[n - 1] && CAPS_DIA.has(n) === dia;
+    return { prox: daqui(prox) ? prox : null, lidos: [...new Set([...seq, ...Object.keys(vistas).map(Number)])].filter(n => daqui(n) && vistas[n]) };
+  }
+  function tecnicasVindas() {
+    const s = estiloAtual(), atual = tecnicaAtual().i, ate = estagioAtual();
+    return { veio: (s ? tecnicasReveladas() : [...new Set(ESTAGIOS.slice(0, ate + 1).flatMap(E => E.tecnicas || []))]).filter(i => NOITE[i] && i !== atual) };
+  }
+  function mundoAgora(dia) {
+    const c = capsDoMundo(dia);
+    if (dia) {
+      const pr = praticasDoMomento("Dia").filter(x => x.agora || x.p.k === "teste"), temTeste = pr.some(x => x.p.k === "teste");
+      const acordar = { attr: 'data-acao="anotar-agora"', ilus: "fita-estrela", nome: "Diário dos 5 minutos", det: est.diario.some(d => isoNoite(d) === hojeIso) ? "anotado hoje" : "ao acordar, sem levantar: onde você estava? o que sentia?" };
+      return `<section class="mundo-sec">${sinalDeSonho() || '<div class="sinal-vazio"><span class="rotulo">Sinal de sonho</span><span class="suave">Quando uma mesma coisa aparecer em três sonhos anotados, ela vira o seu sinal: ao encontrá-la acordado, você pergunta se está sonhando.</span></div>'}</section>
+        <section class="mundo-sec">${secMundo("Ao acordar", [acordar])}
+        ${secMundo("A prática de agora", [...pr.map(itemPratica), temTeste ? null : itemPratica({ p: { k: "teste" }, hora: "ao longo do dia" })])}
+        ${c.prox ? secMundo("O ensinamento de hoje", [capItem(c.prox, c.prox)]) : ""}
+        ${CFG ? listaFerr([{ attr: avisosLigados() ? 'data-aba="atos"' : 'data-acao="ativar-avisos"', ilus: "lua", nome: "Lembretes", det: avisosLigados() ? "ligados" : "os avisos do teste de realidade no celular" }]) : ""}</section>`;
+    }
+    const noite = praticasDoMomento("Noite").filter(x => x.agora), madr = praticasDoMomento("04:00").filter(x => x.agora);
+    return `<section class="mundo-sec">${cartaoTecnica()}</section>
+      <section class="mundo-sec">${secMundo("Ao deitar", noite.map(itemPratica))}${secMundo("De madrugada · 4 da manhã", madr.map(itemPratica))}
+      ${secMundo("Instrumentos da noite", [
+        { attr: 'data-acao="sala-sons"', ilus: "fitas", nome: "A sala dos sons", det: "jornadas gravadas, tambor, sons para dormir e sair do corpo" },
+        livre("sorteio") ? { attr: 'data-acao="sortear"', ilus: "estrela-terra", nome: "O oráculo dos alvos", det: alvoDaNoite() ? "esta noite: " + alvoDaNoite().nome : "sortear o alvo da noite" } : null])}
+      ${c.prox ? secMundo("O ensinamento de hoje", [capItem(c.prox, c.prox)]) : ""}</section>
+      <button class="btn largo mundo-dormir" data-acao="dormir">Vou dormir</button>`;
+  }
+  function mundoJa(dia) {
+    const c = capsDoMundo(dia);
+    let corpo;
+    if (dia) {
+      const pr = praticasDoMomento("Dia").filter(x => !x.agora && x.p.k !== "teste");
+      corpo = secMundo("As práticas do dia", pr.map(itemPratica))
+        + (livre("extras") ? secMundo("Além dos atos", (window.ARHAT.EXTRAS || []).map(p => itemPratica({ p, hora: "quando quiser", agora: true }))) : "");
+    } else {
+      const t = tecnicasVindas(), noite = praticasDoMomento("Noite").filter(x => !x.agora), madr = praticasDoMomento("04:00").filter(x => !x.agora);
+      corpo = secMundo("As técnicas da noite", t.veio.map(i => ({ attr: `data-tecnica="${i}"`, ilus: NOITE[i].ilus, nome: NOITE[i].nome, det: "tocar para praticar esta" })))
+        + secMundo("Ao deitar", noite.map(itemPratica)) + secMundo("De madrugada", madr.map(itemPratica));
+    }
+    corpo += secMundo(dia ? "Os ensinamentos do dia" : "Os ensinamentos da noite", c.lidos.map(n => capItem(n)));
+    return `<section class="mundo-sec">${corpo.trim() ? corpo : '<p class="suave" style="text-align:center">Aqui vão ficar as práticas, as técnicas e os ensinamentos que você já recebeu, para usar quando quiser.</p>'}</section>`;
   }
   function mundosBotao() {
     const n = deNoite(), t = NOITE.length ? tecnicaDaNoite() : null;
@@ -1951,22 +1959,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <button class="mundo-bt noite ${n ? "agora" : ""}" data-mundo="noite"><span class="mundo-ic lua" aria-hidden="true"></span><b>Mundo da noite</b><small>${t ? esc(t.nome) : "a técnica da semana"}</small></button>
     </div>`;
   }
-  function abrirMundo(q) {
-    const dia = q === "dia";
+  function abrirMundo(q, parte) {
+    const dia = q === "dia", ja = parte === "ja";
     deMundo = null;
-    abrirSobre(`<div class="mundo-tela ${q}" data-mundo-tela="${q}"><canvas class="ceu-fundo" aria-hidden="true"></canvas><div class="tela">
+    abrirSobre(`<div class="mundo-tela ${q}" data-mundo-tela="${q}${ja ? ":ja" : ""}"><canvas class="ceu-fundo" aria-hidden="true"></canvas><div class="tela">
       <div style="align-self:stretch">${voltar}</div>
       <div class="mundo-cab"><span class="mundo-ic ${dia ? "sol" : "lua"}" aria-hidden="true"></span><span class="rotulo">${dia ? "O mundo do dia" : "O mundo da noite"}</span>
         <h1>${dia ? "O que se faz acordado" : "O que se faz antes e durante o sono"}</h1>
         <p class="suave">${dia ? "O que você treina durante o dia é o que desperta à noite." : "A preparação, os sons, o alvo e a técnica: o caminho até o outro lado."}</p></div>
-      ${dia ? `<section class="mundo-sec">${sinalDeSonho() || '<div class="sinal-vazio"><span class="rotulo">Sinal de sonho</span><span class="suave">Quando uma mesma coisa aparecer em três sonhos anotados, ela vira o seu sinal: ao encontrá-la acordado, você pergunta se está sonhando.</span></div>'}</section>
-        <section class="mundo-sec">${ferrDia()}</section>`
-      : `<section class="mundo-sec">${cartaoTecnica()}</section>
-        <section class="mundo-sec">${ferrNoite()}</section>
-        <button class="btn largo mundo-dormir" data-acao="dormir">Vou dormir</button>`}
-      ${ensinamentosDoMundo(dia)}
+      <div class="mundo-partes" role="tablist"><button data-mundo="${q}" aria-pressed="${!ja}">Agora</button><button data-mundo="${q}" data-parte="ja" aria-pressed="${ja}">Já aprendido</button></div>
+      ${ja ? mundoJa(dia) : mundoAgora(dia)}
     </div></div>`, d => { if (!dia) ceuFundo(d.querySelector(".ceu-fundo"), d.querySelector(".mundo-tela"), true); });
   }
+
 
   function desenharPonto(ctx, x, y, tipo, cor, escala) {
     escala = escala || 1;
@@ -2357,7 +2362,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const a = alvoDe(l); if (!a) return "";
     return `<div class="leitura-alvo">${l.r === LUA ? '<img class="traco" src="img/traco/terra-lua.svg" alt="">' : ""}
       <div class="topo-l"><img src="${ILUS(a.ilus)}" alt=""><div><span class="eye">${esc(a.reino)}</span><h2>${esc(a.nome)}</h2></div></div>
-      <div class="player audio-reino"><button class="play" disabled aria-label="Áudio em gravação">▶</button><div><b>Viagem guiada · ${esc(a.reino)}</b><div class="suave">na voz da Vivian · em gravação</div></div></div>
       <span class="eye">Como chegar</span>
       <p>${esc(a.chegada)}</p>
       <span class="eye">A imagem para levar à cama</span>
@@ -3075,7 +3079,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     album: { nome: "O álbum dos alvos", ilus: "rio", quando: "Abre depois do seu primeiro sorteio de alvo.", ok: () => !!est.alvo || Object.values(est.hist).some(h => h.sorteio) },
     lugares: { nome: "Os seus lugares", ilus: "olho", quando: DEPOIS, ok: atosConcluidos },
     painel: { nome: "O painel do mês", ilus: "estrela-lilas", quando: "Abre quando você tiver 7 noites anotadas.", ok: () => noitesAnotadas() >= 7 },
-    viagens: { nome: "As viagens guiadas", ilus: "estrela-cadente", quando: DEPOIS, ok: () => atosConcluidos() || est.estilo === "cosmico" },
     despertar: { nome: "O despertar de madrugada", ilus: "lua", quando: "Abre no Segundo Ato, quando começam as práticas das 4 da manhã.", ok: () => est.ato >= 2 }
   };
   const livre = k => LIBERA[k].ok();
@@ -3556,7 +3559,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${grupo("O tambor", "A batida firme e constante das jornadas xamânicas. Quando o tambor parar, volte devagar.", TAMBORES.map(([k, n, m]) => faixa(`data-tambor="${k}"`, n, `${m} min`)))}
       <div class="sala-tempo"><span>Os sons abaixo tocam por</span><div class="sons tempo">${[15, 30, 60, 90].map(m => `<button data-tempo="${m}" aria-pressed="${m === 30}">${m} min</button>`).join("")}</div><small>e somem devagar no fim, mesmo com a tela desligada.</small></div>
       ${fundo}
-      ${livre("viagens") ? grupo("Viagens guiadas", "", VIAGENS.map(v => faixa(`data-pratica="${v.k}"`, v.nome, "viagem guiada"))) : ""}
       <details class="como-sons"><summary>Como funcionam os sons com fone</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone.</p></details>
       <button class="btn largo apagar" id="apagar">Apagar a luz</button>
     </div><p class="sala-aviso" id="aviso-fone" hidden></p>
@@ -3834,8 +3836,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const b = e.target.closest("button"); if (!b) return;
     atualizarDia();
     if (b.dataset.aba) { deMundo = null; fecharSobre(); aba = b.dataset.aba; render(); return; }
-    if (b.hasAttribute("data-fechar")) { const m = b.closest("[data-mundo-tela]") ? null : deMundo; deMundo = null; fecharSobre(); render(); if (m) abrirMundo(m); return; }
-    if (b.dataset.mundo) { abrirMundo(b.dataset.mundo); return; }
+    if (b.hasAttribute("data-fechar")) { const m = b.closest("[data-mundo-tela]") ? null : deMundo; deMundo = null; fecharSobre(); render(); if (m) abrirMundo(...m.split(":")); return; }
+    if (b.dataset.mundo) { abrirMundo(b.dataset.mundo, b.dataset.parte); return; }
     { const m = b.closest("[data-mundo-tela]"); if (m) deMundo = m.dataset.mundoTela; else if (!b.closest("#sobre")) deMundo = null; }
     if (b.dataset.acao === "abrir-conta") { abrirConta(); return; }
     if (b.dataset.acao === "ativar-avisos") {
