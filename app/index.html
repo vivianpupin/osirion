@@ -927,7 +927,10 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .item-sonho[open] .comeco { display: none; }
 .palavras-lista { display: flex; flex-direction: column; gap: 8px; }
 .item-sonho mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: inherit; border-radius: 3px; padding: 0 2px; }
-.item-sonho p { margin: 0; padding: 0 14px 14px 48px; font-size: 15px; line-height: 1.55; }
+.item-sonho p { margin: 0; padding: 0 14px 14px 48px; font-size: 15px; line-height: 1.55; white-space: pre-wrap; }
+.item-sonho .editar-sonho { display: block; margin: -4px 14px 12px 48px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--ceu-3); background: none; color: var(--nevoeiro); font: inherit; font-size: 13px; cursor: pointer; }
+.editar-tela textarea { min-height: 40vh; }
+.editar-tela .apagar { background: none; border: 0; color: #d98a8a; font: inherit; font-size: 14px; padding: 8px; align-self: center; cursor: pointer; }
 .item-sonho .ic-noite.peq { flex: none; margin-top: 2px; }
 .vazio-diario { text-align: center; padding: 26px 10px; border: 1px dashed var(--ceu-3); border-radius: 18px; }
 .vazio-diario p { margin: 4px 0; }
@@ -1186,13 +1189,16 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (typeof a === "number" && typeof b === "number") return Math.max(a, b);
     return a === undefined || a === null ? b : a;
   }
-  const chaveSonho = d => `${d.iso || ""}|${d.h || ""}|${(d.texto || "").slice(0, 80)}`;
+  // Cada sonho tem um id fixo (os antigos, sem id, valem pelo começo do texto). Ao editar um antigo, ele ganha id e
+  // guarda a chave de antes (chave0), para a versão velha que ainda estiver na nuvem não voltar duplicada.
+  const chaveSonho = d => d.id || `${d.iso || ""}|${d.h || ""}|${(d.texto || "").slice(0, 80)}`;
+  const novoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   function mesclar(nova, velha) {
     const r = Object.assign(estPadrao(), velha);
     Object.keys(nova).forEach(k => { if (nova[k] !== null && nova[k] !== undefined) r[k] = nova[k]; });
     ["hist", "vistas", "selos", "marcos", "album", "semanas", "liberados", "feitos"].forEach(k => { r[k] = juntar(nova[k] || {}, velha[k] || {}); });
-    const tem = new Set((nova.diario || []).map(chaveSonho));
-    r.diario = (nova.diario || []).concat((velha.diario || []).filter(d => !tem.has(chaveSonho(d)))).sort((x, y) => (x.iso || "").localeCompare(y.iso || "") || (x.h || 0) - (y.h || 0));
+    const tem = new Set((nova.diario || []).flatMap(d => [chaveSonho(d), d.chave0].filter(Boolean)));
+    r.diario = (nova.diario || []).concat((velha.diario || []).filter(d => !tem.has(chaveSonho(d)) && !(d.chave0 && tem.has(d.chave0)))).sort((x, y) => (x.iso || "").localeCompare(y.iso || "") || (x.h || 0) - (y.h || 0));
     const dj = new Set((nova.dejavus || []).map(d => d.iso + d.texto));
     r.dejavus = (nova.dejavus || []).concat((velha.dejavus || []).filter(d => !dj.has(d.iso + d.texto)));
     r.estagio = Math.max(nova.estagio || 0, velha.estagio || 0);
@@ -1770,7 +1776,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   });
 
   function todasEntradas() {
-    return est.diario.map(d => Object.assign({ iso: hojeIso }, d)).concat(DEMO ? EXEMPLOS : [])
+    return est.diario.map((d, i) => Object.assign({ iso: hojeIso }, d, { _i: i })).concat(DEMO ? EXEMPLOS : [])
       .sort((a, b) => (a.iso < b.iso ? 1 : a.iso > b.iso ? -1 : 0));
   }
 
@@ -1865,7 +1871,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     } else comeco = t ? esc(t.length > 110 ? t.slice(0, 110).replace(/\s+\S*$/, "") + "…" : t) : '<span class="suave">Nada ficou desta noite.</span>';
     return `<details class="item-sonho" ${aberto ? "open" : ""}><summary>${iconeNoite(d.tipo, "peq")}<span><span class="quando">${esc(quando)} · ${esc(TIPOS[Math.min(4, d.tipo)].nome)}</span>
       <span class="comeco">${comeco}</span></span></summary>
-      ${t.length > 110 ? `<p>${realcar(t, termo)}</p>` : ""}</details>`;
+      ${t ? `<p>${realcar(t, termo)}</p>` : ""}${d._i !== undefined ? `<button class="editar-sonho" data-acao="editar-sonho" data-i="${d._i}">Editar</button>` : ""}</details>`;
   }
   function telaLista() {
     const todas = todasEntradas(), termo = busca.trim();
@@ -2313,15 +2319,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   // O que abre primeiro: a entrada, depois a travessia, e só na manhã seguinte a pergunta do nevoeiro.
+  let nevoeiroDepois = false;
+  const diaLocal = () => { const h = new Date(); return `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`; };
   function seguir() {
+    vozPronta();
     if (!est.travessia) return abrirTravessia();
-    const h = new Date(), hoje = `${h.getFullYear()}-${h.getMonth() + 1}-${h.getDate()}`;
-    if (!est.nevoeiro && est.travessia !== hoje && est.perguntou !== hoje) { est.perguntou = hoje; salvar(); abrirNevoeiro(); return; }
+    const h = new Date(), hoje = diaLocal(), hr = h.getHours();
+    const perguntar = !est.nevoeiro && est.travessia !== hoje && est.perguntou !== hoje;
     // De manhã, na primeira vez que abre o app, ele vai direto para o diário escuro dos primeiros 5 minutos.
-    const hr = h.getHours();
+    // A pergunta do nevoeiro (só até a pessoa ver o nevoeiro) espera o sonho ser guardado.
     if (hr >= 4 && hr < 11 && est.manha !== hojeIso && !est.diario.some(d => isoNoite(d) === hojeIso)) {
-      est.manha = hojeIso; salvar(); manha = true; aba = "diario"; modoDiario = "gravar"; render();
+      est.manha = hojeIso; salvar(); manha = true; aba = "diario"; modoDiario = "gravar"; nevoeiroDepois = perguntar; render(); return;
     }
+    if (perguntar) { est.perguntou = hoje; salvar(); abrirNevoeiro(); }
   }
 
   // As viagens guiadas valem em qualquer ato (conteudo.js).
@@ -3223,8 +3233,33 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     });
   }
 
+  // ---------- Editar um sonho já guardado (o texto, o que ditou a mais e como foi a noite) ----------
+  let tipoEd = 1;
+  function abrirEdicao(i) {
+    const d = est.diario[i]; if (!d) return;
+    tipoEd = d.tipo || 0;
+    const q = deIso(d.iso || hojeIso).toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
+    abrirSobre(`<div class="tela diario editar-tela">${voltar}<span class="rotulo">Editar o sonho · ${esc(q)}</span>
+      <textarea id="sonho-ed">${esc(d.texto || "")}</textarea>
+      <button class="btn fantasma largo" id="gravar-ed" data-acao="gravar-ed"><span class="gravar-t">Falar mais</span></button>
+      <p class="suave" id="gravar-tx-ed" style="text-align:center;margin:0"></p>
+      <span class="rotulo">Como foi a noite</span>
+      <div class="tipos">${TIPOS.map(t => `<button class="tipo" data-tipo-ed="${t.k}" aria-pressed="${t.k === tipoEd}">${iconeNoite(t.k)}${t.nome}</button>`).join("")}</div>
+      <button class="btn largo" data-acao="guardar-edicao" data-i="${i}">Guardar as mudanças</button>
+      <button class="apagar" data-acao="apagar-sonho" data-i="${i}">Apagar este sonho</button></div>`,
+      x => { const a = x.querySelector("#sonho-ed"); acompanhar(a); aoFechar = () => { if (rec) rec.parar(); }; });
+  }
+
   // ---------- Diário: voz que vira texto ----------
-  let rec = null;
+  // Dois jeitos de ouvir:
+  // 1) a voz é gravada e escrita por um modelo de transcrição no servidor (bem mais fiel, entende frases longas e
+  //    palavras difíceis); vale quando a pessoa está na conta e o Netlify tem a chave OPENAI_API_KEY;
+  // 2) sem isso, o reconhecimento do próprio aparelho, que recomeça sozinho quando para, até a pessoa tocar para parar.
+  // Não há limite de tamanho: a gravação é escrita em trechos de alguns minutos, um depois do outro.
+  const TRANSCREVER = "/.netlify/functions/transcrever";
+  let rec = null, vozServidor = null, filaVoz = Promise.resolve(), vozPendente = 0, vozFalhas = [];
+  const vozPronta = () => vozServidor !== null ? Promise.resolve(vozServidor)
+    : fetch(TRANSCREVER).then(r => r.json()).then(j => (vozServidor = !!j.pronto)).catch(() => (vozServidor = false));
   // A caixa do diário cresce com o texto e sempre mostra a última frase (ao falar ou ao escrever).
   function acompanhar(area) {
     area.style.height = "auto";
@@ -3233,21 +3268,80 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const r = area.getBoundingClientRect(), nav = document.getElementById("nav"), limite = nav ? nav.getBoundingClientRect().top - 12 : innerHeight;
     if (r.bottom > limite) telas.scrollTop += r.bottom - limite;
   }
-  function gravarVoz(b) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition, tx = document.getElementById("gravar-tx"), area = document.getElementById("sonho");
-    if (rec) { rec.stop(); return; }
-    if (!SR) { tx.textContent = "Neste aparelho a voz não vira texto aqui dentro. Toque na caixa abaixo e use o microfone do teclado para ditar."; area.focus(); return; }
-    rec = new SR(); rec.lang = "pt-BR"; rec.continuous = true; rec.interimResults = true;
-    const base = area.value ? area.value.replace(/\s*$/, " ") : ""; let final = "";
-    rec.onresult = e => {
-      let prov = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) final += r[0].transcript.trim() + " "; else prov += r[0].transcript; }
-      area.value = base + final + prov; acompanhar(area);
+  // espera a voz terminar de virar texto (a gravação parar e os trechos voltarem do servidor)
+  function depoisDaVoz(fn) { (function v() { if (rec || vozPendente) setTimeout(v, 300); else fn(); })(); }
+  const minSeg = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  function gravarVoz(b, area, tx, rotulo) {
+    if (rec) { rec.parar(); return; }
+    const usarServidor = vozServidor && nuvem.usuario && window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+    (usarServidor ? gravarServidor : gravarAparelho)(b, area, tx, rotulo);
+  }
+  const anexar = (area, t) => { t = (t || "").trim(); if (!t) return; area.value = (area.value ? area.value.replace(/\s*$/, " ") : "") + t; acompanhar(area); };
+  function transcreverTrecho(blob) {
+    return nuvem.usuario.getIdToken().then(tok => fetch(TRANSCREVER, { method: "POST", headers: { Authorization: "Bearer " + tok, "Content-Type": blob.type || "audio/webm" }, body: blob }))
+      .then(r => r.ok ? r.json() : Promise.reject(r.status)).then(j => j.texto || "");
+  }
+  function escreverTrecho(blob, area, tx) {
+    vozPendente++;
+    filaVoz = filaVoz.then(() => transcreverTrecho(blob).catch(() => transcreverTrecho(blob)))
+      .then(t => anexar(area, t), () => { vozFalhas.push(blob); })
+      .then(() => {
+        vozPendente--;
+        if (rec || vozPendente) return;
+        tx.innerHTML = vozFalhas.length ? 'Sem conexão para escrever um trecho. A gravação está guardada. <button class="link-conta" data-acao="voz-de-novo">Tentar de novo</button>'
+          : "Pronto. Confira o texto e corrija o que precisar.";
+      });
+  }
+  async function gravarServidor(b, area, tx, rotulo) {
+    let stream;
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }); }
+    catch (e) { tx.textContent = "O Osirion precisa da permissão do microfone. Ou use o microfone do teclado."; return; }
+    const tipo = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg;codecs=opus"].find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || "";
+    let ativo = true, atual = null, corte = 0;
+    const inicio = Date.now(), t = b.querySelector(".gravar-t");
+    const relogio = setInterval(() => { t.textContent = `Ouvindo… ${minSeg(Math.round((Date.now() - inicio) / 1000))} · toque para parar`; }, 500);
+    const novo = () => {
+      const mr = new MediaRecorder(stream, tipo ? { mimeType: tipo, audioBitsPerSecond: 48000 } : undefined), partes = [];
+      mr.ondataavailable = e => { if (e.data && e.data.size) partes.push(e.data); };
+      mr.onstop = () => {
+        clearTimeout(corte);
+        const blob = new Blob(partes, { type: mr.mimeType || tipo || "audio/webm" });
+        if (blob.size > 2000) escreverTrecho(blob, area, tx);
+        if (ativo) return novo();
+        stream.getTracks().forEach(x => x.stop()); clearInterval(relogio);
+        rec = null; b.classList.remove("ativo"); t.textContent = rotulo;
+        if (vozPendente) tx.textContent = "Escrevendo o seu sonho…";
+      };
+      mr.start(); atual = mr;
+      // um trecho a cada 4 minutos: assim não existe limite de tamanho
+      corte = setTimeout(() => { if (mr.state === "recording") mr.stop(); }, 4 * 60e3);
     };
-    rec.onerror = e => { tx.textContent = e.error === "not-allowed" || e.error === "service-not-allowed" ? "O Osirion precisa da permissão do microfone. Ou use o microfone do teclado." : "Não consegui ouvir. Tente de novo ou use o microfone do teclado."; };
-    rec.onend = () => { rec = null; b.classList.remove("ativo"); b.querySelector(".gravar-t").textContent = "Gravar sonho"; };
-    try { rec.start(); } catch (e) { rec = null; return; }
-    b.classList.add("ativo"); b.querySelector(".gravar-t").textContent = "Ouvindo… toque para parar"; tx.textContent = "Fale de olhos fechados. As palavras aparecem na caixa abaixo.";
+    rec = { parar() { ativo = false; if (atual && atual.state === "recording") atual.stop(); } };
+    novo();
+    b.classList.add("ativo"); t.textContent = "Ouvindo… toque para parar"; tx.textContent = "Fale com calma, de olhos fechados. Quando tocar para parar, o texto aparece na caixa.";
+  }
+  function gravarAparelho(b, area, tx, rotulo) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition, t = b.querySelector(".gravar-t");
+    if (!SR) { tx.textContent = "Neste aparelho a voz não vira texto aqui dentro. Toque na caixa e use o microfone do teclado para ditar."; area.focus(); return; }
+    let quer = true, atual = null;
+    const ouvir = () => {
+      const r = new SR(); r.lang = "pt-BR"; r.continuous = true; r.interimResults = true; atual = r;
+      const base = area.value ? area.value.replace(/\s*$/, " ") : "";
+      // remonta o texto a partir de todos os resultados (o iPhone às vezes repete trechos se somar só os novos)
+      r.onresult = e => {
+        let final = "", prov = "";
+        for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; if (x.isFinal) final += x[0].transcript.trim() + " "; else prov += x[0].transcript; }
+        area.value = base + final + prov; acompanhar(area);
+      };
+      r.onerror = e => { if (e.error === "not-allowed" || e.error === "service-not-allowed") { quer = false; tx.textContent = "O Osirion precisa da permissão do microfone. Ou use o microfone do teclado."; } };
+      // o aparelho para sozinho depois de um tempo ou de um silêncio: recomeça e continua o texto, até a pessoa parar
+      r.onend = () => { if (quer) { setTimeout(() => { if (quer) try { ouvir(); } catch (e) { fim(); } }, 150); } else fim(); };
+      r.start();
+    };
+    const fim = () => { rec = null; b.classList.remove("ativo"); t.textContent = rotulo; area.value = area.value.replace(/\s+$/, ""); };
+    rec = { parar() { quer = false; try { atual.stop(); } catch (e) { fim(); } } };
+    try { ouvir(); } catch (e) { rec = null; return; }
+    b.classList.add("ativo"); t.textContent = "Ouvindo… toque para parar"; tx.textContent = "Fale de olhos fechados. As palavras aparecem na caixa abaixo.";
   }
 
   // ---------- Navegação ----------
@@ -3303,6 +3397,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.pratica) { abrirPratica(b.dataset.pratica, b.dataset.ato !== undefined ? +b.dataset.ato : undefined); return; }
     if (b.dataset.capsula) { abrirCapsula(+b.dataset.capsula); return; }
     if (b.dataset.estagio) { abrirEstagio(+b.dataset.estagio); return; }
+    if (b.dataset.tipoEd) { tipoEd = +b.dataset.tipoEd; document.querySelectorAll("[data-tipo-ed]").forEach(t => t.setAttribute("aria-pressed", t === b)); return; }
     if (b.dataset.tipo) { tipoEscolhido = +b.dataset.tipo; document.querySelectorAll(".tipo").forEach(t => t.setAttribute("aria-pressed", t === b)); return; }
     if (b.dataset.alvo) {
       est.alvo = est.alvo === b.dataset.alvo ? null : b.dataset.alvo; salvar();
@@ -3337,7 +3432,25 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "estilo-depois") { est.estiloVisto = true; salvar(); render(); }
     else if (acao === "levar-abaton") { fecharSobre(); aba = "hoje"; render(); abrirPratica("noite"); }
     else if (acao === "sem-nevoeiro") { est.nevoeiro = null; salvar(); fecharSobre(); aba = "hoje"; render(); }
-    else if (acao === "gravar") gravarVoz(b);
+    else if (acao === "gravar") gravarVoz(b, document.getElementById("sonho"), document.getElementById("gravar-tx"), "Gravar sonho");
+    else if (acao === "gravar-ed") gravarVoz(b, document.getElementById("sonho-ed"), document.getElementById("gravar-tx-ed"), "Falar mais");
+    else if (acao === "voz-de-novo") {
+      const area = document.getElementById("sonho-ed") || document.getElementById("sonho"), tx = document.getElementById("gravar-tx-ed") || document.getElementById("gravar-tx");
+      const f = vozFalhas; vozFalhas = []; tx.textContent = "Escrevendo o seu sonho…"; f.forEach(x => escreverTrecho(x, area, tx));
+    }
+    else if (acao === "editar-sonho") abrirEdicao(+b.dataset.i);
+    else if (acao === "guardar-edicao") {
+      if (rec || vozPendente) { if (rec) rec.parar(); b.disabled = true; b.textContent = "Escrevendo o que você falou…"; depoisDaVoz(() => { b.disabled = false; b.click(); }); return; }
+      const d = est.diario[+b.dataset.i]; if (!d) return;
+      if (!d.id) { d.chave0 = chaveSonho(d); d.id = novoId(); }
+      d.texto = document.getElementById("sonho-ed").value.trim(); d.tipo = tipoEd;
+      if (tipoEd > 0 && !d.cor) d.cor = nomeCor().toLowerCase();
+      salvar(); fecharSobre(); render();
+    }
+    else if (acao === "apagar-sonho") {
+      if (!b.dataset.certeza) { b.dataset.certeza = "1"; b.textContent = "Toque de novo para apagar de vez"; return; }
+      est.diario.splice(+b.dataset.i, 1); salvar(); fecharSobre(); render();
+    }
     else if (acao === "dormir") abrirModoNoite();
     else if (acao === "dormir-binaural") { abrirModoNoite("binaural"); const s = document.querySelector('.modo-noite [data-som="foco10"]'); if (s) s.click(); }
     else if (acao === "tecnica") abrirTecnica();
@@ -3357,11 +3470,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       est.pessoais.push({ nome, cena: document.getElementById("p-cena").value.trim() }); salvar(); render();
     }
     else if (acao === "salvar-sonho") {
-      if (rec) rec.stop();
+      // se ainda está ouvindo ou escrevendo a voz, espera o texto chegar e guarda em seguida
+      if (rec || vozPendente) { if (rec) rec.parar(); b.disabled = true; b.textContent = "Escrevendo o que você falou…"; depoisDaVoz(() => { b.disabled = false; b.click(); }); return; }
       const texto = document.getElementById("sonho").value.trim();
       const dormi = document.getElementById("dormi").value, acordei = document.getElementById("acordei").value;
       const min = t => { const [h, m] = (t || "0:0").split(":").map(Number); return h * 60 + m; };
-      const noite = { iso: hojeIso, texto, tipo: tipoEscolhido, cor: tipoEscolhido > 0 ? nomeCor().toLowerCase() : "", exp: [...expSel].filter(k => k !== "ponte") };
+      const noite = { id: novoId(), iso: hojeIso, texto, tipo: tipoEscolhido, cor: tipoEscolhido > 0 ? nomeCor().toLowerCase() : "", exp: [...expSel].filter(k => k !== "ponte") };
       if (dormi && acordei) { noite.sono = { dormi, acordei }; noite.h = Math.round(((min(acordei) - min(dormi) + 1440) % 1440) / 6) / 10; }
       if (expSel.has("ponte")) noite.ponte = { aconteceu: null };
       const l = est.alvo, a = alvoDe(l);
@@ -3374,6 +3488,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       salvar(); expSel = new Set(); chegou = null; manha = false;
       modoDiario = "lista"; diaSel = hojeIso; busca = ""; filtro = null;
       mesVisto = new Date(new Date().getFullYear(), new Date().getMonth(), 1); render();
+      // de manhã o app abre direto no diário; a pergunta do nevoeiro (enquanto a pessoa ainda não viu) vem depois de guardar
+      if (nevoeiroDepois) { nevoeiroDepois = false; est.perguntou = diaLocal(); salvar(); abrirNevoeiro(); }
     }
     else if (acao === "acordado") { registrar("testes"); if (testesHoje() >= metaTestes()) marcar("teste"); salvar(); fecharSobre(); render(); }
     else if (acao === "adiantar") { est.adianta = (est.adianta || 0) + 1; salvar(); render(); }
