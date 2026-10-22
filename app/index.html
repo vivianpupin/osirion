@@ -2546,7 +2546,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Os ensinamentos (silêncio e fumaça, respiração, as mãos, as imagens ao adormecer, o nevoeiro) vêm depois, no aprofundamento.
   const TRAVESSIA = [
     { tipo: "nome", cor: "#262a52", ilus: "olho", peq: true, rotulo: "Portal do nome", titulo: "Como você quer ser chamado na travessia?", texto: "É assim que o Osirion vai falar com você.", botao: "Seguir" },
-    { tipo: "texto", cor: "#22264b", ilus: "figura-dourada", rotulo: "O objetivo", titulo: "Tornar-se um Arhat", texto: "Arhat, em sânscrito, é aquele que despertou. Para ele, o sono não apaga nada: a consciência segue acesa enquanto o corpo dorme, e ele atravessa de um mundo a outro lembrando de tudo.", nota: "Esse é o objetivo do Osirion. Cada noite anotada, cada técnica e cada ato são um passo para você se tornar um Arhat.", botao: "Seguir" },
     { tipo: "escolha", campo: "lembra", cor: "#1f2245", ilus: "lua", peq: true, rotulo: "Portal da memória", titulo: "Você costuma lembrar dos seus sonhos?", opcoes: ["Quase nunca", "Às vezes, em pedaços", "Quase todas as manhãs"], ensina: "Todos sonham, todas as noites. Lembrar é um treino, e começa nos primeiros cinco minutos depois de acordar." },
     { tipo: "escolha", campo: "experiencia", cor: "#1c1f40", ilus: "estrela-dourada", peq: true, rotulo: "Portal da experiência", titulo: "Você já despertou dentro de um sonho?", opcoes: ["Nunca", "Aconteceu por acaso algumas vezes", "Estou tentando, com técnicas", "Às vezes consigo provocar", "Com frequência"], ensina: "Despertar no sonho é perceber, ali dentro, que aquilo é um sonho. Daí em diante você pode agir com a mesma consciência de agora e alterar o cenário do sonho." },
     { tipo: "escolha", campo: "pesadelos", cor: "#191c3a", ilus: "figura-cruz", peq: true, rotulo: "Portal do medo", titulo: "Com que frequência você tem pesadelos?", opcoes: ["Nunca", "Raramente", "Às vezes", "Com frequência"], ensina: "O pesadelo é uma porta: quem está atento percebe o absurdo e desperta dentro dele." },
@@ -2578,15 +2577,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       if (t.tipo === "sono") meio = `<div class="sono"><label>Hora de dormir<input type="time" id="dorme" value="${pf.dorme || "23:00"}"></label><label>Acordar<input type="time" id="acorda" value="${pf.acorda || "07:00"}"></label></div><p class="nota-c" id="sono-conta"></p>`;
       if (t.tipo === "respirar") meio = `<button class="segurar" id="segurar" type="button">segure para inspirar</button><div class="marcas">${Array.from({ length: t.vezes }, () => "<i></i>").join("")}</div>`;
       if (t.tipo === "lembrete") meio = `<div class="notif" style="max-width:300px">${SINAL}<span><span class="linha1"><span>OSIRION</span><span>agora</span></span><span class="msg">Será que estou sonhando?</span><br><span class="suave">Olhe para as suas mãos e conte os dedos.</span></span></div>`;
-      if (t.tipo === "caminho") {
-        const desp = despertar();
-        meio = `<ol class="caminho">
-          <li><b>Hoje à noite</b><span>O Início: a prática da noite e a busca do seu nevoeiro.</span></li>
-          <li><b>Amanhã cedo</b><span>Os primeiros cinco minutos e a pergunta: qual a cor do seu nevoeiro?</span></li>
-          <li><b>Primeira semana</b><span>O Primeiro Ato: as raízes, a Respiração Dourada e os testes de realidade.</span></li>
-          <li><b>Em duas a três semanas</b><span>Os primeiros graus de lucidez e o despertar das ${desp}.</span></li>
-          <li><b>Depois</b><span>Os cinco atos do caminho, a viagem astral e os seus alvos, até você se tornar um Arhat.</span></li></ol>`;
-      }
+      // o caminho de qualquer universo: a escolha vem logo depois, então aqui nada é só do Arhat
+      if (t.tipo === "caminho") meio = `<ol class="caminho">
+          <li><b>Agora</b><span>Escolher por qual universo você vai atravessar.</span></li>
+          <li><b>Hoje à noite</b><span>A primeira técnica, antes de dormir.</span></li>
+          <li><b>Amanhã cedo</b><span>Os primeiros cinco minutos: anotar tudo o que lembrar.</span></li>
+          <li><b>Toda semana</b><span>Uma técnica nova para a noite e as práticas do dia.</span></li>
+          <li><b>Depois</b><span>A lucidez, os alvos e a travessia para o outro lado.</span></li></ol>`;
       const titulo = t.tipo === "caminho" && pf.nome ? `${esc(pf.nome)}, este é o seu caminho` : t.titulo;
       const fundos = [...d.querySelectorAll(".fundo-trav")];
       d.innerHTML = `<div class="tela">
