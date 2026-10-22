@@ -1116,6 +1116,26 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .carro-ir { margin-top: 14px; padding: 13px 34px; border-radius: 99px; border: 1px solid #c9a35f; background: rgba(10,10,24,.4); color: #f0d79b; font-family: var(--display); font-size: 17px; cursor: pointer; animation: surge 1.8s ease 2.6s both; }
 .carro-ir:active { background: rgba(245,199,91,.12); }
 .carro-dica { margin: 6px 0 0; font-size: 12.5px; color: var(--areia-2); font-style: italic; animation: surge 1.8s ease 2.8s both; }
+.som-portais { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 16px; z-index: 3; width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(201,163,95,.35); background: rgba(5,5,14,.4); color: #c9a35f; display: grid; place-items: center; padding: 0; }
+.som-portais svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.som-portais[aria-pressed="true"] .mudo, .som-portais[aria-pressed="false"] .ondas { display: none; }
+/* a apresentação do universo escolhido */
+.apresenta { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(90% 60% at 50% 30%, #1a1b40 0%, #0a0a18 55%, #030308 100%); }
+.apresenta .ceu-fundo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .9; }
+.apr-tela { position: relative; z-index: 1; min-height: 100%; align-items: center; justify-content: center; text-align: center; gap: 14px; padding-top: calc(env(safe-area-inset-top, 0px) + 24px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); }
+.apr-rot { font-family: var(--display); font-size: 10.5px; letter-spacing: .32em; text-transform: uppercase; color: #d9b873; animation: surge 1.6s ease .2s both; }
+.apr-porta { display: block; width: min(210px, 54vw); height: min(210px, 54vw); margin: 6px 0 4px; border-color: #f0cd82; animation: abre-porta 2.6s cubic-bezier(.2,.7,.2,1) .3s both; box-shadow: inset 0 0 0 4px rgba(3,3,8,.9), inset 0 0 0 5px rgba(240,205,130,.45), 0 0 60px -6px rgba(245,199,91,.75); }
+.apr-porta img { opacity: 1; filter: brightness(1.05) drop-shadow(0 0 16px rgba(245,199,91,.5)); }
+.apr-nome { margin: 4px 0 0; font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1.2; color: #f0d79b; text-wrap: balance; max-width: 320px; animation: surge 1.8s ease 1.4s both; }
+.apr-chamada { margin: 0; max-width: 290px; font-size: 14.5px; line-height: 1.55; color: rgba(238,229,212,.85); text-wrap: balance; animation: surge 1.8s ease 2s both; }
+.apr-orn { width: 40%; margin: 4px auto; animation: surge 1.8s ease 2.4s both; }
+.apr-origem { margin: 0; max-width: 300px; font-size: 12.5px; line-height: 1.6; color: rgba(214,208,226,.65); text-wrap: balance; animation: surge 1.8s ease 2.8s both; }
+.apr-entrar { margin-top: 10px; animation: surge 1.8s ease 3.3s both; padding: 13px 44px; }
+.apr-luz { position: absolute; left: 50%; top: 42%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: radial-gradient(circle, rgba(255,240,205,.95), rgba(245,199,91,.35) 45%, transparent 70%); opacity: 0; z-index: 2; pointer-events: none; }
+.apresenta.atravessa .apr-luz { animation: atravessa-luz 1.1s ease-in forwards; }
+.apresenta.atravessa .apr-tela { transition: opacity .8s ease; opacity: 0; }
+@keyframes abre-porta { from { opacity: 0; transform: scale(.55); filter: blur(6px) brightness(.4); } 60% { filter: none; } to { opacity: 1; transform: none; } }
+@keyframes atravessa-luz { 0% { opacity: 0; transform: scale(1); } 40% { opacity: 1; } 100% { opacity: 1; transform: scale(260); } }
 @keyframes surge { from { opacity: 0; transform: translateY(10px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes respira-olho { 50% { filter: drop-shadow(0 0 26px rgba(169,178,240,.75)); } }
 @keyframes chama-porta { 50% { opacity: .82; } }
@@ -1679,6 +1699,17 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // os balõezinhos dos estilos
   // ---------- A escolha da tradição: uma página só para isso, com um cartão para cada tradição ----------
   // Aparece logo depois da travessia (e quando a pessoa quer trocar). Ao tocar, a jornada daquela tradição já abre no Agora.
+  // o som da escolha dos universos (um alaúde na escala hijaz, gerado para o Osirion): entra devagar e continua na apresentação
+  let somPortais = null, segueSom = false;
+  function tocarPortais() {
+    if (somPortais || est.semSomPortais) return;
+    const a = new Audio("sons/portais.mp3"); a.loop = true; a.volume = 0; a.setAttribute("playsinline", ""); somPortais = a;
+    a.play().then(() => { let v = 0; const t = setInterval(() => { v = Math.min(.7, v + .05); if (somPortais === a) a.volume = v; if (v >= .7 || somPortais !== a) clearInterval(t); }, 120); }).catch(() => { if (somPortais === a) somPortais = null; });
+  }
+  function pararPortais() {
+    const a = somPortais; somPortais = null; if (!a) return;
+    const t = setInterval(() => { a.volume = Math.max(0, a.volume - .07); if (a.volume <= 0) { clearInterval(t); a.pause(); a.removeAttribute("src"); } }, 80);
+  }
   function abrirEscolhaTradicao() {
     const atual = est.estiloVisto ? (est.estilo || "arhat") : null;
     // o céu da noite ao fundo (o mesmo do oráculo), e cada universo como uma porta redonda num carrossel
@@ -1688,6 +1719,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <h1 class="portais-tit">Há muitos caminhos para adentrar o outro lado.</h1>
       <p class="portais-conv">Escolha por qual você vai iniciar.</p>
       <div class="portais-orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+      <button class="som-portais" type="button" aria-label="Som" aria-pressed="${!est.semSomPortais}"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="ondas" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="mudo" d="M16 9l5 6M21 9l-5 6"/></svg></button>
       <div class="carro" style="--tam:${Math.round(Math.min(230, innerWidth * .59, innerHeight * .28))}px">
         ${ESTILOS.map((x, i) => `<button class="porta-arco" data-ir="${i}" aria-label="${esc(x.nome)}"><img src="${ILUS(x.ilus)}" alt="">${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}
         <button class="carro-seta esq" data-passo="-1" aria-label="Porta anterior">‹</button><button class="carro-seta dir" data-passo="1" aria-label="Próxima porta">›</button>
@@ -1697,7 +1729,25 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <p class="carro-dica">deslize para escolher</p>
       <button class="carro-ir" data-escolher-trad="">Seguir</button>
       ${est.estiloVisto ? '<p class="portais-sub" style="font-size:12.5px;margin-top:10px">O que você já fez fica guardado em “O que já passou”.</p>' : ""}
-    </div></div></div>`, d => { const box = d.querySelector(".portais"); ceuFundo(d.querySelector(".ceu-fundo"), box, true); carrossel(d, Math.max(0, ESTILOS.findIndex(x => x.id === atual))); });
+    </div></div></div>`, d => { const box = d.querySelector(".portais"); ceuFundo(d.querySelector(".ceu-fundo"), box, true); carrossel(d, Math.max(0, ESTILOS.findIndex(x => x.id === atual)));
+      tocarPortais(); segueSom = false; aoFechar = () => { if (!segueSom) pararPortais(); };
+      const bs = d.querySelector(".som-portais"); bs.onclick = e => { e.stopPropagation(); est.semSomPortais = !est.semSomPortais; salvar(); bs.setAttribute("aria-pressed", !est.semSomPortais); est.semSomPortais ? pararPortais() : tocarPortais(); }; });
+  }
+  // ---------- A apresentação do universo escolhido: a porta se abre, o nome, de onde vem, e a pessoa entra ----------
+  function abrirApresentacao(x) {
+    abrirSobre(`<div class="apresenta"><canvas class="ceu-fundo" aria-hidden="true"></canvas><div class="apr-luz" aria-hidden="true"></div><div class="tela apr-tela">
+      <span class="apr-rot">O seu universo</span>
+      <span class="porta-arco apr-porta"><img src="${ILUS(x.ilus)}" alt=""></span>
+      <h1 class="apr-nome">${esc(x.nome)}</h1>
+      <p class="apr-chamada">${esc(x.chamada || "")}</p>
+      <div class="portais-orn apr-orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+      ${x.origem ? `<p class="apr-origem">${esc(x.origem)}</p>` : ""}
+      <button class="carro-ir apr-entrar" type="button">Entrar</button>
+    </div></div>`, d => {
+      const box = d.querySelector(".apresenta"); ceuFundo(d.querySelector(".ceu-fundo"), box, true);
+      aoFechar = () => pararPortais();
+      d.querySelector(".apr-entrar").onclick = () => { box.classList.add("atravessa"); pararPortais(); setTimeout(() => { fecharSobre(); aba = "hoje"; render(); }, 1100); };
+    });
   }
   // gira as portas: arrastar com o dedo, tocar numa porta do lado, nas setas ou nos pontinhos. Só o botão Seguir escolhe (um toque sem querer ao deslizar não escolhe nada).
   function carrossel(d, ini) {
@@ -3937,8 +3987,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (b.dataset.ouvirSom) { const k = b.dataset.ouvirSom; abrirModoNoite(null, "sala"); const x = document.querySelector(`.sala-sons [data-som="${k}"]`); if (x) x.click(); return; }
     if (b.dataset.escolherTrad) {
       const id = b.dataset.escolherTrad, x = ESTILOS.find(e => e.id === id);
-      escolherEstilo(id); fecharSobre(); aba = "hoje"; render();
-      if (x) setTimeout(() => avisoSelo([{ nome: x.nome }], "A sua tradição"), 300);
+      segueSom = true; escolherEstilo(id); aba = "hoje"; render();
+      if (x) abrirApresentacao(x); else fecharSobre();
       return;
     }
     if (b.dataset.seguirEstilo) { escolherEstilo(b.dataset.seguirEstilo); fecharSobre(); render(); return; }
