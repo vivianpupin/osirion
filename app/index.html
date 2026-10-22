@@ -1700,14 +1700,17 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // os balõezinhos dos estilos
   // ---------- A escolha da tradição: uma página só para isso, com um cartão para cada tradição ----------
   // Aparece logo depois da travessia (e quando a pessoa quer trocar). Ao tocar, a jornada daquela tradição já abre no Agora.
-  // o som da escolha dos universos (um alaúde na escala hijaz, gerado para o Osirion): entra devagar e continua na apresentação
-  let somPortais = null, segueSom = false;
+  // o som da abertura e da escolha dos universos (O Pássaro e a Serpente, de 0:06 a 0:42, em laço): entra devagar e continua na apresentação
+  let somPortais = null, segueSom = false, querSomPortais = false;
   function tocarPortais() {
+    querSomPortais = true;
     if (somPortais || est.semSomPortais) return;
     const a = new Audio("sons/portais.mp3"); a.loop = true; a.volume = 0; a.setAttribute("playsinline", ""); somPortais = a;
-    a.play().then(() => { let v = 0; const t = setInterval(() => { v = Math.min(.7, v + .05); if (somPortais === a) a.volume = v; if (v >= .7 || somPortais !== a) clearInterval(t); }, 120); }).catch(() => { if (somPortais === a) somPortais = null; });
+    a.play().then(() => { let v = 0; const t = setInterval(() => { v = Math.min(.45, v + .03); if (somPortais === a) a.volume = v; if (v >= .45 || somPortais !== a) clearInterval(t); }, 120); }).catch(() => { if (somPortais !== a) return; somPortais = null;
+      const de = () => { removeEventListener("pointerdown", de, true); if (!somPortais && querSomPortais) tocarPortais(); }; addEventListener("pointerdown", de, true); });
   }
   function pararPortais() {
+    querSomPortais = false;
     const a = somPortais; somPortais = null; if (!a) return;
     const t = setInterval(() => { a.volume = Math.max(0, a.volume - .07); if (a.volume <= 0) { clearInterval(t); a.pause(); a.removeAttribute("src"); } }, 80);
   }
@@ -2616,14 +2619,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         <p>Toda noite, ao dormir, fazemos essa mesma travessia, mas sem consciência.</p>
         <p>O Osirion ensina a cruzar esse limiar desperto: descer além da superfície e voltar trazendo tudo o que foi visto do outro lado.</p>
         <button class="btn-trav" type="button">Começar a travessia</button>${CFG ? '<button class="link-conta ab-conta" type="button">Já tenho uma conta</button>' : ""}`;
-      d.classList.add("com-frase"); d.appendChild(f);
-      f.querySelector(".btn-trav").onclick = () => { destravaSom(); sino(); f.classList.add("some"); setTimeout(sai, 450); };
+      d.classList.add("com-frase"); d.appendChild(f); tocarPortais();
+      f.querySelector(".btn-trav").onclick = () => { destravaSom(); pararPortais(); sino(); f.classList.add("some"); setTimeout(sai, 450); };
       // Em outro celular: entra na conta e continua de onde parou, sem refazer a travessia.
       const jc = f.querySelector(".ab-conta");
       if (jc) jc.onclick = () => {
         f.className = "ab-frase ja";
         f.innerHTML = `<p>Entre na sua conta para continuar de onde parou.</p><div class="conta-lugar"></div><button class="link-conta" type="button" id="ab-volta">← voltar</button>`;
-        ligarConta(f, "entrar", () => { f.classList.add("some"); setTimeout(sai, 450); }, false);
+        ligarConta(f, "entrar", () => { pararPortais(); f.classList.add("some"); setTimeout(sai, 450); }, false);
         f.querySelector("#ab-volta").onclick = () => { f.remove(); frase(true); };
       };
     };
