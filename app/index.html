@@ -1117,9 +1117,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .carro-ir { margin-top: 14px; padding: 13px 34px; border-radius: 99px; border: 1px solid #c9a35f; background: rgba(10,10,24,.4); color: #f0d79b; font-family: var(--display); font-size: 17px; cursor: pointer; animation: surge 1.8s ease 2.6s both; }
 .carro-ir:active { background: rgba(245,199,91,.12); }
 .carro-dica { margin: 6px 0 0; font-size: 12.5px; color: var(--areia-2); font-style: italic; animation: surge 1.8s ease 2.8s both; }
-.som-portais { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 16px; z-index: 3; width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(201,163,95,.35); background: rgba(5,5,14,.4); color: #c9a35f; display: grid; place-items: center; padding: 0; }
-.som-portais svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.som-portais[aria-pressed="true"] .mudo, .som-portais[aria-pressed="false"] .ondas { display: none; }
 /* a apresentação do universo escolhido */
 .apresenta { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(90% 60% at 50% 30%, #1a1b40 0%, #0a0a18 55%, #030308 100%); }
 .apresenta .ceu-fundo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .9; }
@@ -1702,8 +1699,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Aparece logo depois da travessia (e quando a pessoa quer trocar). Ao tocar, a jornada daquela tradição já abre no Agora.
   // o som da abertura e da escolha dos universos (O Pássaro e a Serpente, de 0:06 a 0:42, em laço): entra devagar e continua na apresentação
   let somPortais = null, segueSom = false, querSomPortais = false;
-  // baixinho, entra num fade-in bem lento e sai num fade-out suave. O volume passa pelo Web Audio, porque o iPhone não deixa mudar o volume do <audio>.
-  const VOL_PORTAIS = .2;
+  // bem baixinho, só um mistério ao fundo. Um único som para o app inteiro: abrir de novo não cria outro por cima,
+  // só faz o mesmo voltar a subir. O volume passa pelo Web Audio, porque o iPhone não deixa mudar o volume do <audio>.
+  const VOL_PORTAIS = .1;
   function rampaPortais(g, t, alvo, dur) {
     const de = g.gain.value, n = 64, c = new Float32Array(n);
     for (let i = 0; i < n; i++) { const k = i / (n - 1); c[i] = de + (alvo - de) * k * k * (3 - 2 * k); }
@@ -1711,29 +1709,29 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function tocarPortais() {
     querSomPortais = true;
-    if (somPortais || est.semSomPortais) return;
-    const a = new Audio("sons/portais.mp3"); a.loop = true; a.setAttribute("playsinline", "");
-    let g = null, ctx = null;
-    try { ctx = audio(); if (ctx) { const fonte = ctx.createMediaElementSource(a); g = ctx.createGain(); g.gain.value = 0; fonte.connect(g); g.connect(ctx.destination); if (ctx.state !== "running") ctx.resume().catch(() => {}); } } catch (e) { g = null; }
-    if (!g) a.volume = 0;
-    const s = somPortais = { a, g, ctx };
-    // a curva em S: começa quase parado, sobe no meio e chega devagar (o mesmo na saída)
-    // o celular pode segurar o som até o primeiro toque: aí ele começa do zero e sobe devagar
-    const sobe = () => {
-      if (somPortais !== s) return;
-      if (g) { const t = ctx.currentTime; rampaPortais(g, t, VOL_PORTAIS, 7); }
-      else { const t0 = performance.now(), f = () => { if (somPortais !== s) return; const k = Math.min(1, (performance.now() - t0) / 7000); a.volume = VOL_PORTAIS * k * k * (3 - 2 * k); if (k < 1) requestAnimationFrame(f); }; f(); }
-    };
-    const toque = () => { removeEventListener("pointerdown", toque, true); if (somPortais !== s) { if (!somPortais && querSomPortais) tocarPortais(); return; } if (ctx && ctx.state !== "running") ctx.resume().then(sobe).catch(() => {}); if (a.paused) a.play().then(sobe).catch(() => {}); };
-    a.play().then(() => { if (ctx && ctx.state !== "running") addEventListener("pointerdown", toque, true); sobe(); })
-      .catch(() => { if (somPortais !== s) return; addEventListener("pointerdown", toque, true); });
+    let s = somPortais;
+    if (!s) {
+      const a = new Audio("sons/portais.mp3"); a.loop = true; a.setAttribute("playsinline", "");
+      let g = null, ctx = null;
+      try { ctx = audio(); if (ctx) { const fonte = ctx.createMediaElementSource(a); g = ctx.createGain(); g.gain.value = 0; fonte.connect(g); g.connect(ctx.destination); } } catch (e) { g = null; }
+      if (!g) a.volume = VOL_PORTAIS; // sem Web Audio: só toca baixo, sem fade (o iPhone ignoraria)
+      s = somPortais = { a, g, ctx, ligado: false, timer: 0 };
+    }
+    clearTimeout(s.timer);
+    if (s.ligado) return; s.ligado = true;
+    // a curva em S: começa quase parado, sobe no meio e chega devagar
+    const sobe = () => { if (!s.ligado) return; if (s.g) rampaPortais(s.g, s.ctx.currentTime, VOL_PORTAIS, 7); };
+    const toque = () => { removeEventListener("pointerdown", toque, true); if (!s.ligado) return; if (s.ctx && s.ctx.state !== "running") s.ctx.resume().catch(() => {}); if (s.a.paused) s.a.play().then(sobe).catch(() => {}); else sobe(); };
+    if (s.ctx && s.ctx.state !== "running") s.ctx.resume().catch(() => {});
+    s.a.play().then(() => { if (s.ctx && s.ctx.state !== "running") addEventListener("pointerdown", toque, true); sobe(); })
+      .catch(() => { if (s.ligado) addEventListener("pointerdown", toque, true); });
   }
   function pararPortais() {
     querSomPortais = false;
-    const s = somPortais; somPortais = null; if (!s) return;
-    const fim = () => { s.a.pause(); s.a.removeAttribute("src"); };
-    if (s.g) { const t = s.ctx.currentTime; rampaPortais(s.g, t, 0, 4); setTimeout(fim, 4200); }
-    else { const v0 = s.a.volume, t0 = performance.now(), f = () => { const k = Math.min(1, (performance.now() - t0) / 4000); s.a.volume = v0 * (1 - k * k * (3 - 2 * k)); if (k < 1) requestAnimationFrame(f); else fim(); }; f(); }
+    const s = somPortais; if (!s || !s.ligado) return; s.ligado = false;
+    clearTimeout(s.timer);
+    if (s.g) { rampaPortais(s.g, s.ctx.currentTime, 0, 4); s.timer = setTimeout(() => s.a.pause(), 4200); }
+    else s.a.pause();
   }
   function abrirEscolhaTradicao() {
     const atual = est.estiloVisto ? (est.estilo || "arhat") : null;
@@ -1744,7 +1742,6 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <h1 class="portais-tit">Há muitos caminhos para adentrar o outro lado.</h1>
       <p class="portais-conv">Escolha por qual você vai iniciar.</p>
       <div class="portais-orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
-      <button class="som-portais" type="button" aria-label="Som" aria-pressed="${!est.semSomPortais}"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="ondas" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="mudo" d="M16 9l5 6M21 9l-5 6"/></svg></button>
       <div class="carro" style="--tam:${Math.round(Math.min(230, innerWidth * .59, innerHeight * .28))}px">
         ${ESTILOS.map((x, i) => `<button class="porta-arco" data-ir="${i}" aria-label="${esc(x.nome)}"><img src="${ILUS(x.ilus)}" alt="">${x.id === atual ? "<em>a sua</em>" : ""}</button>`).join("")}
         <button class="carro-seta esq" data-passo="-1" aria-label="Porta anterior">‹</button><button class="carro-seta dir" data-passo="1" aria-label="Próxima porta">›</button>
@@ -1753,10 +1750,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="carro-pontos">${ESTILOS.map((x, i) => `<button data-ponto="${i}" aria-label="${esc(x.nome)}"><i></i></button>`).join("")}</div>
       <p class="carro-dica">deslize para escolher</p>
       <button class="carro-ir" data-escolher-trad="">Seguir</button>
-      ${est.estiloVisto ? '<p class="portais-sub" style="font-size:12.5px;margin-top:10px">O que você já fez fica guardado em “O que já passou”.</p>' : ""}
     </div></div></div>`, d => { const box = d.querySelector(".portais"); ceuFundo(d.querySelector(".ceu-fundo"), box, true); carrossel(d, Math.max(0, ESTILOS.findIndex(x => x.id === atual)));
       tocarPortais(); segueSom = false; aoFechar = () => { if (!segueSom) pararPortais(); };
-      const bs = d.querySelector(".som-portais"); bs.onclick = e => { e.stopPropagation(); est.semSomPortais = !est.semSomPortais; salvar(); bs.setAttribute("aria-pressed", !est.semSomPortais); est.semSomPortais ? pararPortais() : tocarPortais(); }; });
+    });
   }
   // ---------- A apresentação do universo escolhido: a porta se abre, o nome, de onde vem, e a pessoa entra ----------
   function abrirApresentacao(x) {
