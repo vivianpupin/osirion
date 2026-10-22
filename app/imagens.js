@@ -35,6 +35,7 @@ self.IMAGENS = [
   "img/livro/voo-asas.webp",
   "img/livro/salto-estrelas.webp",
   "img/livro/nut-estrelas.webp",
+  "img/livro/rio-estrelas.webp",
   "img/livro/fita-estrela-dourada.webp",
   "img/livro/fita-estrela-lilas.webp",
   "img/livro/fita-estrela.webp",
