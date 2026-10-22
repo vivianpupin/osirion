@@ -1702,17 +1702,38 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Aparece logo depois da travessia (e quando a pessoa quer trocar). Ao tocar, a jornada daquela tradição já abre no Agora.
   // o som da abertura e da escolha dos universos (O Pássaro e a Serpente, de 0:06 a 0:42, em laço): entra devagar e continua na apresentação
   let somPortais = null, segueSom = false, querSomPortais = false;
+  // baixinho, entra num fade-in bem lento e sai num fade-out suave. O volume passa pelo Web Audio, porque o iPhone não deixa mudar o volume do <audio>.
+  const VOL_PORTAIS = .2;
+  function rampaPortais(g, t, alvo, dur) {
+    const de = g.gain.value, n = 64, c = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const k = i / (n - 1); c[i] = de + (alvo - de) * k * k * (3 - 2 * k); }
+    g.gain.cancelScheduledValues(t); g.gain.setValueCurveAtTime(c, t, dur);
+  }
   function tocarPortais() {
     querSomPortais = true;
     if (somPortais || est.semSomPortais) return;
-    const a = new Audio("sons/portais.mp3"); a.loop = true; a.volume = 0; a.setAttribute("playsinline", ""); somPortais = a;
-    a.play().then(() => { let v = 0; const t = setInterval(() => { v = Math.min(.45, v + .03); if (somPortais === a) a.volume = v; if (v >= .45 || somPortais !== a) clearInterval(t); }, 120); }).catch(() => { if (somPortais !== a) return; somPortais = null;
-      const de = () => { removeEventListener("pointerdown", de, true); if (!somPortais && querSomPortais) tocarPortais(); }; addEventListener("pointerdown", de, true); });
+    const a = new Audio("sons/portais.mp3"); a.loop = true; a.setAttribute("playsinline", "");
+    let g = null, ctx = null;
+    try { ctx = audio(); if (ctx) { const fonte = ctx.createMediaElementSource(a); g = ctx.createGain(); g.gain.value = 0; fonte.connect(g); g.connect(ctx.destination); if (ctx.state !== "running") ctx.resume().catch(() => {}); } } catch (e) { g = null; }
+    if (!g) a.volume = 0;
+    const s = somPortais = { a, g, ctx };
+    // a curva em S: começa quase parado, sobe no meio e chega devagar (o mesmo na saída)
+    // o celular pode segurar o som até o primeiro toque: aí ele começa do zero e sobe devagar
+    const sobe = () => {
+      if (somPortais !== s) return;
+      if (g) { const t = ctx.currentTime; rampaPortais(g, t, VOL_PORTAIS, 7); }
+      else { const t0 = performance.now(), f = () => { if (somPortais !== s) return; const k = Math.min(1, (performance.now() - t0) / 7000); a.volume = VOL_PORTAIS * k * k * (3 - 2 * k); if (k < 1) requestAnimationFrame(f); }; f(); }
+    };
+    const toque = () => { removeEventListener("pointerdown", toque, true); if (somPortais !== s) { if (!somPortais && querSomPortais) tocarPortais(); return; } if (ctx && ctx.state !== "running") ctx.resume().then(sobe).catch(() => {}); if (a.paused) a.play().then(sobe).catch(() => {}); };
+    a.play().then(() => { if (ctx && ctx.state !== "running") addEventListener("pointerdown", toque, true); sobe(); })
+      .catch(() => { if (somPortais !== s) return; addEventListener("pointerdown", toque, true); });
   }
   function pararPortais() {
     querSomPortais = false;
-    const a = somPortais; somPortais = null; if (!a) return;
-    const t = setInterval(() => { a.volume = Math.max(0, a.volume - .07); if (a.volume <= 0) { clearInterval(t); a.pause(); a.removeAttribute("src"); } }, 80);
+    const s = somPortais; somPortais = null; if (!s) return;
+    const fim = () => { s.a.pause(); s.a.removeAttribute("src"); };
+    if (s.g) { const t = s.ctx.currentTime; rampaPortais(s.g, t, 0, 4); setTimeout(fim, 4200); }
+    else { const v0 = s.a.volume, t0 = performance.now(), f = () => { const k = Math.min(1, (performance.now() - t0) / 4000); s.a.volume = v0 * (1 - k * k * (3 - 2 * k)); if (k < 1) requestAnimationFrame(f); else fim(); }; f(); }
   }
   function abrirEscolhaTradicao() {
     const atual = est.estiloVisto ? (est.estilo || "arhat") : null;
