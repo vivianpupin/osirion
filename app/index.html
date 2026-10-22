@@ -1124,7 +1124,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 /* A sala dos sons: o céu fino da escolha dos universos, cada estilo de som com o seu título e as faixas numa lista */
 .sala-sons { position: absolute; inset: 0; overflow-y: auto; background: radial-gradient(90% 60% at 50% 12%, #17183a 0%, #0a0a18 55%, #030308 100%); }
 .sala-sons .ceu-fundo { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .9; }
-.sala-sons .tela { position: relative; gap: 0; padding-top: calc(env(safe-area-inset-top, 0px) + 14px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 90px); }
+.sala-sons .tela { position: relative; gap: 0; padding-top: calc(env(safe-area-inset-top, 0px) + 14px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 120px); }
 .sala-topo { align-self: stretch; }
 .sala-tit { font-family: var(--display); font-weight: 400; font-size: 26px; letter-spacing: .03em; text-align: center; margin: 18px 0 0; color: #f0d79b; }
 .sala-sub { text-align: center; margin: 8px auto 0; max-width: 280px; font-size: 13.5px; line-height: 1.55; color: rgba(214,208,226,.8); text-wrap: balance; }
@@ -1151,8 +1151,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .sala-sons .como-sons { margin-top: 26px; color: rgba(214,208,226,.7); font-size: 13px; }
 .sala-sons .como-sons p { line-height: 1.6; }
 .sala-sons .apagar { margin-top: 34px; background: rgba(245,199,91,.12); color: #f0d79b; border: 1px solid rgba(201,163,95,.5); }
-.sala-aviso { position: fixed; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); z-index: 2; margin: 0; padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(201,163,95,.4); background: rgba(8,8,20,.92); color: #eee5d4; font-size: 13px; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
-.sala-aviso[hidden] { display: none; }
+.tocador { position: fixed; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); z-index: 2; display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 18px; border: 1px solid rgba(201,163,95,.45); background: #0a0a19; box-shadow: 0 -10px 30px 6px rgba(3,3,10,.85), 0 12px 34px rgba(0,0,0,.65); color: #eee5d4; }
+.tocador[hidden] { display: none; }
+.toc-pp { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #f0cd82; background: rgba(245,199,91,.12); color: #f0cd82; display: grid; place-items: center; padding: 0; }
+.toc-pp .pp { width: auto; height: auto; border: 0; margin: 0; font-size: 13px; }
+.tocador[data-estado="preparando"] .toc-pp { animation: gravando 1.4s ease-in-out infinite; }
+.toc-meio { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.toc-meio b { font-family: var(--display); font-weight: 400; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #f0d79b; }
+.toc-st { font-size: 11.5px; line-height: 1.35; color: rgba(214,208,226,.75); }
+.toc-st[hidden] { display: none; }
+.toc-barra { position: relative; height: 4px; border-radius: 4px; background: rgba(255,255,255,.12); cursor: pointer; }
+.toc-barra i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 4px; background: linear-gradient(90deg, #c9a35f, #f0cd82); }
+.toc-tempo { display: flex; justify-content: space-between; font-size: 11px; color: rgba(214,208,226,.65); font-variant-numeric: tabular-nums; }
+.toc-x { flex: none; width: 32px; height: 32px; border: 0; background: none; color: rgba(214,208,226,.7); font-size: 15px; }
 .destaques { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .som-destaque { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px 14px 14px; border-radius: 18px; border: 1px solid #b8914f; background: radial-gradient(130% 120% at 0% 0%, #3a1a0e, #170606); color: #f5d79b; text-align: left; box-shadow: 0 0 24px -10px rgba(245,199,91,.6); }
 .som-destaque b { font-family: var(--display); font-weight: 400; font-size: 18px; line-height: 1.2; }
@@ -3597,7 +3608,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ${fundo}
       <details class="como-sons"><summary>Como funcionam os sons com fone</summary><p>Cada ouvido escuta um tom um pouquinho diferente. O cérebro sente uma batida lenta entre os dois e desacelera junto com ela, até o corpo dormir com a mente acordada. Por isso precisa de fone.</p></details>
       <button class="btn largo apagar" id="apagar">Apagar a luz</button>
-    </div><p class="sala-aviso" id="aviso-fone" hidden></p>
+    </div><div class="tocador" id="tocador" hidden><button class="toc-pp" id="toc-pp" type="button" aria-label="Tocar ou pausar"><span class="pp" aria-hidden="true"></span></button>
+      <div class="toc-meio"><b id="toc-nome"></b><span class="toc-st" id="aviso-fone"></span><div class="toc-barra" id="toc-barra"><i id="toc-fill"></i></div><span class="toc-tempo"><span id="toc-ag">0:00</span><span id="toc-tot"></span></span></div>
+      <button class="toc-x" id="toc-x" type="button" aria-label="Parar">✕</button></div>
     <div class="breu" id="breu" hidden><div class="relogio" id="relogio2"></div><span id="breu-desp"></span><span class="miuda">toque para acender</span></div></div>`;
   }
   function abrirModoNoite(somInicial, soOuvir) {
@@ -3637,14 +3650,29 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       const vis = () => { if (document.visibilityState === "visible" && d.isConnected) pede(); };
       document.addEventListener("visibilitychange", vis); pede();
       let tambor = null;
-      const pararTambor = () => { if (tambor) { tambor.pause(); tambor.removeAttribute("src"); tambor.load(); } tambor = null; d.querySelectorAll("[data-tambor]").forEach(x => { x.setAttribute("aria-pressed", "false"); x.dataset.estado = ""; }); if (!nomeSom) sessaoMidia(null); };
+      const pararTambor = () => { if (tambor) { const t = tambor; tambor = null; t.pause(); t.removeAttribute("src"); t.load(); } d.querySelectorAll("[data-tambor]").forEach(x => { x.setAttribute("aria-pressed", "false"); x.dataset.estado = ""; }); if (!nomeSom) sessaoMidia(null); if (typeof atualizaTocador === "function") atualizaTocador(); };
       const estadoTambor = e => { const b = d.querySelector(`[data-tambor="${tambor && tambor.dataset.k}"]`); if (b) b.dataset.estado = e; };
       const pausarTambor = () => { if (tambor && !tambor.paused) { tambor.pause(); estadoTambor("pausado"); } };
       const continuarTambor = () => { if (tambor && tambor.paused) { tambor.play().catch(() => {}); estadoTambor("tocando"); } };
       // o som toca num <audio> (uma gravação feita pelo app): continua com a tela desligada
       const el1 = new Audio(), el2 = new Audio(), el3 = new Audio(), els = [el1, el2, el3]; els.forEach(x => { x.setAttribute("playsinline", ""); x.preload = "auto"; });
       let atual = null, pausadoEm = 0, fimEm = 0, saindo = false;
-      const marca = estado => d.querySelectorAll("[data-som]").forEach(x => { const e = x.dataset.som === nomeSom ? estado : ""; x.dataset.estado = e; x.setAttribute("aria-pressed", e ? "true" : "false"); });
+      let estadoSom = "";
+      const marca = estado => { estadoSom = estado; d.querySelectorAll("[data-som]").forEach(x => { const e = x.dataset.som === nomeSom ? estado : ""; x.dataset.estado = e; x.setAttribute("aria-pressed", e ? "true" : "false"); }); atualizaTocador(); };
+      // o tocador da sala dos sons: tocar/pausar, a barra do tempo e quanto falta (mostra "carregando" até o som chegar)
+      const mmss = s => { s = Math.max(0, Math.floor(s || 0)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+      function atualizaTocador() {
+        const toc = d.querySelector("#tocador"); if (!toc) return;
+        let nome = null, ag = 0, tot = 0, e = "";
+        if (tambor) { nome = tambor.dataset.nome; ag = tambor.currentTime; tot = isFinite(tambor.duration) ? tambor.duration : 0; e = tambor.paused ? "pausado" : tambor.readyState < 3 || !tambor.dataset.tocou ? "preparando" : "tocando"; }
+        else if (nomeSom) { nome = (SONS.find(x => x[0] === nomeSom) || [, nomeSom])[1]; tot = minutos * 60; ag = fimEm ? ((pausadoEm || Date.now()) - (fimEm - minutos * 6e4)) / 1000 : 0; e = estadoSom; }
+        toc.hidden = !nome; if (!nome) return;
+        toc.dataset.estado = e; d.querySelector("#toc-nome").textContent = nome;
+        const st = d.querySelector("#aviso-fone"); if (e === "preparando") { st.textContent = "carregando…"; st.hidden = false; } else if (st.textContent === "carregando…" || st.textContent === "Carregando o som…") st.hidden = true;
+        d.querySelector("#toc-fill").style.width = (tot ? Math.min(100, ag / tot * 100) : 0) + "%";
+        d.querySelector("#toc-ag").textContent = mmss(ag); d.querySelector("#toc-tot").textContent = tot ? mmss(tot) : "";
+      }
+      const relTocador = setInterval(atualizaTocador, 500);
       const pararSom = () => { els.forEach(x => { x.pause(); x.onended = null; }); atual = null; som = null; nomeSom = null; pausadoEm = 0; fimEm = 0; saindo = false; clearInterval(fimSom); marca(""); if (!tambor) sessaoMidia(null); };
       // no fim do tempo, a saída: o som some devagar em um minuto e para
       const sair = () => { if (saindo || !atual) return; saindo = true; atual.pause(); atual = el3; el3.currentTime = 0; el3.onended = pararSom; el3.play().catch(() => pararSom()); };
@@ -3662,7 +3690,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         if (alarme && Date.now() >= alarme) { alarme = 0; $("#desp").setAttribute("aria-pressed", "false"); toca(); }
       }, 10000);
       ["#relogio2", "#relogio3"].forEach(s => { if ($(s)) $(s).textContent = agoraHM(); });
-      aoFechar = () => { somDeFundo(false); pararSom(); pararTambor(); pararSino(); clearInterval(relogio); document.removeEventListener("visibilitychange", vis); try { if (lock) lock.release(); } catch (e) {} };
+      aoFechar = () => { clearInterval(relTocador); somDeFundo(false); pararSom(); pararTambor(); pararSino(); clearInterval(relogio); document.removeEventListener("visibilitychange", vis); try { if (lock) lock.release(); } catch (e) {} };
       d.addEventListener("click", e => {
         const b = e.target.closest("button"); if (!b) return;
         destravaSom(); somDeFundo(true);
@@ -3671,6 +3699,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
           // tocar de novo no mesmo tambor pausa e continua
           if (tambor && tambor.dataset.k === b.dataset.tambor) { tambor.paused ? continuarTambor() : pausarTambor(); return; }
           pararTambor(); pararSom(); tambor = new Audio("sons/" + b.dataset.tambor + (/\.(mp3|m4a)$/.test(b.dataset.tambor) ? "" : ".mp3")); tambor.dataset.k = b.dataset.tambor; tambor.setAttribute("playsinline", "");
+          tambor.dataset.nome = (b.querySelector("b") || b).textContent.replace(/\d+ min$/, "").trim();
+          ["playing", "pause", "waiting", "loadedmetadata"].forEach(ev => tambor.addEventListener(ev, () => { if (ev === "playing") tambor.dataset.tocou = "1"; atualizaTocador(); }));
           tambor.onended = pararTambor; tambor.play().catch(() => {}); b.setAttribute("aria-pressed", "true"); b.dataset.estado = "tocando";
           sessaoMidia((b.querySelector("b") || b).textContent.replace(/\d+ min$/, "").trim() + (b.dataset.tambor.startsWith("tambor") ? " · jornada do tambor" : ""), pausarTambor, continuarTambor, pararTambor);
         }
@@ -3698,12 +3728,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         } else if (b.id === "desp") {
           const liga = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", liga); alarme = liga ? proximo() : 0;
           b.querySelector("span").textContent = liga ? `Ligado. O sino toca às ${despertar()}. Toque para desligar.` : "Toque para ligar.";
-        } else if (b.id === "ouvir-sino") sino();
+        } else if (b.id === "toc-pp") { if (tambor) tambor.paused ? continuarTambor() : pausarTambor(); else if (nomeSom) pausadoEm ? continuar() : pausar(); atualizaTocador(); }
+        else if (b.id === "toc-x") { pararTambor(); pararSom(); atualizaTocador(); }
+        else if (b.id === "ouvir-sino") sino();
         else if (b.id === "apagar") { cobre("#breu", true); $("#breu-desp").textContent = alarme ? `sino às ${despertar()}` : ""; }
         else if (b.id === "volta-dormir") { pararSino(); cobre("#acorda", false); cobre("#breu", true); $("#breu-desp").textContent = ""; }
         else if (b.id === "fazer-madrugada") { pararSino(); fecharSobre(); render(); abrirPratica("madrugada"); }
       });
       if ($("#breu")) $("#breu").addEventListener("click", () => cobre("#breu", false));
+      const barra = $("#toc-barra"); if (barra) barra.addEventListener("click", e => { if (!tambor || !isFinite(tambor.duration)) return; const r = barra.getBoundingClientRect(); tambor.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * tambor.duration; atualizaTocador(); });
     });
   }
 
