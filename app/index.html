@@ -1559,7 +1559,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     return `<button class="capsula-hoje t-${c.tema}" data-capsula="${c.dia}">
       <span class="tema-tag">${hoje ? "Cápsula de hoje · " : ""}Dia ${c.dia} · ${TEMAS[c.tema]}</span>
       <h2>${esc(c.titulo)}</h2>
-      <span class="suave">${est.vistas[c.dia] ? "Vista · tocar para rever" : `${c.minutos} min · ${c.cartas.length} cartas`}</span>
+      <span class="suave">${est.vistas[c.dia] ? "Vista · tocar para rever" : esc((c.cartas[0] || {}).sub || "")}</span>
       <span class="abrir">${est.vistas[c.dia] ? "✓" : "▶"}</span></button>`;
   }
 
@@ -1843,7 +1843,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const anotou = est.diario.some(d => isoNoite(d) === hojeIso);
     if (hr >= 4 && hr < 14) itens.push(linhaRito('data-acao="anotar-agora"', "pena", "Anotar o sonho", anotou ? "Anotado hoje" : "Antes de levantar: onde você estava? O que sentia?", anotou, !anotou));
     const n = proximoAgora(k);
-    if (n) { const c = CAPS[n - 1]; itens.push(linhaRito(`data-capsula="${n}"`, "luz", c.titulo, `Ensinamento · ${c.minutos} min`, false, !noite && (anotou || hr >= 14))); }
+    if (n) { const c = CAPS[n - 1]; itens.push(linhaRito(`data-capsula="${n}"`, "luz", c.titulo, "Ensinamento", false, !noite && (anotou || hr >= 14))); }
     const med0 = praticaDoDia(E), med = med0 && med0.p.k !== "teste" ? med0 : praticaDoAto(E.ato, E.meditacao);
     if (med) {
       itens.push(linhaRito(`data-pratica="${med.p.k}"${med.ato !== undefined ? ` data-ato="${med.ato}"` : ""}`, med.p.ico, med.p.nome, (estiloAtual() && med === med0 ? "A prática do dia · " : "Meditação do dia · ") + med.p.det, feitoHoje(med.p.k)));
@@ -1891,7 +1891,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const pr = progressoEstagio(i), prox = proximoEnsinamento(i);
     const ens = E.ensinamentos.map((n, j) => {
       const c = CAPS[n - 1], lido = !!est.vistas[n], cur = n === prox;
-      return `<button class="etapa ${lido ? "ok" : cur ? "atual" : "fechada"}" ${lido || cur ? `data-capsula="${n}"` : "disabled"}><span class="marca">${lido ? "✓" : cur ? "✦" : j + 1}</span><span><span class="rot">${c.minutos} min</span><b>${esc(c.titulo)}</b></span></button>`;
+      return `<button class="etapa ${lido ? "ok" : cur ? "atual" : "fechada"}" ${lido || cur ? `data-capsula="${n}"` : "disabled"}><span class="marca">${lido ? "✓" : cur ? "✦" : j + 1}</span><span><b>${esc(c.titulo)}</b></span></button>`;
     }).join("");
     const pr2 = ["noite", "madrugada"].map(x => praticaDoAto(E.ato, x)).filter(Boolean);
     const med = praticaDoAto(E.ato, E.meditacao);
@@ -1962,7 +1962,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         bt: `<button class="btn largo" data-acao="dormir">Vou dormir</button><button class="btn fantasma largo" data-acao="tecnica">Ver a técnica</button>` }
         : { rot: "Esta noite", tit: "Escolher a técnica da semana", arte: `<img src="${ILUS("espiral-figura")}" alt="">`, txt: "Uma técnica antes de dormir, por sete noites. Você escolhe com qual começar.", bt: `<button class="btn largo" data-acao="escolher-tecnica">Escolher a técnica</button>` }; }
     else { const n = proximoAgora(k), med = praticaDoDia(E);
-      if (n) { const cp = CAPS[n - 1]; c = { rot: `Ensinamento de hoje · ${cp.minutos} min`, tit: cp.titulo, arte: `<img src="${ILUS(cp.ilus)}" alt="">`, txt: cp.cartas[0].sub || "", bt: `<button class="btn largo" data-capsula="${n}">Abrir o ensinamento</button>` }; }
+      if (n) { const cp = CAPS[n - 1]; c = { rot: "Ensinamento de hoje", tit: cp.titulo, arte: `<img src="${ILUS(cp.ilus)}" alt="">`, txt: cp.cartas[0].sub || "", bt: `<button class="btn largo" data-capsula="${n}">Abrir o ensinamento</button>` }; }
       else if (med && !feitoHoje(med.p.k)) c = { rot: estiloAtual() ? "A prática do dia" : "Meditação do dia", tit: med.p.nome, arte: `<img src="${ILUS(med.p.ilus || "estrela-sol")}" alt="">`, txt: med.p.det, bt: med.p.k === "teste" ? `<button class="btn largo" data-acao="teste">Fazer um teste</button>` : `<button class="btn largo" data-pratica="${med.p.k}"${med.ato !== undefined ? ` data-ato="${med.ato}"` : ""}>Começar</button>` };
       else c = { rot: "Durante o dia", tit: "Será que estou sonhando?", arte: `<img src="${ILUS("maos-chama")}" alt="">`, txt: `${testesHoje()} de ${metaTestes()} testes de realidade hoje.`, bt: `<button class="btn largo" data-acao="teste">Fazer um teste</button>` }; }
     const barra = (a, b) => `<i><b style="width:${Math.min(1, a / b) * 100}%"></b></i>`;
@@ -2002,7 +2002,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // Cada mundo tem duas partes: "Agora" (só o que é deste momento do caminho, em ordem) e "Já aprendido"
   // (as práticas, técnicas e ensinamentos que já chegaram, para praticar de novo), para não acumular tudo na mesma página.
   const secMundo = (rot, itens) => itens.filter(Boolean).length ? `<span class="rotulo">${rot}</span>${listaFerr(itens)}` : "";
-  const capItem = (n, prox) => { const c = CAPS[n - 1]; return { attr: `data-capsula="${n}"`, ilus: c.ilus, nome: c.titulo, det: n === prox ? `o ensinamento de hoje · ${c.minutos} min` : (c.cartas[0] || {}).sub || "" }; };
+  const capItem = (n, prox) => { const c = CAPS[n - 1]; return { attr: `data-capsula="${n}"`, ilus: c.ilus, nome: c.titulo, det: n === prox ? "o ensinamento de hoje" : (c.cartas[0] || {}).sub || "" }; };
   function capsDoMundo(dia) {
     const s = estiloAtual(), seq = s ? (s.ensinamentos || []) : ESTAGIOS.slice(0, estagioAtual() + 1).flatMap(E => E.ensinamentos || []);
     const prox = proximoAgora(estagioAtual()), vistas = est.vistas || {}, daqui = n => CAPS[n - 1] && CAPS_DIA.has(n) === dia;
@@ -2952,7 +2952,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         const ultima = i === c.cartas.length - 1;
         d.querySelector("#prox").textContent = ultima ? "Concluir cápsula" : k.t === "abre" ? "Começar" : "Continuar";
         const de = k.de ? `<span class="de">${esc(k.de)}</span>` : "";
-        if (k.t === "abre") carta.innerHTML = `${c.ilus ? `<img class="ilus grande" src="${ILUS(c.ilus)}" alt="">` : ""}<span class="rotulo" style="color:var(--tema)">${c.minutos} min</span><h1 class="capa-t">${esc(k.titulo)}</h1><p class="suave" style="font-size:17px">${esc(k.sub)}</p>`;
+        if (k.t === "abre") carta.innerHTML = `${c.ilus ? `<img class="ilus grande" src="${ILUS(c.ilus)}" alt="">` : ""}<h1 class="capa-t">${esc(k.titulo)}</h1><p class="suave" style="font-size:17px">${esc(k.sub)}</p>`;
         else if (k.t === "fala") carta.innerHTML = `<p class="grande ${k.texto.length > 170 ? "media" : ""}">${esc(k.texto)}</p>${de}`;
         else if (k.t === "desenho") carta.innerHTML = `${DESENHOS[k.d] || ""}<p class="legenda-d">${esc(k.texto || "")}</p>`;
         else if (k.t === "foto") carta.innerHTML = `<img class="foto-carta" src="${ILUS(k.ilus)}" alt=""><p class="legenda-d">${esc(k.texto || "")}</p>`;
