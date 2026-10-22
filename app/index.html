@@ -1421,7 +1421,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         if (!est.estagioDesde) est.estagioDesde = hojeIso;
         if (ESTAGIOS.length) est.ato = ESTAGIOS[estagioAtual()].ato;
         try { localStorage.setItem("arhat", JSON.stringify(est)); } catch (e) {}
-        if (!document.getElementById("caverna") && !document.querySelector(".abertura-app") && !document.getElementById("sobre")) render();
+        if (!document.getElementById("caverna") && !document.querySelector(".abertura-app") && !document.getElementById("sobre")) render(true);
       }
       if (nuvem.pendente || JSON.stringify(junto) !== r.estado) { nuvem.pendente = false; enviarNuvem(); }
       return daNuvem;
@@ -1764,11 +1764,12 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       ps.forEach((el, i) => { const r = rel(i), a = Math.abs(r);
         el.style.transform = `translateX(${Math.sign(r) * Math.min(a, 2.6) * esp()}px) perspective(700px) rotateY(${-Math.max(-1, Math.min(1, r)) * 38}deg) scale(${Math.max(.45, 1 - .28 * a)})`;
         el.style.opacity = Math.max(0, 1 - .32 * a); el.style.zIndex = 20 - Math.round(a * 4); el.classList.toggle("no-centro", a < .4); el.tabIndex = a < .4 ? 0 : -1; });
-      const k = ((Math.round(p) % n) + n) % n; if (k === vis) return; vis = k;
+      const k = ((Math.round(p) % n) + n) % n; if (k === vis) return; const primeira = vis === -1; vis = k;
       const x = ESTILOS[k], nb = info.querySelector("b"); nb.textContent = x.nome;
       // o nome cabe sempre numa linha: se for longo para a tela, a letra diminui um pouco
       let fs = 23; nb.style.fontSize = fs + "px"; while (nb.offsetHeight > fs * 1.6 && fs > 17) nb.style.fontSize = --fs + "px"; info.querySelector("span").textContent = (x.chamada || x.sub).replace(/ (um|uma|o|a|os|as|e|é|de|do|da|dos|das|no|na|nos|nas|à|ao) /gi, " $1\u00a0"); // palavra curta não fica sozinha no fim da linha
-      info.classList.remove("troca"); void info.offsetWidth; info.classList.add("troca");
+      // ao abrir, o nome entra na sua vez (depois do título e da porta); o efeito de troca é só ao girar
+      if (!primeira) { info.classList.remove("troca"); void info.offsetWidth; info.classList.add("troca"); }
       ir.dataset.escolherTrad = x.id; pts.forEach((b, i) => b.classList.toggle("on", i === k));
     }
     function anima() { cancelAnimationFrame(raf); if (calmo) { p = alvo; pinta(); return; }
@@ -3935,10 +3936,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   // ---------- Navegação ----------
-  function render() {
+  // "quieto" (quando a nuvem traz a jornada logo ao abrir): se a tela ficaria igual, nada é refeito, para ela não piscar
+  let ultimaTela = "";
+  function render(quieto) {
     atualizarDia();
     aplicarCor();
-    telas.innerHTML = { hoje: telaHoje, diario: telaDiario, ceu: telaCeu, capsulas: telaCaminho, atos: telaJornada }[aba]();
+    const html = { hoje: telaHoje, diario: telaDiario, ceu: telaCeu, capsulas: telaCaminho, atos: telaJornada }[aba]();
+    const molde = html.replace(/\bct\d+/g, "ct"); // o número das chamas muda a cada montagem e não conta
+    if (quieto === true && molde === ultimaTela && telas.firstChild) return;
+    ultimaTela = molde; telas.innerHTML = html;
     telas.scrollTop = 0;
     document.querySelectorAll("#nav button").forEach(b => b.setAttribute("aria-current", b.dataset.aba && (b.dataset.aba === aba || (aba === "ceu" && b.dataset.aba === "diario")) ? "page" : "false"));
     pintarCeu();
