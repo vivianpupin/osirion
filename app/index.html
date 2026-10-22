@@ -450,6 +450,26 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .barras { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
 .barras i { height: 3px; border-radius: 3px; background: var(--ceu-3); }
 .barras i.on { background: var(--tema); }
+/* as páginas de leitura (práticas e técnicas): título e desenho no centro, desenho menor, texto na medida */
+.leitura > .rotulo, .leitura > h1, .leitura > .suave:not(.miuda) { align-self: center; text-align: center; }
+.leitura > h1 { font-size: 26px; line-height: 1.25; max-width: 300px; text-wrap: balance; margin: 0; }
+.leitura .ilus { width: auto; max-width: 160px; max-height: 120px; }
+.leitura .grande-p { font-size: 16px !important; line-height: 1.7 !important; }
+.leitura .passo-wrap p, .leitura .passo-wrap li { font-size: 16px; line-height: 1.7; }
+/* o ensinamento com respiro: desenho menor, letras na medida, tudo centrado, botão fino */
+.story .carta { align-items: center; text-align: center; gap: 16px; }
+.story .carta .ilus { width: auto; max-width: 150px; max-height: 110px; }
+.story .carta .ilus.grande { max-width: 170px; max-height: 130px; }
+.story .carta h1.capa-t { margin: 0; font-size: 27px; line-height: 1.25; letter-spacing: .01em; max-width: 290px; text-wrap: balance; }
+.story .carta .grande { font-size: 19px; line-height: 1.62; max-width: 310px; color: rgba(238,229,212,.92); text-wrap: balance; }
+.story .carta .grande.media { font-size: 17px; }
+.story .carta .rotulo, .story .carta .de { font-size: 10.5px; letter-spacing: .24em; }
+.story .carta p.suave { font-size: 14px !important; max-width: 290px; margin-inline: auto; }
+.story .carta .opcao, .story .carta .resposta, .story .carta .explica { text-align: left; max-width: 320px; }
+.story .carta .legenda-d { font-size: 17px; }
+.story-pe .btn.tema { background: transparent; color: var(--tema); border: 1px solid color-mix(in srgb, var(--tema) 70%, transparent); font-family: var(--display); font-size: 16px; font-weight: 400; letter-spacing: .04em; }
+.story-pe .btn.tema:active { background: color-mix(in srgb, var(--tema) 14%, transparent); }
+.fechar:focus { outline: none; }
 .story-topo { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .carta { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; min-height: 340px; }
 .carta .grande { font-family: var(--display); font-size: 25px; line-height: 1.35; text-wrap: pretty; }
@@ -1061,7 +1081,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 /* a boca da caverna: as bordas escurecem e a luz fica no centro */
 .portais::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 85% at 50% 40%, transparent 45%, rgba(0,0,0,.75) 100%); }
 .portais .ceu-fundo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .9; }
-.portais-rolo { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; z-index: 1; }
+/* as portas dos lados passam da borda: sem isso a página inteira rolava de lado no celular */
+.portais-rolo { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; z-index: 1; }
 .portais-tela { position: relative; align-items: center; justify-content: center; text-align: center; gap: 0; min-height: 100%; padding-top: calc(env(safe-area-inset-top, 0px) + 18px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 22px); }
 .portais-tela > .fechar-linha { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 16px; }
 .portais-olho { width: 52px; margin: 0 auto; filter: drop-shadow(0 0 16px rgba(169,178,240,.5)); animation: surge 2.2s ease both, respira-olho 6s ease-in-out 2.2s infinite; }
@@ -1543,7 +1564,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   function abrirTecnica() {
     const { t, i, dia, completa } = tecnicaAtual(), lista = tecnicasReveladas(), trad = estiloAtual();
     const iProx = lista[(lista.indexOf(i) + 1) % lista.length] ?? (i + 1) % NOITE.length, prox = NOITE[iProx];
-    abrirSobre(`<div class="tela">${voltar}<span class="rotulo">A técnica da semana · ${completa ? "semana completa" : `dia ${dia} de 7`}</span><h1>${esc(t.nome)}</h1>
+    abrirSobre(`<div class="tela leitura">${voltar}<span class="rotulo">A técnica da semana · ${completa ? "semana completa" : `dia ${dia} de 7`}</span><h1>${esc(t.nome)}</h1>
       <span class="suave">${esc(t.de)}</span>
       <img class="ilus" src="${ILUS(t.ilus)}" alt=""><p class="grande-p" style="font-size:17px;line-height:1.6">${esc(t.texto)}</p>
       <ol class="roteiro">${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
@@ -1588,7 +1609,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       return `<button class="lua-item ${i < k ? "feita" : i === k ? "atual" : "futura"}" ${i <= k ? `data-tecnica="${t}"` : "disabled"}><span class="lua-ic" aria-hidden="true">${i > k ? CADEADO : ""}</span>
         <span><b>${esc(T.nome)}</b><span class="suave">${i < k ? "já recebida · toque para repetir" : i === k ? `a técnica de agora · ${Math.min(7, c.noites || 0)} de 7 noites` : "chega com as noites"}</span></span></button>`; }).join("")}</div></section>`;
   }
-  // ---------- O que já passou: o que a pessoa já viu fica guardado aqui, para repetir quando quiser ----------
+  // ---------- O que já passou: o que a pessoa já viu fica guardado aqui, para repetir ----------
   function jaPassou() {
     const chip = (attr, nome) => `<button class="alvo" ${attr}>${esc(nome)}</button>`;
     const caps = Object.keys(est.vistas || {}).map(Number).filter(n => CAPS[n - 1]).sort((a, b) => a - b);
@@ -1601,7 +1622,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       + grupo("As técnicas da noite", tecs.map(i => chip(`data-tecnica="${i}"`, NOITE[i].nome)))
       + grupo("As práticas", prats.map(([k, at, n]) => chip(`data-pratica="${k}" data-ato="${at}"`, n)));
     return `<section class="ja-passou"><div class="momento-cab"><h2>O que já passou</h2></div>
-      <p class="suave">${corpo ? "Tudo o que você já viu fica guardado aqui. Toque para repetir." : "Aqui vão ficar guardados os ensinamentos, as técnicas e as práticas que você for encontrando, para repetir quando quiser."}</p>${corpo}</section>`;
+      <p class="suave">${corpo ? "Tudo o que você já viu fica guardado aqui. Toque para repetir." : "Aqui vão ficar guardados os ensinamentos, as técnicas e as práticas que você for encontrando, para repetir."}</p>${corpo}</section>`;
   }
 
   // ---------- Os estágios (programa.js): ensinamentos, meditação do dia, técnica da noite e um marco ----------
@@ -1688,12 +1709,19 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     function anima() { cancelAnimationFrame(raf); if (calmo) { p = alvo; pinta(); return; }
       const f = () => { p += (alvo - p) * .16; if (Math.abs(alvo - p) < .002) p = alvo; pinta(); if (p !== alvo) raf = requestAnimationFrame(f); }; f(); }
     const vai = r => { alvo = Math.round(alvo) + r; anima(); };
-    car.addEventListener("pointerdown", e => { x0 = e.clientX; p0 = p; moveu = false; cancelAnimationFrame(raf); });
-    window.addEventListener("pointermove", e => { if (x0 === null || !car.isConnected) return; const dx = e.clientX - x0;
+    // o dedo: o deslizar de lado gira as portas e não deixa a página rolar (passive: false para poder segurar o gesto)
+    let y0 = 0, deLado = null;
+    car.addEventListener("touchstart", e => { const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; p0 = p; moveu = false; deLado = null; cancelAnimationFrame(raf); }, { passive: true });
+    car.addEventListener("touchmove", e => { if (x0 === null) return; const t = e.touches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+      if (deLado === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) deLado = Math.abs(dx) > Math.abs(dy);
+      if (!deLado) return; e.preventDefault(); moveu = true; p = alvo = p0 - dx / esp(); pinta(); }, { passive: false });
+    // o mouse (no computador)
+    car.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse") return; x0 = e.clientX; p0 = p; moveu = false; cancelAnimationFrame(raf); });
+    window.addEventListener("pointermove", e => { if (e.pointerType !== "mouse" || x0 === null || !car.isConnected) return; const dx = e.clientX - x0;
       if (Math.abs(dx) > 8) moveu = true; if (moveu) { p = alvo = p0 - dx / esp(); pinta(); } });
     const solta = () => { if (x0 === null) return; x0 = null; if (!moveu) return;
       const d = p - p0; alvo = Math.abs(d) < .12 ? Math.round(p0) : Math.round(p0) + Math.sign(d) * Math.max(1, Math.round(Math.abs(d))); anima(); };
-    window.addEventListener("pointerup", solta); window.addEventListener("pointercancel", solta);
+    window.addEventListener("pointerup", e => { if (e.pointerType === "mouse") solta(); }); car.addEventListener("touchend", solta); car.addEventListener("touchcancel", solta);
     car.addEventListener("click", e => { e.stopPropagation(); if (moveu) { moveu = false; return; }
       const b = e.target.closest("button"); if (!b) return;
       if (b.dataset.passo) return vai(+b.dataset.passo);
@@ -1714,7 +1742,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         ? `<li><b>${esc(t.nome)}</b> · ${esc(t.de)}</li>` : `<li class="suave">Uma técnica ainda escondida · chega com as noites</li>`).join("")}</ol></section>
       <section><span class="rotulo">Os ensinamentos · ${caps.length}</span><ol class="roteiro">${caps.map(c => `<li>${esc(c.titulo)}</li>`).join("")}</ol></section>`}
       <button class="btn largo" data-seguir-estilo="${x.id}">${(est.estilo || "arhat") === x.id ? "Esta é a sua tradição" : "Seguir esta tradição"}</button>
-      <p class="suave miuda">Você pode trocar de tradição quando quiser. O que já fez fica guardado.</p></div>`);
+      <p class="suave miuda">Para trocar de tradição, vá ao Caminho. O que você já fez fica guardado.</p></div>`);
   }
   // Venda da jornada completa: desligada por enquanto (só a Vivian usa o app). Desligada, tudo fica aberto e a oferta não aparece.
   const VENDA = false;
@@ -1906,7 +1934,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     ? { attr: 'data-acao="teste"', ilus: "maos-chama", nome: "Teste de realidade", det: `${testesHoje()} de ${metaTestes()} hoje · ${hora}` }
     : { attr: `data-pratica="${p.k}"${ato !== undefined ? ` data-ato="${ato}"` : ""}`, ilus: p.ilus || "estrela-sol", nome: p.nome, det: feitoHoje(p.k) ? "feita hoje" : `${agora ? hora : "para repetir"} · ${p.det}` };
   // Cada mundo tem duas partes: "Agora" (só o que é deste momento do caminho, em ordem) e "Já aprendido"
-  // (as práticas, técnicas e ensinamentos que já chegaram, para usar quando quiser), para não acumular tudo na mesma página.
+  // (as práticas, técnicas e ensinamentos que já chegaram, para praticar de novo), para não acumular tudo na mesma página.
   const secMundo = (rot, itens) => itens.filter(Boolean).length ? `<span class="rotulo">${rot}</span>${listaFerr(itens)}` : "";
   const capItem = (n, prox) => { const c = CAPS[n - 1]; return { attr: `data-capsula="${n}"`, ilus: c.ilus, nome: c.titulo, det: n === prox ? `o ensinamento de hoje · ${c.minutos} min` : (c.cartas[0] || {}).sub || "" }; };
   function capsDoMundo(dia) {
@@ -1943,14 +1971,14 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (dia) {
       const pr = praticasDoMomento("Dia").filter(x => !x.agora && x.p.k !== "teste");
       corpo = secMundo("As práticas do dia", pr.map(itemPratica))
-        + (livre("extras") ? secMundo("Além dos atos", (window.ARHAT.EXTRAS || []).map(p => itemPratica({ p, hora: "quando quiser", agora: true }))) : "");
+        + (livre("extras") ? secMundo("Além dos atos", (window.ARHAT.EXTRAS || []).map(p => itemPratica({ p, hora: p.hora || "uma vez ao dia", agora: true }))) : "");
     } else {
       const t = tecnicasVindas(), noite = praticasDoMomento("Noite").filter(x => !x.agora), madr = praticasDoMomento("04:00").filter(x => !x.agora);
       corpo = secMundo("As técnicas da noite", t.veio.map(i => ({ attr: `data-tecnica="${i}"`, ilus: NOITE[i].ilus, nome: NOITE[i].nome, det: "tocar para praticar esta" })))
         + secMundo("Ao deitar", noite.map(itemPratica)) + secMundo("De madrugada", madr.map(itemPratica));
     }
     corpo += secMundo(dia ? "Os ensinamentos do dia" : "Os ensinamentos da noite", c.lidos.map(n => capItem(n)));
-    return `<section class="mundo-sec">${corpo.trim() ? corpo : '<p class="suave" style="text-align:center">Aqui vão ficar as práticas, as técnicas e os ensinamentos que você já recebeu, para usar quando quiser.</p>'}</section>`;
+    return `<section class="mundo-sec">${corpo.trim() ? corpo : '<p class="suave" style="text-align:center">Aqui vão ficar as práticas, as técnicas e os ensinamentos que você já recebeu, para praticar de novo.</p>'}</section>`;
   }
   function mundosBotao() {
     const n = deNoite(), t = NOITE.length ? tecnicaDaNoite() : null;
@@ -2726,9 +2754,9 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     for (const m of a.momentos) for (const p of m.praticas) if (p.k === k) return { a, m, p };
     // as práticas do dia das tradições (conteudo.js → DIAS)
     const td = (window.ARHAT.DIAS || []).find(e => e.k === k);
-    if (td) return { a: { nome: "A prática do dia" }, m: { quando: "Dia", hora: "quando quiser" }, p: td };
+    if (td) return { a: { nome: "A prática do dia" }, m: { quando: "Dia", hora: td.hora || "uma vez ao dia" }, p: td };
     const x = (window.ARHAT.EXTRAS || []).find(e => e.k === k);
-    if (x) return { a: { nome: "Além dos atos" }, m: { quando: "Dia", hora: "quando quiser" }, p: x };
+    if (x) return { a: { nome: "Além dos atos" }, m: { quando: "Dia", hora: x.hora || "uma vez ao dia" }, p: x };
     const v = VIAGENS.find(x => x.k === k);
     if (v) return { a: { nome: "Viagem guiada" }, m: { quando: "para qualquer noite", hora: "ao deitar" }, p: v };
     return null;
@@ -2753,7 +2781,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     const player = p.audioSrc ? `<div class="player"><button class="play" id="play" aria-label="Ouvir a prática">▶</button>
         <div><b>Prática guiada pela Vivian</b><div class="trilho"><span id="trilho"></span></div></div></div>` : "";
     const fim = k === "noite" || ehViagem(k) ? "Vou dormir" : k === "madrugada" ? "Voltar a dormir" : k === "diario" ? "Abrir o diário" : "Feito";
-    abrirSobre(`<div class="tela">${voltar}
+    abrirSobre(`<div class="tela leitura">${voltar}
       <span class="rotulo">${esc(a.nome)} · ${m.quando === "Noite" ? "A prática da noite" : esc(m.quando)}</span><h1>${esc(p.nome)}</h1>
       ${respHtml}${player}
       <div class="passo-wrap" id="passo"></div>
@@ -3587,7 +3615,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         ${NOITE.length ? `<section><span class="rotulo">A técnica da semana · ${esc(tecnicaDaNoite().nome)}</span><ol class="passos-noite">${tecnicaDaNoite().passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol></section>` : ""}
         <section><span class="rotulo">Purificação</span><div class="checks">${PURIF.map((t, i) => `<button class="check" data-check="${i}" aria-pressed="false"><i></i>${esc(t)}</button>`).join("")}</div></section>
         ${a ? `<section><span class="rotulo">Alvo desta noite</span><p><b>${esc(a.nome)}</b> · ${esc(a.chegada)}</p><p class="comando">“Esta noite eu vou até lá e sei que estou sonhando.”</p></section>`
-          : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite · se quiser</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
+          : livre("sorteio") ? '<section><span class="rotulo">Alvo desta noite</span><button class="btn fantasma largo" data-acao="sortear">Sortear um alvo</button></section>' : ""}
         <section><span class="rotulo">Sons para dormir</span><button class="btn fantasma largo" data-acao="sala-sons">Abrir a sala dos sons</button></section>
         ${!livre("despertar") ? "" : `<section><span class="rotulo">Despertar de madrugada</span>
           <button class="desp" id="desp" aria-pressed="false"><b>${despertar()}</b><span>Um sino suave cinco horas depois de deitar${temMadrugada ? ", para a prática da madrugada" : ""}. Toque para ligar.</span></button>

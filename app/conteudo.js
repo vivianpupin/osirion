@@ -26,7 +26,7 @@ window.ARHAT = (function () {
   const TESTE = { k: "teste", ilus: "olho", ico: "mao", nome: "Teste de realidade", det: "“Será que estou sonhando?” 7 a 10 vezes" };
   // Textos escritos para o app (a Vivian revisa): a atenção inteira (olhos, mente e coração) e as três forças.
   const ATENCAO = {
-    k: "atencao", ilus: "olho", traco: "mente-coracao", ico: "luz", nome: "Olhos, mente e coração", det: "A atenção inteira num ponto só",
+    k: "atencao", hora: "uma vez ao dia", ilus: "olho", traco: "mente-coracao", ico: "luz", nome: "Olhos, mente e coração", det: "A atenção inteira num ponto só",
     texto: [
       { p: "Os olhos, a mente e o coração, juntos, formam a atenção inteira. Quando os três olham para o mesmo ponto, a consciência fica firme, e é essa firmeza que você leva para dentro do sonho." },
       { p: "Sente-se confortável e feche os olhos. Leve o olhar para dentro, para o ponto entre as sobrancelhas, sem forçar." },
@@ -37,7 +37,7 @@ window.ARHAT = (function () {
     ]
   };
   const DIALOGO = {
-    k: "dialogo", ilus: "montanha-fita", ico: "luz", nome: "Parar o diálogo interno", det: "Caminhar em silêncio, sem nomear",
+    k: "dialogo", hora: "numa caminhada do dia", ilus: "montanha-fita", ico: "luz", nome: "Parar o diálogo interno", det: "Caminhar em silêncio, sem nomear",
     texto: [
       { p: "Dom Juan dizia que o mundo se mantém como o conhecemos porque falamos dele o tempo todo, por dentro. Quando essa conversa para, a percepção se abre, e é nesse silêncio que se aprende a sonhar." },
       { p: "Saia para caminhar devagar, de preferência num lugar com árvores ou céu aberto." },
@@ -48,7 +48,7 @@ window.ARHAT = (function () {
     ]
   };
   const VER = {
-    k: "ver", ilus: "fita-estrela-dourada", ico: "luz", nome: "Ver, não só olhar", det: "O olhar que abrange tudo em volta",
+    k: "ver", hora: "ao ar livre, uma vez ao dia", ilus: "fita-estrela-dourada", ico: "luz", nome: "Ver, não só olhar", det: "O olhar que abrange tudo em volta",
     texto: [
       { p: "Olhar é fixar uma coisa e dar nome a ela. Ver é perceber tudo de uma vez, sem escolher. Nos livros de Castaneda, ver é a percepção do guerreiro: direta, sem o filtro das palavras." },
       { p: "Sente-se num lugar tranquilo, com a coluna ereta, e escolha um ponto à sua frente." },
@@ -59,7 +59,7 @@ window.ARHAT = (function () {
     ]
   };
   const FORCAS = {
-    k: "forcas", ilus: "estrela-terra", traco: "tres-forcas", ico: "espiral", nome: "As três forças", det: "Do alto, da frente e da Terra",
+    k: "forcas", hora: "ao acordar", ilus: "estrela-terra", traco: "tres-forcas", ico: "espiral", nome: "As três forças", det: "Do alto, da frente e da Terra",
     texto: [
       { p: "Três forças sustentam a vida: a do universo, que vem do alto; a cósmica, que chega pela frente, no ar que respiramos; e a da Terra, que sobe do chão." },
       { p: "Sente-se numa cadeira, com a coluna ereta e os pés inteiros no chão. Mãos sobre os joelhos. Feche os olhos e respire devagar." },
@@ -90,7 +90,7 @@ window.ARHAT = (function () {
             { p: "É nativo do ser humano a vida dual, matéria e espírito. Todos, sem exceção de nenhum, passam por atividades noturnas de desdobramento. Todos possuem um cérebro com memória ativa. Se você tem dificuldades para se recordar de seus sonhos é porque não teve estímulos para isso, portanto, apenas continue treinando!" },
             { p: "Dê importância à dimensão espiritual e receberá os doces frutos da eternidade!" }
           ] } ] },
-        { quando: "Dia", hora: "quando quiser", praticas: [
+        { quando: "Dia", hora: "uma vez ao dia, sentado", praticas: [
           { k: "raizes", ilus: "fitas", traco: "raizes", ilusFim: "maos-chama", ico: "raiz", nome: "Raízes de Cura", det: "Sentir as raízes ativas e conectadas", texto: [
             { p: "Temos raízes, linhas invisíveis, tentáculos tremeluzentes pouco opacos que saem de nossas mãos, cabeça, garganta, coração, umbigo e centros sexuais." },
             { p: "Esses filamentos sutis, parte importante de nosso corpo invisível, são usados por curandeiros para penetrar em outros corpos, curar e manipular energia." },
@@ -428,15 +428,15 @@ window.ARHAT = (function () {
     {"nome": "Receber e trabalhar", "afirm": ["O que chega no sonho, eu trago e cuido."], "de": "inspirado nos cantores do norte da Austrália", "ilus": "ondas", "texto": "No norte da Austrália, as canções wangga são entendidas como vindas dos ancestrais, que as cantam ao cantor em sonho; o etnomusicólogo Allan Marett registrou cantores trabalhando a canção recebida até ela tomar forma. Entre os Warlpiri, Barbara Glowczewski gravou sonhos que viraram canções, danças e pinturas. Não se trata de receber o Dreaming nem de imitar a arte deles: é o gesto de trazer o que vem do sonho e trabalhar com isso.", "passos": ["Deixe papel e lápis ao lado da cama.", "Ao acordar, anote ou desenhe qualquer som, imagem ou forma do sonho.", "Volte a esse registro durante o dia e trabalhe nele, sem forçar um sentido."]},
     {"nome": "Deitar em pureza", "afirm": ["Ó Deus, eu me entrego a Ti."], "de": "um hadith de Sahih al-Bukhari (247)", "ilus": "estrela-lilas", "texto": "Segundo al-Bara' ibn 'Azib, o Profeta ensinou: quando fores para a cama, faz a ablução como para a oração, deita-te sobre o lado direito e diz a súplica de entrega, “Ó Deus, eu me entrego a Ti…”.", "passos": ["Antes de deitar, faça a ablução como para a oração.", "Deite-se sobre o lado direito.", "Diga a súplica de entrega. Quem não é muçulmano pode dizer uma frase de entrega no mesmo espírito."]},
     {"nome": "A proteção da noite", "afirm": ["Eu durmo guardado até o amanhecer."], "de": "hadiths de Sahih al-Bukhari (2311 e 5017)", "ilus": "lua", "texto": "Segundo os hadiths, quem recita o Versículo do Trono (Alcorão 2:255) antes de dormir tem um guardião da parte de Deus até o amanhecer. Aisha conta que toda noite, ao deitar, o Profeta juntava as mãos, soprava nelas, recitava as três últimas suratas do Alcorão e passava as mãos pelo corpo, três vezes.", "passos": ["Recite o Versículo do Trono (Alcorão 2:255).", "Junte as mãos, recite as suratas Al-Ikhlas, Al-Falaq e An-Nas e sopre nas mãos.", "Passe as mãos pela cabeça, pelo rosto e pelo corpo, três vezes."]},
-    {"nome": "Ao acordar de um sonho", "afirm": ["Eu agradeço o sonho bom e deixo ir o ruim."], "de": "hadiths de Sahih al-Bukhari (6985) e Sahih Muslim (2261, 2262)", "ilus": "estrela-cadente", "texto": "Os hadiths ensinam: do sonho bom, agradeça a Deus e conte a quem você ama; do sonho ruim, busque refúgio em Deus, vire para o outro lado e não o conte a ninguém, que ele não fará mal. No Osirion, o que você anota fica só com você.", "passos": ["Ao acordar de um sonho bom, agradeça.", "Ao acordar de um sonho ruim, busque refúgio em Deus três vezes e vire para o outro lado.", "Não conte o sonho ruim a ninguém. Se quiser guardá-lo, ele fica só no seu diário."]},
+    {"nome": "Ao acordar de um sonho", "afirm": ["Eu agradeço o sonho bom e deixo ir o ruim."], "de": "hadiths de Sahih al-Bukhari (6985) e Sahih Muslim (2261, 2262)", "ilus": "estrela-cadente", "texto": "Os hadiths ensinam: do sonho bom, agradeça a Deus e conte a quem você ama; do sonho ruim, busque refúgio em Deus, vire para o outro lado e não o conte a ninguém, que ele não fará mal. No Osirion, o que você anota fica só com você.", "passos": ["Ao acordar de um sonho bom, agradeça.", "Ao acordar de um sonho ruim, busque refúgio em Deus três vezes e vire para o outro lado.", "Não conte o sonho ruim a ninguém. Anote-o só no seu diário."]},
     // Mais do caminho de Castaneda: só o que os livros confirmam
-    {"nome": "O terceiro portão", "afirm": ["Eu me vejo dormindo e permaneço desperto."], "de": "nos livros de Castaneda (A arte de sonhar, 1993)", "ilus": "figura-deitada", "texto": "Em A arte de sonhar, o terceiro portão é alcançado quando, no sonho, a pessoa se vê dormindo na própria cama. Ver o próprio corpo assim pode assustar: é só um sinal de que a consciência está desperta dentro do sono.", "passos": ["Ao deitar, decida com calma: se eu me vir dormindo, eu fico sereno.", "Se acontecer, não lute: respire devagar e observe.", "Se quiser acordar, mexa devagar um dedo do corpo físico.", "De manhã, anote como foi."]},
+    {"nome": "O terceiro portão", "afirm": ["Eu me vejo dormindo e permaneço desperto."], "de": "nos livros de Castaneda (A arte de sonhar, 1993)", "ilus": "figura-deitada", "texto": "Em A arte de sonhar, o terceiro portão é alcançado quando, no sonho, a pessoa se vê dormindo na própria cama. Ver o próprio corpo assim pode assustar: é só um sinal de que a consciência está desperta dentro do sono.", "passos": ["Ao deitar, decida com calma: se eu me vir dormindo, eu fico sereno.", "Se acontecer, não lute: respire devagar e observe.", "Para acordar, mexa devagar um dedo do corpo físico.", "De manhã, anote como foi."]},
     {"nome": "O ovo de luz", "afirm": ["Eu sou um ovo de luz."], "de": "nos livros de Castaneda (O fogo interior, 1984)", "ilus": "estrela-dourada", "texto": "Em O fogo interior, Don Juan diz que quem “vê” percebe o ser humano como um ovo de luz, e que há nele um ponto de brilho intenso, a cerca de um braço de distância atrás das omoplatas, onde a percepção se monta. Mover esse ponto seria ver de outro jeito. Aqui é uma imagem de concentração, não uma promessa de enxergar luz.", "passos": ["Deitado, imagine o seu corpo dentro de um grande ovo de luz, do tamanho dos braços abertos.", "Imagine um ponto mais brilhante atrás das costas, a um braço de distância.", "Respire e imagine esse ponto deslizando devagar, como uma luz que muda de lugar.", "Adormeça com a imagem do ovo inteiro brilhando."]},
     {"nome": "O pássaro que sai e volta", "afirm": ["Eu saio de dia e volto inteiro."], "de": "inspirado nas fórmulas do ba no Livro dos Mortos egípcio", "ilus": "figura-voo", "texto": "O Livro dos Mortos egípcio chamava-se, na língua deles, “Livro de sair de dia”. Nele há fórmulas para tomar a forma de um ba vivo, de uma andorinha, e para o ba voltar a se unir ao corpo; nas ilustrações, o ba é um pássaro com cabeça humana pousado sobre o corpo. Eram textos para os mortos: aqui é só uma imagem para adormecer.", "passos": ["Deitado, imagine um pequeno pássaro de luz pousado sobre o seu peito: é o seu ba.", "Ao sentir o sono chegando, imagine que ele levanta voo devagar, sem medo.", "Diga por dentro: “Eu saio de dia e volto inteiro.”", "De manhã, antes de abrir os olhos, imagine o pássaro pousando de novo no peito, e lembre o sonho."]},
     // O Japão: o diário de Myōe, os templos de Kannon, o Baku e o primeiro sonho do ano
     {"nome": "O caderno de Myōe", "afirm": ["Ao acordar, eu guardo o que a noite me deu."], "de": "o monge Myōe, no Japão do século XIII", "ilus": "lua", "texto": "O monge Myōe, do templo Kōzanji, em Kyoto, anotou os seus sonhos e visões por cerca de 40 anos, até morrer, em 1232. De manhã, a primeira coisa que fazia era pegar o caderno. Depois acrescentava comentários e relia os sonhos antigos, ligando uns aos outros.", "passos": ["Deixe o diário ao lado da cama antes de dormir.", "Ao acordar, antes de levantar, anote o sonho, mesmo que seja só um pedaço.", "Mais tarde, escreva uma linha de comentário: o que este sonho lembra?", "Uma vez por semana, releia os sonhos antigos e procure o fio que os liga."]},
     {"nome": "Pedir um sonho a Kannon", "afirm": ["Que um sonho me seja concedido."], "de": "os retiros nos templos de Kannon, no Japão antigo", "ilus": "estrela-lilas", "texto": "No Japão dos séculos X a XII, peregrinos passavam noites nos templos de Kannon, como Hasedera e Ishiyamadera, dormindo no salão e pedindo que um sonho lhes fosse concedido. No Diário de Sarashina (por volta de 1060), a autora passa três dias em Hasedera e sonha com um ramo de cedro lançado no quarto. Era um pedido, não uma garantia.", "passos": ["Escolha uma única pergunta ou intenção para a noite.", "Coma leve à noite. Nada de jejum.", "Antes de dormir, peça em silêncio que um sonho lhe seja concedido sobre essa pergunta.", "Ao acordar, anote qualquer imagem, mesmo pequena: no diário, um ramo de cedro foi o sinal."]},
-    {"nome": "Entregar o pesadelo ao Baku", "afirm": ["O Baku leva o que não é meu."], "de": "o folclore japonês do Baku", "ilus": "estrela-terra", "texto": "No Japão, o Baku é o ser que come os pesadelos. Desde o período Edo, havia amuletos e travesseiros com a figura dele. Em algumas regiões, quem acordava com medo dizia três vezes: “Baku, coma o meu pesadelo.”", "passos": ["Ao acordar de um pesadelo, sente-se e respire devagar.", "Diga três vezes: “Baku, leve este sonho.”", "Se quiser, anote o sonho e feche a página.", "Antes de voltar a dormir, pense numa imagem calma. Se os pesadelos forem frequentes, procure ajuda de um profissional."]},
+    {"nome": "Entregar o pesadelo ao Baku", "afirm": ["O Baku leva o que não é meu."], "de": "o folclore japonês do Baku", "ilus": "estrela-terra", "texto": "No Japão, o Baku é o ser que come os pesadelos. Desde o período Edo, havia amuletos e travesseiros com a figura dele. Em algumas regiões, quem acordava com medo dizia três vezes: “Baku, coma o meu pesadelo.”", "passos": ["Ao acordar de um pesadelo, sente-se e respire devagar.", "Diga três vezes: “Baku, leve este sonho.”", "Anote o sonho e feche a página.", "Antes de voltar a dormir, pense numa imagem calma. Se os pesadelos forem frequentes, procure ajuda de um profissional."]},
     {"nome": "O barco do primeiro sonho", "afirm": ["Que o primeiro sonho do ciclo seja bom."], "de": "o hatsuyume, o primeiro sonho do ano no Japão", "ilus": "ondas", "texto": "No Japão, o primeiro sonho do ano se chama hatsuyume. O costume é pôr sob o travesseiro a imagem de um barco do tesouro, o takarabune, com um poema que se lê igual de trás para frente. Se o sonho fosse ruim, a imagem era jogada no rio pela manhã. Aqui, o barco marca o começo de um ciclo: um mês, uma técnica, um ano.", "passos": ["No começo de um ciclo, desenhe um pequeno barco num papel e escreva nele a sua intenção.", "Ponha o papel sob o travesseiro.", "Ao acordar, anote o primeiro sonho.", "Se o sonho foi ruim, rasgue o papel e jogue fora com respeito."]},
 
   ];
@@ -470,7 +470,7 @@ window.ARHAT = (function () {
 
   // As práticas do dia das tradições (programa.js → ESTILOS[].dia). Só o que as fontes documentam; o resto é adaptação declarada.
   const DESPERTA = {
-    k: "desperta", ilus: "olho", ico: "sol", nome: "Desperta em paz", det: "Saudar a luz da manhã, como no templo de Dendera",
+    k: "desperta", hora: "ao nascer do sol", ilus: "olho", ico: "sol", nome: "Desperta em paz", det: "Saudar a luz da manhã, como no templo de Dendera",
     texto: [
       { p: "No templo de Hathor, em Dendera, um hino gravado na fachada do santuário pede que a deusa e as outras deusas despertem em paz, e diz que os deuses madrugam todos os dias para adorá-la. Nos templos egípcios, o ritual do dia começava logo depois da primeira luz." },
       { p: "No Ano Novo, os sacerdotes subiam com a estátua de Hathor até um pequeno quiosque no telhado do templo, para que ela recebesse os primeiros raios do sol: a união da deusa com o disco solar." },
@@ -483,7 +483,7 @@ window.ARHAT = (function () {
   };
 
   const PUREZA = {
-    k: "pureza", ilus: "rio", ico: "agua", nome: "Pensamentos puros", det: "Preparar-se para a noite como no santuário de Asclépio",
+    k: "pureza", hora: "no fim da tarde", ilus: "rio", ico: "agua", nome: "Pensamentos puros", det: "Preparar-se para a noite como no santuário de Asclépio",
     texto: [
       { p: "Segundo Porfírio (Da Abstinência 2.19), sobre a entrada do santuário de Asclépio em Epidauro havia uma inscrição: puro deve ser quem entra no templo perfumado, e pureza é pensar coisas santas. A data dessa inscrição é discutida pelos estudiosos." },
       { p: "Antes de dormir no santuário, quem vinha pedir um sonho se purificava com um banho e fazia uma oferenda e uma prece (Emma e Ludwig Edelstein, Asclepius, 1945)." },
@@ -494,7 +494,7 @@ window.ARHAT = (function () {
     ]
   };
   const FLORESTA = {
-    k: "floresta", ilus: "morro-figuras", ico: "raiz", nome: "Sonhar a floresta", det: "Escutar os seres vivos e levar um deles para a noite",
+    k: "floresta", hora: "durante o dia, ao ar livre", ilus: "morro-figuras", ico: "raiz", nome: "Sonhar a floresta", det: "Escutar os seres vivos e levar um deles para a noite",
     texto: [
       { p: "Em A queda do céu, com Bruce Albert, o xamã yanomami Davi Kopenawa diz que os brancos dormem muito, mas sonham só com eles mesmos, enquanto os Yanomami sonham longe; e que quem não sabe sonhar a floresta não a defende." },
       { p: "Na etnografia de Hanna Limulja, o sonho yanomami tem consequência durante o dia: quem sonha presta atenção ao que está em volta." },
@@ -504,7 +504,7 @@ window.ARHAT = (function () {
     ]
   };
   const ESCUTA = {
-    k: "escuta", ilus: "estrela-terra", ico: "lua", nome: "Escuta profunda", det: "Inspirada em dadirri, como Miriam-Rose Ungunmerr-Baumann a ofereceu",
+    k: "escuta", hora: "uma vez ao dia, em silêncio", ilus: "estrela-terra", ico: "lua", nome: "Escuta profunda", det: "Inspirada em dadirri, como Miriam-Rose Ungunmerr-Baumann a ofereceu",
     texto: [
       { p: "Dadirri é uma palavra dos povos Ngan'gikurungkurr e Ngen'giwumirri, da região do rio Daly, no norte da Austrália. A educadora Miriam-Rose Ungunmerr-Baumann a descreve como escuta interior e profunda e consciência quieta, e a ofereceu aos australianos como um presente." },
       { p: "Ela fala de aprender observando e escutando, esperando, e só então agindo. Dadirri não é uma técnica de sonho: é uma escuta que acalma por dentro." },
@@ -515,7 +515,7 @@ window.ARHAT = (function () {
     ]
   };
   const VERDADE = {
-    k: "verdade", ilus: "estrela-lilas", ico: "luz", nome: "A fala verdadeira", det: "Durante o dia, falar só a verdade",
+    k: "verdade", hora: "o dia inteiro", ilus: "estrela-lilas", ico: "luz", nome: "A fala verdadeira", det: "Durante o dia, falar só a verdade",
     texto: [
       { p: "Um hadith de Sahih Muslim (2263) liga o dia ao sonho: os sonhos mais verdadeiros vêm aos que são mais verdadeiros na fala." },
       { p: "A tradição registra também que o Profeta e os seus companheiros faziam uma sesta breve ao meio-dia (Sahih al-Bukhari 939 e 6281)." },
@@ -527,7 +527,7 @@ window.ARHAT = (function () {
   };
   // O homem pássaro: uma prática do dia diferente a cada técnica (os capítulos de Viagem a Ixtlan, 1972)
   const HISTORIA = {
-    k: "historia", ilus: "fita-estrela", ico: "pena", nome: "Apagar a história pessoal", det: "Não repetir hoje uma história sobre si mesmo",
+    k: "historia", hora: "o dia inteiro", ilus: "fita-estrela", ico: "pena", nome: "Apagar a história pessoal", det: "Não repetir hoje uma história sobre si mesmo",
     texto: [
       { p: "Em Viagem a Ixtlan, no capítulo “Apagar a história pessoal”, Don Juan ensina a deixar o passado de lado e a não alimentar a imagem que os outros fazem de nós: assim se fica mais livre e menos previsível." },
       { p: "Hoje, repare numa história sobre você que você costuma contar: “eu sou assim”, “comigo sempre acontece isso”." },
@@ -536,7 +536,7 @@ window.ARHAT = (function () {
     ]
   };
   const MORTE = {
-    k: "conselheira", ilus: "figura-fio", ico: "pena", nome: "A conselheira à esquerda", det: "Dar peso a cada gesto do dia",
+    k: "conselheira", hora: "o dia inteiro", ilus: "figura-fio", ico: "pena", nome: "A conselheira à esquerda", det: "Dar peso a cada gesto do dia",
     texto: [
       { p: "Em Viagem a Ixtlan, no capítulo “A morte é uma conselheira”, Don Juan diz que a morte está sempre à nossa esquerda, a um braço de distância, e que lembrar dela tira a mesquinharia e dá peso a cada ato." },
       { p: "Aqui não se trata de pensar em morrer: é lembrar que este dia é precioso e não volta." },
@@ -545,7 +545,7 @@ window.ARHAT = (function () {
     ]
   };
   const SOMBRAS = {
-    k: "sombras", ilus: "fitas", ico: "luz", nome: "Olhar as sombras", det: "O não-fazer: reparar no que sempre se ignora",
+    k: "sombras", hora: "à tarde, por três minutos", ilus: "fitas", ico: "luz", nome: "Olhar as sombras", det: "O não-fazer: reparar no que sempre se ignora",
     texto: [
       { p: "Em Viagem a Ixtlan, no capítulo “Não-fazer”, Don Juan ensina a prestar atenção ao que normalmente ignoramos: por exemplo, olhar as sombras das folhas, e não as folhas." },
       { p: "Escolha uma planta ou uma árvore com luz batendo nela." },
@@ -554,7 +554,7 @@ window.ARHAT = (function () {
     ]
   };
   const MARCHA = {
-    k: "marcha", ilus: "figura-descendo", ico: "pena", nome: "O passo atento", det: "Caminhar confiando no corpo",
+    k: "marcha", hora: "numa caminhada do dia", ilus: "figura-descendo", ico: "pena", nome: "O passo atento", det: "Caminhar confiando no corpo",
     texto: [
       { p: "Em Viagem a Ixtlan, no capítulo “A marcha de poder”, Don Juan ensina a correr no escuro, em terreno difícil, com os olhos fixos no chão logo à frente, confiando no corpo e não na vista." },
       { p: "O app não indica correr no escuro: esta é uma adaptação segura. Caminhe devagar num lugar plano e iluminado." },
@@ -564,7 +564,7 @@ window.ARHAT = (function () {
     ]
   };
   const MEDITAR_SONHO = {
-    k: "meditar-sonho", ilus: "lua", ico: "lua", nome: "Meditar para sonhar", det: "Como o monge Myōe, orientar o sonho pela meditação",
+    k: "meditar-sonho", hora: "no fim do dia, sentado", ilus: "lua", ico: "lua", nome: "Meditar para sonhar", det: "Como o monge Myōe, orientar o sonho pela meditação",
     texto: [
       { p: "O monge Myōe meditava sentado e recitava no templo Kōzanji. Pela meditação, ele tentava conduzir a mente a sonhar com o que buscava, e anotava no mesmo caderno as visões da meditação e os sonhos da noite." },
       { p: "Esta prática é uma adaptação inspirada nele. Sente-se em silêncio, de dia, por cinco a dez minutos." },

@@ -374,7 +374,7 @@ window.CAPSULAS = [
     { t: "abre", titulo: "Silenciar e perfumar o caminho", sub: "A preparação da noite" },
     { t: "fala", texto: "Nos templos do sono, ninguém entrava direto. Depois da água vinham o silêncio e a fumaça." },
     { t: "fala", texto: "Ninguém conversava nos pátios internos, e o incenso ou as ervas queimadas limpavam o ar e a atenção." },
-    { t: "faca", titulo: "Esta noite", texto: "Uma hora antes de dormir, desligue as telas. Se quiser, acenda um incenso ou uma erva e deixe o quarto em silêncio." }
+    { t: "faca", titulo: "Esta noite", texto: "Uma hora antes de dormir, desligue as telas. Acenda um incenso ou uma erva e deixe o quarto em silêncio." }
   ] },
   { dia: 49, ilus: "meditacao-fita", tema: "livro", titulo: "Corpo relaxado, mente desperta", minutos: 1, cartas: [
     { t: "abre", titulo: "Corpo relaxado, mente desperta", sub: "O estado que abre a porta" },
