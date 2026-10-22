@@ -395,6 +395,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
 .t-tradicoes { --tema: var(--ocre); }
 .t-viajantes { --tema: #7fd6c2; }
 .t-mantras { --tema: #f0a3c4; }
+.t-psique { --tema: #c7a6ec; }
 .tema-tag { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--tema); }
 .capsula-hoje { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; text-align: left; width: 100%; border-radius: 20px; padding: 16px; border: 1px solid color-mix(in srgb, var(--tema) 45%, var(--ceu-3)); background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--tema) 22%, transparent), transparent 60%), var(--ceu-2); }
 .capsula-hoje h2 { grid-column: 1; }
@@ -1264,7 +1265,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const ILUS = nome => `img/livro/${nome}.webp`;
   // Baixa e prepara todas as imagens já na abertura (e guarda as referências): nenhuma tela espera a ilustração chegar.
   const PRONTAS = (window.IMAGENS || []).map(src => { const im = new Image(); im.decoding = "async"; im.src = src; if (im.decode) im.decode().catch(() => {}); return im; });
-  const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem"), viajantes: ILUS("textura-azul"), mantras: ILUS("textura-dourada") };
+  const TEXTURA = { livro: ILUS("textura-dourada"), ciencia: ILUS("textura-azul"), tradicoes: ILUS("textura-nuvem"), viajantes: ILUS("textura-azul"), mantras: ILUS("textura-dourada"), psique: ILUS("textura-nuvem") };
   // Sinal do Osirion nos avisos: o ícone do app, o olho do livro Arhat.
   const SINAL = '<img class="sinal" src="apple-touch-icon.png" alt="">';
 
@@ -1283,7 +1284,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // O conteúdo vem do livro (conteudo.js).
   const ATOS = window.ARHAT.ATOS.map(a => Object.assign({}, a, { capa: IMG[a.capa] }));
   const CAPS = window.CAPSULAS;
-  const TEMAS = { livro: "Ensinamentos", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho", viajantes: "Técnicas de mergulho", mantras: "Mantras do sonho" };
+  const TEMAS = { livro: "Ensinamentos", ciencia: "Ciência do sono", tradicoes: "Tradições do sonho", viajantes: "Técnicas de mergulho", mantras: "Mantras do sonho", psique: "A alma do sonho" };
 
   const CORES = [
     { nome: "Lilás", v: "#a9b2f0" }, { nome: "Azul", v: "#6fa8ff" }, { nome: "Dourado", v: "#f5c75b" },
@@ -1973,7 +1974,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // No Agora, um botão dividido ao meio abre a área de trabalho de cada um: as práticas daquele momento e os ensinamentos dele.
   // Dia: o que treina a consciência acordado (sinal de sonho, teste de realidade, prática do dia, lembretes).
   // Noite: o que se faz antes e durante o sono (a técnica da semana, a sala dos sons, o oráculo dos alvos, as viagens, dormir).
-  const CAPS_DIA = new Set([1, 4, 6, 10, 13, 32, 33, 34, 37, 54, 55, 56, 62, 67]);
+  const CAPS_DIA = new Set([1, 4, 6, 10, 13, 32, 33, 34, 37, 54, 55, 56, 62, 67, 77, 78]);
   const deNoite = () => { const h = new Date().getHours(); return h >= 18 || h < 5; };
   let deMundo = null; // o mundo de onde a pessoa abriu alguma coisa: ao voltar, volta para ele
   const listaFerr = f => `<div class="instr">${f.filter(Boolean).map(x => `<button class="ferr" ${x.attr}><span class="selo-img"><img src="${ILUS(x.ilus)}" alt=""></span><span class="ferr-t"><b>${esc(x.nome)}</b><span>${esc(x.det)}</span></span><svg class="seta-d" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`).join("")}</div>`;
