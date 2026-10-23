@@ -370,6 +370,8 @@ textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--c
 .seg button[aria-pressed="true"] { background: var(--ceu-3); color: var(--areia); }
 .mes-cab { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .mes-cab button { background: none; border: 1px solid var(--ceu-3); border-radius: 10px; width: 36px; height: 36px; font-size: 16px; }
+.cal-lista { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1px solid var(--ceu-3); border-radius: 18px; background: color-mix(in srgb, var(--ceu-2) 40%, transparent); }
+.cal-lista .mes-cab h2 { font-size: 19px; margin: 0; }
 .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
 .cal .dsem { font-size: 11px; color: var(--areia-2); padding-bottom: 2px; }
 .cal .dia { aspect-ratio: 1; max-width: 100%; min-width: 0; border: 0; border-radius: 10px; background: var(--ceu-2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 12px; color: var(--areia-2); font-variant-numeric: tabular-nums; padding: 0; }
@@ -2167,11 +2169,13 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     let s = 3; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
     for (let i = 0; i < 160; i++) { ctx.fillStyle = `rgba(238,229,212,${.05 + rnd() * .1})`; ctx.fillRect(rnd() * W, rnd() * H, 1.2, 1.2); }
     const todas = noitesExemplo().concat(est.diario.map(d => d.tipo));
-    const cols = 7, linhas = Math.ceil(todas.length / cols);
-    const mx = 70, my = 50, dx = (W - mx * 2) / (cols - 1), dy = (H - my * 2) / Math.max(1, linhas - 1);
+    // as noites se espalham do centro para fora, em espiral (a primeira no meio, as novas nas bordas):
+    // com poucas noites o céu já fica bonito, e nenhuma sai do desenho
+    const N = Math.max(todas.length, 14), cx = W / 2, cy = H / 2, rx = W / 2 - 46, ry = H / 2 - 40;
     const pos = todas.map((t, i) => {
-      const col = i % cols, lin = Math.floor(i / cols);
-      return { x: mx + col * dx + (rnd() - .5) * dx * .6, y: my + lin * dy + (rnd() - .5) * dy * .5, t };
+      const ang = i * 2.39996 + 0.6, r = Math.sqrt((i + .6) / N);
+      const x = cx + Math.cos(ang) * r * rx + (rnd() - .5) * 14, y = cy + Math.sin(ang) * r * ry + (rnd() - .5) * 14;
+      return { x: Math.max(24, Math.min(W - 24, x)), y: Math.max(24, Math.min(H - 24, y)), t };
     });
     const estrelas = pos.filter(p => p.t >= 3);
     ctx.strokeStyle = "rgba(245,199,91,.28)"; ctx.lineWidth = 1.2; ctx.beginPath();
@@ -2270,6 +2274,23 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       : `<div class="cartao"><div class="data"><span>${esc(titulo)}</span></div><p class="suave">Nenhuma anotação nesta noite.</p></div>`;
   }
 
+  // o mês com o ícone de cada noite. Na lista dos sonhos, tocar num dia abre o calendário com aquele dia.
+  function gradeMes(naLista) {
+    const porDia = {};
+    todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
+    const ano = mesVisto.getFullYear(), mes = mesVisto.getMonth();
+    const dias = new Date(ano, mes + 1, 0).getDate(), inicio = new Date(ano, mes, 1).getDay();
+    let celulas = "";
+    for (let i = 0; i < inicio; i++) celulas += '<span class="vazio"></span>';
+    for (let d = 1; d <= dias; d++) {
+      const iso = isoDe(new Date(ano, mes, d)), t = porDia[iso];
+      celulas += `<button class="dia ${t !== undefined ? "tem" : ""} ${iso === hojeIso ? "hoje" : ""}" ${naLista ? `data-ver-dia="${iso}"` : `data-dia="${iso}" aria-pressed="${iso === diaSel && !busca && filtro === null}"`} aria-label="${d}">
+        <span>${d}</span>${t !== undefined ? iconeNoite(t, "cel") : '<span class="cel-vazia"></span>'}</button>`;
+    }
+    const nomeMes = mesVisto.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    return `<div class="mes-cab"><button data-mes="-1" aria-label="Mês anterior">‹</button><h2>${esc(nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1))}</h2><button data-mes="1" aria-label="Próximo mês">›</button></div>
+      <div class="cal">${["D", "S", "T", "Q", "Q", "S", "S"].map(s => `<span class="dsem">${s}</span>`).join("")}${celulas}</div>`;
+  }
   function telaCalendario() {
     const porDia = {};
     todasEntradas().forEach(d => { porDia[d.iso] = Math.max(porDia[d.iso] ?? -1, d.tipo); });
@@ -2291,8 +2312,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
         ${(() => { const ps = palavrasQueSeRepetem(); return ps.length ? `<span class="rotulo">Palavras que se repetem nos seus sonhos</span>
         <div class="alvos">${ps.map(([w, n]) => `<button class="alvo" data-palavra="${esc(w)}" aria-pressed="${chave(busca.trim()) === chave(w)}">${esc(w)} <span class="suave" style="font-size:12px">${n}</span></button>`).join("")}</div>` : ""; })()}
       </div>
-      <div class="mes-cab"><button data-mes="-1" aria-label="Mês anterior">‹</button><h2>${esc(nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1))}</h2><button data-mes="1" aria-label="Próximo mês">›</button></div>
-      <div class="cal">${["D", "S", "T", "Q", "Q", "S", "S"].map(s => `<span class="dsem">${s}</span>`).join("")}${celulas}</div>
+      ${gradeMes(false)}
       <p class="suave" style="text-align:center">${anotadas} ${anotadas === 1 ? "noite anotada" : "noites anotadas"} neste mês</p>
       <div class="alvos">${TIPOS.map(t => `<button class="alvo" data-filtro="${t.k}" aria-pressed="${filtro === t.k}">${iconeNoite(t.k, "peq")} ${["Sem lembrança", "Sonhos", "Lucidez", "Sonho lúcido", "Viagem astral"][t.k]}</button>`).join("")}</div>
       <div id="lista-cal" style="display:flex;flex-direction:column;gap:10px">${listaCalendario()}</div>
@@ -2317,7 +2337,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
   function telaLista() {
     const todas = todasEntradas(), achadas = todas;
-    return `<div class="lista-cab"><h1>Meus sonhos</h1><span class="lista-botoes"><button class="btn-cal" data-aba="ceu"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/></svg>Céu</button><button class="btn-cal" data-modo="calendario"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Calendário</button><button class="btn-cal" data-modo="buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>Buscar</button><button class="btn-cal" data-modo="repetidos"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Sonhos repetidos</button></span></div>
+    return `<div class="lista-cab"><h1>Meus sonhos</h1><span class="lista-botoes"><button class="btn-cal" data-aba="ceu"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/></svg>Céu</button><button class="btn-cal" data-modo="buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>Buscar</button><button class="btn-cal" data-modo="repetidos"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Sonhos repetidos</button></span></div>
+      <div class="cal-lista">${gradeMes(true)}</div>
       ${todas.length ? (() => { const cont = [0, 0, 0, 0, 0]; todas.forEach(d => cont[Math.min(4, d.tipo || 0)]++);
         return `<div class="placar placar-diario">${["Noite negra", "Sonhos", "Algum grau de lucidez", "Sonho lúcido", "Viagem astral"].map((n, k) => `<span>${iconeNoite(k, "mini")}<b>${cont[k]}</b><small>${n}</small></span>`).join("")}</div>`; })() : ""}
       <div class="lista-sonhos" id="lista-sonhos">${achadas.length ? achadas.map(itemSonho).join("")
