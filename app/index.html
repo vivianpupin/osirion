@@ -320,6 +320,17 @@ ol.roteiro li::marker { color: var(--nevoeiro); font-family: var(--display); }
 
 /* Diário */
 .diario { background: #0b0c18; }
+.anotar { gap: 14px; min-height: 100%; }
+.anotar .an-meio { display: flex; justify-content: center; padding: 26px 0 0; }
+.anotar .gravar .moeda-antiga { --tam: 132px; }
+.anotar #gravar-tx:empty { display: none; }
+.anotar .an-txt { min-height: 120px; background: transparent; border: 0; border-bottom: 1px solid var(--ceu-3); border-radius: 0; text-align: center; font-family: var(--display); font-size: 18px; line-height: 1.5; }
+.anotar .an-txt:focus { outline: none; border-bottom-color: var(--nevoeiro); text-align: left; }
+.an-noite { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.an-noite .tipo { flex-direction: column; gap: 4px; padding: 9px 2px; justify-content: center; text-align: center; font-size: 11px; color: var(--areia-2); }
+.an-noite .tipo svg { width: 30px; height: 30px; }
+.an-noite .tipo[aria-pressed="true"] { border-color: var(--cristal); background: rgba(245,199,91,.1); color: var(--areia); }
+
 /* Gravar sonho: uma moeda antiga com o olho do Osirion gravado. Ao gravar, ela só brilha por dentro: não cresce nem cobre o que está em volta. */
 .gravar { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 10px 0 2px; background: none; border: 0; color: var(--areia); font-family: var(--display); font-size: 16px; }
 .gravar .moeda-antiga { --tam: 116px; box-shadow: 0 0 14px 1px rgba(214,170,90,.25), 0 10px 22px -8px rgba(0,0,0,.65), inset 0 0 0 2px #6b4a1c; transition: box-shadow .4s ease; }
@@ -2227,6 +2238,8 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   }
 
   let tipoEscolhido = 1, manha = false, modoAnota = "gravar", expSel = new Set(), chegou = null;
+  // os 7 primeiros dias depois da travessia: o app ainda ensina como fazer
+  const primeiraSemana = () => !/^\d{4}-\d\d-\d\d$/.test(est.travessia || "") || (deIso(hojeIso) - deIso(est.travessia)) / 864e5 < 7;
   // O que aconteceu na noite: vira selos e ajuda a ver o caminho. "ponte" marca um sonho que parece avisar algo.
   const EXPS = [["voo", "Voei"], ["saida", "Saí do corpo"], ["vibra", "Vibrações"], ["nevoeiro", "Vi o nevoeiro"], ["nome", "Ouvi meu nome"], ["paralisia", "Paralisia do sono"], ["ponte", "Parece um aviso"]];
   let modoDiario = "lista", mesVisto = new Date(new Date().getFullYear(), new Date().getMonth(), 1), diaSel = hojeIso, busca = "", filtro = null;
@@ -2369,17 +2382,15 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (modoDiario === "repetidos") return `<div class="tela">${topo()}${seg}${telaRepetidos()}</div>`;
     if (modoDiario === "calendario") return `<div class="tela">${topo()}${seg}${telaCalendario()}</div>`;
     const a = alvoDaNoite(), hora = agoraHM();
-    return `<div class="tela diario ${manha ? "manha" : ""}">${seg}
-      <div class="topo"><span class="rotulo">Os primeiros 5 minutos</span><span class="hora">${hora}</span></div>
-      <div class="perguntas"><span>Não levante. Não abra os olhos.</span><span style="color:var(--areia)">Onde eu estava?</span><span style="color:var(--areia)">O que eu estava sentindo?</span></div>
-      <div class="seg" role="group" aria-label="Como anotar"><button data-anota="gravar" aria-pressed="${modoAnota === "gravar"}">Falar</button><button data-anota="escrever" aria-pressed="${modoAnota === "escrever"}">Escrever</button></div>
-      ${modoAnota === "gravar" ? `<button class="gravar" id="gravar" data-acao="gravar"><span class="moeda-antiga"><span class="relevo"><i class="olho-g"></i></span></span><span class="gravar-t">Gravar sonho</span></button>
-      <p class="suave" id="gravar-tx" style="text-align:center">Toque e fale de olhos fechados. A sua voz vira texto aqui embaixo.</p>` : ""}
-      <p class="dica-pessoa">Conte em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga, a luz é laranja…”. Até lembranças pequenas contam.</p>
-      <label for="sonho" class="rotulo">Diário</label>
-      <textarea id="sonho" placeholder="Estou numa casa antiga, a luz é laranja…">${esc((lerRascunho("sonho") || {}).texto || "")}</textarea>
-      <span class="rotulo">Como foi a noite</span>
-      <div class="tipos">${TIPOS.map(t => `<button class="tipo" data-tipo="${t.k}" aria-pressed="${t.k === tipoEscolhido}">${iconeNoite(t.k)}${t.nome}</button>`).join("")}</div>
+    // as dicas de como anotar aparecem só na primeira semana de uso; depois a tela fica limpa
+    const ensina = primeiraSemana();
+    return `<div class="tela diario anotar ${manha ? "manha" : ""}">${seg}
+      ${ensina ? `<div class="perguntas"><span>Não levante. Não abra os olhos.</span><span style="color:var(--areia)">Onde eu estava?</span><span style="color:var(--areia)">O que eu estava sentindo?</span></div>` : ""}
+      <div class="an-meio"><button class="gravar" id="gravar" data-acao="gravar"><span class="moeda-antiga"><span class="relevo"><i class="olho-g"></i></span></span><span class="gravar-t">Toque e conte</span></button></div>
+      <p class="suave" id="gravar-tx" style="text-align:center">${ensina ? "Fale de olhos fechados. A sua voz vira texto aqui embaixo." : ""}</p>
+      ${ensina ? '<p class="dica-pessoa">Conte em primeira pessoa e no presente, como se estivesse acontecendo agora: “Estou numa casa antiga, a luz é laranja…”. Até lembranças pequenas contam.</p>' : ""}
+      <textarea id="sonho" class="an-txt" aria-label="O sonho" placeholder="ou escreva aqui…">${esc((lerRascunho("sonho") || {}).texto || "")}</textarea>
+      <div class="an-noite" role="group" aria-label="Como foi a noite">${TIPOS.map(t => `<button class="tipo" data-tipo="${t.k}" aria-pressed="${t.k === tipoEscolhido}" aria-label="${esc(t.nome)}">${iconeNoite(t.k)}<small>${["Nada", "Sonhos", "Lucidez", "Lúcido", "Viagem"][t.k]}</small></button>`).join("")}</div>
       <details class="mais"><summary><span><b>Mais detalhes</b><span>o que aconteceu, o alvo, o sono</span></span></summary>
       <span class="rotulo">O que aconteceu</span>
       <div class="alvos">${EXPS.map(([k, n]) => `<button class="alvo" data-exp="${k}" aria-pressed="${expSel.has(k)}">${n}</button>`).join("")}</div>
@@ -4088,7 +4099,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     else if (acao === "estilo-depois") { est.estiloVisto = true; salvar(); render(); }
     else if (acao === "levar-abaton") { fecharSobre(); aba = "hoje"; render(); abrirPratica("noite"); }
     else if (acao === "sem-nevoeiro") { est.nevoeiro = null; salvar(); fecharSobre(); aba = "hoje"; render(); }
-    else if (acao === "gravar") gravarVoz(b, document.getElementById("sonho"), document.getElementById("gravar-tx"), "Gravar sonho");
+    else if (acao === "gravar") gravarVoz(b, document.getElementById("sonho"), document.getElementById("gravar-tx"), "Toque e conte");
     else if (acao === "gravar-ed") gravarVoz(b, document.getElementById("sonho-ed"), document.getElementById("gravar-tx-ed"), "Falar mais");
     else if (acao === "voz-de-novo") {
       const area = document.getElementById("sonho-ed") || document.getElementById("sonho"), tx = document.getElementById("gravar-tx-ed") || document.getElementById("gravar-tx");
