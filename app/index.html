@@ -3908,20 +3908,27 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   // A caixa do diário cresce com o texto e sempre mostra a última frase (ao falar ou ao escrever).
   // o campo do sonho cresce junto com o texto e nunca rola por dentro: quem rola é só a página.
   // (um campo com rolagem própria dentro de uma página que também rola trava o dedo no celular)
+  // Enquanto se escreve ou se fala ele só cresce, sem encolher e medir de novo, e a página não é empurrada
+  // enquanto o dedo está rolando: qualquer mudança no meio do gesto corta o embalo da rolagem no iPhone.
+  let dedoEm = 0;
+  ["touchstart", "touchmove", "wheel"].forEach(ev => document.addEventListener(ev, () => { dedoEm = Date.now(); }, { passive: true, capture: true }));
   function acompanhar(area, semRolar) {
-    const sc = area.closest(".sobre, .telas") || telas, y = sc.scrollTop;
-    area.style.height = "auto";
-    area.style.height = area.scrollHeight + 2 + "px";
-    sc.scrollTop = y;
-    if (semRolar) return;
+    if (semRolar) {
+      const sc = area.closest(".sobre, .telas") || telas, y = sc.scrollTop;
+      area.style.height = "auto"; area.style.height = area.scrollHeight + 2 + "px"; sc.scrollTop = y; return;
+    }
+    if (area.scrollHeight > area.clientHeight) area.style.height = area.scrollHeight + 2 + "px";
+    if (Date.now() - dedoEm < 2500) return;
     // só acompanha o fim do texto quando a pessoa está escrevendo (ou falando) no fim dele
     if (document.activeElement === area && area.selectionEnd < area.value.length) return;
-    const vv = window.visualViewport, nav = sc === telas && document.getElementById("nav");
+    const sc = area.closest(".sobre, .telas") || telas, vv = window.visualViewport, nav = sc === telas && document.getElementById("nav");
     let limite = vv ? vv.offsetTop + vv.height - 12 : innerHeight - 12;
     if (nav) limite = Math.min(limite, nav.getBoundingClientRect().top - 12);
     const r = area.getBoundingClientRect();
-    if (r.bottom > limite) sc.scrollTop += r.bottom - limite;
+    if (r.bottom > limite) sc.scrollTo({ top: sc.scrollTop + r.bottom - limite, behavior: "smooth" });
   }
+  // ao sair do campo, ele se ajusta ao texto (encolhe se algo foi apagado)
+  document.addEventListener("focusout", e => { if (e.target.id === "sonho" || e.target.id === "sonho-ed") acompanhar(e.target, true); });
   // espera a voz terminar de virar texto (a gravação parar e os trechos voltarem do servidor)
   function depoisDaVoz(fn) { (function v() { if (rec || vozPendente) setTimeout(v, 300); else fn(); })(); }
   const minSeg = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
