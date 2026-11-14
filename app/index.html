@@ -325,6 +325,7 @@ ol.roteiro li::marker { color: var(--nevoeiro); font-family: var(--display); }
 .anotar .gravar .moeda-antiga { --tam: 132px; }
 .anotar #gravar-tx:empty { display: none; }
 .anotar .an-txt { min-height: 120px; background: transparent; border: 0; border-bottom: 1px solid var(--ceu-3); border-radius: 0; text-align: center; font-family: var(--display); font-size: 18px; line-height: 1.5; }
+#sonho, #sonho-ed { overflow: hidden; resize: none; overscroll-behavior: auto; }
 .anotar .an-txt:focus { outline: none; border-bottom-color: var(--nevoeiro); text-align: left; }
 .an-noite { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 .an-noite .tipo { flex-direction: column; gap: 4px; padding: 9px 2px; justify-content: center; text-align: center; font-size: 11px; color: var(--areia-2); }
@@ -3891,7 +3892,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
       <div class="tipos">${TIPOS.map(t => `<button class="tipo" data-tipo-ed="${t.k}" aria-pressed="${t.k === tipoEd}">${iconeNoite(t.k)}${t.nome}</button>`).join("")}</div>
       <button class="btn largo" data-acao="guardar-edicao" data-i="${i}">Guardar as mudanças</button>
       <button class="apagar" data-acao="apagar-sonho" data-i="${i}">Apagar este sonho</button></div>`,
-      x => { const a = x.querySelector("#sonho-ed"); acompanhar(a); aoFechar = () => { if (rec) rec.parar(); }; });
+      x => { const a = x.querySelector("#sonho-ed"); acompanhar(a, true); aoFechar = () => { if (rec) rec.parar(); }; });
   }
 
   // ---------- Diário: voz que vira texto ----------
@@ -3905,12 +3906,21 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
   const vozPronta = () => vozServidor !== null ? Promise.resolve(vozServidor)
     : fetch(TRANSCREVER).then(r => r.json()).then(j => (vozServidor = !!j.pronto)).catch(() => (vozServidor = false));
   // A caixa do diário cresce com o texto e sempre mostra a última frase (ao falar ou ao escrever).
-  function acompanhar(area) {
+  // o campo do sonho cresce junto com o texto e nunca rola por dentro: quem rola é só a página.
+  // (um campo com rolagem própria dentro de uma página que também rola trava o dedo no celular)
+  function acompanhar(area, semRolar) {
+    const sc = area.closest(".sobre, .telas") || telas, y = sc.scrollTop;
     area.style.height = "auto";
-    area.style.height = Math.min(area.scrollHeight + 2, Math.round(innerHeight * .55)) + "px";
-    area.scrollTop = area.scrollHeight;
-    const r = area.getBoundingClientRect(), nav = document.getElementById("nav"), limite = nav ? nav.getBoundingClientRect().top - 12 : innerHeight;
-    if (r.bottom > limite) telas.scrollTop += r.bottom - limite;
+    area.style.height = area.scrollHeight + 2 + "px";
+    sc.scrollTop = y;
+    if (semRolar) return;
+    // só acompanha o fim do texto quando a pessoa está escrevendo (ou falando) no fim dele
+    if (document.activeElement === area && area.selectionEnd < area.value.length) return;
+    const vv = window.visualViewport, nav = sc === telas && document.getElementById("nav");
+    let limite = vv ? vv.offsetTop + vv.height - 12 : innerHeight - 12;
+    if (nav) limite = Math.min(limite, nav.getBoundingClientRect().top - 12);
+    const r = area.getBoundingClientRect();
+    if (r.bottom > limite) sc.scrollTop += r.bottom - limite;
   }
   // espera a voz terminar de virar texto (a gravação parar e os trechos voltarem do servidor)
   function depoisDaVoz(fn) { (function v() { if (rec || vozPendente) setTimeout(v, 300); else fn(); })(); }
@@ -3999,6 +4009,7 @@ mark { background: color-mix(in srgb, var(--cristal) 35%, transparent); color: v
     if (quieto === true && molde === ultimaTela && telas.firstChild) return;
     ultimaTela = molde; telas.innerHTML = html;
     telas.scrollTop = 0;
+    { const so = document.getElementById("sonho"); if (so && so.value) acompanhar(so, true); }
     document.querySelectorAll("#nav button").forEach(b => b.setAttribute("aria-current", b.dataset.aba && (b.dataset.aba === aba || (aba === "ceu" && b.dataset.aba === "diario")) ? "page" : "false"));
     pintarCeu();
     checarConquistas();
